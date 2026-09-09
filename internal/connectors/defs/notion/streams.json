@@ -50,10 +50,6 @@
       "schema": "schemas/databases.json",
       "incremental": {
         "cursor_field": "last_edited_time"
-      },
-      "conformance": {
-        "skip_dynamic": true,
-        "reason": "StreamHook-handled (POST /search body-carried start_cursor/filter pagination the declarative read path cannot express -- engine/read.go always issues a nil request body; see docs.md's Streams notes); hook-covered, proven live by archived parity evidence for notion (TestParityNotion_DatabasesSearchBodyCursorPagination) and internal/connectors/hooks/notion/hooks_test.go."
       }
     },
     {
@@ -65,10 +61,6 @@
       "schema": "schemas/pages.json",
       "incremental": {
         "cursor_field": "last_edited_time"
-      },
-      "conformance": {
-        "skip_dynamic": true,
-        "reason": "StreamHook-handled (POST /search body-carried start_cursor/filter pagination the declarative read path cannot express -- engine/read.go always issues a nil request body; see docs.md's Streams notes); hook-covered, proven live by archived parity evidence for notion (TestParityNotion_DatabasesSearchBodyCursorPagination) and internal/connectors/hooks/notion/hooks_test.go."
       }
     },
     {
@@ -77,11 +69,7 @@
       "records": {
         "path": "results"
       },
-      "schema": "schemas/users.json",
-      "conformance": {
-        "skip_dynamic": true,
-        "reason": "Routed through the same StreamHook as databases/pages for a single consistent dispatch path across the bundle, even though GET /users' query-param start_cursor pagination is independently declarative-expressible (docs.md Known limits); hook-covered, proven live by archived parity evidence for notion (TestParityNotion_UsersQueryCursorPagination) and internal/connectors/hooks/notion/hooks_test.go."
-      }
+      "schema": "schemas/users.json"
     },
     {
       "name": "custom_emojis",

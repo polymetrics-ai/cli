@@ -42,7 +42,7 @@ of restarting from page one. Hard deletes are not observable through polling.
 dynamic PostgreSQL catalog cannot truthfully declare a fixed cursor type,
 cursor column, or tie-breaker. The production transport builds that effective
 implemented declaration per stream after catalog validation and runs the
-shared preflight/conformance contract before source I/O.
+shared preflight/execution-contract contract before source I/O.
 
 ## Auth setup
 

@@ -1,0 +1,48 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "body": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "discussion_category_name": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "draft": {
+      "type": "boolean"
+    },
+    "generate_release_notes": {
+      "type": "boolean"
+    },
+    "make_latest": {
+      "enum": [
+        "true",
+        "false",
+        "legacy"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "name": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "prerelease": {
+      "type": "boolean"
+    },
+    "tag_name": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "target_commitish": {
+      "maxLength": 8192,
+      "type": "string"
+    }
+  },
+  "required": [
+    "tag_name"
+  ],
+  "type": "object"
+}

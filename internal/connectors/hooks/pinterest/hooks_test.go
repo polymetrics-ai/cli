@@ -65,7 +65,7 @@ func doAuthenticatedRequest(t *testing.T, auth interface {
 // --- registration ---------------------------------------------------------
 
 func TestHooksRegisteredUnderPinterest(t *testing.T) {
-	h := engine.HooksFor("pinterest")
+	h := ExplicitFactory()
 	if h == nil {
 		t.Fatal(`engine.HooksFor("pinterest") = nil, want registered hooks (hooks/pinterest's init() must call engine.RegisterHooks)`)
 	}

@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "secret_name": {
+      "maxLength": 8192,
+      "type": "string"
+    }
+  },
+  "required": [
+    "secret_name"
+  ],
+  "type": "object"
+}

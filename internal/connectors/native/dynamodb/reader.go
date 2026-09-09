@@ -141,7 +141,7 @@ func (c Connector) scan(ctx context.Context, conn connConfig, body scanRequest) 
 }
 
 // readFixture emits deterministic records without any network access so the
-// conformance harness and unit tests can exercise dynamodb credential-free.
+// fixture tests and unit tests can exercise dynamodb credential-free.
 // Ported verbatim from legacy dynamodb.go's readFixture.
 func readFixture(ctx context.Context, emit func(connectors.Record) error) error {
 	for i := 1; i <= 2; i++ {

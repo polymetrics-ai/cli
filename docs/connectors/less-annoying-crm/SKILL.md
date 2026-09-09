@@ -7,7 +7,7 @@ description: Less Annoying CRM connector knowledge and safe action guide.
 
 ## Purpose
 
-Reads Less Annoying CRM users, contacts, tasks, notes, and events through the Less Annoying CRM v2 API.
+Reads Less Annoying CRM users, contacts, tasks, notes, and events through fixed v2 RPC requests.
 
 ## Icon
 
@@ -24,17 +24,42 @@ Reads Less Annoying CRM users, contacts, tasks, notes, and events through the Le
 
 ## Authentication
 
-- No secret authentication is required for this connector.
+- Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 ## Configuration
 
-- No connector-specific config fields.
+- start_date (required)
+- api_key (secret) (required)
+
+## ETL Streams
+
+- users:
+  - primary key: UserId
+  - fields: FirstName(string), LastName(string), Timezone(string), UserId(string)
+- contacts:
+  - primary key: ContactId
+  - fields: Address(array), AssignedTo(number), Company Name(string), CompanyId(string), ContactId(string), DateCreated(string), Email(array), IsCompany(boolean), Job Title(string), LastUpdate(string), Name(string), Phone(array), Website(string)
+- tasks:
+  - primary key: TaskId
+  - cursor: DateCreated
+  - fields: AssignedTo(string), CalendarId(string), ContactId(string), DateCreated(string), Description(string), DueDate(string), IsCompleted(boolean), Name(string), TaskId(string)
+- notes:
+  - primary key: NoteId
+  - fields: ContactId(string), DateCreated(string), DateDisplayedInHistory(string), IsRichText(boolean), Note(string), NoteId(string), UserId(string)
+- events:
+  - primary key: EventId
+  - cursor: DateUpdated
+  - fields: ContactIds(array), DateCreated(string), DateUpdated(string), Description(string), EndDate(string), EventId(string), IsAllDay(boolean), IsRecurring(boolean), Location(string), Name(string), StartDate(string), UserIds(array)
+
+## Sync Modes
+
+- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
 
 ## Security
 
-- read risk: connector-specific
-- write risk: connector-specific
-- approval: external mutations require preview and approval
+- read risk: Bounded POST reads use the fixed Less Annoying CRM v2 origin and declared API-key header authentication.
+- write risk: unsupported
+- approval: none; read-only
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 ## Commands

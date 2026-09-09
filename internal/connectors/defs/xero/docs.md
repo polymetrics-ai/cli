@@ -12,7 +12,7 @@ Current fixture-backed operation ledger:
 | Binary/file attachment and PDF operations | 59 | 11 attachment metadata list streams implemented; 48 binary/PDF download or attachment upload operations are bounded in `operations.json` and blocked on the shared binary/file executor |
 | CDC/changefeed | 0 | No Accounting API CDC/changefeed operation is present in the official source |
 
-No live Xero call, credentialed check, certification, or provider write was performed to produce these fixtures.
+No live Xero call, credentialed check, validation, or provider write was performed to produce these fixtures.
 
 ## Auth setup
 
@@ -26,9 +26,9 @@ Add credentials from environment variables or stdin, not chat or shell history. 
 
 ## Streams notes
 
-The official Accounting API has 78 non-report, non-binary GET operations and all are represented in `streams.json`. The bundle also retains report and attachment metadata streams for ETL compatibility, but `api_surface.json` classifies official report endpoints as direct/provider reads and attachment/PDF endpoints as binary/file lane operations.
+The official Accounting API has 78 non-report, non-binary GET operations and all are represented in `streams.json`. The bundle also retains report and attachment metadata streams for ETL compatibility, but `execution bundle` classifies official report endpoints as direct/provider reads and attachment/PDF endpoints as binary/file lane operations.
 
-Pagination is bounded by the declarative `page_number` paginator for Xero list endpoints. Generated conformance fixtures include at least one sanitized page for every stream; the first eligible paginated stream includes a second page to exercise pagination termination without inflating every embedded fixture.
+Pagination is bounded by the declarative `page_number` paginator for Xero list endpoints. Generated execution-contract fixtures include at least one sanitized page for every stream; the first eligible paginated stream includes a second page to exercise pagination termination without inflating every embedded fixture.
 
 ## Write actions & risks
 
@@ -40,7 +40,7 @@ Attachment uploads are not exposed as generic write actions. They are tracked as
 
 ## Known limits
 
-- Fixture-only evidence is not live certification. `certification.json` records safe defaults and one direct-read candidate, but this branch does not claim certified live Xero behavior.
+- Fixture-only evidence is not live validation. the execution bundle records safe defaults and one direct-read candidate, but this branch does not claim validated live Xero behavior.
 - The 48 attachment/PDF download or attachment upload operations that transfer file bytes are bounded and source-linked, but blocked on shared runtime support for binary/file execution. No connector-local generic HTTP/file escape hatch was added.
 - Provider report commands are bounded direct reads with fixed operation definitions. They do not alter warehouse `pm query` semantics and do not expose raw query/path/body passthrough.
 - Official source re-audit used Xero Accounting OpenAPI `info.version=16.1.0` fetched from `https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml` on 2026-07-31. The semantic binary count treats PDF endpoints as binary/file operations even though the landed r2 issue table grouped only attachment paths under binary_file.

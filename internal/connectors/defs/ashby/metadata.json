@@ -1,25 +1,25 @@
 {
-  "name": "ashby",
-  "display_name": "Ashby",
-  "description": "Reads Ashby applicant-tracking REST resources and exposes reviewed reverse-ETL/direct-read surfaces from the official Ashby OpenAPI. Fixture-only; not live-certified.",
-  "integration_type": "api",
-  "release_stage": "alpha",
-  "capabilities": {
-    "check": true,
-    "read": true,
-    "write": true,
-    "query": false,
-    "cdc": false,
-    "dynamic_schema": false
-  },
   "batch": {
     "read_page_size": 100,
     "write_batch_size": 1
   },
-  "risk": {
-    "read": "bounded Ashby POST reads using documented endpoints, Basic API-key auth, page-size and max-pages bounds, and sanitized replay fixtures",
-    "write": "named reverse-ETL actions only; no generic HTTP method/path/body; destructive actions require typed confirmation",
-    "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute"
+  "capabilities": {
+    "cdc": false,
+    "check": true,
+    "dynamic_schema": false,
+    "query": false,
+    "read": true,
+    "write": true
   },
-  "docs_url": "https://developers.ashbyhq.com/"
+  "description": "Reads Ashby applicant-tracking REST resources and exposes reviewed reverse-ETL/direct-read surfaces from the official Ashby OpenAPI.",
+  "display_name": "Ashby",
+  "docs_url": "https://developers.ashbyhq.com/",
+  "integration_type": "api",
+  "name": "ashby",
+  "release_stage": "alpha",
+  "risk": {
+    "approval": "reverse ETL writes require plan -\u003e preview -\u003e explicit approval -\u003e execute",
+    "read": "external Ashby API reads through fixed declaration-bound routes",
+    "write": "named reverse-ETL actions only; no generic HTTP method/path/body; destructive actions require typed confirmation"
+  }
 }

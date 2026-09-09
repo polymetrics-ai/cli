@@ -56,7 +56,7 @@ must use the shared plan, preview, explicit approval, and confirm-gate flow when
 ## Known limits
 
 - The provider ledger contains 234 operations. This wave makes 21 reads executable; the remaining
-  213 operations are individually dispositioned in `api_surface.json`.
+  213 operations are individually dispositioned in `execution bundle`.
 - Fourteen provider HEAD checks are blocked on a shared typed HEAD direct-read/check executor.
 - `GET /v1/media/animation/list/{page_number}` is blocked on provider RTM result correlation.
 - `POST /v1/bucket/url/generate` is blocked on provider RTM correlation plus a bounded signed-upload

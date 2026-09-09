@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "data": {
+      "additionalProperties": false,
+      "properties": {
+        "html_text": {
+          "type": "string"
+        },
+        "is_pinned": {
+          "type": "boolean"
+        },
+        "sticker_name": {
+          "type": "string"
+        },
+        "text": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "goal_gid": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "goal_gid",
+    "data"
+  ],
+  "type": "object"
+}

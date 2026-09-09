@@ -1,0 +1,3952 @@
+{
+  "base": "29b790d741255ed6642a0bd5071d7b6e6cfc3bb8",
+  "original_inventory": "LEGACY-ROUTE-INVENTORY.json",
+  "original_structural_rows": 390,
+  "original_lexical_complement_rows": 1039,
+  "current_ast_scan": "/Users/karthiksivadas/pm-cli-agent-workspace/data/cli-batch1-pi-takeover/receipts-cp13-141/cp15-inventory-scan-169-04/output.jsonl",
+  "current_ast_sha256": "46279525f61a4d96438989246518fc4b21e8a0ea9abfa43ecabb54cf6ed31b7a",
+  "scanner_sha256": "b8f9e9712cebdc72cd7f68dda2287ddf5be441b3042990ab0246eb59cb5dc310",
+  "original_production_calls": 541,
+  "current_production_calls": [
+    {
+      "path": "cmd/connectorgen/gen.go",
+      "function": "prepareHookset",
+      "line": 32,
+      "call": "hookFactorySpecs",
+      "test": false
+    },
+    {
+      "path": "cmd/connectorgen/gen.go",
+      "function": "hookFactorySpecs",
+      "line": 76,
+      "call": "readHookFactorySpec",
+      "test": false
+    },
+    {
+      "path": "cmd/connectorgen/gen.go",
+      "function": "generatedHookExtensions",
+      "line": 221,
+      "call": "hookFactorySpecs",
+      "test": false
+    },
+    {
+      "path": "cmd/connectorgen/source_foundation_admission.go",
+      "function": "deriveSourceFoundationAdmission",
+      "line": 148,
+      "call": "sourceFoundationCurrentAdmission",
+      "test": false
+    },
+    {
+      "path": "cmd/connectorgen/source_foundation_admission.go",
+      "function": "deriveSourceFoundationAdmission",
+      "line": 149,
+      "call": "sourceFoundationAdmissionSource",
+      "test": false
+    },
+    {
+      "path": "cmd/connectorgen/source_foundation_admission.go",
+      "function": "observeSourceFoundationAdmission",
+      "line": 460,
+      "call": "deriveSourceFoundationAdmission",
+      "test": false
+    },
+    {
+      "path": "cmd/connectorgen/source_foundation_admission.go",
+      "function": "observeSourceFoundationAdmission",
+      "line": 464,
+      "call": "sourceFoundationAdmissionPins",
+      "test": false
+    },
+    {
+      "path": "cmd/connectorgen/source_foundation_admission.go",
+      "function": "sourceFoundationAdmissionWithRoot",
+      "line": 539,
+      "call": "revalidateSourceFoundationAdmission",
+      "test": false
+    },
+    {
+      "path": "cmd/connectorgen/source_foundation_admission.go",
+      "function": "sourceFoundationAdmissionWithRoot",
+      "line": 546,
+      "call": "revalidateSourceFoundationAdmission",
+      "test": false
+    },
+    {
+      "path": "cmd/connectorgen/source_foundation_admission.go",
+      "function": "buildSourceFoundationAdmission",
+      "line": 553,
+      "call": "observeSourceFoundationAdmission",
+      "test": false
+    },
+    {
+      "path": "cmd/connectorgen/source_foundation_admission.go",
+      "function": "buildSourceFoundationAdmission",
+      "line": 566,
+      "call": "sourceFoundationAdmissionPins",
+      "test": false
+    },
+    {
+      "path": "cmd/connectorgen/source_foundation_admission.go",
+      "function": "buildSourceFoundationAdmission",
+      "line": 570,
+      "call": "deriveSourceFoundationAdmission",
+      "test": false
+    },
+    {
+      "path": "cmd/connectorgen/source_foundation_admission.go",
+      "function": "buildSourceFoundationAdmission",
+      "line": 571,
+      "call": "sourceFoundationAdmissionEqual",
+      "test": false
+    },
+    {
+      "path": "cmd/connectorgen/source_foundation_admission.go",
+      "function": "buildSourceFoundationAdmission",
+      "line": 574,
+      "call": "revalidateSourceFoundationAdmission",
+      "test": false
+    },
+    {
+      "path": "cmd/connectorgen/source_foundation_admission.go",
+      "function": "sourceFoundationAdmissionAssessments",
+      "line": 642,
+      "call": "buildSourceFoundationAdmissionObserved",
+      "test": false
+    },
+    {
+      "path": "cmd/connectorgen/source_foundation_assessment.go",
+      "function": "observeSourceFoundationAssessmentsWithCache",
+      "line": 130,
+      "call": "sourceFoundationAdmissionAssessments",
+      "test": false
+    },
+    {
+      "path": "cmd/connectorgen/source_foundation_assessment.go",
+      "function": "observeSourceFoundationAssessmentsWithCache",
+      "line": 134,
+      "call": "revalidateSourceFoundationAdmission",
+      "test": false
+    },
+    {
+      "path": "cmd/connectorgen/source_foundation_assessment.go",
+      "function": "observeSourceFoundationAssessmentsWithCache",
+      "line": 138,
+      "call": "revalidateSourceFoundationAdmission",
+      "test": false
+    },
+    {
+      "path": "cmd/connectorgen/source_foundation_cli.go",
+      "function": "runSourceDemandsObserved",
+      "line": 143,
+      "call": "revalidateSourceFoundationAdmission",
+      "test": false
+    },
+    {
+      "path": "cmd/connectorgen/source_foundation_cli.go",
+      "function": "runSourceDemandsObserved",
+      "line": 168,
+      "call": "buildSourceFoundationRegister",
+      "test": false
+    },
+    {
+      "path": "cmd/connectorgen/source_foundation_cli.go",
+      "function": "runSourceDemandsObserved",
+      "line": 195,
+      "call": "validateSourceFoundationRegister",
+      "test": false
+    },
+    {
+      "path": "cmd/connectorgen/source_foundation_cli.go",
+      "function": "runSourceDemandsObserved",
+      "line": 201,
+      "call": "validateSourceFoundationRegister",
+      "test": false
+    },
+    {
+      "path": "cmd/connectorgen/source_foundation_cli.go",
+      "function": "runSourceDemandsObserved",
+      "line": 209,
+      "call": "revalidateSourceFoundationAdmission",
+      "test": false
+    },
+    {
+      "path": "cmd/connectorgen/source_foundation_demand.go",
+      "function": "buildSourceFoundationUniverseWithCache",
+      "line": 53,
+      "call": "buildSourceFoundationAdmissionObserved",
+      "test": false
+    },
+    {
+      "path": "cmd/connectorgen/source_foundation_demand.go",
+      "function": "buildSourceFoundationAdmissionObserved",
+      "line": 86,
+      "call": "buildSourceFoundationAdmission",
+      "test": false
+    },
+    {
+      "path": "cmd/connectorgen/source_foundation_demand.go",
+      "function": "buildSourceFoundationAdmissionObserved",
+      "line": 94,
+      "call": "buildSourceFoundationAdmission",
+      "test": false
+    },
+    {
+      "path": "cmd/connectorgen/source_foundation_demand.go",
+      "function": "buildSourceFoundationAdmissionObserved",
+      "line": 99,
+      "call": "revalidateSourceFoundationAdmission",
+      "test": false
+    },
+    {
+      "path": "cmd/connectorgen/source_foundation_mechanism.go",
+      "function": "sourceFoundationFitTarget",
+      "line": 73,
+      "call": "sourceFoundationAdmissionFit",
+      "test": false
+    },
+    {
+      "path": "cmd/connectorgen/source_foundation_register.go",
+      "function": "buildSourceFoundationRegister",
+      "line": 76,
+      "call": "buildSourceFoundationRegisterCurrent",
+      "test": false
+    },
+    {
+      "path": "cmd/connectorgen/source_foundation_register.go",
+      "function": "buildSourceFoundationRegister",
+      "line": 82,
+      "call": "revalidateSourceFoundationAdmission",
+      "test": false
+    },
+    {
+      "path": "cmd/connectorgen/source_foundation_register.go",
+      "function": "buildSourceFoundationRegister",
+      "line": 87,
+      "call": "revalidateSourceFoundationAdmission",
+      "test": false
+    },
+    {
+      "path": "cmd/connectorgen/source_foundation_register.go",
+      "function": "buildSourceFoundationRegister",
+      "line": 90,
+      "call": "sourceFoundationAdmissionWithRoot",
+      "test": false
+    },
+    {
+      "path": "cmd/connectorgen/source_foundation_register.go",
+      "function": "buildSourceFoundationRegisterCurrent",
+      "line": 137,
+      "call": "sourceFoundationCurrentAdmission",
+      "test": false
+    },
+    {
+      "path": "cmd/connectorgen/source_foundation_register.go",
+      "function": "buildSourceFoundationRegisterCurrent",
+      "line": 256,
+      "call": "sourceFoundationRegisterCompletion",
+      "test": false
+    },
+    {
+      "path": "cmd/connectorgen/source_foundation_register_check.go",
+      "function": "validateSourceFoundationRegister",
+      "line": 27,
+      "call": "buildSourceFoundationRegister",
+      "test": false
+    },
+    {
+      "path": "cmd/connectorgen/source_foundation_requirements.go",
+      "function": "buildSourceFoundationRequirements",
+      "line": 56,
+      "call": "sourceFoundationAdmissionWithRoot",
+      "test": false
+    },
+    {
+      "path": "cmd/connectorgen/source_foundation_requirements.go",
+      "function": "buildSourceFoundationRequirementsBatch",
+      "line": 173,
+      "call": "sourceFoundationAdmissionFit",
+      "test": false
+    },
+    {
+      "path": "cmd/connectorgen/vnext_admission.go",
+      "function": "admitVNextCanonicalDescriptor",
+      "line": 102,
+      "call": "vNextResolveSuppliedSyncAdmissions",
+      "test": false
+    },
+    {
+      "path": "cmd/connectorgen/vnext_publication.go",
+      "function": "vNextPublicationAcquireLock",
+      "line": 1867,
+      "call": "ctx.Done",
+      "test": false
+    },
+    {
+      "path": "cmd/iconregistrygen/main.go",
+      "function": "downloadIconAssets",
+      "line": 534,
+      "call": "func() {\n\tdefer wg.Done()\n\tfor asset := range jobs {\n\t\tif err := downloadIconAsset(client, iconsDir, asset); err != nil {\n\t\t\terrs <- err\n\t\t}\n\t}\n}",
+      "test": false
+    },
+    {
+      "path": "cmd/iconregistrygen/main.go",
+      "function": "downloadIconAssets",
+      "line": 535,
+      "call": "wg.Done",
+      "test": false
+    },
+    {
+      "path": "internal/app/app.go",
+      "function": "*App.resolveCredential",
+      "line": 3639,
+      "call": "resolveAuthAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/app/durable_coordination.go",
+      "function": "*App.parkRateLimitedRun",
+      "line": 74,
+      "call": "resolver.RateLimitParkingScope",
+      "test": false
+    },
+    {
+      "path": "internal/app/durable_coordination.go",
+      "function": "*App.parkRateLimitedRun",
+      "line": 88,
+      "call": "engine.RearmRateLimitedRun",
+      "test": false
+    },
+    {
+      "path": "internal/app/durable_coordination.go",
+      "function": "*App.parkRateLimitedRun",
+      "line": 92,
+      "call": "engine.ParkRateLimitedRun",
+      "test": false
+    },
+    {
+      "path": "internal/app/durable_coordination.go",
+      "function": "*App.parkRateLimitedRun",
+      "line": 101,
+      "call": "coordination.ErrRateLimitRearmed.Error",
+      "test": false
+    },
+    {
+      "path": "internal/app/durable_coordination.go",
+      "function": "*App.resumeParkedRateLimitRun",
+      "line": 222,
+      "call": "a.markParkedRateLimitRunResumed",
+      "test": false
+    },
+    {
+      "path": "internal/app/durable_coordination.go",
+      "function": "*App.resumeParkedRateLimitRun",
+      "line": 225,
+      "call": "a.markParkedRateLimitRunResumed",
+      "test": false
+    },
+    {
+      "path": "internal/app/durable_coordination.go",
+      "function": "*App.resumeParkedRateLimitRun",
+      "line": 227,
+      "call": "a.startParkedRateLimitRunRearm",
+      "test": false
+    },
+    {
+      "path": "internal/app/durable_coordination.go",
+      "function": "*App.resumeParkedRateLimitRun",
+      "line": 231,
+      "call": "a.markParkedRateLimitRunResumed",
+      "test": false
+    },
+    {
+      "path": "internal/app/durable_coordination.go",
+      "function": "*App.startParkedRateLimitRunRearm",
+      "line": 242,
+      "call": "parkedRateLimitRunETLRequest",
+      "test": false
+    },
+    {
+      "path": "internal/app/etl_mode_dispatch.go",
+      "function": "*App.dispatchETLMode",
+      "line": 70,
+      "call": "a.parkRateLimitedRun",
+      "test": false
+    },
+    {
+      "path": "internal/app/etl_mode_dispatch.go",
+      "function": "*App.dispatchETLMode",
+      "line": 100,
+      "call": "a.parkRateLimitedRun",
+      "test": false
+    },
+    {
+      "path": "internal/app/etl_mode_dispatch.go",
+      "function": "*App.dispatchETLMode",
+      "line": 113,
+      "call": "a.parkRateLimitedRun",
+      "test": false
+    },
+    {
+      "path": "internal/app/issue_label_warehouse_transport.go",
+      "function": "declarativeTypedDestinationReadBack",
+      "line": 796,
+      "call": "readCtx.Done",
+      "test": false
+    },
+    {
+      "path": "internal/app/query_engine_duckdb.go",
+      "function": "duckdbEngine.openScopedDuckDB",
+      "line": 225,
+      "call": "duckdb.RegisterReplacementScan",
+      "test": false
+    },
+    {
+      "path": "internal/app/transport_composition.go",
+      "function": "*App.composeTransportRegistryLocked",
+      "line": 55,
+      "call": "synctransport.RegisterDeclaredTransports",
+      "test": false
+    },
+    {
+      "path": "internal/app/transport_dispatch.go",
+      "function": "*App.isExecutableFullSnapshotWarehouseTransport",
+      "line": 171,
+      "call": "a.transports.RegisteredDestination",
+      "test": false
+    },
+    {
+      "path": "internal/cli/cli.go",
+      "function": "run",
+      "line": 134,
+      "call": "engine.ConfigureSharedRateLimitRegistry",
+      "test": false
+    },
+    {
+      "path": "internal/cli/cli.go",
+      "function": "run",
+      "line": 134,
+      "call": "coordination.OpenSharedRateLimitRegistry",
+      "test": false
+    },
+    {
+      "path": "internal/cli/cli.go",
+      "function": "runConnectorsWithRegistry",
+      "line": 401,
+      "call": "connectors.RateLimitCoordinationOf",
+      "test": false
+    },
+    {
+      "path": "internal/cli/cli.go",
+      "function": "runConnectorsWithRegistry",
+      "line": 416,
+      "call": "connectors.RateLimitCoordinationOf",
+      "test": false
+    },
+    {
+      "path": "internal/cli/cli.go",
+      "function": "runRuntime",
+      "line": 2637,
+      "call": "runtimecheck.Doctor",
+      "test": false
+    },
+    {
+      "path": "internal/cli/runtime_helpers.go",
+      "function": "recordRuntimeETL",
+      "line": 33,
+      "call": "runtimecheck.Doctor",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/bundleregistry/factories.go",
+      "function": "ExecutorFactories.Construct",
+      "line": 60,
+      "call": "factory.Construct",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/bundleregistry/registry.go",
+      "function": "NewConstruction",
+      "line": 62,
+      "call": "nativeDatabaseExecutorFactory",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/bundleregistry/registry.go",
+      "function": "NewConstruction",
+      "line": 63,
+      "call": "nativeDatabaseExecutorFactory",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/bundleregistry/registry.go",
+      "function": "NewConstruction",
+      "line": 64,
+      "call": "nativeDatabaseExecutorFactory",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/bundleregistry/registry.go",
+      "function": "nativeDatabaseExecutorFactory",
+      "line": 94,
+      "call": "adapter.Construct",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/bundleregistry/registry.go",
+      "function": "NewRegistry",
+      "line": 109,
+      "call": "NewConstruction",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/bundleregistry/registry.go",
+      "function": "*Construction.BuildRegistry",
+      "line": 143,
+      "call": "registry.RegisterBuiltins",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/bundleregistry/registry.go",
+      "function": "*Construction.construct",
+      "line": 164,
+      "call": "c.compatibility.Construct",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/bundleregistry/registry.go",
+      "function": "*Construction.construct",
+      "line": 180,
+      "call": "c.factories.Construct",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/commandrunner/runner.go",
+      "function": "resolvePreflightCommand",
+      "line": 544,
+      "call": "preflighter.PreflightDeferredCommand",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/connectors.go",
+      "function": "GroupRateLimitScopeKeys",
+      "line": 122,
+      "call": "RateLimitScopeKey",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/connectors.go",
+      "function": "GroupRateLimitScopeKeys",
+      "line": 125,
+      "call": "RateLimitScopeKey",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/connectors.go",
+      "function": "NewRegistry",
+      "line": 3020,
+      "call": "r.RegisterBuiltins",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/connectors.go",
+      "function": "*Registry.RegisterBuiltins",
+      "line": 3028,
+      "call": "r.Register",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/connectors.go",
+      "function": "*Registry.RegisterBuiltins",
+      "line": 3029,
+      "call": "r.Register",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/connectors.go",
+      "function": "*Registry.RegisterBuiltins",
+      "line": 3030,
+      "call": "r.Register",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/connectors.go",
+      "function": "*Registry.RegisterBuiltins",
+      "line": 3031,
+      "call": "r.Register",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/connectors.go",
+      "function": "*Registry.Resolve",
+      "line": 3092,
+      "call": "ctx.Done",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/connsdk/auth.go",
+      "function": "*OAuth2ClientCredentials.accessToken",
+      "line": 210,
+      "call": "http.NewRequestWithContext",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/connsdk/auth.go",
+      "function": "*OAuth2ClientCredentials.accessToken",
+      "line": 225,
+      "call": "CheckRequestAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/connsdk/auth.go",
+      "function": "*OAuth2ClientCredentials.accessToken",
+      "line": 228,
+      "call": "clientCopy.Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/connsdk/http.go",
+      "function": "*Requester.admit",
+      "line": 368,
+      "call": "r.Admission.Admit",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/connsdk/http.go",
+      "function": "*Requester.admit",
+      "line": 375,
+      "call": "r.RouteRateLimits.AdmitRoute",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/connsdk/http.go",
+      "function": "*Requester.observeRateLimit",
+      "line": 391,
+      "call": "r.emitRateLimitReset",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/connsdk/http.go",
+      "function": "*Requester.observeRateLimit",
+      "line": 396,
+      "call": "r.RouteRateLimits.ObserveRoute",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/connsdk/http.go",
+      "function": "*Requester.ObserveRateLimit",
+      "line": 420,
+      "call": "r.emitRateLimitReset",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/connsdk/http.go",
+      "function": "*Requester.ObserveRateLimit",
+      "line": 425,
+      "call": "r.RouteRateLimits.ObserveRoute",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/connsdk/http.go",
+      "function": "*Requester.emitRateLimitEvent",
+      "line": 433,
+      "call": "r.RateLimitEvents.RecordRateLimitEvent",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/connsdk/http.go",
+      "function": "*Requester.emitRateLimitReset",
+      "line": 440,
+      "call": "r.emitRateLimitEvent",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/connsdk/http.go",
+      "function": "*Requester.admitRequesterSend",
+      "line": 478,
+      "call": "CheckRequestAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/connsdk/http.go",
+      "function": "*Requester.admitRequesterSend",
+      "line": 484,
+      "call": "r.SendAdmission.AdmitSend",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/connsdk/http.go",
+      "function": "*Requester.admitRequesterSend",
+      "line": 488,
+      "call": "r.rateLimitAdmissionContext",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/connsdk/http.go",
+      "function": "*Requester.admitRequesterSend",
+      "line": 489,
+      "call": "cancelAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/connsdk/http.go",
+      "function": "*Requester.admitRequesterSend",
+      "line": 493,
+      "call": "r.emitRateLimitEvent",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/connsdk/http.go",
+      "function": "*Requester.admitRequesterSend",
+      "line": 505,
+      "call": "r.emitRateLimitEvent",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/connsdk/http.go",
+      "function": "*Requester.admitRequesterSend",
+      "line": 516,
+      "call": "r.emitRateLimitEvent",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/connsdk/http.go",
+      "function": "*Requester.clientWithRateLimitAdmission",
+      "line": 567,
+      "call": "r.admitRequesterSend",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/connsdk/http.go",
+      "function": "ctxSleep",
+      "line": 590,
+      "call": "ctx.Done",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/connsdk/http.go",
+      "function": "*Requester.DoLimited",
+      "line": 640,
+      "call": "r.DoJSONLimited",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/connsdk/http.go",
+      "function": "*contextReader.Read",
+      "line": 992,
+      "call": "r.ctx.Done",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/connsdk/http.go",
+      "function": "*Requester.doWithBodyPolicy",
+      "line": 1247,
+      "call": "r.clientWithRateLimitAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/connsdk/http.go",
+      "function": "*Requester.doWithBodyPolicy",
+      "line": 1253,
+      "call": "bodyFactory",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/connsdk/http.go",
+      "function": "*Requester.doWithBodyPolicy",
+      "line": 1263,
+      "call": "http.NewRequestWithContext",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/connsdk/http.go",
+      "function": "*Requester.doWithBodyPolicy",
+      "line": 1280,
+      "call": "r.admitRequesterSend",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/connsdk/http.go",
+      "function": "*Requester.doWithBodyPolicy",
+      "line": 1285,
+      "call": "client.Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/connsdk/http.go",
+      "function": "*Requester.doWithBodyPolicy",
+      "line": 1300,
+      "call": "isRateLimitAdmissionError",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/connsdk/http.go",
+      "function": "*Requester.doWithBodyPolicy",
+      "line": 1300,
+      "call": "isRequestAdmissionError",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/connsdk/http.go",
+      "function": "*Requester.doWithBodyPolicy",
+      "line": 1311,
+      "call": "r.observeRateLimit",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/connsdk/http.go",
+      "function": "*Requester.DoJSON",
+      "line": 1433,
+      "call": "r.Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/connsdk/paginate.go",
+      "function": "Harvest",
+      "line": 211,
+      "call": "r.Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/connsdk/rate_limit_requester.go",
+      "function": "rateLimitObservation",
+      "line": 197,
+      "call": "parseNonNegativeRateLimitHeader",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/connsdk/rate_limit_requester.go",
+      "function": "rateLimitObservation",
+      "line": 201,
+      "call": "parseNonNegativeRateLimitHeader",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/connsdk/rate_limit_requester.go",
+      "function": "rateLimitObservation",
+      "line": 206,
+      "call": "parseRateLimitResetWithAbsolute",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/connsdk/rate_limit_requester.go",
+      "function": "rateLimitObservation",
+      "line": 212,
+      "call": "parsePositiveRateLimitCost",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/connsdk/rate_limit_requester.go",
+      "function": "parseRateLimitResetWithAbsolute",
+      "line": 258,
+      "call": "parseNonNegativeRateLimitHeader",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/connsdk/rate_limit_requester.go",
+      "function": "parseRateLimitResetWithAbsolute",
+      "line": 263,
+      "call": "parseNonNegativeRateLimitHeader",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/connsdk/refresh_token.go",
+      "function": "*OAuth2RefreshToken.exchangeLocked",
+      "line": 318,
+      "call": "http.NewRequestWithContext",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/connsdk/refresh_token.go",
+      "function": "*OAuth2RefreshToken.exchangeLocked",
+      "line": 328,
+      "call": "CheckRequestAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/connsdk/refresh_token.go",
+      "function": "*OAuth2RefreshToken.exchangeLocked",
+      "line": 335,
+      "call": "clientCopy.Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/connsdk/stream.go",
+      "function": "*Requester.DoStream",
+      "line": 102,
+      "call": "r.clientWithRateLimitAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/connsdk/stream.go",
+      "function": "*Requester.DoStream",
+      "line": 112,
+      "call": "http.NewRequestWithContext",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/connsdk/stream.go",
+      "function": "*Requester.DoStream",
+      "line": 136,
+      "call": "r.admitRequesterSend",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/connsdk/stream.go",
+      "function": "*Requester.DoStream",
+      "line": 140,
+      "call": "client.Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/connsdk/stream.go",
+      "function": "*Requester.DoStream",
+      "line": 147,
+      "call": "isRateLimitAdmissionError",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/connsdk/stream.go",
+      "function": "*Requester.DoStream",
+      "line": 147,
+      "call": "isRequestAdmissionError",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/connsdk/stream.go",
+      "function": "*Requester.DoStream",
+      "line": 158,
+      "call": "r.observeRateLimit",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/coordination_identity.go",
+      "function": "CoordinationIdentity.RateScopeKey",
+      "line": 112,
+      "call": "validateRateLimitScope",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/coordination_identity.go",
+      "function": "CoordinationIdentity.RateScopeKey",
+      "line": 115,
+      "call": "RateLimitScopeKey",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/database/arrow_transform.go",
+      "function": "*ArrowTransformer.Transform",
+      "line": 120,
+      "call": "arrowConnection.RegisterView",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/database/managed_target_provisioning.go",
+      "function": "*ManagedTargetProvisioner.acquire",
+      "line": 449,
+      "call": "ctx.Done",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/database/managed_target_provisioning.go",
+      "function": "*ManagedTargetProvisioner.acquire",
+      "line": 461,
+      "call": "once.Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/database/registry.go",
+      "function": "NewDatabaseInboundAdmission",
+      "line": 70,
+      "call": "newDatabaseNativeAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/database/registry.go",
+      "function": "NewDatabaseOutboundAdmission",
+      "line": 76,
+      "call": "newDatabaseNativeAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/database/registry.go",
+      "function": "newDatabaseNativeAdmission",
+      "line": 80,
+      "call": "isNilNativeAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/database/registry.go",
+      "function": "DatabaseNativeAdmission.matches",
+      "line": 113,
+      "call": "synccontract.ValidateNativeAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/database/registry.go",
+      "function": "NewDriverRegistry",
+      "line": 173,
+      "call": "registry.Register",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/database/registry.go",
+      "function": "*DriverRegistry.Register",
+      "line": 194,
+      "call": "cloneDatabaseNativeAdmissions",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/database/registry.go",
+      "function": "*DriverRegistry.Register",
+      "line": 194,
+      "call": "admitted.DatabaseNativeAdmissions",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/database/registry.go",
+      "function": "*DriverRegistry.Register",
+      "line": 195,
+      "call": "validateDatabaseNativeAdmissionLegs",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/database/registry.go",
+      "function": "*DriverRegistry.Register",
+      "line": 210,
+      "call": "validateRegisteredDatabaseNativeAdmissionLegs",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/database/registry.go",
+      "function": "*DriverRegistry.Admit",
+      "line": 278,
+      "call": "validateDriverNativeAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/database/registry.go",
+      "function": "*DriverRegistry.Admit",
+      "line": 278,
+      "call": "r.registeredNativeAdmissions",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/database/registry.go",
+      "function": "*DriverRegistry.registeredNativeAdmissions",
+      "line": 305,
+      "call": "cloneDatabaseNativeAdmissions",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/database/registry.go",
+      "function": "validateDriverNativeAdmission",
+      "line": 311,
+      "call": "validateDatabaseNativeAdmissionLegs",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/database/registry.go",
+      "function": "validateDatabaseNativeAdmissionLegs",
+      "line": 325,
+      "call": "databaseNativeAdmissionLegsConflict",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/database/registry.go",
+      "function": "validateRegisteredDatabaseNativeAdmissionLegs",
+      "line": 338,
+      "call": "databaseNativeAdmissionLegsConflict",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/database/registry.go",
+      "function": "databaseNativeAdmissionLegsConflict",
+      "line": 348,
+      "call": "sameDatabaseNativeAdmissionContract",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/database/registry.go",
+      "function": "sameDatabaseNativeAdmissionContract",
+      "line": 352,
+      "call": "synccontract.ValidateNativeAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/database/workset_delivery.go",
+      "function": "ChangeDeliveryResult.DownstreamAcknowledgement",
+      "line": 361,
+      "call": "r.write.DownstreamAcknowledgement",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/discovery/driver.go",
+      "function": "*Driver.describeAll",
+      "line": 233,
+      "call": "func() {\n\tdefer wg.Done()\n\tfor index := range jobs {\n\t\tobject := objects[index]\n\t\tfields, attempts, err := d.describe(ctx, provider, object)\n\t\tif err != nil {\n\t\t\tif errors.Is(err, context.Canceled) || errors.Is(err, context.DeadlineExceeded) {\n\t\t\t\tresults <- result{terminal: err}\n\t\t\t\tcontinue\n\t\t\t}\n\t\t\tresults <- result{index: index, failure: &connectors.DiscoveryFailure{Object: object.Name, Stage: \"describe\", Attempts: attempts}}\n\t\t\tcontinue\n\t\t}\n\t\tstream, err := d.stream(object, fields)\n\t\tif err != nil {\n\t\t\tresults <- result{index: index, failure: &connectors.DiscoveryFailure{Object: object.Name, Stage: \"schema\", Attempts: attempts}}\n\t\t\tcontinue\n\t\t}\n\t\tresults <- result{index: index, stream: stream}\n\t}\n}",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/discovery/driver.go",
+      "function": "*Driver.describeAll",
+      "line": 234,
+      "call": "wg.Done",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/discovery/driver.go",
+      "function": "*Driver.describeAll",
+      "line": 255,
+      "call": "func() {\n\tfor index := range objects {\n\t\tselect {\n\t\tcase jobs <- index:\n\t\tcase <-ctx.Done():\n\t\t\tclose(jobs)\n\t\t\twg.Wait()\n\t\t\tclose(results)\n\t\t\treturn\n\t\t}\n\t}\n\tclose(jobs)\n\twg.Wait()\n\tclose(results)\n}",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/discovery/driver.go",
+      "function": "*Driver.describeAll",
+      "line": 259,
+      "call": "ctx.Done",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/discovery/driver.go",
+      "function": "*Driver.retry",
+      "line": 318,
+      "call": "isRateLimited",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/discovery/driver.go",
+      "function": "sleepContext",
+      "line": 538,
+      "call": "ctx.Done",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/auth.go",
+      "function": "rateLimitConfigForSelectedAuth",
+      "line": 69,
+      "call": "profileHook.RateLimitAuthProfile",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/auth_declared_password_token.go",
+      "function": "*declaredPasswordTokenAuthenticator.token",
+      "line": 81,
+      "call": "http.NewRequestWithContext",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/auth_declared_password_token.go",
+      "function": "*declaredPasswordTokenAuthenticator.token",
+      "line": 87,
+      "call": "connsdk.CheckRequestAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/auth_declared_password_token.go",
+      "function": "*declaredPasswordTokenAuthenticator.token",
+      "line": 90,
+      "call": "(&http.Client{\n\tTimeout: 30 * time.Second,\n\tCheckRedirect: func(*http.Request, []*http.Request) error {\n\t\treturn http.ErrUseLastResponse\n\t},\n}).Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/auth_declared_session.go",
+      "function": "*declaredSessionAuthenticator.sessionToken",
+      "line": 77,
+      "call": "a.requester.DoJSON",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/binary_read.go",
+      "function": "OperationBinaryDownload",
+      "line": 174,
+      "call": "requester.DoStream",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/bundle.go",
+      "function": "loadBundle",
+      "line": 1507,
+      "call": "loadRateLimits",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/connector.go",
+      "function": "*Connector.RateLimitParkingScope",
+      "line": 205,
+      "call": "newRateLimitResolverWithContext",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/connector.go",
+      "function": "executeWithAuthCohort",
+      "line": 475,
+      "call": "cfg.AuthenticationAdmission.Execute",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/database_polling_apply.go",
+      "function": "*DatabasePollingApplyExecutor.ApplyPollingPage",
+      "line": 146,
+      "call": "result.DownstreamAcknowledgement",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/deferred_command.go",
+      "function": "*Connector.PreflightDeferredCommand",
+      "line": 15,
+      "call": "PreflightDeferredCommand",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/deferred_command.go",
+      "function": "Base.PreflightDeferredCommand",
+      "line": 21,
+      "call": "PreflightDeferredCommand",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/direct_read_paginate.go",
+      "function": "readDirectPage",
+      "line": 253,
+      "call": "requester.DoTextLimited",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/direct_read_paginate.go",
+      "function": "readDirectPage",
+      "line": 255,
+      "call": "requester.DoLimited",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/direct_write.go",
+      "function": "OperationDirectWrite",
+      "line": 174,
+      "call": "requester.DoPreparedFormLimited",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/direct_write.go",
+      "function": "OperationDirectWrite",
+      "line": 180,
+      "call": "requester.DoPreparedJSONLimited",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/direct_write.go",
+      "function": "OperationDirectWrite",
+      "line": 196,
+      "call": "requester.DoMultipartLimited",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/direct_write.go",
+      "function": "OperationDirectWrite",
+      "line": 260,
+      "call": "observeGraphQLRateLimit",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/graphql_operation.go",
+      "function": "operationGraphQLDirectRead",
+      "line": 674,
+      "call": "requester.DoLimited",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/graphql_operation.go",
+      "function": "operationGraphQLDirectRead",
+      "line": 702,
+      "call": "observeGraphQLRateLimit",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/graphql_operation.go",
+      "function": "graphQLOperationResponseWithRuntimeErrorPolicy",
+      "line": 801,
+      "call": "graphQLRateLimit",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/graphql_operation.go",
+      "function": "observeGraphQLRateLimit",
+      "line": 868,
+      "call": "graphQLRateLimitObservation",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/graphql_operation.go",
+      "function": "observeGraphQLRateLimit",
+      "line": 872,
+      "call": "requester.ObserveRateLimit",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/hooks.go",
+      "function": "declaredRouteRequester.DoJSON",
+      "line": 110,
+      "call": "r.runtime.RequesterFor",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/hooks.go",
+      "function": "declaredRouteRequester.DoJSON",
+      "line": 130,
+      "call": "clone.Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/rate_limit_runtime.go",
+      "function": "currentRateLimitRegistry",
+      "line": 39,
+      "call": "processRateLimitRegistry.mu.RLock",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/rate_limit_runtime.go",
+      "function": "currentRateLimitRegistry",
+      "line": 40,
+      "call": "processRateLimitRegistry.mu.RUnlock",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/rate_limit_runtime.go",
+      "function": "replaceRateLimitRegistryForTest",
+      "line": 48,
+      "call": "processRateLimitRegistry.mu.Lock",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/rate_limit_runtime.go",
+      "function": "replaceRateLimitRegistryForTest",
+      "line": 51,
+      "call": "processRateLimitRegistry.mu.Unlock",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/rate_limit_runtime.go",
+      "function": "replaceRateLimitRegistryForTest",
+      "line": 53,
+      "call": "processRateLimitRegistry.mu.Lock",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/rate_limit_runtime.go",
+      "function": "replaceRateLimitRegistryForTest",
+      "line": 55,
+      "call": "processRateLimitRegistry.mu.Unlock",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/rate_limit_runtime.go",
+      "function": "ConfigureSharedRateLimitRegistry",
+      "line": 63,
+      "call": "processSharedRateLimitRegistry.mu.Lock",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/rate_limit_runtime.go",
+      "function": "ConfigureSharedRateLimitRegistry",
+      "line": 65,
+      "call": "processSharedRateLimitRegistry.mu.Unlock",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/rate_limit_runtime.go",
+      "function": "currentSharedRateLimitRegistry",
+      "line": 69,
+      "call": "processSharedRateLimitRegistry.mu.RLock",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/rate_limit_runtime.go",
+      "function": "currentSharedRateLimitRegistry",
+      "line": 70,
+      "call": "processSharedRateLimitRegistry.mu.RUnlock",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/rate_limit_runtime.go",
+      "function": "ConfigureRateLimitEventSink",
+      "line": 82,
+      "call": "processRateLimitEventSinks.mu.Lock",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/rate_limit_runtime.go",
+      "function": "ConfigureRateLimitEventSink",
+      "line": 85,
+      "call": "processRateLimitEventSinks.mu.Unlock",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/rate_limit_runtime.go",
+      "function": "ConfigureRateLimitEventSink",
+      "line": 87,
+      "call": "processRateLimitEventSinks.mu.Lock",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/rate_limit_runtime.go",
+      "function": "ConfigureRateLimitEventSink",
+      "line": 93,
+      "call": "processRateLimitEventSinks.mu.Unlock",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/rate_limit_runtime.go",
+      "function": "rateLimitEventSinkFor",
+      "line": 98,
+      "call": "processRateLimitEventSinks.mu.RLock",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/rate_limit_runtime.go",
+      "function": "rateLimitEventSinkFor",
+      "line": 99,
+      "call": "processRateLimitEventSinks.mu.RUnlock",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/rate_limit_runtime.go",
+      "function": "ConfigureRateLimitAdmissionTimeout",
+      "line": 111,
+      "call": "processRateLimitAdmissionTimeouts.mu.Lock",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/rate_limit_runtime.go",
+      "function": "ConfigureRateLimitAdmissionTimeout",
+      "line": 114,
+      "call": "processRateLimitAdmissionTimeouts.mu.Unlock",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/rate_limit_runtime.go",
+      "function": "ConfigureRateLimitAdmissionTimeout",
+      "line": 116,
+      "call": "processRateLimitAdmissionTimeouts.mu.Lock",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/rate_limit_runtime.go",
+      "function": "ConfigureRateLimitAdmissionTimeout",
+      "line": 122,
+      "call": "processRateLimitAdmissionTimeouts.mu.Unlock",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/rate_limit_runtime.go",
+      "function": "rateLimitAdmissionTimeoutFor",
+      "line": 127,
+      "call": "processRateLimitAdmissionTimeouts.mu.RLock",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/rate_limit_runtime.go",
+      "function": "rateLimitAdmissionTimeoutFor",
+      "line": 128,
+      "call": "processRateLimitAdmissionTimeouts.mu.RUnlock",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/rate_limit_runtime.go",
+      "function": "replaceSharedRateLimitRegistryForTest",
+      "line": 133,
+      "call": "processSharedRateLimitRegistry.mu.Lock",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/rate_limit_runtime.go",
+      "function": "replaceSharedRateLimitRegistryForTest",
+      "line": 136,
+      "call": "processSharedRateLimitRegistry.mu.Unlock",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/rate_limit_runtime.go",
+      "function": "replaceSharedRateLimitRegistryForTest",
+      "line": 138,
+      "call": "processSharedRateLimitRegistry.mu.Lock",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/rate_limit_runtime.go",
+      "function": "replaceSharedRateLimitRegistryForTest",
+      "line": 140,
+      "call": "processSharedRateLimitRegistry.mu.Unlock",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/rate_limit_runtime.go",
+      "function": "newRateLimitResolver",
+      "line": 161,
+      "call": "newRateLimitResolverWithContext",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/rate_limit_runtime.go",
+      "function": "newRateLimitResolverWithContext",
+      "line": 174,
+      "call": "currentRateLimitRegistry",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/rate_limit_runtime.go",
+      "function": "newRateLimitResolverWithContext",
+      "line": 175,
+      "call": "currentSharedRateLimitRegistry",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/rate_limit_runtime.go",
+      "function": "*rateLimitResolver.requesterFor",
+      "line": 181,
+      "call": "r.declaredRequester",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/rate_limit_runtime.go",
+      "function": "*rateLimitResolver.defaultRequester",
+      "line": 209,
+      "call": "r.declaredRequester",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/rate_limit_runtime.go",
+      "function": "*rateLimitResolver.declaredRequester",
+      "line": 245,
+      "call": "resolvedRateLimitAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/rate_limit_runtime.go",
+      "function": "*rateLimitResolver.declaredRequester",
+      "line": 246,
+      "call": "resolvedRateLimitObserver",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/rate_limit_runtime.go",
+      "function": "*rateLimitResolver.resolvePolicies",
+      "line": 281,
+      "call": "connectors.GroupRateLimitScopeKeys",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/rate_limit_runtime.go",
+      "function": "*endpointRateLimitResolver.AdmitRoute",
+      "line": 508,
+      "call": "resolvedRateLimitAdmission(matched).Admit",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/rate_limit_runtime.go",
+      "function": "*endpointRateLimitResolver.AdmitRoute",
+      "line": 508,
+      "call": "resolvedRateLimitAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/rate_limit_runtime.go",
+      "function": "*endpointRateLimitResolver.ObserveRoute",
+      "line": 532,
+      "call": "resolvedRateLimitObserver(matched).Observe",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/rate_limit_runtime.go",
+      "function": "*endpointRateLimitResolver.ObserveRoute",
+      "line": 532,
+      "call": "resolvedRateLimitObserver",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/rate_limit_runtime.go",
+      "function": "*Runtime.requesterFor",
+      "line": 720,
+      "call": "rt.RequesterFor",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/rate_limits.go",
+      "function": "loadRateLimits",
+      "line": 41,
+      "call": "validateRateLimits",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/rate_limits.go",
+      "function": "validateRateLimits",
+      "line": 78,
+      "call": "validateRateLimitPolicy",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/rate_limits.go",
+      "function": "validateRateLimits",
+      "line": 87,
+      "call": "validateRateLimitCostHeaderConflicts",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/rate_limits.go",
+      "function": "validateRateLimitPolicy",
+      "line": 91,
+      "call": "validateRateLimitSource",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/rate_limits.go",
+      "function": "validateRateLimitPolicy",
+      "line": 94,
+      "call": "validateRateLimitSelector",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/rate_limits.go",
+      "function": "validateRateLimitPolicy",
+      "line": 97,
+      "call": "validateRateLimitScope",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/rate_limits.go",
+      "function": "validateRateLimitPolicy",
+      "line": 114,
+      "call": "validateRateLimitBudget",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/rate_limits.go",
+      "function": "validateRateLimitSource",
+      "line": 128,
+      "call": "hasCredentialLikeRateLimitFragment",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/rate_limits.go",
+      "function": "validateRateLimitSelector",
+      "line": 194,
+      "call": "validateRateLimitEndpoints",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/rate_limits.go",
+      "function": "validateRateLimitSelector",
+      "line": 197,
+      "call": "validateRateLimitEndpoints",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/rate_limits.go",
+      "function": "validateRateLimitSelector",
+      "line": 200,
+      "call": "validateRateLimitNames",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/rate_limits.go",
+      "function": "validateRateLimitSelector",
+      "line": 203,
+      "call": "validateRateLimitNames",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/rate_limits.go",
+      "function": "validateRateLimitEndpoints",
+      "line": 208,
+      "call": "validRateLimitMethod",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/rate_limits.go",
+      "function": "validateRateLimitScope",
+      "line": 258,
+      "call": "validRateLimitScopeSubject",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/rate_limits.go",
+      "function": "validateRateLimitBudget",
+      "line": 295,
+      "call": "requirePositiveRateLimitInt",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/rate_limits.go",
+      "function": "validateRateLimitBudget",
+      "line": 298,
+      "call": "requirePositiveRateLimitInt",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/rate_limits.go",
+      "function": "validateRateLimitBudget",
+      "line": 305,
+      "call": "requirePositiveRateLimitInt",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/rate_limits.go",
+      "function": "validateRateLimitBudget",
+      "line": 308,
+      "call": "requirePositiveRateLimitFloat",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/rate_limits.go",
+      "function": "validateRateLimitBudget",
+      "line": 317,
+      "call": "validateRateLimitCost",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/rate_limits.go",
+      "function": "validateRateLimitCost",
+      "line": 357,
+      "call": "requirePositiveRateLimitFloat",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/read.go",
+      "function": "fanOutIDsFromRequest",
+      "line": 424,
+      "call": "requester.Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/read.go",
+      "function": "readOneSequence",
+      "line": 529,
+      "call": "newRateLimiter",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/read.go",
+      "function": "readOneSequence",
+      "line": 673,
+      "call": "requester.DoForm",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/read.go",
+      "function": "readOneSequence",
+      "line": 675,
+      "call": "requester.Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/read.go",
+      "function": "newRuntimeWithResolvedHTTPBindings",
+      "line": 1176,
+      "call": "rateLimitAdmissionTimeoutFor",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/read.go",
+      "function": "newRuntimeWithResolvedHTTPBindings",
+      "line": 1178,
+      "call": "newRateLimitResolverWithContext",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/read.go",
+      "function": "newRuntimeWithResolvedHTTPBindings",
+      "line": 1200,
+      "call": "resolver.defaultRequester",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/read.go",
+      "function": "ctxSleepFallback",
+      "line": 2692,
+      "call": "ctx.Done",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/read.go",
+      "function": "Check",
+      "line": 2768,
+      "call": "requester.DoLimited",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/read.go",
+      "function": "Check",
+      "line": 2778,
+      "call": "requester.DoForm",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/read.go",
+      "function": "Check",
+      "line": 2780,
+      "call": "requester.Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/status_check.go",
+      "function": "OperationStatusCheck",
+      "line": 81,
+      "call": "requester.DoStatusCheck",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/write.go",
+      "function": "executeWriteRecordWithResponse",
+      "line": 617,
+      "call": "writeRequester",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/write.go",
+      "function": "executeWriteRecordWithResponse",
+      "line": 629,
+      "call": "requester.DoLimited",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/write.go",
+      "function": "executeWriteRecordWithResponse",
+      "line": 632,
+      "call": "requester.DoFormLimited",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/write.go",
+      "function": "executeWriteRecordWithResponse",
+      "line": 638,
+      "call": "requester.DoLimited",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/write.go",
+      "function": "executeWriteRecordWithResponse",
+      "line": 654,
+      "call": "requester.DoLimited",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/write.go",
+      "function": "executeWriteRecordWithResponse",
+      "line": 656,
+      "call": "requester.DoLimited",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/write.go",
+      "function": "executeWriteRecordWithResponse",
+      "line": 662,
+      "call": "requester.DoLimited",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/write.go",
+      "function": "executeWriteRecordWithResponse",
+      "line": 673,
+      "call": "requester.DoMultipartLimited",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/write.go",
+      "function": "executeWriteRecordWithResponse",
+      "line": 679,
+      "call": "requester.DoLimited",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/write.go",
+      "function": "executeWriteRecordWithResponse",
+      "line": 685,
+      "call": "requester.DoBinaryLimited",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/engine/write.go",
+      "function": "executeWriteRecordWithResponse",
+      "line": 704,
+      "call": "requester.DoLimited",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/akeneo/hooks.go",
+      "function": "*passwordGrantAuth.accessToken",
+      "line": 236,
+      "call": "http.NewRequestWithContext",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/akeneo/hooks.go",
+      "function": "*passwordGrantAuth.accessToken",
+      "line": 245,
+      "call": "a.httpClient().Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/amazon-ads/hooks.go",
+      "function": "*Hooks.Authenticator",
+      "line": 118,
+      "call": "http.NewRequestWithContext",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/amazon-ads/hooks.go",
+      "function": "*Hooks.Authenticator",
+      "line": 129,
+      "call": "client.Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/amazon-seller-partner/hooks.go",
+      "function": "*Hooks.Authenticator",
+      "line": 92,
+      "call": "http.NewRequestWithContext",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/amazon-seller-partner/hooks.go",
+      "function": "*Hooks.Authenticator",
+      "line": 103,
+      "call": "client.Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/apple-search-ads/hooks.go",
+      "function": "harvest",
+      "line": 123,
+      "call": "r.Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/apple-search-ads/hooks.go",
+      "function": "harvest",
+      "line": 128,
+      "call": "r.Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/appsflyer/hooks.go",
+      "function": "Hooks.ReadStream",
+      "line": 60,
+      "call": "rt.Requester.Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/blogger/hooks.go",
+      "function": "*oauthRefreshAuth.accessToken",
+      "line": 201,
+      "call": "http.NewRequestWithContext",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/blogger/hooks.go",
+      "function": "*oauthRefreshAuth.accessToken",
+      "line": 208,
+      "call": "a.httpClient().Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/chift/hooks.go",
+      "function": "*sessionTokenAuth.accessToken",
+      "line": 165,
+      "call": "http.NewRequestWithContext",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/chift/hooks.go",
+      "function": "*sessionTokenAuth.accessToken",
+      "line": 172,
+      "call": "a.httpClient().Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/ebay-fulfillment/hooks.go",
+      "function": "*refreshTokenAuth.accessToken",
+      "line": 181,
+      "call": "http.NewRequestWithContext",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/ebay-fulfillment/hooks.go",
+      "function": "*refreshTokenAuth.accessToken",
+      "line": 195,
+      "call": "client.Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/ebay-fulfillment/hooks.go",
+      "function": "*Hooks.ReadStream",
+      "line": 255,
+      "call": "rt.Requester.Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/feishu/hooks.go",
+      "function": "*Hooks.AuthenticatorWithDeclaredRoute",
+      "line": 64,
+      "call": "requester.DoJSON",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/github/hooks.go",
+      "function": "*Hooks.AuthenticatorWithDeclaredRoute",
+      "line": 100,
+      "call": "requester.DoJSON",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/github/hooks.go",
+      "function": "githubWriteRequester",
+      "line": 454,
+      "call": "rt.RequesterFor",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/github/hooks.go",
+      "function": "createLabel",
+      "line": 686,
+      "call": "githubWriteRequester",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/github/hooks.go",
+      "function": "createLabel",
+      "line": 690,
+      "call": "requester.Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/github/hooks.go",
+      "function": "updateLabel",
+      "line": 709,
+      "call": "githubWriteRequester",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/github/hooks.go",
+      "function": "updateLabel",
+      "line": 713,
+      "call": "requester.Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/github/hooks.go",
+      "function": "closeResource",
+      "line": 747,
+      "call": "githubWriteRequester",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/github/hooks.go",
+      "function": "closeResource",
+      "line": 751,
+      "call": "requester.Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/github/hooks.go",
+      "function": "reopenResource",
+      "line": 770,
+      "call": "githubWriteRequester",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/github/hooks.go",
+      "function": "reopenResource",
+      "line": 774,
+      "call": "requester.Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/github/hooks.go",
+      "function": "createPullRequest",
+      "line": 797,
+      "call": "githubWriteRequester",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/github/hooks.go",
+      "function": "createPullRequest",
+      "line": 801,
+      "call": "requester.Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/github/hooks.go",
+      "function": "updatePullRequest",
+      "line": 823,
+      "call": "githubWriteRequester",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/github/hooks.go",
+      "function": "updatePullRequest",
+      "line": 827,
+      "call": "requester.Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/github/hooks.go",
+      "function": "pullRequestFollowups",
+      "line": 843,
+      "call": "githubWriteRequester",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/github/hooks.go",
+      "function": "pullRequestFollowups",
+      "line": 847,
+      "call": "requester.Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/github/hooks.go",
+      "function": "pullRequestFollowups",
+      "line": 858,
+      "call": "githubWriteRequester",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/github/hooks.go",
+      "function": "pullRequestFollowups",
+      "line": 862,
+      "call": "requester.Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/github/hooks.go",
+      "function": "postComment",
+      "line": 871,
+      "call": "githubWriteRequester",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/github/hooks.go",
+      "function": "postComment",
+      "line": 875,
+      "call": "requester.Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/gmail/hooks.go",
+      "function": "*oauthRefreshAuth.accessToken",
+      "line": 236,
+      "call": "http.NewRequestWithContext",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/gmail/hooks.go",
+      "function": "*oauthRefreshAuth.accessToken",
+      "line": 243,
+      "call": "a.httpClient().Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/google-ads/hooks.go",
+      "function": "Hooks.readAccessibleCustomers",
+      "line": 127,
+      "call": "r.Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/google-ads/hooks.go",
+      "function": "Hooks.search",
+      "line": 174,
+      "call": "r.Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/google-calendar/hooks.go",
+      "function": "*refreshTokenAuthenticator.accessToken",
+      "line": 139,
+      "call": "http.NewRequestWithContext",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/google-calendar/hooks.go",
+      "function": "*refreshTokenAuthenticator.accessToken",
+      "line": 150,
+      "call": "client.Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/google-forms/hooks.go",
+      "function": "*Hooks.Check",
+      "line": 105,
+      "call": "rt.Requester.DoJSON",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/google-forms/hooks.go",
+      "function": "*oauthRefreshAuth.accessToken",
+      "line": 257,
+      "call": "http.NewRequestWithContext",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/google-forms/hooks.go",
+      "function": "*oauthRefreshAuth.accessToken",
+      "line": 264,
+      "call": "a.httpClient().Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/google-search-console/hooks.go",
+      "function": "*Hooks.readSitemaps",
+      "line": 105,
+      "call": "r.Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/google-search-console/hooks.go",
+      "function": "*Hooks.readAnalyticsForSite",
+      "line": 185,
+      "call": "r.Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/hoorayhr/hooks.go",
+      "function": "*sessionTokenAuth.token",
+      "line": 132,
+      "call": "a.login.DoJSON",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/jamf-pro/hooks.go",
+      "function": "*tokenAuth.accessToken",
+      "line": 148,
+      "call": "http.NewRequestWithContext",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/jamf-pro/hooks.go",
+      "function": "*tokenAuth.accessToken",
+      "line": 159,
+      "call": "client.Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/keka/hooks.go",
+      "function": "*tokenAuth.accessToken",
+      "line": 257,
+      "call": "http.NewRequestWithContext",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/keka/hooks.go",
+      "function": "*tokenAuth.accessToken",
+      "line": 268,
+      "call": "client.Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/microsoft-dataverse/hooks.go",
+      "function": "*Hooks.ReadStream",
+      "line": 98,
+      "call": "rt.Requester.Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/microsoft-entra-id/hooks.go",
+      "function": "*Hooks.ReadStream",
+      "line": 104,
+      "call": "rt.Requester.Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/microsoft-lists/hooks.go",
+      "function": "*Hooks.ReadStream",
+      "line": 151,
+      "call": "rt.Requester.Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/microsoft-teams/hooks.go",
+      "function": "Hooks.harvest",
+      "line": 98,
+      "call": "r.Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/monday/hooks.go",
+      "function": "execute",
+      "line": 218,
+      "call": "r.Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/notion/hooks.go",
+      "function": "Hooks.harvest",
+      "line": 129,
+      "call": "r.Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/notion/hooks.go",
+      "function": "Hooks.harvest",
+      "line": 136,
+      "call": "r.Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/outlook/hooks.go",
+      "function": "*refreshTokenAuth.accessToken",
+      "line": 213,
+      "call": "http.NewRequestWithContext",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/outlook/hooks.go",
+      "function": "*refreshTokenAuth.accessToken",
+      "line": 219,
+      "call": "a.httpClient().Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/outlook/hooks.go",
+      "function": "harvest",
+      "line": 292,
+      "call": "r.Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/paypal-transaction/hooks.go",
+      "function": "*basicTokenAuth.accessToken",
+      "line": 174,
+      "call": "http.NewRequestWithContext",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/paypal-transaction/hooks.go",
+      "function": "*basicTokenAuth.accessToken",
+      "line": 187,
+      "call": "client.Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/paypal-transaction/hooks.go",
+      "function": "*Hooks.harvestDisputes",
+      "line": 251,
+      "call": "r.Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/pinterest/hooks.go",
+      "function": "*refreshTokenAuth.accessToken",
+      "line": 208,
+      "call": "http.NewRequestWithContext",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/pinterest/hooks.go",
+      "function": "*refreshTokenAuth.accessToken",
+      "line": 216,
+      "call": "a.httpClient().Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/plaid/hooks.go",
+      "function": "Hooks.Check",
+      "line": 113,
+      "call": "rt.Requester.Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/plaid/hooks.go",
+      "function": "Hooks.readPage",
+      "line": 120,
+      "call": "r.Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/quickbooks/hooks.go",
+      "function": "*oauthRefreshAuth.accessToken",
+      "line": 210,
+      "call": "http.NewRequestWithContext",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/quickbooks/hooks.go",
+      "function": "*oauthRefreshAuth.accessToken",
+      "line": 217,
+      "call": "a.httpClient().Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/quickbooks/hooks.go",
+      "function": "*Hooks.harvest",
+      "line": 309,
+      "call": "r.Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/rss/hooks.go",
+      "function": "load",
+      "line": 106,
+      "call": "r.Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/salesloft/hooks.go",
+      "function": "*refreshTokenAuth.accessToken",
+      "line": 240,
+      "call": "http.NewRequestWithContext",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/salesloft/hooks.go",
+      "function": "*refreshTokenAuth.accessToken",
+      "line": 247,
+      "call": "a.httpClient().Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/sentry/hooks.go",
+      "function": "*Hooks.ReadStream",
+      "line": 91,
+      "call": "rt.Requester.Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/serpstat/hooks.go",
+      "function": "Hooks.ReadStream",
+      "line": 96,
+      "call": "rt.Requester.Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/slack/hooks.go",
+      "function": "Hooks.Check",
+      "line": 54,
+      "call": "rt.Requester.Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/slack/hooks.go",
+      "function": "Hooks.harvest",
+      "line": 133,
+      "call": "r.Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/smartsheets/hooks.go",
+      "function": "Hooks.readRows",
+      "line": 77,
+      "call": "r.Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/snapchat-marketing/hooks.go",
+      "function": "*refreshTokenAuth.accessToken",
+      "line": 202,
+      "call": "http.NewRequestWithContext",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/snapchat-marketing/hooks.go",
+      "function": "*refreshTokenAuth.accessToken",
+      "line": 209,
+      "call": "a.httpClient().Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/stigg/hooks.go",
+      "function": "Hooks.ReadStream",
+      "line": 72,
+      "call": "rt.Requester.Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/strava/hooks.go",
+      "function": "*refreshTokenAuth.accessToken",
+      "line": 199,
+      "call": "http.NewRequestWithContext",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/strava/hooks.go",
+      "function": "*refreshTokenAuth.accessToken",
+      "line": 206,
+      "call": "a.httpClient().Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/twilio/hooks.go",
+      "function": "Hooks.harvest",
+      "line": 138,
+      "call": "r.Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/uptick/hooks.go",
+      "function": "*passwordGrantAuth.accessToken",
+      "line": 207,
+      "call": "http.NewRequestWithContext",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/uptick/hooks.go",
+      "function": "*passwordGrantAuth.accessToken",
+      "line": 214,
+      "call": "a.httpClient().Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/us-census/hooks.go",
+      "function": "Hooks.ReadStream",
+      "line": 68,
+      "call": "rt.Requester.Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/youtube-analytics/hooks.go",
+      "function": "*oauthRefreshAuth.accessToken",
+      "line": 235,
+      "call": "http.NewRequestWithContext",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/youtube-analytics/hooks.go",
+      "function": "*oauthRefreshAuth.accessToken",
+      "line": 242,
+      "call": "a.httpClient().Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/zoho-analytics-metadata-api/hooks.go",
+      "function": "*oauthRefreshAuth.accessToken",
+      "line": 206,
+      "call": "http.NewRequestWithContext",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/zoho-analytics-metadata-api/hooks.go",
+      "function": "*oauthRefreshAuth.accessToken",
+      "line": 213,
+      "call": "a.httpClient().Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/zoho-bigin/hooks.go",
+      "function": "*oauthRefreshAuth.accessToken",
+      "line": 200,
+      "call": "http.NewRequestWithContext",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/hooks/zoho-bigin/hooks.go",
+      "function": "*oauthRefreshAuth.accessToken",
+      "line": 207,
+      "call": "a.httpClient().Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/icons.go",
+      "function": "loadConnectorIconRegistry",
+      "line": 125,
+      "call": "connectorIcons.once.Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/manifeststore/bundle_store.go",
+      "function": "*GenerationLease.Release",
+      "line": 58,
+      "call": "l.once.Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/manifeststore/bundle_store.go",
+      "function": "*BundleHandle.Release",
+      "line": 99,
+      "call": "h.once.Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/manifeststore/bundle_store.go",
+      "function": "*BundleStore.wait",
+      "line": 240,
+      "call": "ctx.Done",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/bing-ads/connection.go",
+      "function": "Connector.Check",
+      "line": 235,
+      "call": "fixtureMode",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/bing-ads/connection.go",
+      "function": "Connector.Check",
+      "line": 249,
+      "call": "r.Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/bing-ads/connection.go",
+      "function": "*oauthRefreshAuth.accessToken",
+      "line": 325,
+      "call": "http.NewRequestWithContext",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/bing-ads/connection.go",
+      "function": "*oauthRefreshAuth.accessToken",
+      "line": 332,
+      "call": "a.httpClient().Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/bing-ads/reader.go",
+      "function": "Connector.Read",
+      "line": 119,
+      "call": "fixtureMode",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/bing-ads/reader.go",
+      "function": "Connector.Read",
+      "line": 120,
+      "call": "c.readFixture",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/bing-ads/reader.go",
+      "function": "Connector.Read",
+      "line": 143,
+      "call": "r.Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/dbtest/harness.go",
+      "function": "*Harness.Start",
+      "line": 256,
+      "call": "ctx.Done",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/dbtest/harness.go",
+      "function": "*Harness.Close",
+      "line": 398,
+      "call": "h.closeOnce.Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/dbtest/harness.go",
+      "function": "closeHarnesses",
+      "line": 1056,
+      "call": "func(harness *Harness) {\n\tdefer wg.Done()\n\t_ = harness.Close(ctx)\n}",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/dbtest/harness.go",
+      "function": "closeHarnesses",
+      "line": 1057,
+      "call": "wg.Done",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/dynamodb/connection.go",
+      "function": "Connector.Check",
+      "line": 144,
+      "call": "fixtureMode",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/dynamodb/reader.go",
+      "function": "Connector.Read",
+      "line": 56,
+      "call": "fixtureMode",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/dynamodb/reader.go",
+      "function": "Connector.Read",
+      "line": 57,
+      "call": "readFixture",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/dynamodb/reader.go",
+      "function": "Connector.scan",
+      "line": 109,
+      "call": "http.NewRequestWithContext",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/dynamodb/reader.go",
+      "function": "Connector.scan",
+      "line": 127,
+      "call": "client.Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/hubspot/cataloger.go",
+      "function": "hubspotProvider.List",
+      "line": 63,
+      "call": "requester.DoJSON",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/hubspot/cataloger.go",
+      "function": "hubspotProvider.Describe",
+      "line": 91,
+      "call": "requester.DoJSON",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/hubspot/cataloger.go",
+      "function": "hubspotProvider.requester",
+      "line": 112,
+      "call": "p.runtime.RequesterFor",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/hubspot/reader.go",
+      "function": "*Connector.Read",
+      "line": 57,
+      "call": "runtime.RequesterFor",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/hubspot/reader.go",
+      "function": "*Connector.Read",
+      "line": 80,
+      "call": "requester.DoJSON",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/nativeset/factories.go",
+      "function": "ManifestSelections",
+      "line": 54,
+      "call": "[]nativeFactory",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/nativeset/factories.go",
+      "function": "NewDatabaseAdapter",
+      "line": 92,
+      "call": "newFactoryAdapter",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/nativeset/factories.go",
+      "function": "NewCompatibilityAdapter",
+      "line": 101,
+      "call": "newFactoryAdapter",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/postgres/arrow_full_overwrite_transport.go",
+      "function": "*ManagedTargetTransportDestination.BeginArrowFullOverwrite",
+      "line": 30,
+      "call": "executeManagedTargetWithAuthenticationAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/postgres/arrow_full_overwrite_transport.go",
+      "function": "*managedTargetArrowFullOverwriteRun.ApplyArrowSegment",
+      "line": 96,
+      "call": "executeManagedTargetWithAuthenticationAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/postgres/arrow_full_overwrite_transport.go",
+      "function": "*managedTargetArrowFullOverwriteRun.PublishArrowFullOverwrite",
+      "line": 170,
+      "call": "executeManagedTargetWithAuthenticationAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/postgres/arrow_full_overwrite_transport.go",
+      "function": "*managedTargetArrowFullOverwriteRun.ReadBackArrowFullOverwrite",
+      "line": 225,
+      "call": "executeManagedTargetWithAuthenticationAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/postgres/arrow_full_overwrite_transport.go",
+      "function": "*managedTargetArrowFullOverwriteRun.publishArrowShadow",
+      "line": 322,
+      "call": "checkPostgresRequestAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/postgres/arrow_range_extract.go",
+      "function": "*PollingTransportSource.ExtractArrowRanges",
+      "line": 40,
+      "call": "executeWithAuthenticationAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/postgres/arrow_range_extract.go",
+      "function": "*PollingTransportSource.extractArrowRanges",
+      "line": 46,
+      "call": "fixtureMode",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/postgres/arrow_range_extract.go",
+      "function": "*PollingTransportSource.extractArrowRanges",
+      "line": 75,
+      "call": "checkPostgresRequestAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/postgres/bootstrap.go",
+      "function": "Connector.BootstrapCDC",
+      "line": 51,
+      "call": "executeWithAuthenticationAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/postgres/bootstrap.go",
+      "function": "validateBootstrapCDCRequest",
+      "line": 117,
+      "call": "fixtureMode",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/postgres/bootstrap.go",
+      "function": "Connector.readBootstrapSnapshot",
+      "line": 188,
+      "call": "checkPostgresRequestAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/postgres/cataloger.go",
+      "function": "Connector.Catalog",
+      "line": 15,
+      "call": "executeWithAuthenticationAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/postgres/cataloger.go",
+      "function": "Connector.catalog",
+      "line": 27,
+      "call": "fixtureMode",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/postgres/cdc.go",
+      "function": "Connector.ReadCDC",
+      "line": 42,
+      "call": "executeWithAuthenticationAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/postgres/cdc.go",
+      "function": "Connector.readCDC",
+      "line": 51,
+      "call": "fixtureMode",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/postgres/cdc_lifecycle.go",
+      "function": "Connector.CDCSlotName",
+      "line": 422,
+      "call": "executeWithAuthenticationAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/postgres/cdc_lifecycle.go",
+      "function": "Connector.TeardownCDC",
+      "line": 458,
+      "call": "executeWithAuthenticationAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/postgres/cdc_v2.go",
+      "function": "*pgoutputV2TransactionMachine.commit",
+      "line": 280,
+      "call": "stagedReceipt.DownstreamReceiptID",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/postgres/connection.go",
+      "function": "openPostgresPool",
+      "line": 261,
+      "call": "checkPostgresRequestAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/postgres/connection.go",
+      "function": "checkPostgresRequestAdmission",
+      "line": 279,
+      "call": "connsdk.CheckRequestAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/postgres/connection.go",
+      "function": "admittedPostgresTx.Exec",
+      "line": 301,
+      "call": "checkPostgresRequestAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/postgres/connection.go",
+      "function": "admittedPostgresTx.Query",
+      "line": 308,
+      "call": "checkPostgresRequestAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/postgres/connection.go",
+      "function": "admittedPostgresTx.QueryRow",
+      "line": 315,
+      "call": "checkPostgresRequestAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/postgres/connection.go",
+      "function": "admittedPostgresTx.Commit",
+      "line": 322,
+      "call": "checkPostgresRequestAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/postgres/connection.go",
+      "function": "resolveConfig",
+      "line": 369,
+      "call": "fixtureMode",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/postgres/connection.go",
+      "function": "Connector.Check",
+      "line": 511,
+      "call": "executeWithAuthenticationAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/postgres/connection.go",
+      "function": "executeWithAuthenticationAdmission",
+      "line": 521,
+      "call": "cfg.AuthenticationAdmission.Execute",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/postgres/connection.go",
+      "function": "Connector.check",
+      "line": 550,
+      "call": "fixtureMode",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/postgres/connection.go",
+      "function": "Connector.check",
+      "line": 558,
+      "call": "checkPostgresRequestAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/postgres/database_driver.go",
+      "function": "postgresPreflightDurability",
+      "line": 76,
+      "call": "checkPostgresRequestAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/postgres/full_overwrite_transport.go",
+      "function": "*ManagedTargetTransportDestination.BeginFullOverwrite",
+      "line": 31,
+      "call": "executeManagedTargetWithAuthenticationAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/postgres/full_overwrite_transport.go",
+      "function": "*managedTargetFullOverwriteRun.PublishFullOverwrite",
+      "line": 113,
+      "call": "executeManagedTargetWithAuthenticationAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/postgres/full_overwrite_transport.go",
+      "function": "*managedTargetFullOverwriteRun.ReadBackFullOverwrite",
+      "line": 156,
+      "call": "executeManagedTargetWithAuthenticationAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/postgres/full_overwrite_transport.go",
+      "function": "*ManagedTargetTransportDestination.ReadBackEmptyFullOverwrite",
+      "line": 166,
+      "call": "executeManagedTargetWithAuthenticationAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/postgres/full_overwrite_transport.go",
+      "function": "*managedTargetFullOverwriteRun.publishShadow",
+      "line": 318,
+      "call": "checkPostgresRequestAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/postgres/managed_target_control.go",
+      "function": "*DatabaseDriver.loadNamespaceOwner",
+      "line": 27,
+      "call": "checkPostgresRequestAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/postgres/managed_target_control.go",
+      "function": "*DatabaseDriver.loadTargetControl",
+      "line": 86,
+      "call": "checkPostgresRequestAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/postgres/managed_target_control.go",
+      "function": "*DatabaseDriver.LoadManagedTargetDelivery",
+      "line": 144,
+      "call": "checkPostgresRequestAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/postgres/managed_target_control.go",
+      "function": "*DatabaseDriver.StoreManagedTargetDelivery",
+      "line": 183,
+      "call": "checkPostgresRequestAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/postgres/managed_target_driver.go",
+      "function": "*DatabaseDriver.AcquireManagedTargetLock",
+      "line": 42,
+      "call": "checkPostgresRequestAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/postgres/managed_target_driver.go",
+      "function": "*postgresManagedTargetLock.ReleaseManagedTargetLock",
+      "line": 65,
+      "call": "l.once.Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/postgres/managed_target_driver.go",
+      "function": "*DatabaseDriver.ObserveManagedTarget",
+      "line": 99,
+      "call": "checkPostgresRequestAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/postgres/managed_target_driver.go",
+      "function": "*DatabaseDriver.ObserveManagedTarget",
+      "line": 131,
+      "call": "checkPostgresRequestAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/postgres/managed_target_driver.go",
+      "function": "*DatabaseDriver.CreateManagedTarget",
+      "line": 217,
+      "call": "checkPostgresRequestAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/postgres/managed_target_driver.go",
+      "function": "*DatabaseDriver.targetDatabaseIdentity",
+      "line": 477,
+      "call": "checkPostgresRequestAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/postgres/managed_target_write.go",
+      "function": "*DatabaseDriver.BeginDatabaseWrite",
+      "line": 95,
+      "call": "checkPostgresRequestAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/postgres/polling_transport_source.go",
+      "function": "RegisterPollingTransportSource",
+      "line": 94,
+      "call": "registry.RegisterSource",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/postgres/polling_transport_source.go",
+      "function": "*PollingTransportSource.ReadTransport",
+      "line": 105,
+      "call": "executeWithAuthenticationAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/postgres/polling_transport_source.go",
+      "function": "*PollingTransportSource.readPollingTransport",
+      "line": 192,
+      "call": "registry.RegisterSource",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/postgres/polling_transport_source.go",
+      "function": "*PollingTransportSource.readPollingTransport",
+      "line": 195,
+      "call": "registry.RegisterApply",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/postgres/polling_transport_source.go",
+      "function": "*PollingTransportSource.preparePollingRunner",
+      "line": 214,
+      "call": "fixtureMode",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/postgres/polling_transport_source.go",
+      "function": "*postgresPollingSourceRunner.FetchPollingSourcePage",
+      "line": 520,
+      "call": "checkPostgresRequestAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/postgres/reader.go",
+      "function": "Connector.Read",
+      "line": 31,
+      "call": "executeWithAuthenticationAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/postgres/reader.go",
+      "function": "Connector.read",
+      "line": 48,
+      "call": "fixtureMode",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/postgres/reader.go",
+      "function": "Connector.read",
+      "line": 49,
+      "call": "c.readFixture",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/postgres/reader.go",
+      "function": "Connector.snapshot",
+      "line": 93,
+      "call": "checkPostgresRequestAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/postgres/transport_destination.go",
+      "function": "*ManagedTargetTransportDestination.ApplyDestination",
+      "line": 119,
+      "call": "executeManagedTargetWithAuthenticationAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/postgres/transport_destination.go",
+      "function": "executeManagedTargetWithAuthenticationAdmission",
+      "line": 199,
+      "call": "executeWithAuthenticationAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/postgres/transport_destination.go",
+      "function": "*ManagedTargetTransportDestination.applyChangeDelivery",
+      "line": 262,
+      "call": "result.DownstreamAcknowledgement",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/postgres/transport_destination.go",
+      "function": "*ManagedTargetTransportDestination.applyDatabaseWrite",
+      "line": 311,
+      "call": "result.DownstreamAcknowledgement",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/postgres/transport_destination.go",
+      "function": "*ManagedTargetTransportDestination.ReadBackDestination",
+      "line": 334,
+      "call": "executeManagedTargetWithAuthenticationAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/postgres/transport_destination.go",
+      "function": "*ManagedTargetTransportDestination.resolveManagedTargetWithTransform",
+      "line": 478,
+      "call": "checkPostgresRequestAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/postgres/transport_source.go",
+      "function": "Connector.SyncTransportDefinitionFactories",
+      "line": 51,
+      "call": "PollingTransportDefinitionFactory",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/postgres/transport_source.go",
+      "function": "Connector.SyncTransportDefinitionFactories",
+      "line": 51,
+      "call": "ManagedTargetTransportDefinitionFactory",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/postgres/transport_source.go",
+      "function": "RegisterSnapshotTransportSource",
+      "line": 58,
+      "call": "RegisterPollingTransportSource",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/postgres/typed_catalog.go",
+      "function": "Connector.TypedCatalog",
+      "line": 114,
+      "call": "executeWithAuthenticationAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/postgres/typed_catalog.go",
+      "function": "Connector.typedCatalog",
+      "line": 130,
+      "call": "fixtureMode",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/postgres/typed_catalog.go",
+      "function": "discoverTypedCatalog",
+      "line": 213,
+      "call": "checkPostgresRequestAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/tally-prime/connection.go",
+      "function": "Connector.Check",
+      "line": 130,
+      "call": "fixtureMode",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/tally-prime/connection.go",
+      "function": "Connector.postCollection",
+      "line": 252,
+      "call": "http.NewRequestWithContext",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/tally-prime/connection.go",
+      "function": "Connector.postCollection",
+      "line": 259,
+      "call": "client.Do",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/tally-prime/reader.go",
+      "function": "Connector.Read",
+      "line": 47,
+      "call": "fixtureMode",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/native/tally-prime/reader.go",
+      "function": "Connector.Read",
+      "line": 48,
+      "call": "c.readFixture",
+      "test": false
+    },
+    {
+      "path": "internal/connectors/rate_limit_coordination.go",
+      "function": "RateLimitCoordinationOf",
+      "line": 35,
+      "call": "provider.RateLimitCoordination",
+      "test": false
+    },
+    {
+      "path": "internal/coordination/auth_cohort.go",
+      "function": "*AuthCohortRuntime.Execute",
+      "line": 167,
+      "call": "connsdk.WithRequestAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/coordination/durable_store.go",
+      "function": "*FileRateParkingStore.Create",
+      "line": 195,
+      "call": "validateParkedRateLimitRun",
+      "test": false
+    },
+    {
+      "path": "internal/coordination/durable_store.go",
+      "function": "*FileRateParkingStore.Create",
+      "line": 205,
+      "call": "parkedRateLimitRunEqual",
+      "test": false
+    },
+    {
+      "path": "internal/coordination/durable_store.go",
+      "function": "*FileRateParkingStore.Rearm",
+      "line": 228,
+      "call": "validateParkedRateLimitRun",
+      "test": false
+    },
+    {
+      "path": "internal/coordination/durable_store.go",
+      "function": "*FileRateParkingStore.MarkNeedsReauthorization",
+      "line": 339,
+      "call": "validateParkedRateLimitRun",
+      "test": false
+    },
+    {
+      "path": "internal/coordination/durable_store.go",
+      "function": "validateRateParkingFileState",
+      "line": 494,
+      "call": "validateParkedRateLimitRun",
+      "test": false
+    },
+    {
+      "path": "internal/coordination/rate_budget_coordinator.go",
+      "function": "*RateBudgetCoordinator.Decide",
+      "line": 173,
+      "call": "newRateLimitSet",
+      "test": false
+    },
+    {
+      "path": "internal/coordination/rate_limits.go",
+      "function": "wallRateLimitClock.Sleep",
+      "line": 32,
+      "call": "ctx.Done",
+      "test": false
+    },
+    {
+      "path": "internal/coordination/rate_limits.go",
+      "function": "*RateLimitRegistry.Limiter",
+      "line": 99,
+      "call": "newRateLimitSet",
+      "test": false
+    },
+    {
+      "path": "internal/coordination/rate_parking.go",
+      "function": "*NeedsReauthorizationError.Error",
+      "line": 51,
+      "call": "ErrRateLimitNeedsReauthorization.Error",
+      "test": false
+    },
+    {
+      "path": "internal/coordination/rate_parking.go",
+      "function": "*MemoryRateParkingStore.Create",
+      "line": 159,
+      "call": "validateParkedRateLimitRun",
+      "test": false
+    },
+    {
+      "path": "internal/coordination/rate_parking.go",
+      "function": "*MemoryRateParkingStore.Create",
+      "line": 168,
+      "call": "parkedRateLimitRunEqual",
+      "test": false
+    },
+    {
+      "path": "internal/coordination/rate_parking.go",
+      "function": "*MemoryRateParkingStore.Rearm",
+      "line": 181,
+      "call": "validateParkedRateLimitRun",
+      "test": false
+    },
+    {
+      "path": "internal/coordination/rate_parking.go",
+      "function": "*MemoryRateParkingStore.MarkNeedsReauthorization",
+      "line": 277,
+      "call": "validateParkedRateLimitRun",
+      "test": false
+    },
+    {
+      "path": "internal/coordination/rate_parking.go",
+      "function": "*MemoryRateParkingStore.updateResumePhase",
+      "line": 302,
+      "call": "validateParkedRateLimitRun",
+      "test": false
+    },
+    {
+      "path": "internal/coordination/rate_parking.go",
+      "function": "*RateParkingCoordinator.Start",
+      "line": 556,
+      "call": "validateParkedRateLimitRun",
+      "test": false
+    },
+    {
+      "path": "internal/coordination/rate_parking.go",
+      "function": "*RateParkingCoordinator.Park",
+      "line": 624,
+      "call": "parkedRateLimitRunFromRequest",
+      "test": false
+    },
+    {
+      "path": "internal/coordination/rate_parking.go",
+      "function": "*RateParkingCoordinator.Park",
+      "line": 635,
+      "call": "parkedRateLimitRunEqual",
+      "test": false
+    },
+    {
+      "path": "internal/coordination/rate_parking.go",
+      "function": "*RateParkingCoordinator.Rearm",
+      "line": 662,
+      "call": "parkedRateLimitRunFromRequest",
+      "test": false
+    },
+    {
+      "path": "internal/coordination/rate_parking.go",
+      "function": "*RateParkingCoordinator.reloadDurableRunsLocked",
+      "line": 778,
+      "call": "validateParkedRateLimitRun",
+      "test": false
+    },
+    {
+      "path": "internal/coordination/rate_parking.go",
+      "function": "*RateParkingCoordinator.resumeDue",
+      "line": 834,
+      "call": "c.active.Done",
+      "test": false
+    },
+    {
+      "path": "internal/coordination/rate_parking.go",
+      "function": "*RateParkingCoordinator.resumeDue",
+      "line": 894,
+      "call": "parkedRateLimitRunEqual",
+      "test": false
+    },
+    {
+      "path": "internal/coordination/rate_parking.go",
+      "function": "*RateParkingCoordinator.resumeDue",
+      "line": 943,
+      "call": "parkedRateLimitRunSameIdentity",
+      "test": false
+    },
+    {
+      "path": "internal/coordination/rate_parking.go",
+      "function": "*RateParkingCoordinator.resumeDue",
+      "line": 976,
+      "call": "parkedRateLimitRunSameIdentity",
+      "test": false
+    },
+    {
+      "path": "internal/coordination/rate_parking.go",
+      "function": "*RateParkingCoordinator.renewClaim",
+      "line": 1070,
+      "call": "ctx.Done",
+      "test": false
+    },
+    {
+      "path": "internal/coordination/rate_parking.go",
+      "function": "parkedRateLimitRunFromRequest",
+      "line": 1183,
+      "call": "validateParkedRateLimitRun",
+      "test": false
+    },
+    {
+      "path": "internal/coordination/rate_parking.go",
+      "function": "parkedRateLimitRunSameIdentity",
+      "line": 1212,
+      "call": "parkedRateLimitRunEqual",
+      "test": false
+    },
+    {
+      "path": "internal/coordination/shared_rate_limits.go",
+      "function": "OpenSharedRateLimitRegistry",
+      "line": 95,
+      "call": "NewSharedRateLimitRegistry",
+      "test": false
+    },
+    {
+      "path": "internal/coordination/shared_rate_limits.go",
+      "function": "OpenSharedRateLimitRegistry",
+      "line": 97,
+      "call": "NewSharedRateLimitRegistry",
+      "test": false
+    },
+    {
+      "path": "internal/coordination/shared_rate_limits.go",
+      "function": "*SharedRateLimitRegistry.EnsureAvailable",
+      "line": 116,
+      "call": "sharedRateLimitUnavailable",
+      "test": false
+    },
+    {
+      "path": "internal/coordination/shared_rate_limits.go",
+      "function": "*SharedRateLimitRegistry.EnsureAvailable",
+      "line": 122,
+      "call": "sharedRateLimitUnavailable",
+      "test": false
+    },
+    {
+      "path": "internal/coordination/shared_rate_limits.go",
+      "function": "sharedRateLimitReserveError",
+      "line": 135,
+      "call": "sharedRateLimitUnavailable",
+      "test": false
+    },
+    {
+      "path": "internal/coordination/shared_rate_limits.go",
+      "function": "*SharedRateLimitRegistry.Limiter",
+      "line": 141,
+      "call": "[]connsdk.RateLimitBudget",
+      "test": false
+    },
+    {
+      "path": "internal/coordination/shared_rate_limits.go",
+      "function": "*SharedRateLimiter.Admit",
+      "line": 162,
+      "call": "sharedRateLimitUnavailable",
+      "test": false
+    },
+    {
+      "path": "internal/coordination/shared_rate_limits.go",
+      "function": "*SharedRateLimiter.Admit",
+      "line": 164,
+      "call": "sharedRateLimitBudgetSpecs",
+      "test": false
+    },
+    {
+      "path": "internal/coordination/shared_rate_limits.go",
+      "function": "*SharedRateLimiter.Admit",
+      "line": 168,
+      "call": "sharedRateLimitTTL",
+      "test": false
+    },
+    {
+      "path": "internal/coordination/shared_rate_limits.go",
+      "function": "*SharedRateLimiter.Admit",
+      "line": 180,
+      "call": "sharedRateLimitReserveScript.Run(ctx, l.registry.dragonfly.client, []string{sharedRateLimitRedisKey(l.key)}, string(encoded), ttl.Milliseconds()).Result",
+      "test": false
+    },
+    {
+      "path": "internal/coordination/shared_rate_limits.go",
+      "function": "*SharedRateLimiter.Admit",
+      "line": 180,
+      "call": "sharedRateLimitReserveScript.Run",
+      "test": false
+    },
+    {
+      "path": "internal/coordination/shared_rate_limits.go",
+      "function": "*SharedRateLimiter.Admit",
+      "line": 180,
+      "call": "sharedRateLimitRedisKey",
+      "test": false
+    },
+    {
+      "path": "internal/coordination/shared_rate_limits.go",
+      "function": "*SharedRateLimiter.Admit",
+      "line": 185,
+      "call": "sharedRateLimitReserveError",
+      "test": false
+    },
+    {
+      "path": "internal/coordination/shared_rate_limits.go",
+      "function": "*SharedRateLimiter.Admit",
+      "line": 187,
+      "call": "sharedRateLimitWait",
+      "test": false
+    },
+    {
+      "path": "internal/coordination/shared_rate_limits.go",
+      "function": "*SharedRateLimiter.Admit",
+      "line": 196,
+      "call": "ctx.Done",
+      "test": false
+    },
+    {
+      "path": "internal/coordination/shared_rate_limits.go",
+      "function": "*SharedRateLimiter.Observe",
+      "line": 210,
+      "call": "sharedRateLimitObservationOf",
+      "test": false
+    },
+    {
+      "path": "internal/coordination/shared_rate_limits.go",
+      "function": "*SharedRateLimiter.Observe",
+      "line": 214,
+      "call": "sharedRateLimitBudgetSpecs",
+      "test": false
+    },
+    {
+      "path": "internal/coordination/shared_rate_limits.go",
+      "function": "*SharedRateLimiter.Observe",
+      "line": 218,
+      "call": "sharedRateLimitTTL",
+      "test": false
+    },
+    {
+      "path": "internal/coordination/shared_rate_limits.go",
+      "function": "*SharedRateLimiter.Observe",
+      "line": 225,
+      "call": "sharedRateLimitObserveScriptArgs",
+      "test": false
+    },
+    {
+      "path": "internal/coordination/shared_rate_limits.go",
+      "function": "*SharedRateLimiter.Observe",
+      "line": 229,
+      "call": "sharedRateLimitObserveScript.Run(ctx, l.registry.dragonfly.client, []string{sharedRateLimitRedisKey(l.key)}, args...).Result",
+      "test": false
+    },
+    {
+      "path": "internal/coordination/shared_rate_limits.go",
+      "function": "*SharedRateLimiter.Observe",
+      "line": 229,
+      "call": "sharedRateLimitObserveScript.Run",
+      "test": false
+    },
+    {
+      "path": "internal/coordination/shared_rate_limits.go",
+      "function": "*SharedRateLimiter.Observe",
+      "line": 229,
+      "call": "sharedRateLimitRedisKey",
+      "test": false
+    },
+    {
+      "path": "internal/coordination/shared_rate_limits.go",
+      "function": "sharedRateLimitObservationOf",
+      "line": 250,
+      "call": "sharedRateLimitObservationOfAt",
+      "test": false
+    },
+    {
+      "path": "internal/coordination/shared_rate_limits.go",
+      "function": "sharedRateLimitBudgetSpecs",
+      "line": 319,
+      "call": "validateSharedRateLimitWindowSeconds",
+      "test": false
+    },
+    {
+      "path": "internal/coordination/unix_rate_budget_coordinator.go",
+      "function": "*UnixRateBudgetCoordinatorOwner.accept",
+      "line": 180,
+      "call": "o.wg.Done",
+      "test": false
+    },
+    {
+      "path": "internal/coordination/unix_rate_budget_coordinator.go",
+      "function": "*UnixRateBudgetCoordinatorOwner.handle",
+      "line": 206,
+      "call": "o.wg.Done",
+      "test": false
+    },
+    {
+      "path": "internal/flow/action.go",
+      "function": "ctxSleepAction",
+      "line": 126,
+      "call": "ctx.Done",
+      "test": false
+    },
+    {
+      "path": "internal/flow/action.go",
+      "function": "*HTTPActionRunner.sendBatch",
+      "line": 403,
+      "call": "http.NewRequestWithContext",
+      "test": false
+    },
+    {
+      "path": "internal/flow/action.go",
+      "function": "*HTTPActionRunner.sendBatch",
+      "line": 409,
+      "call": "r.client().Do",
+      "test": false
+    },
+    {
+      "path": "internal/perf/perf.go",
+      "function": "Compare",
+      "line": 77,
+      "call": "runtimecheck.Doctor",
+      "test": false
+    },
+    {
+      "path": "internal/rlm/llm.go",
+      "function": "*httpLLM.Complete",
+      "line": 153,
+      "call": "l.req.DoJSON",
+      "test": false
+    },
+    {
+      "path": "internal/synccontract/native.go",
+      "function": "NewNativeExecutorRegistry",
+      "line": 145,
+      "call": "registry.Register",
+      "test": false
+    },
+    {
+      "path": "internal/synccontract/native.go",
+      "function": "*NativeExecutorRegistry.Register",
+      "line": 157,
+      "call": "isNilNativeExecutorAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/synccontract/native.go",
+      "function": "*NativeExecutorRegistry.admissionFor",
+      "line": 225,
+      "call": "isNilNativeExecutorAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/synccontract/native.go",
+      "function": "*NativeExecutorRegistry.admissionFor",
+      "line": 228,
+      "call": "ValidateNativeAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/synccontract/native.go",
+      "function": "ValidateNativeAdmission",
+      "line": 239,
+      "call": "isNilNativeExecutorAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/synccontract/native.go",
+      "function": "isNilNativeSyncExecutor",
+      "line": 253,
+      "call": "isNilNativeExecutorAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/synctransport/arrow_fast_path_controller.go",
+      "function": "*Orchestrator.runArrowFullOverwrite",
+      "line": 215,
+      "call": "request.ReadBackAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/synctransport/arrow_fast_path_pipeline.go",
+      "function": "*Orchestrator.runArrowFullOverwritePipelined",
+      "line": 149,
+      "call": "request.ReadBackAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/synctransport/arrow_fast_path_pipeline.go",
+      "function": "produceArrowPipeline",
+      "line": 252,
+      "call": "ctx.Done",
+      "test": false
+    },
+    {
+      "path": "internal/synctransport/byte_credits.go",
+      "function": "*ByteCreditController.Acquire",
+      "line": 76,
+      "call": "ctx.Done",
+      "test": false
+    },
+    {
+      "path": "internal/synctransport/byte_credits.go",
+      "function": "*ByteCreditLease.Release",
+      "line": 87,
+      "call": "l.once.Do",
+      "test": false
+    },
+    {
+      "path": "internal/synctransport/definition_composition.go",
+      "function": "RegisterDeclaredTransports",
+      "line": 70,
+      "call": "definitionFactoryIndex",
+      "test": false
+    },
+    {
+      "path": "internal/synctransport/orchestrator.go",
+      "function": "*Orchestrator.Run",
+      "line": 247,
+      "call": "func() (synccontract.DownstreamAcknowledgement, error) {\n\tapplyCtx, cancelApply := transportUnitContext(ctx, request.unitDeadline())\n\tif err := authorizeDestinationEffect(applyCtx, request.Approval, \"apply\"); err != nil {\n\t\tcancelApply()\n\t\treturn synccontract.DownstreamAcknowledgement{}, err\n\t}\n\n\tapplyStarted := time.Now()\n\tacknowledgement, err := resolved.Destination.ApplyDestination(applyCtx, destinationApplyRequest)\n\tresult.ApplyElapsed += time.Since(applyStarted)\n\tcancelApply()\n\tcollectDestinationResult(&result, acknowledgement, err)\n\tif err != nil {\n\t\treturn synccontract.DownstreamAcknowledgement{}, fmt.Errorf(\"apply destination transport: %w\", tagTransportExecutionError(TransportExecutionOriginDestination, err))\n\t}\n\n\tresult.RecordsApplied += len(staged.Records)\n\treadBackRequest, err := cloneDestinationReadBackRequest(DestinationReadBackRequest{\n\t\tPlan:            plan,\n\t\tWorkset:         destinationWorkset,\n\t\tAcknowledgement: acknowledgement,\n\t\tRuntime:         request.DestinationRuntime,\n\t\tSource:          request.Source,\n\t\tSourceRuntime:   request.SourceRuntime,\n\t\tDestination:     request.Destination,\n\t\tBinding:         request.DestinationBinding,\n\t\tStream:          request.Stream,\n\t\tMode:            request.Mode,\n\t})\n\tif err != nil {\n\t\treturn synccontract.DownstreamAcknowledgement{}, fmt.Errorf(\"clone destination read-back request: %w\", err)\n\t}\n\treadBackCtx, cancelReadBack := transportUnitContext(ctx, request.unitDeadline())\n\treadBackStarted := time.Now()\n\tif err := resolved.Destination.ReadBackDestination(readBackCtx, readBackRequest); err != nil {\n\t\tresult.ReadBackElapsed += time.Since(readBackStarted)\n\t\tcancelReadBack()\n\t\treturn synccontract.DownstreamAcknowledgement{}, fmt.Errorf(\"read back destination transport receipt: %w\", tagTransportExecutionError(TransportExecutionOriginDestination, err))\n\t}\n\tresult.ReadBackElapsed += time.Since(readBackStarted)\n\tcancelReadBack()\n\treturn acknowledgement, nil\n}",
+      "test": false
+    },
+    {
+      "path": "internal/synctransport/orchestrator.go",
+      "function": "*Orchestrator.runFullOverwrite",
+      "line": 565,
+      "call": "request.ReadBackAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/synctransport/orchestrator.go",
+      "function": "authorizeTransportSource",
+      "line": 675,
+      "call": "request.SourceAdmission",
+      "test": false
+    },
+    {
+      "path": "internal/synctransport/types.go",
+      "function": "RunRequest.validateExecution",
+      "line": 753,
+      "call": "r.RateLimitResumeCheckpoint.Validate",
+      "test": false
+    },
+    {
+      "path": "internal/worker/serve.go",
+      "function": "ServeWithActivities",
+      "line": 37,
+      "call": "ctx.Done",
+      "test": false
+    },
+    {
+      "path": "internal/worker/submit.go",
+      "function": "registerWorker",
+      "line": 82,
+      "call": "w.RegisterWorkflow",
+      "test": false
+    },
+    {
+      "path": "internal/worker/submit.go",
+      "function": "registerWorker",
+      "line": 83,
+      "call": "w.RegisterActivity",
+      "test": false
+    }
+  ],
+  "production_multiset_added": [],
+  "production_multiset_removed": [],
+  "original_go_pins": 947,
+  "current_go_pins": 961,
+  "changed_or_new_source_pins": [
+    {
+      "path": "cmd/connectorgen/source_visibility_shape_165_test.go",
+      "sha256": "260de16edb1ff05897698235da1b814a0ad249118cadbcbb2e0f2692197a5772"
+    },
+    {
+      "path": "internal/app/app.go",
+      "sha256": "fab79edeb527ab24a9d93c9c4509d98dd776fdab1e57a678652e4309b136ea24"
+    },
+    {
+      "path": "internal/app/bundle_public_diagnostics_167_test.go",
+      "sha256": "851ef9560cbabe223866292c7538f43d216b48410e1bb0f839ce7b56e6b8219b"
+    },
+    {
+      "path": "internal/cli/bundle_public_diagnostics_167_test.go",
+      "sha256": "ee2f3e2319c529f41f3f0cf8bcbca09c866d5dc6968745db7a0c9392521228d2"
+    },
+    {
+      "path": "internal/cli/docs.go",
+      "sha256": "9fe64fb927bd24f160ae8c64990d684ab8831db3dcd6fb945cb3470f974bcb31"
+    },
+    {
+      "path": "internal/cli/errors.go",
+      "sha256": "d9efb74a1fb13ba810a44d6a67704fac9cbd84efe7eba5fdfec51b644cf34319"
+    },
+    {
+      "path": "internal/cli/lazy_registry_test.go",
+      "sha256": "cf42674d140dd69349b662324c2b6e58f0d64d7e92bec5dd1ff7796218bcd027"
+    },
+    {
+      "path": "internal/cli/source_visibility_shape_165_test.go",
+      "sha256": "ede955946ad9fe503aebb657904ec0ba3701897bb9c7c00dcd97e180e4b25384"
+    },
+    {
+      "path": "internal/connectors/bundleregistry/bundle_diagnostics_168_test.go",
+      "sha256": "720b1f0d63af3d5682ecec84e69b65ddf22c77b1060ff4dcc6f7d5189bae6f7b"
+    },
+    {
+      "path": "internal/connectors/connectors.go",
+      "sha256": "ab5de3b44ab03b004353337d4ae4d6a92196636d02741b70fba3aff666837656"
+    },
+    {
+      "path": "internal/connectors/connsdk/send_order_165_test.go",
+      "sha256": "0ce1329906a424db6fce70c49e9488b5bd4a03d3785b70f6b3e98065223bb5a9"
+    },
+    {
+      "path": "internal/connectors/database/definition.go",
+      "sha256": "a49cfe5729411521ff580b50ee3146872100e5bcc8cc24f33204f82051f9063b"
+    },
+    {
+      "path": "internal/connectors/engine/binary_read.go",
+      "sha256": "fe969b2d9c23fa76398291c8cdb5a62eabacfd7783de389572b4b111fdbbdd24"
+    },
+    {
+      "path": "internal/connectors/engine/bundle.go",
+      "sha256": "3976d624dff0b669d5ceeecb33b2d9e35e4364bdb5383c2d9ac7a22e95ed5720"
+    },
+    {
+      "path": "internal/connectors/engine/bundle_diagnostics.go",
+      "sha256": "0a5110ae399efb80b00a2ea2eec97c194268d2715310523c8380c5f805c15069"
+    },
+    {
+      "path": "internal/connectors/engine/bundle_diagnostics_165_test.go",
+      "sha256": "ab3f35f3d91d46ad6d46caeae3d2de656d71aa754713d2a7005af449e962cdae"
+    },
+    {
+      "path": "internal/connectors/engine/bundle_execution_boundary_168_test.go",
+      "sha256": "0c089a5707320fe45150eb1a6e543eeadc9dd2a062faa31b00bbdc9f84472ca4"
+    },
+    {
+      "path": "internal/connectors/engine/bundle_io_diagnostics_167_test.go",
+      "sha256": "be857f7bb64cf1cb31ba9fc5bb581da7e7841329e83c74ceddf8671b8aa2ee2c"
+    },
+    {
+      "path": "internal/connectors/engine/bundle_public_diagnostics_167_test.go",
+      "sha256": "22cce0287b51a3dfccb1a031cb348fae69b9856b42aea27401b1bde8ac64ebcd"
+    },
+    {
+      "path": "internal/connectors/engine/bundle_test.go",
+      "sha256": "104a29e66760952ae91355f519b5cedeeab8143a8aa37250e47aecc9d2518df4"
+    },
+    {
+      "path": "internal/connectors/engine/direct_read.go",
+      "sha256": "492438941516402c3c7c893c0d55bbec29fca149f93bcb1a8d47a5951b25dce9"
+    },
+    {
+      "path": "internal/connectors/engine/operation_headers.go",
+      "sha256": "15960ca86f28dada73d4de17ebfeab3a8280c97cffc94a8fd80d5981e64fb166"
+    },
+    {
+      "path": "internal/connectors/engine/operation_multipart_test.go",
+      "sha256": "22998cab90246985fa90688b36677c4a2e8e594de3653103ceaf8f63d6f7c429"
+    },
+    {
+      "path": "internal/connectors/engine/operation_parameters.go",
+      "sha256": "fcf1ca00f42acd1363b5e9e1ee0cf6b6c44bbb6accd82d425c5102fd3a32be0c"
+    },
+    {
+      "path": "internal/connectors/engine/operation_route.go",
+      "sha256": "7c1fc360693d4e895ddcaa2e4be0a54d0b748a1e7d0211c8abc6980e0f84d52d"
+    },
+    {
+      "path": "internal/connectors/engine/polling_definition_test.go",
+      "sha256": "9ada88e54fd7a8ef73ac51b1a32edd3b0cf8f856c61d0c866f9ecb4017bde183"
+    },
+    {
+      "path": "internal/connectors/engine/rate_limits.go",
+      "sha256": "ebc73ee61387cb6ed5494802960aceeaa6743f38f4df78c8a770b2fca59e6e66"
+    },
+    {
+      "path": "internal/connectors/engine/schema.go",
+      "sha256": "1c1ce0ca4ad0a2dccc5f592524edb588618444566d4c82f948fcf263a9a44a59"
+    },
+    {
+      "path": "internal/connectors/hooks/hookset/closed_inventory_165_test.go",
+      "sha256": "dd8942e898817fa19425e0574fa20df19ef3d16d1ae8a4859557256336657808"
+    },
+    {
+      "path": "internal/connectors/manifeststore/bundle_diagnostics_165_test.go",
+      "sha256": "bdaf1f863c1f781a60fa52f4267fbdc5c0aec0a3eba7c57c15a6e8b4c6ce8cff"
+    },
+    {
+      "path": "internal/connectors/manifeststore/bundle_store.go",
+      "sha256": "09f9d07186e2e8002dd390331803a5e3d80862eb6dcc37ab822407afe513e670"
+    },
+    {
+      "path": "internal/connectors/native/nativeset/closed_inventory_165_test.go",
+      "sha256": "355e28de5b7c456ababe70346217c23695d454f7843e3d33eab0e2cd1ea3224f"
+    },
+    {
+      "path": "internal/connectors/polling_watermark.go",
+      "sha256": "f7d5eafce88ab5ac14f61e52abaebbbd7cd069c3dd2c34c2273c25357e7aef8d"
+    },
+    {
+      "path": "internal/connectors/source_visibility.go",
+      "sha256": "dc2273bf93c22a8b330d93245eabad5542562d4fe63774b524b4fbdfcc66cb62"
+    },
+    {
+      "path": "internal/connectors/sync_transport.go",
+      "sha256": "b4e0745bc5484daa28eea6fd51e61eeda5b32f551afeb2950030c40ac3b0b933"
+    }
+  ],
+  "limits": [
+    "AST selectors are the original bounded census, not an all-program semantic reachability oracle.",
+    "Unchanged production call identity preserves the source census; original row dispositions and physical-send/closed-inventory witnesses supply behavior evidence.",
+    "New diagnostic wrappers, schema producers and selected Resolve semantics are reviewed separately; no provider-live claim.",
+    "Original row line numbers remain tied to R1 base; current AST coordinates are recorded here."
+  ],
+  "current_production_call_count": 541
+}

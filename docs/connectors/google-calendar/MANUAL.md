@@ -222,7 +222,6 @@ SECURITY
 COMMAND SURFACE
   Read Google Calendar data, run a bounded free/busy query, and safely plan typed Calendar reverse-ETL writes.
   Usage: pm google-calendar <command> [flags]
-  Source CLI: Google Calendar API v3 (https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest)
   Global flags:
     --json (boolean): Write machine-readable JSON output.
     --connection (string): Use a saved Google Calendar connector credential.: maps_to=connection

@@ -106,7 +106,7 @@ func doAuthenticatedRequest(t *testing.T, auth interface {
 // --- registration -------------------------------------------------------
 
 func TestHooksRegisteredUnderYoutubeAnalytics(t *testing.T) {
-	h := engine.HooksFor("youtube-analytics")
+	h := ExplicitFactory()
 	if h == nil {
 		t.Fatal("engine.HooksFor(\"youtube-analytics\") = nil, want registered hooks (hooks/youtube-analytics's init() must call engine.RegisterHooks)")
 	}

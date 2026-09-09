@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "namespace_id": {
+      "type": "integer"
+    },
+    "node_id": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "namespace_id",
+    "node_id"
+  ],
+  "type": "object"
+}

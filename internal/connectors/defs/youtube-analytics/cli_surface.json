@@ -1,12 +1,6 @@
 {
   "tagline": "Read YouTube Reporting/Analytics metadata and safely plan documented job/group mutations.",
   "usage": "pm youtube-analytics <command> [flags]",
-  "source_cli": {
-    "name": "YouTube Analytics and Reporting APIs",
-    "docs": "https://developers.google.com/youtube/analytics",
-    "reference": "Google Discovery: YouTube Analytics API v2 revision 20260803 and YouTube Reporting API v1 revision 20260803",
-    "source": "provider_api"
-  },
   "groups": [
     {
       "id": "reporting",
@@ -75,8 +69,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "jobs",
-      "source_cli_path": "GET /v1/jobs",
-      "source_url": "https://developers.google.com/youtube/reporting/v1/reference/rest/v1/jobs/list",
       "flags": [
         {
           "name": "include-system-managed",
@@ -101,8 +93,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "job",
-      "source_cli_path": "GET /v1/jobs/{jobId}",
-      "source_url": "https://developers.google.com/youtube/reporting/v1/reference/rest/v1/jobs/get",
       "api_surface": [
         {
           "method": "GET",
@@ -120,8 +110,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_job",
-      "source_cli_path": "POST /v1/jobs",
-      "source_url": "https://developers.google.com/youtube/reporting/v1/reference/rest/v1/jobs/create",
       "flags": [
         {
           "name": "report-type-id",
@@ -158,8 +146,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "delete_job",
-      "source_cli_path": "DELETE /v1/jobs/{jobId}",
-      "source_url": "https://developers.google.com/youtube/reporting/v1/reference/rest/v1/jobs/delete",
       "flags": [
         {
           "name": "job-id",
@@ -191,8 +177,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "report_types",
-      "source_cli_path": "GET /v1/reportTypes",
-      "source_url": "https://developers.google.com/youtube/reporting/v1/reference/rest/v1/reportTypes/list",
       "flags": [
         {
           "name": "include-system-managed",
@@ -217,8 +201,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "reports",
-      "source_cli_path": "GET /v1/jobs/{jobId}/reports",
-      "source_url": "https://developers.google.com/youtube/reporting/v1/reference/rest/v1/jobs.reports/list",
       "flags": [
         {
           "name": "created-after",
@@ -262,8 +244,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "report",
-      "source_cli_path": "GET /v1/jobs/{jobId}/reports/{reportId}",
-      "source_url": "https://developers.google.com/youtube/reporting/v1/reference/rest/v1/jobs.reports/get",
       "api_surface": [
         {
           "method": "GET",
@@ -281,8 +261,6 @@
       "intent": "direct_read",
       "availability": "planned",
       "operation": "reports_query",
-      "source_cli_path": "GET /v2/reports",
-      "source_url": "https://developers.google.com/youtube/analytics/reference/reports/query",
       "api_surface": [
         {
           "method": "GET",
@@ -297,8 +275,6 @@
       "intent": "binary_download",
       "availability": "implemented",
       "operation": "download_report",
-      "source_cli_path": "GET /v1/media/{+resourceName}",
-      "source_url": "https://developers.google.com/youtube/reporting/v1/reports#step-6-download-the-report",
       "flags": [
         {
           "name": "resource-name",
@@ -323,8 +299,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "groups",
-      "source_cli_path": "GET /v2/groups",
-      "source_url": "https://developers.google.com/youtube/analytics/reference/groups/list",
       "flags": [
         {
           "name": "mine",
@@ -353,8 +327,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_group",
-      "source_cli_path": "POST /v2/groups",
-      "source_url": "https://developers.google.com/youtube/analytics/reference/groups/insert",
       "flags": [
         {
           "name": "title",
@@ -396,8 +368,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "update_group",
-      "source_cli_path": "PUT /v2/groups",
-      "source_url": "https://developers.google.com/youtube/analytics/reference/groups/update",
       "flags": [
         {
           "name": "id",
@@ -437,8 +407,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "delete_group",
-      "source_cli_path": "DELETE /v2/groups?id={id}",
-      "source_url": "https://developers.google.com/youtube/analytics/reference/groups/delete",
       "flags": [
         {
           "name": "id",
@@ -470,8 +438,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "group_items",
-      "source_cli_path": "GET /v2/groupItems",
-      "source_url": "https://developers.google.com/youtube/analytics/reference/groupItems/list",
       "flags": [
         {
           "name": "group-id",
@@ -498,8 +464,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_group_item",
-      "source_cli_path": "POST /v2/groupItems",
-      "source_url": "https://developers.google.com/youtube/analytics/reference/groupItems/insert",
       "flags": [
         {
           "name": "group-id",
@@ -552,8 +516,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "delete_group_item",
-      "source_cli_path": "DELETE /v2/groupItems?id={id}",
-      "source_url": "https://developers.google.com/youtube/analytics/reference/groupItems/delete",
       "flags": [
         {
           "name": "id",

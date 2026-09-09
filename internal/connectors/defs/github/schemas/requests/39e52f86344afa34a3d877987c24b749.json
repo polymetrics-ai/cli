@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "comment": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "environment_ids": {
+      "items": {
+        "type": "integer"
+      },
+      "maxItems": 256,
+      "type": "array"
+    },
+    "run_id": {
+      "type": "integer"
+    },
+    "state": {
+      "enum": [
+        "approved",
+        "rejected"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    }
+  },
+  "required": [
+    "comment",
+    "environment_ids",
+    "run_id",
+    "state"
+  ],
+  "type": "object"
+}

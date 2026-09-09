@@ -2,7 +2,6 @@ package boundary
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -50,16 +49,6 @@ type metadataFile struct {
 	Aliases         []string `json:"aliases"`
 }
 
-type cliSurfaceFile struct {
-	SourceCLI      cliRootFile `json:"source_cli"`
-	DestinationCLI cliRootFile `json:"destination_cli"`
-}
-
-type cliRootFile struct {
-	Name    string   `json:"name"`
-	Aliases []string `json:"aliases"`
-}
-
 func loadLexicon(root string) (lexicon, error) {
 	defsDir := filepath.Join(root, "internal", "connectors", "defs")
 	entries, err := os.ReadDir(defsDir)
@@ -77,16 +66,12 @@ func loadLexicon(root string) (lexicon, error) {
 		if err != nil {
 			return lexicon{}, fmt.Errorf("load connector metadata %s: %w", dirName, err)
 		}
-		cliSurface, err := readCLISurface(filepath.Join(defsDir, dirName, "cli_surface.json"))
-		if err != nil {
-			return lexicon{}, fmt.Errorf("load connector cli surface %s: %w", dirName, err)
-		}
 		name := strings.TrimSpace(meta.Name)
 		if name == "" {
 			return lexicon{}, fmt.Errorf("load connector metadata %s: name is required", dirName)
 		}
 		name = strings.ToLower(name)
-		seen[name] = newConnectorLexeme(name, meta, cliSurface)
+		seen[name] = newConnectorLexeme(name, meta)
 	}
 	if len(seen) == 0 {
 		return lexicon{}, fmt.Errorf("no connector metadata loaded from %s", defsDir)
@@ -100,7 +85,7 @@ func loadLexicon(root string) (lexicon, error) {
 	return lexicon{connectors: connectors, byName: seen}, nil
 }
 
-func newConnectorLexeme(name string, meta metadataFile, cliSurface cliSurfaceFile) connectorLexeme {
+func newConnectorLexeme(name string, meta metadataFile) connectorLexeme {
 	display := strings.TrimSpace(meta.DisplayName)
 	strongName := strongConnectorNameAlias(name, meta)
 	c := connectorLexeme{Name: name, DisplayName: display, weakDocs: (meta.IntegrationType == "" || strings.EqualFold(meta.IntegrationType, "api")) && strings.TrimSpace(meta.DocsURL) != ""}
@@ -116,7 +101,6 @@ func newConnectorLexeme(name string, meta metadataFile, cliSurface cliSurfaceFil
 	for _, alias := range append([]string{display}, meta.Aliases...) {
 		c.addMetadataAlias(name, alias, meta)
 	}
-	c.addCLISurfaceAliases(cliSurface)
 	c.sortAliases()
 	return c
 }
@@ -131,21 +115,6 @@ func readMetadata(path string) (metadataFile, error) {
 		return metadataFile{}, err
 	}
 	return meta, nil
-}
-
-func readCLISurface(path string) (cliSurfaceFile, error) {
-	b, err := os.ReadFile(path)
-	if err != nil {
-		if errors.Is(err, os.ErrNotExist) {
-			return cliSurfaceFile{}, nil
-		}
-		return cliSurfaceFile{}, err
-	}
-	var cliSurface cliSurfaceFile
-	if err := json.Unmarshal(b, &cliSurface); err != nil {
-		return cliSurfaceFile{}, err
-	}
-	return cliSurface, nil
 }
 
 func compactDisplayName(display string) string {
@@ -178,29 +147,6 @@ func (c *connectorLexeme) addMetadataAlias(name, alias string, meta metadataFile
 			c.addIdentifierContains(compactLower)
 		}
 	}
-}
-
-func (c *connectorLexeme) addCLISurfaceAliases(cliSurface cliSurfaceFile) {
-	for _, root := range []cliRootFile{cliSurface.SourceCLI, cliSurface.DestinationCLI} {
-		c.addCLIAlias(root.Name)
-		for _, alias := range root.Aliases {
-			c.addCLIAlias(alias)
-		}
-	}
-}
-
-func (c *connectorLexeme) addCLIAlias(value string) {
-	value = strings.TrimSpace(value)
-	if value == "" {
-		return
-	}
-	alias := lexemeAlias{Value: value, Lower: strings.ToLower(value), Alias: false}
-	if tokenOnlyPattern.MatchString(value) {
-		c.commandTokenAliases = append(c.commandTokenAliases, alias)
-		c.addCommandIdentifierRoot(strings.ReplaceAll(alias.Lower, "-", ""))
-		return
-	}
-	c.commandPhraseAliases = append(c.commandPhraseAliases, alias)
 }
 
 func (c *connectorLexeme) addLiteralAlias(value string, legacy, weak bool) {
@@ -486,9 +432,12 @@ func (lx lexicon) identifierMatches(identifier string) []literalMatch {
 }
 
 func (c connectorLexeme) matchesIdentifier(identifier, lowerIdentifier string) bool {
-	for _, alias := range c.identifierContains {
-		if strings.Contains(lowerIdentifier, alias) {
-			return true
+	if len(c.identifierContains) > 0 {
+		components := identifierTailComponents(identifier)
+		for _, alias := range c.identifierContains {
+			if identifierHasCompactAlias(components, alias) {
+				return true
+			}
 		}
 	}
 	for _, prefix := range c.identifierPrefixes {
@@ -576,6 +525,22 @@ func identifierTailComponents(tail string) []string {
 		components = append(components, strings.ToLower(tail[startIdx:]))
 	}
 	return components
+}
+
+func identifierHasCompactAlias(components []string, alias string) bool {
+	for start := range components {
+		offset := 0
+		for _, component := range components[start:] {
+			if len(alias)-offset < len(component) || alias[offset:offset+len(component)] != component {
+				break
+			}
+			offset += len(component)
+			if offset == len(alias) {
+				return true
+			}
+		}
+	}
+	return false
 }
 
 func weakIdentifierTailLooksLikePolicy(components []string) bool {

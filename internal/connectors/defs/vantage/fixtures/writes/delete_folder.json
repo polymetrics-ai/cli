@@ -1,9 +1,0 @@
-{
-  "record": {
-    "folder_token": "fldr_fixture_1"
-  },
-  "expect": {
-    "method": "DELETE",
-    "path": "/v2/folders/fldr_fixture_1"
-  }
-}

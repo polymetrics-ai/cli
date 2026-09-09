@@ -47,7 +47,7 @@ func doRequest(t *testing.T, auth interface {
 // --- registration ---------------------------------------------------------
 
 func TestHooksRegisteredUnderNetsuite(t *testing.T) {
-	h := engine.HooksFor("netsuite")
+	h := ExplicitFactory()
 	if h == nil {
 		t.Fatal("engine.HooksFor(\"netsuite\") = nil, want registered hooks (hooks/netsuite's init() must call engine.RegisterHooks)")
 	}

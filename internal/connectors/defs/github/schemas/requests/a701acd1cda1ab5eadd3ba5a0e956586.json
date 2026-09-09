@@ -1,0 +1,55 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "client_ip": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "devcontainer_path": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "display_name": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "geo": {
+      "enum": [
+        "EuropeWest",
+        "SoutheastAsia",
+        "UsEast",
+        "UsWest"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "idle_timeout_minutes": {
+      "type": "integer"
+    },
+    "location": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "machine": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "multi_repo_permissions_opt_out": {
+      "type": "boolean"
+    },
+    "ref": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "retention_period_minutes": {
+      "type": "integer"
+    },
+    "working_directory": {
+      "maxLength": 8192,
+      "type": "string"
+    }
+  },
+  "required": [],
+  "type": "object"
+}

@@ -1,6 +1,6 @@
 # Overview
 
-Asana reads source-bound operations through the Asana v1 REST API and executes typed reverse-ETL actions through plan -> preview -> approval -> execute. The pinned OpenAPI ledger accounts for all 249 provider operations: 212 are executable `covered_by` routes and the remaining 37 are explicit non-executable or not-applicable rows with their source citation and current foundation reason.
+Asana reads source-bound operations through the Asana v1 REST API and executes typed one-record direct writes through plan -> preview -> approval -> execute. Saved connections use the same 12 streams for warehouse-backed ETL, and `pm reverse` uses the same write actions for warehouse-table reverse ETL. The pinned OpenAPI ledger accounts for all 249 provider operations, and every row now has an executable source-bound route. `POST /batch` is available only through the closed declared-action selector; it is not a raw HTTP escape hatch.
 
 Official source inventory:
 
@@ -8,12 +8,24 @@ Official source inventory:
 - Pinned source: https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml
 - OpenAPI: `3.0.0` / info version `1.0`
 - Operation count: `249` (`GET=119`, `POST=81`, `PUT=26`, `DELETE=23`)
-- Executable source-backed lanes: `direct_read=106`, `etl=12`, `reverse_etl=94`
-- Remaining ledger rows: one source-bound GET with a named foundation gap, 35 mutations with an exact declared contract/foundation gap, and `/batch` as the sole not-applicable generic-wrapper route
+- Declared interactive lanes: `direct_read=119` (107 bounded operation-backed + 12 stream-backed commands with a shared one-provider-request budget), `direct_write=131` across all 130 mutation endpoints (129 one-to-one actions + 2 attachment request variants sharing `POST /attachments`)
+- Additional command rows: one implemented `binary_upload` alias and one planned legacy attachment operation alias; neither adds a provider operation
+
+## Provider-operation lane matrix
+
+The connector-local `TestEveryLockedOperationHasOneAccountedCommandLane` constructs this matrix from the immutable 249-operation source lock, `execution bundle`, and `cli_surface.json`. It counts provider operations once; command aliases are accounted separately.
+
+| Locked provider operations | Current lane/accounting | Actual execution status |
+| ---: | --- | --- |
+| 107 | operation-backed `direct_read` | implemented bounded operation read, including `GET /memberships/{membership_gid}` |
+| 12 | stream-backed `direct_read` plus saved ETL | the interactive command has one aggregate provider-request/page budget; saved full-refresh ETL remains exhaustive |
+| 130 | 131 `direct_write` actions plus warehouse-table reverse ETL | every mutation endpoint is executable; `POST /attachments` has two closed request variants and `POST /batch` has one closed declared-action adapter |
+
+The rows total 249. They project to 252 CLI command rows because `asana.rest.createAttachmentForObject` has four command representations: two implemented direct writes (`attachments upload-attachment-file` and `attachments create-external-attachment`), one planned legacy operation alias, and one implemented `binary_upload` alias. The planned legacy alias is an accounting/compatibility row, not an unmapped provider operation. The provider documents arbitrary full file contents rather than a finite media allow-list, so the file action carries a closed `provider_unrestricted` policy instead of fabricated MIME types. The binary alias uses the same 100 MB cap, project-root confinement, payload digest, preview, and approval binding. No locked Asana operation supplies a binary response contract, so no `binary_download` command is invented.
 
 Readable streams currently executable by the declarative engine: `custom_fields`, `project_statuses`, `projects`, `sections`, `stories`, `tags`, `tasks`, `team_memberships`, `teams`, `users`, `workspace_memberships`, `workspaces`.
 
-Write actions currently executable by the declarative engine: 94 (51 `create`, 20 `update`, 23 `delete`), bound to 94 of the 130 official POST/PUT/DELETE rows. This includes 19 source-complete DELETEs and the no-body `approve_access_request` and `reject_access_request` POSTs. `writes.json` is the authoritative per-action contract; `pm connectors inspect asana` and the generated `docs/connectors/asana/SKILL.md` render every action's endpoint, required record fields, and risk note.
+Write actions currently executable by the declarative engine: 131 across all 130 official POST/PUT/DELETE rows. There are 129 one-to-one endpoint actions plus two source-backed attachment request variants for the same `POST /attachments` operation. The action kinds are 63 `create`, 28 `update`, 39 `delete`, and one closed `custom` batch action. `writes.json` is the authoritative per-action contract; `pm connectors inspect asana` and the generated `docs/connectors/asana/SKILL.md` render every action's endpoint, required record fields, and risk note.
 
 Service API documentation: https://developers.asana.com/reference/rest-api-reference.
 
@@ -35,7 +47,7 @@ Default configuration values: `base_url=https://app.asana.com/api/1.0`.
 
 Authentication behavior: bearer token authentication using `secrets.access_token`.
 
-Connection checks call GET `/users/me`. That identity alias is documented by Asana and already used by this connector, but it is not present in the pinned OpenAPI `paths` map and is therefore intentionally not counted in `api_surface.json`'s 249 official operation ledger.
+Connection checks call GET `/users/me`. That identity alias is documented by Asana and already used by this connector, but it is not present in the pinned OpenAPI `paths` map and is therefore intentionally not counted in `execution bundle`'s 249 official operation ledger.
 
 ## Streams notes
 
@@ -45,7 +57,10 @@ Implemented streams remain intentionally bounded and fixture-backed:
 
 - `workspaces`: GET `/workspaces`; records path `data`; first-stream fixture-backed.
 
-The 106 bounded source-bound direct reads are deliberately distinct from streams: each returns one response-capped provider page and reports only the completeness its declared pagination can prove. The 12 source-bound ETL commands, including `pm asana workspaces list`, retain their declared stream pagination and record semantics.
+The 107 operation-backed direct reads are deliberately distinct from stream-backed reads: each operation read returns one response-capped provider page and reports only the completeness its declared pagination can prove. The 12 stream-backed interactive commands, including `pm asana workspaces list`, apply one aggregate provider-send and page budget across pagination, retries, redirects, discovery, and fan-out. Saved connections leave that interactive budget unset so warehouse-backed full-refresh ETL remains exhaustive. An interactive stream command is still a bounded `direct_read`; it is not an ETL run.
+
+`event_source_contract.json` is the machine-readable source-evidence projection for the project-scoped `tasks` incremental lane. Its closed schema binds `sync_transport.json`'s exact `asana_event_token_source` executor/execution-contract reference to the immutable lock and cites `asana.rest.getEvents`, the `resource`/`sync` parameters, first/expired 412 rebootstrap, `data`/`sync`/`has_more`, project-to-task scope, `EventResponse` actions and resource `gid`/type, `asana.rest.getTask` hydration, the project-filtered `asana.rest.getTasks` snapshot, pagination, and auth. It explicitly records `event_total_order=not_documented`. The file is evidence, not a runtime lifecycle: retry, page caps, window coalescing, checkpoint acknowledgement, and request execution remain owned by the registered Asana executor.
+
 - `projects`: GET `/projects`; optional `workspace` query from `workspace_id`.
 - `tasks`: GET `/tasks`; optional `workspace`, `project`, and `assignee` query values.
 - `users`: GET `/users`; optional `workspace` query.
@@ -58,26 +73,28 @@ The 106 bounded source-bound direct reads are deliberately distinct from streams
 - `team_memberships`: GET `/team_memberships`; optional `team` and `workspace` query values.
 - `workspace_memberships`: GET `/workspaces/{{ config.workspace_id }}/workspace_memberships`.
 
-The sole non-executable source GET is `asana.rest.getMembership` (`GET /memberships/{membership_gid}`): it records `missing_foundation=cli-openapi30-reference-sibling-foundation-r1` with the pinned source citation. Other non-executable provider operations remain visible in `api_surface.json`, `operations.json`, and `cli_surface.json` with their exact request-contract, encoding, CDC, or binary-input foundation; no generic request or raw provider escape hatch is exposed.
+All 119 locked source GET operations are executable: 107 through bounded operation-backed commands and 12 through bounded stream-backed commands. `asana.rest.getMembership` (`GET /memberships/{membership_gid}`) is implemented because its request path/query contract is complete; the retained OpenAPI 3.0 response-schema sibling diagnostic is response-only authoring evidence and does not block the bounded JSON read. No generic request or raw provider escape hatch is exposed.
 
 ## Write actions & risks
 
-Overall write risk: every external mutation must be run through reverse ETL plan -> preview -> explicit approval -> execute. Destructive/admin/delete operations also require typed confirmation (`confirm: "destructive"` / `--confirm destructive`) before execution.
+Overall write risk: every interactive external mutation is a one-record direct write that must run through plan -> preview -> explicit approval -> execute. Bulk reverse ETL remains the separate `pm reverse` warehouse-table path. Destructive/admin/delete operations also require typed confirmation (`confirm: "destructive"` / `--confirm destructive`) before execution.
 
-Implemented write actions: 94 named actions in `writes.json`, which is their authoritative contract (endpoint, bounded record schema, required/accepted fields, redacted path fields, idempotency and confirmation notes). Read them with `pm connectors inspect asana` or in the generated `docs/connectors/asana/SKILL.md`; this file does not restate per-action fields.
+Implemented write actions: 131 named actions in `writes.json`, which is their authoritative contract (endpoint, bounded record schema, required/accepted fields, redacted path fields, idempotency and confirmation notes). Read them with `pm connectors inspect asana` or in the generated `docs/connectors/asana/SKILL.md`; this file does not restate per-action fields.
 
 By resource family: tasks and subtasks (create/update/delete, duplicate, instantiate from template, set parent, add dependencies/dependents/project/tag/followers), projects (create for team/workspace, update, delete, duplicate, save as template, briefs, statuses, custom-field settings, members, followers, portfolio settings), sections (create, insert, update, delete, add task), tags (create, create for workspace, update, delete), stories (`add_comment`, goal stories, update), goals and goal relationships (create/update, metrics, supporting relationships, followers, custom-field settings), portfolios (create/update, add item/members/custom-field setting, duplicate), custom fields and enum options, teams and team membership, users and workspace membership, workspaces, status updates, rule triggers, exports, OOO entries, and time-tracking entries.
 
-Every action routes through reverse ETL plan -> preview -> explicit approval -> execute. All 23 implemented DELETEs require typed `--confirm destructive`, treat 404 as success, and redact their path fields. The source-complete DELETE set is covered by the same action path as the earlier task/project/section/tag deletes; only 16 destructive rows remain non-executable because their current source request contract lacks the required bounded action foundation.
+Every interactive action routes through the one-record direct-write plan -> preview -> explicit approval -> execute lifecycle; bulk warehouse-table execution remains available through `pm reverse`. All provider DELETE routes require typed `--confirm destructive`, treat 404 as success, and redact their path fields. POST-based remove/admin actions use their source-projected request schema and the same approval boundary.
 
-The remaining official POST/PUT/DELETE operations are not blanket-excluded. Their pinned source entries name the exact missing foundation. In particular, 69 implemented actions retain source-partial declarations only where the real provider request requires `cli-request-schema-foundation-r1` (65 operations) or `source-path-parameter-alias-foundation-r1` (4 operations); their declared typed subset remains executable and is never presented as complete provider coverage.
+Sixty-nine actions retain historical source-partial disposition metadata where their earlier projection required `cli-request-schema-foundation-r1` (65 operations) or `source-path-parameter-alias-foundation-r1` (4 operations). The strict source-first projector now recreates their final closed request/CLI behavior from the schema-v3 lock; the dispositions remain audit evidence and do not block execution.
 
 ## Known limits
 
 - Static source availability is computed from pinned declarations: no credential or live-provider account is required to determine whether a declared operation has its complete shared foundation.
-- `api_surface.json` uses `operation_ledger_version: 1`: non-executable operation rows are the source of truth for the remaining foundation gaps.
-- `/batch` is the only not-applicable official lane row. It is disallowed because it is a generic batch subrequest wrapper and would recreate raw method/path/body passthrough; each underlying Asana operation is represented individually instead.
-- Executable surfaces are 12 streams + 106 bounded source-bound direct reads + 94 writes (212 `covered_by` rows). The remaining 37 official rows are explicit non-executable or not-applicable metadata, not executable runtime claims.
+- `execution bundle` uses `operation_ledger_version: 1`: non-executable operation rows are the source of truth for the remaining foundation gaps.
+- `/batch` is executable only as the closed `create_batch_request` action. A record supplies 1..10 named, explicitly allow-listed existing actions; the engine derives every subrequest method/path/body, rejects unsupported/nested/query-bearing actions before provider I/O, preserves preview/approval, and fails closed on partial or malformed provider results. Callers never supply raw HTTP fields.
+- Provider-route coverage is 12 bounded stream reads + 107 bounded operation reads + all 130 mutation endpoints. Interactive presentation declares 119 direct reads and 131 direct writes; the attachment operation has two source-backed request variants. All 249 locked provider rows therefore have an executable `covered_by` route.
+- Full-refresh overwrite/append remains available for all 12 saved ETL streams. Provider-token incremental append/upsert/dedupe is admitted only for project-scoped `tasks`, using Asana Events tokens, complete `has_more` windows, durable checkpoint acknowledgement, stable `gid` coalescing/hydration, and `deleted` tombstones. The other 11 stream scopes and ordered history/change capture remain unproven and are not admitted as incremental modes.
+- Saved bulk multipart upload currently resolves a warehouse row's `file_path` relative to the app-owned `.polymetrics` runtime directory, while the one-record direct-write route resolves it relative to the public project root. The all-action reverse-ETL proof exercises the current bounded behavior; changing the shared bulk runtime root requires a deliberate App-level policy correction.
 - Every promoted write's record schema is derived from the pinned OpenAPI source above, never inferred from response shapes. Envelope and resource levels are closed with `additionalProperties: false`; deeply nested provider-defined regions (for example `custom_fields` on `create_task`) stay `type: object` with `additionalProperties: true`, which is the bundle's bounded-but-not-exhaustive convention.
-- Provider search/typeahead, CDC/changefeed/audit/webhook, and attachment binary routes remain visible only with their actual named request/response foundation in the source ledger; source unavailability and missing runtime foundation are distinct states.
-- No generic shell, generic HTTP request/write, raw SQL write, arbitrary GraphQL, unrestricted file, unrestricted binary, or raw passthrough tool is exposed by this connector.
+- Provider search/typeahead and audit/webhook operations are bounded direct commands, not evidence that every stream supports incremental ETL. The source-backed Asana attachment action is the sole binary-upload route; no binary-download route is claimed.
+- No generic shell, generic HTTP request/write, raw SQL write, arbitrary GraphQL, caller-selected file route/media contract, or raw passthrough tool is exposed by this connector.

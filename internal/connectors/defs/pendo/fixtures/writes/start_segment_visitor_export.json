@@ -1,9 +1,0 @@
-{
-  "record": {
-    "segmentId": "segmentId_fixture"
-  },
-  "expect": {
-    "method": "POST",
-    "path": "/segment/segmentId_fixture/visitors"
-  }
-}

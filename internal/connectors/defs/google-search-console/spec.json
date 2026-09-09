@@ -21,19 +21,19 @@
     },
     "site_url": {
       "type": "string",
-      "description": "Single Search Console site property for site_details and sitemap_details, as the sitemaps and search_analytics_* fallback, and for fixture/live certification defaults."
+      "description": "Single Search Console site property for site_details and sitemap_details, as the sitemaps and search_analytics_* fallback, and for fixture/live validation defaults."
     },
     "feedpath": {
       "type": "string",
-      "description": "Sitemap feed URL/path for sitemap_details and sitemap write/delete certification defaults."
+      "description": "Sitemap feed URL/path for sitemap_details and sitemap write/delete validation defaults."
     },
     "inspection_url": {
       "type": "string",
-      "description": "URL Inspection direct-read default URL; used only by certification sweeps when explicitly provided."
+      "description": "URL Inspection direct-read default URL; used only by validation sweeps when explicitly provided."
     },
     "mobile_test_url": {
       "type": "string",
-      "description": "Mobile Friendly Test direct-read default URL; used only by certification sweeps when explicitly provided."
+      "description": "Mobile Friendly Test direct-read default URL; used only by validation sweeps when explicitly provided."
     },
     "start_date": {
       "type": "string",
@@ -66,7 +66,7 @@
     },
     "mode": {
       "type": "string",
-      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+      "description": "Runtime mode: live (default) or fixture for credential-free fixture tests."
     }
   }
 }

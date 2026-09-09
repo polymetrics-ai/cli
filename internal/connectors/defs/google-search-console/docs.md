@@ -35,10 +35,10 @@ Connection fields:
   example `https://example.com/` or `sc-domain:example.com`) to fan out over for `sitemaps` and
   `search_analytics_*` streams. When unset, those streams fall back to `site_url`.
 - `site_url` (optional, string); single Search Console site property for `site_details`,
-  `sitemap_details`, the `sitemaps` and `search_analytics_*` fallback, and certification defaults.
+  `sitemap_details`, the `sitemaps` and `search_analytics_*` fallback, and validation defaults.
 - `feedpath` (optional, string); sitemap feed URL/path for `sitemap_details` and sitemap
-  write/delete certification defaults.
-- `inspection_url` and `mobile_test_url` (optional, string); fixture/live certification defaults for
+  write/delete validation defaults.
+- `inspection_url` and `mobile_test_url` (optional, string); fixture/live validation defaults for
   typed direct-read sweeps.
 - `start_date` (optional, string); default `2021-01-01`; format `date`; lower bound for
   `search_analytics_*` streams.
@@ -107,7 +107,7 @@ operations also require typed confirmation. No write action accepts a raw body.
 ## Known limits
 
 - Fixture and local validation only in this wave; this file does not claim live provider
-  certification.
+  validation.
 - `base_url` must be an origin-only root such as `https://searchconsole.googleapis.com`.
   Credential creation and command overlays do not enforce that shape, so validate overrides before
   use; pathful values are unsupported and are not silently corrected.

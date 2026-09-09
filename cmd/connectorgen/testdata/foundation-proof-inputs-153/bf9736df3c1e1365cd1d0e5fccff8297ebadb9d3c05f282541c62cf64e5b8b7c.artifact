@@ -1,0 +1,12 @@
+[
+  {
+    "name": "page",
+    "type": "integer",
+    "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page."
+  },
+  {
+    "name": "page-cursor",
+    "type": "string",
+    "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header)."
+  }
+]

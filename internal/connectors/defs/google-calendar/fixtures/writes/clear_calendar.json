@@ -1,4 +1,0 @@
-{
-  "record": {"calendar_id": "primary"},
-  "expect": {"method": "POST", "path": "/calendars/primary/clear"}
-}

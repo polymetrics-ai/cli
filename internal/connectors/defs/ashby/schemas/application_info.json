@@ -1,304 +1,264 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "application_info",
-  "type": "object",
   "properties": {
-    "id": {
-      "type": "string",
-      "description": "The unique identifier for the application"
-    },
-    "createdAt": {
-      "type": "string",
-      "description": "The timestamp when the application was created",
-      "format": "date-time"
-    },
-    "updatedAt": {
-      "type": "string",
-      "description": "The timestamp when the application was last updated",
-      "format": "date-time"
-    },
-    "status": {
-      "type": "string",
-      "description": "The status of the application",
-      "enum": [
-        "Hired",
-        "Archived",
-        "Active",
-        "Lead"
-      ]
-    },
-    "customFields": {
-      "type": "array",
+    "applicationFormSubmissions": {
       "items": {
-        "type": "object",
-        "description": "A custom field value attached to the application",
         "properties": {
-          "id": {
-            "type": "string",
-            "description": "The unique identifier for the custom field definition"
-          },
-          "isPrivate": {
-            "type": "boolean",
-            "description": "Whether the custom field is private"
-          },
-          "title": {
-            "type": "string",
-            "description": "The title of the custom field"
-          },
-          "valueLabel": {
-            "type": "string"
-          },
-          "value": {
-            "type": "object",
+          "formDefinition": {
             "properties": {
-              "value": {
-                "type": "number",
-                "description": "The currency amount"
-              },
-              "currencyCode": {
-                "type": "string",
-                "description": "The ISO currency code"
+              "sections": {
+                "description": "The sections in the form definition",
+                "items": {
+                  "properties": {
+                    "descriptionHtml": {
+                      "type": "string"
+                    },
+                    "descriptionPlain": {
+                      "type": "string"
+                    },
+                    "fields": {
+                      "description": "The fields in this form section",
+                      "items": {
+                        "properties": {
+                          "descriptionHtml": {
+                            "type": "string"
+                          },
+                          "descriptionPlain": {
+                            "type": "string"
+                          },
+                          "field": {
+                            "properties": {
+                              "humanReadablePath": {
+                                "description": "The human-readable path for the form field",
+                                "type": "string"
+                              },
+                              "id": {
+                                "description": "The unique identifier for the form definition field",
+                                "type": "string"
+                              },
+                              "isNullable": {
+                                "description": "Whether the form field accepts null values",
+                                "type": "boolean"
+                              },
+                              "path": {
+                                "description": "The path used to submit values for this field",
+                                "type": "string"
+                              },
+                              "selectableValues": {
+                                "items": {
+                                  "properties": {
+                                    "label": {
+                                      "description": "The display label for the selectable value",
+                                      "type": "string"
+                                    },
+                                    "value": {
+                                      "description": "The submitted value for the selectable option",
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "label",
+                                    "value"
+                                  ],
+                                  "type": "object"
+                                },
+                                "type": "array"
+                              },
+                              "title": {
+                                "description": "The display title for the form field",
+                                "type": "string"
+                              },
+                              "type": {
+                                "description": "The type of the form definition field",
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "type",
+                              "path",
+                              "humanReadablePath",
+                              "title",
+                              "isNullable"
+                            ],
+                            "type": "object"
+                          },
+                          "isRequired": {
+                            "description": "Whether this form field is required",
+                            "type": "boolean"
+                          }
+                        },
+                        "required": [
+                          "isRequired",
+                          "field"
+                        ],
+                        "type": "object"
+                      },
+                      "type": "array"
+                    },
+                    "title": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "fields"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
               }
             },
             "required": [
-              "value",
-              "currencyCode"
-            ]
+              "sections"
+            ],
+            "type": "object"
+          },
+          "id": {
+            "description": "The unique identifier for the application form submission",
+            "type": "string"
+          },
+          "submittedValues": {
+            "description": "The values submitted for the form, keyed by field path"
           }
         },
         "required": [
           "id",
+          "formDefinition",
+          "submittedValues"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "applicationHistory": {
+      "items": {
+        "properties": {
+          "actorId": {
+            "type": "string"
+          },
+          "allowedActions": {
+            "description": "Actions that can be performed on this history event via `application.updateHistory`.",
+            "items": {
+              "enum": [
+                "none",
+                "delete",
+                "set_entered_at"
+              ],
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "enteredStageAt": {
+            "description": "The timestamp the application entered this stage",
+            "format": "date-time",
+            "type": "string"
+          },
+          "id": {
+            "description": "The unique identifier for the history event",
+            "type": "string"
+          },
+          "leftStageAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "stageId": {
+            "description": "The id of the interview stage for this event",
+            "type": "string"
+          },
+          "stageNumber": {
+            "description": "The order of the history event in the application's history. 0 is the first event.",
+            "type": "integer"
+          },
+          "title": {
+            "description": "The interview stage title for this event",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "stageId",
           "title",
-          "value"
-        ]
-      }
-    },
-    "candidate": {
-      "type": "object",
-      "description": "The candidate associated with the application",
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "The unique identifier for the candidate"
-        },
-        "name": {
-          "type": "string",
-          "description": "The candidate's name"
-        },
-        "primaryEmailAddress": {
-          "type": "object",
-          "properties": {
-            "value": {
-              "type": "string",
-              "description": "The email address or phone number of the candidate"
-            },
-            "type": {
-              "type": "string",
-              "description": "The type of the contact info",
-              "enum": [
-                "Personal",
-                "Work",
-                "Other"
-              ]
-            },
-            "isPrimary": {
-              "type": "boolean",
-              "description": "Whether the contact info is the primary email or phone number"
-            }
-          },
-          "required": [
-            "value",
-            "type",
-            "isPrimary"
-          ]
-        },
-        "primaryPhoneNumber": {
-          "type": "object",
-          "properties": {
-            "value": {
-              "type": "string",
-              "description": "The email address or phone number of the candidate"
-            },
-            "type": {
-              "type": "string",
-              "description": "The type of the contact info",
-              "enum": [
-                "Personal",
-                "Work",
-                "Other"
-              ]
-            },
-            "isPrimary": {
-              "type": "boolean",
-              "description": "Whether the contact info is the primary email or phone number"
-            }
-          },
-          "required": [
-            "value",
-            "type",
-            "isPrimary"
-          ]
-        }
+          "enteredStageAt",
+          "stageNumber",
+          "allowedActions"
+        ],
+        "type": "object"
       },
-      "required": [
-        "id",
-        "name"
-      ]
+      "type": "array"
     },
-    "currentInterviewStage": {
-      "type": "object",
-      "description": "The current interview stage for the application",
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "The unique identifier for the interview stage"
-        },
-        "title": {
-          "type": "string",
-          "description": "The interview stage title"
-        },
-        "type": {
-          "type": "string",
-          "description": "The interview stage type"
-        },
-        "orderInInterviewPlan": {
-          "type": "integer",
-          "description": "The stage's order within its interview plan"
-        },
-        "interviewStageGroupId": {
-          "type": "string"
-        },
-        "interviewPlanId": {
-          "type": "string",
-          "description": "The id of the interview plan the stage belongs to"
-        }
-      },
-      "required": [
-        "id",
-        "title",
-        "type",
-        "orderInInterviewPlan",
-        "interviewPlanId"
-      ]
-    },
-    "source": {
-      "type": "object",
-      "description": "The source attributed to this application, if any",
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "The source's unique identifier"
-        },
-        "title": {
-          "type": "string",
-          "description": "The title of the source"
-        },
-        "isArchived": {
-          "type": "boolean",
-          "description": "Whether the source has been archived"
-        },
-        "sourceType": {
-          "type": "object",
-          "description": "The source type associated with this source",
-          "properties": {
-            "id": {
-              "type": "string",
-              "description": "The source type's unique identifier"
-            },
-            "title": {
-              "type": "string",
-              "description": "The title of the source type"
-            },
-            "isArchived": {
-              "type": "boolean",
-              "description": "Whether the source type has been archived"
-            }
-          },
-          "required": [
-            "id",
-            "title",
-            "isArchived"
-          ]
-        }
-      },
-      "required": [
-        "id",
-        "title",
-        "isArchived",
-        "sourceType"
-      ]
+    "appliedViaJobPostingId": {
+      "type": "string"
     },
     "archiveReason": {
-      "type": "object",
       "description": "Details about the archive reason for this application, if archived",
       "properties": {
-        "id": {
-          "type": "string",
-          "description": "The unique identifier for the archive reason"
-        },
-        "text": {
-          "type": "string",
-          "description": "The display text for the archive reason"
-        },
-        "reasonType": {
-          "type": "string",
-          "description": "The category of archive reason",
-          "enum": [
-            "RejectedByCandidate",
-            "RejectedByOrg",
-            "Other"
-          ]
-        },
-        "isArchived": {
-          "type": "boolean",
-          "description": "Whether the archive reason is archived"
-        },
         "customFields": {
-          "type": "array",
           "description": "Archive detail custom field values",
           "items": {
-            "type": "object",
             "description": "A custom field value attached to the application",
             "properties": {
               "id": {
-                "type": "string",
-                "description": "The unique identifier for the custom field definition"
+                "description": "The unique identifier for the custom field definition",
+                "type": "string"
               },
               "isPrivate": {
-                "type": "boolean",
-                "description": "Whether the custom field is private"
+                "description": "Whether the custom field is private",
+                "type": "boolean"
               },
               "title": {
-                "type": "string",
-                "description": "The title of the custom field"
-              },
-              "valueLabel": {
+                "description": "The title of the custom field",
                 "type": "string"
               },
               "value": {
-                "type": "object",
                 "properties": {
-                  "value": {
-                    "type": "number",
-                    "description": "The currency amount"
-                  },
                   "currencyCode": {
-                    "type": "string",
-                    "description": "The ISO currency code"
+                    "description": "The ISO currency code",
+                    "type": "string"
+                  },
+                  "value": {
+                    "description": "The currency amount",
+                    "type": "number"
                   }
                 },
                 "required": [
                   "value",
                   "currencyCode"
-                ]
+                ],
+                "type": "object"
+              },
+              "valueLabel": {
+                "type": "string"
               }
             },
             "required": [
               "id",
               "title",
               "value"
-            ]
-          }
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "id": {
+          "description": "The unique identifier for the archive reason",
+          "type": "string"
+        },
+        "isArchived": {
+          "description": "Whether the archive reason is archived",
+          "type": "boolean"
+        },
+        "reasonType": {
+          "description": "The category of archive reason",
+          "enum": [
+            "RejectedByCandidate",
+            "RejectedByOrg",
+            "Other"
+          ],
+          "type": "string"
+        },
+        "text": {
+          "description": "The display text for the archive reason",
+          "type": "string"
         }
       },
       "required": [
@@ -307,111 +267,124 @@
         "reasonType",
         "isArchived",
         "customFields"
-      ]
+      ],
+      "type": "object"
     },
     "archivedAt": {
-      "type": "string",
-      "format": "date-time"
+      "format": "date-time",
+      "type": "string"
     },
-    "job": {
-      "type": "object",
-      "description": "The job the application is for",
+    "candidate": {
+      "description": "The candidate associated with the application",
       "properties": {
         "id": {
-          "type": "string",
-          "description": "The unique identifier for the job"
-        },
-        "title": {
-          "type": "string",
-          "description": "The job title"
-        },
-        "locationId": {
+          "description": "The unique identifier for the candidate",
           "type": "string"
         },
-        "departmentId": {
+        "name": {
+          "description": "The candidate's name",
           "type": "string"
+        },
+        "primaryEmailAddress": {
+          "properties": {
+            "isPrimary": {
+              "description": "Whether the contact info is the primary email or phone number",
+              "type": "boolean"
+            },
+            "type": {
+              "description": "The type of the contact info",
+              "enum": [
+                "Personal",
+                "Work",
+                "Other"
+              ],
+              "type": "string"
+            },
+            "value": {
+              "description": "The email address or phone number of the candidate",
+              "type": "string"
+            }
+          },
+          "required": [
+            "value",
+            "type",
+            "isPrimary"
+          ],
+          "type": "object"
+        },
+        "primaryPhoneNumber": {
+          "properties": {
+            "isPrimary": {
+              "description": "Whether the contact info is the primary email or phone number",
+              "type": "boolean"
+            },
+            "type": {
+              "description": "The type of the contact info",
+              "enum": [
+                "Personal",
+                "Work",
+                "Other"
+              ],
+              "type": "string"
+            },
+            "value": {
+              "description": "The email address or phone number of the candidate",
+              "type": "string"
+            }
+          },
+          "required": [
+            "value",
+            "type",
+            "isPrimary"
+          ],
+          "type": "object"
         }
       },
       "required": [
         "id",
-        "title"
-      ]
+        "name"
+      ],
+      "type": "object"
+    },
+    "createdAt": {
+      "description": "The timestamp when the application was created",
+      "format": "date-time",
+      "type": "string"
     },
     "creditedToUser": {
-      "type": "object",
       "properties": {
-        "id": {
-          "type": "string",
-          "description": "The unique identifier for the user"
-        },
-        "firstName": {
-          "type": "string",
-          "description": "The user's first name"
-        },
-        "lastName": {
-          "type": "string",
-          "description": "The user's last name"
-        },
-        "email": {
-          "type": "string",
-          "format": "email"
-        },
-        "globalRole": {
-          "type": "string",
-          "description": "The user's global role in the organization",
-          "enum": [
-            "Organization Admin",
-            "Elevated Access",
-            "Limited Access",
-            "External Recruiter"
-          ]
-        },
-        "isEnabled": {
-          "type": "boolean",
-          "description": "Whether the user is enabled (not deactivated)"
-        },
-        "updatedAt": {
-          "type": "string",
-          "description": "The timestamp when the user was last updated (ISO 8601 format)"
-        },
-        "managerId": {
-          "type": "string",
-          "description": "The unique identifier for the user's manager"
-        },
         "customFields": {
-          "type": "array",
           "description": "Custom fields associated with the user (only included when requested)",
           "items": {
-            "type": "object",
             "properties": {
               "id": {
-                "type": "string",
-                "description": "The unique identifier for the custom field definition"
+                "description": "The unique identifier for the custom field definition",
+                "type": "string"
               },
               "isPrivate": {
-                "type": "boolean",
-                "description": "Whether the custom field is private"
+                "description": "Whether the custom field is private",
+                "type": "boolean"
               },
               "title": {
-                "type": "string",
-                "description": "The title of the custom field"
+                "description": "The title of the custom field",
+                "type": "string"
               },
               "value": {
-                "type": "object",
                 "properties": {
-                  "value": {
-                    "type": "number",
-                    "description": "The currency amount"
-                  },
                   "currencyCode": {
-                    "type": "string",
-                    "description": "The currency code"
+                    "description": "The currency code",
+                    "type": "string"
+                  },
+                  "value": {
+                    "description": "The currency amount",
+                    "type": "number"
                   }
                 },
                 "required": [
                   "value",
                   "currencyCode"
-                ]
+                ],
+                "type": "object"
               },
               "valueLabel": {
                 "type": "string"
@@ -422,8 +395,48 @@
               "isPrivate",
               "title",
               "value"
-            ]
-          }
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "email": {
+          "format": "email",
+          "type": "string"
+        },
+        "firstName": {
+          "description": "The user's first name",
+          "type": "string"
+        },
+        "globalRole": {
+          "description": "The user's global role in the organization",
+          "enum": [
+            "Organization Admin",
+            "Elevated Access",
+            "Limited Access",
+            "External Recruiter"
+          ],
+          "type": "string"
+        },
+        "id": {
+          "description": "The unique identifier for the user",
+          "type": "string"
+        },
+        "isEnabled": {
+          "description": "Whether the user is enabled (not deactivated)",
+          "type": "boolean"
+        },
+        "lastName": {
+          "description": "The user's last name",
+          "type": "string"
+        },
+        "managerId": {
+          "description": "The unique identifier for the user's manager",
+          "type": "string"
+        },
+        "updatedAt": {
+          "description": "The timestamp when the user was last updated (ISO 8601 format)",
+          "type": "string"
         }
       },
       "required": [
@@ -434,34 +447,115 @@
         "globalRole",
         "isEnabled",
         "updatedAt"
-      ]
+      ],
+      "type": "object"
+    },
+    "currentInterviewStage": {
+      "description": "The current interview stage for the application",
+      "properties": {
+        "id": {
+          "description": "The unique identifier for the interview stage",
+          "type": "string"
+        },
+        "interviewPlanId": {
+          "description": "The id of the interview plan the stage belongs to",
+          "type": "string"
+        },
+        "interviewStageGroupId": {
+          "type": "string"
+        },
+        "orderInInterviewPlan": {
+          "description": "The stage's order within its interview plan",
+          "type": "integer"
+        },
+        "title": {
+          "description": "The interview stage title",
+          "type": "string"
+        },
+        "type": {
+          "description": "The interview stage type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "type",
+        "orderInInterviewPlan",
+        "interviewPlanId"
+      ],
+      "type": "object"
+    },
+    "customFields": {
+      "items": {
+        "description": "A custom field value attached to the application",
+        "properties": {
+          "id": {
+            "description": "The unique identifier for the custom field definition",
+            "type": "string"
+          },
+          "isPrivate": {
+            "description": "Whether the custom field is private",
+            "type": "boolean"
+          },
+          "title": {
+            "description": "The title of the custom field",
+            "type": "string"
+          },
+          "value": {
+            "properties": {
+              "currencyCode": {
+                "description": "The ISO currency code",
+                "type": "string"
+              },
+              "value": {
+                "description": "The currency amount",
+                "type": "number"
+              }
+            },
+            "required": [
+              "value",
+              "currencyCode"
+            ],
+            "type": "object"
+          },
+          "valueLabel": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "value"
+        ],
+        "type": "object"
+      },
+      "type": "array"
     },
     "hiringTeam": {
-      "type": "array",
       "description": "The hiring team for the application",
       "items": {
-        "type": "object",
         "properties": {
-          "userId": {
-            "type": "string",
-            "description": "The unique identifier of the hiring team member"
+          "email": {
+            "description": "The primary email address of the hiring team member",
+            "format": "email",
+            "type": "string"
           },
           "firstName": {
-            "type": "string",
-            "description": "The first name of the hiring team member"
+            "description": "The first name of the hiring team member",
+            "type": "string"
           },
           "lastName": {
-            "type": "string",
-            "description": "The last name of the hiring team member"
-          },
-          "email": {
-            "type": "string",
-            "description": "The primary email address of the hiring team member",
-            "format": "email"
+            "description": "The last name of the hiring team member",
+            "type": "string"
           },
           "role": {
-            "type": "string",
-            "description": "The hiring team role assigned to the member"
+            "description": "The hiring team role assigned to the member",
+            "type": "string"
+          },
+          "userId": {
+            "description": "The unique identifier of the hiring team member",
+            "type": "string"
           }
         },
         "required": [
@@ -470,138 +564,151 @@
           "lastName",
           "email",
           "role"
-        ]
-      }
+        ],
+        "type": "object"
+      },
+      "type": "array"
     },
-    "appliedViaJobPostingId": {
+    "id": {
+      "description": "The unique identifier for the application",
       "type": "string"
     },
-    "submitterClientIp": {
-      "type": "string"
-    },
-    "submitterUserAgent": {
-      "type": "string"
+    "job": {
+      "description": "The job the application is for",
+      "properties": {
+        "departmentId": {
+          "type": "string"
+        },
+        "id": {
+          "description": "The unique identifier for the job",
+          "type": "string"
+        },
+        "locationId": {
+          "type": "string"
+        },
+        "title": {
+          "description": "The job title",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "title"
+      ],
+      "type": "object"
     },
     "openings": {
-      "type": "array",
       "items": {
-        "type": "object",
         "description": "An opening linked to the application via `expand: ['openings']`",
         "properties": {
-          "id": {
-            "type": "string",
-            "description": "The unique identifier for the opening"
-          },
-          "openedAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "closedAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "isArchived": {
-            "type": "boolean",
-            "description": "Whether the opening is archived"
-          },
           "archivedAt": {
-            "type": "string",
-            "format": "date-time"
+            "format": "date-time",
+            "type": "string"
           },
           "closeReasonId": {
             "type": "string"
           },
-          "openingState": {
-            "type": "string",
-            "description": "The current state of the opening",
-            "enum": [
-              "Approved",
-              "Closed",
-              "Draft",
-              "Filled",
-              "Open"
-            ]
+          "closedAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "id": {
+            "description": "The unique identifier for the opening",
+            "type": "string"
+          },
+          "isArchived": {
+            "description": "Whether the opening is archived",
+            "type": "boolean"
           },
           "latestVersion": {
-            "type": "object",
             "description": "The latest version of the opening",
             "properties": {
-              "id": {
-                "type": "string",
-                "description": "The unique identifier for the opening version"
-              },
-              "identifier": {
-                "type": "string",
-                "description": "The human-readable opening identifier"
-              },
-              "description": {
-                "type": "string"
-              },
               "authorId": {
                 "type": "string"
               },
               "createdAt": {
-                "type": "string",
                 "description": "The timestamp when the opening version was created",
-                "format": "date-time"
-              },
-              "teamId": {
+                "format": "date-time",
                 "type": "string"
               },
-              "jobIds": {
-                "type": "array",
-                "description": "The unique identifiers for jobs linked to the opening",
+              "customFields": {
+                "description": "Custom fields attached to the opening",
                 "items": {
-                  "type": "string"
-                }
+                  "description": "A custom field value attached to the application",
+                  "properties": {
+                    "id": {
+                      "description": "The unique identifier for the custom field definition",
+                      "type": "string"
+                    },
+                    "isPrivate": {
+                      "description": "Whether the custom field is private",
+                      "type": "boolean"
+                    },
+                    "title": {
+                      "description": "The title of the custom field",
+                      "type": "string"
+                    },
+                    "value": {
+                      "properties": {
+                        "currencyCode": {
+                          "description": "The ISO currency code",
+                          "type": "string"
+                        },
+                        "value": {
+                          "description": "The currency amount",
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "value",
+                        "currencyCode"
+                      ],
+                      "type": "object"
+                    },
+                    "valueLabel": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "title",
+                    "value"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
               },
-              "targetHireDate": {
+              "description": {
                 "type": "string"
-              },
-              "targetStartDate": {
-                "type": "string"
-              },
-              "isBackfill": {
-                "type": "boolean",
-                "description": "Whether the opening is a backfill"
               },
               "employmentType": {
-                "type": "string",
-                "description": "The employment type"
-              },
-              "locationIds": {
-                "type": "array",
-                "description": "The location ids",
-                "items": {
-                  "type": "string"
-                }
+                "description": "The employment type",
+                "type": "string"
               },
               "hiringTeam": {
-                "type": "array",
                 "description": "Hiring team for the opening",
                 "items": {
-                  "type": "object",
                   "properties": {
-                    "userId": {
-                      "type": "string",
-                      "description": "The user id"
+                    "email": {
+                      "description": "The email",
+                      "format": "email",
+                      "type": "string"
                     },
                     "firstName": {
-                      "type": "string",
-                      "description": "The first name"
+                      "description": "The first name",
+                      "type": "string"
                     },
                     "lastName": {
-                      "type": "string",
-                      "description": "The last name"
-                    },
-                    "email": {
-                      "type": "string",
-                      "description": "The email",
-                      "format": "email"
+                      "description": "The last name",
+                      "type": "string"
                     },
                     "role": {
-                      "type": "string",
-                      "description": "The role"
+                      "description": "The role",
+                      "type": "string"
+                    },
+                    "userId": {
+                      "description": "The user id",
+                      "type": "string"
                     }
                   },
                   "required": [
@@ -610,55 +717,45 @@
                     "lastName",
                     "email",
                     "role"
-                  ]
-                }
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
               },
-              "customFields": {
-                "type": "array",
-                "description": "Custom fields attached to the opening",
+              "id": {
+                "description": "The unique identifier for the opening version",
+                "type": "string"
+              },
+              "identifier": {
+                "description": "The human-readable opening identifier",
+                "type": "string"
+              },
+              "isBackfill": {
+                "description": "Whether the opening is a backfill",
+                "type": "boolean"
+              },
+              "jobIds": {
+                "description": "The unique identifiers for jobs linked to the opening",
                 "items": {
-                  "type": "object",
-                  "description": "A custom field value attached to the application",
-                  "properties": {
-                    "id": {
-                      "type": "string",
-                      "description": "The unique identifier for the custom field definition"
-                    },
-                    "isPrivate": {
-                      "type": "boolean",
-                      "description": "Whether the custom field is private"
-                    },
-                    "title": {
-                      "type": "string",
-                      "description": "The title of the custom field"
-                    },
-                    "valueLabel": {
-                      "type": "string"
-                    },
-                    "value": {
-                      "type": "object",
-                      "properties": {
-                        "value": {
-                          "type": "number",
-                          "description": "The currency amount"
-                        },
-                        "currencyCode": {
-                          "type": "string",
-                          "description": "The ISO currency code"
-                        }
-                      },
-                      "required": [
-                        "value",
-                        "currencyCode"
-                      ]
-                    }
-                  },
-                  "required": [
-                    "id",
-                    "title",
-                    "value"
-                  ]
-                }
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "locationIds": {
+                "description": "The location ids",
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "targetHireDate": {
+                "type": "string"
+              },
+              "targetStartDate": {
+                "type": "string"
+              },
+              "teamId": {
+                "type": "string"
               }
             },
             "required": [
@@ -673,281 +770,76 @@
               "locationIds",
               "hiringTeam",
               "customFields"
-            ]
+            ],
+            "type": "object"
+          },
+          "openedAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "openingState": {
+            "description": "The current state of the opening",
+            "enum": [
+              "Approved",
+              "Closed",
+              "Draft",
+              "Filled",
+              "Open"
+            ],
+            "type": "string"
           }
         },
         "required": [
           "id",
           "isArchived",
           "openingState"
-        ]
-      }
-    },
-    "applicationHistory": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "The unique identifier for the history event"
-          },
-          "stageId": {
-            "type": "string",
-            "description": "The id of the interview stage for this event"
-          },
-          "title": {
-            "type": "string",
-            "description": "The interview stage title for this event"
-          },
-          "enteredStageAt": {
-            "type": "string",
-            "description": "The timestamp the application entered this stage",
-            "format": "date-time"
-          },
-          "leftStageAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "stageNumber": {
-            "type": "integer",
-            "description": "The order of the history event in the application's history. 0 is the first event."
-          },
-          "allowedActions": {
-            "type": "array",
-            "description": "Actions that can be performed on this history event via `application.updateHistory`.",
-            "items": {
-              "type": "string",
-              "enum": [
-                "none",
-                "delete",
-                "set_entered_at"
-              ]
-            }
-          },
-          "actorId": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "id",
-          "stageId",
-          "title",
-          "enteredStageAt",
-          "stageNumber",
-          "allowedActions"
-        ]
-      }
-    },
-    "applicationFormSubmissions": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "The unique identifier for the application form submission"
-          },
-          "formDefinition": {
-            "type": "object",
-            "properties": {
-              "sections": {
-                "type": "array",
-                "description": "The sections in the form definition",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "title": {
-                      "type": "string"
-                    },
-                    "descriptionHtml": {
-                      "type": "string"
-                    },
-                    "descriptionPlain": {
-                      "type": "string"
-                    },
-                    "fields": {
-                      "type": "array",
-                      "description": "The fields in this form section",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "isRequired": {
-                            "type": "boolean",
-                            "description": "Whether this form field is required"
-                          },
-                          "descriptionHtml": {
-                            "type": "string"
-                          },
-                          "descriptionPlain": {
-                            "type": "string"
-                          },
-                          "field": {
-                            "type": "object",
-                            "properties": {
-                              "id": {
-                                "type": "string",
-                                "description": "The unique identifier for the form definition field"
-                              },
-                              "type": {
-                                "type": "string",
-                                "description": "The type of the form definition field"
-                              },
-                              "path": {
-                                "type": "string",
-                                "description": "The path used to submit values for this field"
-                              },
-                              "humanReadablePath": {
-                                "type": "string",
-                                "description": "The human-readable path for the form field"
-                              },
-                              "title": {
-                                "type": "string",
-                                "description": "The display title for the form field"
-                              },
-                              "isNullable": {
-                                "type": "boolean",
-                                "description": "Whether the form field accepts null values"
-                              },
-                              "selectableValues": {
-                                "type": "array",
-                                "items": {
-                                  "type": "object",
-                                  "properties": {
-                                    "label": {
-                                      "type": "string",
-                                      "description": "The display label for the selectable value"
-                                    },
-                                    "value": {
-                                      "type": "string",
-                                      "description": "The submitted value for the selectable option"
-                                    }
-                                  },
-                                  "required": [
-                                    "label",
-                                    "value"
-                                  ]
-                                }
-                              }
-                            },
-                            "required": [
-                              "id",
-                              "type",
-                              "path",
-                              "humanReadablePath",
-                              "title",
-                              "isNullable"
-                            ]
-                          }
-                        },
-                        "required": [
-                          "isRequired",
-                          "field"
-                        ]
-                      }
-                    }
-                  },
-                  "required": [
-                    "fields"
-                  ]
-                }
-              }
-            },
-            "required": [
-              "sections"
-            ]
-          },
-          "submittedValues": {
-            "description": "The values submitted for the form, keyed by field path"
-          }
-        },
-        "required": [
-          "id",
-          "formDefinition",
-          "submittedValues"
-        ]
-      }
+        ],
+        "type": "object"
+      },
+      "type": "array"
     },
     "referrals": {
-      "type": "array",
       "items": {
-        "type": "object",
         "properties": {
+          "referredAt": {
+            "description": "The timestamp the referral was created",
+            "format": "date-time",
+            "type": "string"
+          },
           "user": {
-            "type": "object",
             "properties": {
-              "id": {
-                "type": "string",
-                "description": "The unique identifier for the user"
-              },
-              "firstName": {
-                "type": "string",
-                "description": "The user's first name"
-              },
-              "lastName": {
-                "type": "string",
-                "description": "The user's last name"
-              },
-              "email": {
-                "type": "string",
-                "format": "email"
-              },
-              "globalRole": {
-                "type": "string",
-                "description": "The user's global role in the organization",
-                "enum": [
-                  "Organization Admin",
-                  "Elevated Access",
-                  "Limited Access",
-                  "External Recruiter"
-                ]
-              },
-              "isEnabled": {
-                "type": "boolean",
-                "description": "Whether the user is enabled (not deactivated)"
-              },
-              "updatedAt": {
-                "type": "string",
-                "description": "The timestamp when the user was last updated (ISO 8601 format)"
-              },
-              "managerId": {
-                "type": "string",
-                "description": "The unique identifier for the user's manager"
-              },
               "customFields": {
-                "type": "array",
                 "description": "Custom fields associated with the user (only included when requested)",
                 "items": {
-                  "type": "object",
                   "properties": {
                     "id": {
-                      "type": "string",
-                      "description": "The unique identifier for the custom field definition"
+                      "description": "The unique identifier for the custom field definition",
+                      "type": "string"
                     },
                     "isPrivate": {
-                      "type": "boolean",
-                      "description": "Whether the custom field is private"
+                      "description": "Whether the custom field is private",
+                      "type": "boolean"
                     },
                     "title": {
-                      "type": "string",
-                      "description": "The title of the custom field"
+                      "description": "The title of the custom field",
+                      "type": "string"
                     },
                     "value": {
-                      "type": "object",
                       "properties": {
-                        "value": {
-                          "type": "number",
-                          "description": "The currency amount"
-                        },
                         "currencyCode": {
-                          "type": "string",
-                          "description": "The currency code"
+                          "description": "The currency code",
+                          "type": "string"
+                        },
+                        "value": {
+                          "description": "The currency amount",
+                          "type": "number"
                         }
                       },
                       "required": [
                         "value",
                         "currencyCode"
-                      ]
+                      ],
+                      "type": "object"
                     },
                     "valueLabel": {
                       "type": "string"
@@ -958,8 +850,48 @@
                     "isPrivate",
                     "title",
                     "value"
-                  ]
-                }
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "email": {
+                "format": "email",
+                "type": "string"
+              },
+              "firstName": {
+                "description": "The user's first name",
+                "type": "string"
+              },
+              "globalRole": {
+                "description": "The user's global role in the organization",
+                "enum": [
+                  "Organization Admin",
+                  "Elevated Access",
+                  "Limited Access",
+                  "External Recruiter"
+                ],
+                "type": "string"
+              },
+              "id": {
+                "description": "The unique identifier for the user",
+                "type": "string"
+              },
+              "isEnabled": {
+                "description": "Whether the user is enabled (not deactivated)",
+                "type": "boolean"
+              },
+              "lastName": {
+                "description": "The user's last name",
+                "type": "string"
+              },
+              "managerId": {
+                "description": "The unique identifier for the user's manager",
+                "type": "string"
+              },
+              "updatedAt": {
+                "description": "The timestamp when the user was last updated (ISO 8601 format)",
+                "type": "string"
               }
             },
             "required": [
@@ -970,43 +902,111 @@
               "globalRole",
               "isEnabled",
               "updatedAt"
-            ]
-          },
-          "referredAt": {
-            "type": "string",
-            "description": "The timestamp the referral was created",
-            "format": "date-time"
+            ],
+            "type": "object"
           }
         },
         "required": [
           "user",
           "referredAt"
-        ]
-      }
+        ],
+        "type": "object"
+      },
+      "type": "array"
     },
     "resumeFileHandle": {
-      "type": "object",
       "properties": {
+        "handle": {
+          "description": "The file handle, which can be used with the `file.info` endpoint",
+          "type": "string"
+        },
         "id": {
-          "type": "string",
-          "description": "The unique identifier for the file"
+          "description": "The unique identifier for the file",
+          "type": "string"
         },
         "name": {
-          "type": "string",
-          "description": "The file name"
-        },
-        "handle": {
-          "type": "string",
-          "description": "The file handle, which can be used with the `file.info` endpoint"
+          "description": "The file name",
+          "type": "string"
         }
       },
       "required": [
         "id",
         "name",
         "handle"
-      ]
+      ],
+      "type": "object"
+    },
+    "source": {
+      "description": "The source attributed to this application, if any",
+      "properties": {
+        "id": {
+          "description": "The source's unique identifier",
+          "type": "string"
+        },
+        "isArchived": {
+          "description": "Whether the source has been archived",
+          "type": "boolean"
+        },
+        "sourceType": {
+          "description": "The source type associated with this source",
+          "properties": {
+            "id": {
+              "description": "The source type's unique identifier",
+              "type": "string"
+            },
+            "isArchived": {
+              "description": "Whether the source type has been archived",
+              "type": "boolean"
+            },
+            "title": {
+              "description": "The title of the source type",
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "title",
+            "isArchived"
+          ],
+          "type": "object"
+        },
+        "title": {
+          "description": "The title of the source",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "isArchived",
+        "sourceType"
+      ],
+      "type": "object"
+    },
+    "status": {
+      "description": "The status of the application",
+      "enum": [
+        "Hired",
+        "Archived",
+        "Active",
+        "Lead"
+      ],
+      "type": "string"
+    },
+    "submitterClientIp": {
+      "type": "string"
+    },
+    "submitterUserAgent": {
+      "type": "string"
+    },
+    "updatedAt": {
+      "description": "The timestamp when the application was last updated",
+      "format": "date-time",
+      "type": "string"
     }
   },
+  "title": "application_info",
+  "type": "object",
   "x-primary-key": [
     "id"
   ]

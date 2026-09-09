@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "configuration_id": {
+      "type": "integer"
+    },
+    "default_for_new_repos": {
+      "enum": [
+        "all",
+        "none",
+        "private_and_internal",
+        "public"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "enterprise": {
+      "maxLength": 8192,
+      "type": "string"
+    }
+  },
+  "required": [
+    "configuration_id",
+    "enterprise"
+  ],
+  "type": "object"
+}

@@ -1,7 +1,0 @@
-{
-  "issue": 3863,
-  "parent": 3862,
-  "state": "ready_for_firstmate",
-  "execution": "inline_manual_no_spawn",
-  "next": "no_mistakes_shipping_gate"
-}

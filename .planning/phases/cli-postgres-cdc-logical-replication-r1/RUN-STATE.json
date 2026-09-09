@@ -1,9 +1,0 @@
-{
-  "branch": "fm/cli-postgres-cdc-logical-replication-r1",
-  "base": "origin/main",
-  "base_head": "f96a47e80",
-  "lifecycle": "inline-manual-gsd-fallback",
-  "status": "containment-validated",
-  "tdd": "PCDC-1 through PCDC-9 green; PostgreSQL 12.22 live protocol result is retained as historical evidence only",
-  "validation": "current validation passed: fail-closed PostgreSQL and CLI tests, full internal/cli (662.780s), vet/build, connectorgen validation/surface-sync, connector docs validation, and agent contract check; the pre-containment live protocol result is not current conformance"
-}

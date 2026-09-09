@@ -1,0 +1,141 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "data": {
+      "additionalProperties": false,
+      "properties": {
+        "approval_status": {
+          "type": "string"
+        },
+        "assigned_by": {
+          "additionalProperties": false,
+          "properties": {
+            "name": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "assignee": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "assignee_section": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "assignee_status": {
+          "type": "string"
+        },
+        "completed": {
+          "type": "boolean"
+        },
+        "completed_by": {
+          "additionalProperties": false,
+          "properties": {
+            "name": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "custom_fields": {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        "due_at": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "due_on": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "external": {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "type": "string"
+            },
+            "gid": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "followers": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "html_notes": {
+          "type": "string"
+        },
+        "liked": {
+          "type": "boolean"
+        },
+        "name": {
+          "type": "string"
+        },
+        "notes": {
+          "type": "string"
+        },
+        "parent": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "projects": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "resource_subtype": {
+          "type": "string"
+        },
+        "start_at": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "start_on": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "workspace": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "task_gid": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "task_gid",
+    "data"
+  ],
+  "type": "object"
+}

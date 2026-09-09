@@ -1,18 +1,59 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "bot": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "created_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "id": {
+      "type": "integer"
+    },
+    "is_admin": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "state": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "username": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "web_url": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "id"
+  ],
   "title": "users",
   "type": "object",
-  "x-primary-key": ["id"],
   "x-cursor-field": "created_at",
-  "required": ["id"],
-  "properties": {
-    "id": { "type": "integer" },
-    "username": { "type": ["string", "null"] },
-    "name": { "type": ["string", "null"] },
-    "state": { "type": ["string", "null"] },
-    "web_url": { "type": ["string", "null"] },
-    "created_at": { "type": ["string", "null"] },
-    "bot": { "type": ["boolean", "null"] },
-    "is_admin": { "type": ["boolean", "null"] }
-  }
+  "x-primary-key": [
+    "id"
+  ]
 }

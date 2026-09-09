@@ -1,13 +1,6 @@
 // Rewrites the count tables in website/content/docs/github-cli-surface.mdx from
-// the GitHub connector bundle.
+// GitHub's immutable schema-4 source lock and rendered execution JSON.
 // Run: node scripts/gen-github-cli-surface.mjs
-// Reads: internal/connectors/defs/github/{cli_surface,api_surface,streams,writes}.json
-// Emits: website/content/docs/github-cli-surface.mdx (marked blocks only)
-//
-// The page used to hand-copy these numbers and drifted to roughly a quarter of
-// the real command count, on the same page that argues declared metadata must
-// match reality. Only the marked blocks are generated; every other line on the
-// page, including each intent's runtime rule, stays hand-written.
 
 import { readFileSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
@@ -16,30 +9,25 @@ import { fileURLToPath } from 'node:url';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const BUNDLE = resolve(__dirname, '../../internal/connectors/defs/github');
 const PAGE = resolve(__dirname, '../content/docs/github-cli-surface.mdx');
-const SOURCE_LOCK = resolve(BUNDLE, 'sources/github-operation-source-lock.json');
-const COMBINED_LEDGER = resolve(__dirname, '../../.planning/phases/github-parity-extract-r1/GITHUB-COMBINED-OPERATION-LEDGER.json');
 
-// Runtime rules are editorial, not derivable, so they live here rather than in
-// the bundle. An intent with no rule is a hard error: a silently blank rule
-// would reintroduce exactly the unverified prose this generator removes.
 const INTENT_RULES = [
-  ['etl', 'Reads map to existing streams or planned stream/direct-read coverage.'],
+  ['etl', 'Reads bind to rendered streams and keep warehouse materialization separate from direct reads.'],
   [
     'reverse_etl',
     'Commands with explicit `record.*` flag mappings create stored reverse plans; execution requires preview and approval.',
   ],
-  ['direct_read', 'Constrained read commands that do not naturally fit streams.'],
+  ['direct_read', 'Constrained reads bind to one rendered provider operation.'],
   [
     'binary_download',
-    'Bounded GET downloads that require declared response status, media, and redirect policy before writing a file beneath a caller-supplied `--dest-root`; no response body is rendered.',
+    'Bounded downloads require declared response status, media, redirect, size, and destination policy.',
   ],
   [
     'binary_upload',
-    'Declared, bounded local-file uploads follow plan → preview → approval → execute; the provider URL, byte cap, media policy, and request body remain connector-owned.',
+    'Bounded local-file uploads follow plan → preview → approval → execute with connector-owned media and size policy.',
   ],
   [
     'direct_write',
-    'Fixed declared writes follow plan → preview → approval → execute; destructive operations also require typed confirmation.',
+    'Fixed rendered writes follow plan → preview → approval → execute; destructive operations require typed confirmation.',
   ],
   ['local_workflow', 'Browser, git, shell, extension, completion, or local config behavior.'],
   ['auth', 'Credential lifecycle commands; never print token material.'],
@@ -56,53 +44,17 @@ const AVAILABILITY_ROWS = [
   ['Unsafe or disallowed entries', 'unsafe_or_disallowed'],
 ];
 
+const LANE_ROWS = [
+  ['Direct read lane', 'direct_read'],
+  ['Direct write lane', 'direct_write'],
+  ['Binary download lane', 'binary_download'],
+  ['Binary upload lane', 'binary_upload'],
+  ['ETL lane', 'etl'],
+  ['Reverse ETL lane', 'reverse_etl'],
+  ['Sync transport lane', 'sync_transport'],
+];
+
 const readJSON = (name) => JSON.parse(readFileSync(resolve(BUNDLE, name), 'utf8'));
-
-function sourceCounts(sourceLock) {
-  const counts = sourceLock?.counts;
-  const names = ['rest', 'graphql_query', 'graphql_mutation', 'total'];
-  if (!counts || names.some((name) => !Number.isInteger(counts[name]) || counts[name] < 0)) {
-    throw new Error('GitHub source lock has no complete non-negative operation counts');
-  }
-  if (counts.rest + counts.graphql_query + counts.graphql_mutation !== counts.total) {
-    throw new Error('GitHub source lock operation counts do not sum to total');
-  }
-  return counts;
-}
-
-function isLegacyGraphQLBinding(endpoint) {
-  return endpoint?.method === 'GRAPHQL';
-}
-
-function isFixedGraphQLTransport(endpoint) {
-  return endpoint?.method === 'POST'
-    && endpoint?.path === '/graphql'
-    && Array.isArray(endpoint?.covered_by?.operations);
-}
-
-function sourceProgress(ledger, source) {
-  if (!ledger || JSON.stringify(ledger.counts) !== JSON.stringify(source)) {
-    throw new Error('GitHub combined ledger counts do not match the source lock');
-  }
-  const metrics = [
-    ['inventory', 'classified'],
-    ['implementation', 'implemented'],
-    ['live_proof', 'proven'],
-  ];
-  const progress = {};
-  for (const [name, numeratorName] of metrics) {
-    const metric = ledger.progress?.[name];
-    if (!metric || !Number.isInteger(metric[numeratorName]) || metric[numeratorName] < 0 || metric[numeratorName] > source.total || metric.total !== source.total) {
-      throw new Error(`GitHub combined ledger ${name} progress is incomplete`);
-    }
-    const expectedPercent = Number(((metric[numeratorName] / source.total) * 100).toFixed(2));
-    if (metric.percent !== expectedPercent) {
-      throw new Error(`GitHub combined ledger ${name} percentage does not match its numerator`);
-    }
-    progress[name] = metric;
-  }
-  return progress;
-}
 
 function countBy(items, key) {
   const counts = new Map();
@@ -124,10 +76,22 @@ function assertAccountedFor(label, counts, known, total) {
   }
 }
 
-export function currentSurfaceTable({ commands, endpoints, streams, writes, sourceLock, ledger }) {
-  const source = sourceCounts(sourceLock);
-  const progress = sourceProgress(ledger, source);
+function assertVNextLock(sourceLock) {
+  if (sourceLock?.schema_version !== 4 || sourceLock?.connector !== 'github') {
+    throw new Error('GitHub source lock must be schema 4 for connector github');
+  }
+  if (!Array.isArray(sourceLock.operations)) {
+    throw new Error('GitHub source lock operations must be an array');
+  }
+  const laneKeys = Object.keys(sourceLock.lanes ?? {}).sort();
+  const expected = LANE_ROWS.map(([, key]) => key).sort();
+  if (JSON.stringify(laneKeys) !== JSON.stringify(expected)) {
+    throw new Error('GitHub source lock must declare exactly seven lanes');
+  }
+}
 
+export function currentSurfaceTable({ commands, streams, writes, sourceLock }) {
+  assertVNextLock(sourceLock);
   const availability = countBy(commands, 'availability');
   assertAccountedFor(
     'availability',
@@ -136,63 +100,20 @@ export function currentSurfaceTable({ commands, endpoints, streams, writes, sour
     commands.length,
   );
 
-  // GraphQL shares one physical POST /graphql transport, which is intentionally
-  // not a REST OpenAPI operation. Keep that row separate so a future source
-  // change cannot silently inflate the REST denominator in the website.
-  const restEndpoints = endpoints.filter(
-    (endpoint) => !isLegacyGraphQLBinding(endpoint) && !isFixedGraphQLTransport(endpoint),
-  );
-  const fixedGraphQLTransports = endpoints.filter(isFixedGraphQLTransport);
-  const legacyGraphQLBindings = endpoints.filter(isLegacyGraphQLBinding);
-  if (restEndpoints.length !== source.rest) {
-    throw new Error(`GitHub REST endpoint count = ${restEndpoints.length}, source lock declares ${source.rest}`);
-  }
-  if (fixedGraphQLTransports.length !== 1) {
-    throw new Error(`GitHub fixed GraphQL transport count = ${fixedGraphQLTransports.length}, want 1`);
-  }
-  const fixedGraphQLOperations = fixedGraphQLTransports[0].covered_by.operations;
-  if (
-    new Set(fixedGraphQLOperations).size !== fixedGraphQLOperations.length
-    || fixedGraphQLOperations.some((operation) => typeof operation !== 'string' || operation.trim() === '')
-  ) {
-    throw new Error('GitHub fixed GraphQL operation bindings must be unique non-empty strings');
-  }
-  const sourceGraphQLOperations = fixedGraphQLOperations.filter((operation) =>
-    /^github\.graphql\.(?:query|mutation)\./u.test(operation));
-  const supplementalGraphQLOperations = fixedGraphQLOperations.filter((operation) =>
-    !/^github\.graphql\.(?:query|mutation)\./u.test(operation));
-  const expectedGraphQLRoots = source.graphql_query + source.graphql_mutation;
-  if (
-    sourceGraphQLOperations.length !== expectedGraphQLRoots
-    || new Set(sourceGraphQLOperations).size !== expectedGraphQLRoots
-  ) {
-    throw new Error(
-      `GitHub fixed GraphQL root-operation bindings = ${sourceGraphQLOperations.length}, source lock declares ${expectedGraphQLRoots}`,
-    );
-  }
-
-  const coveredREST = restEndpoints.filter((endpoint) => endpoint?.covered_by).length;
-  const blockedREST = restEndpoints.filter((endpoint) => !endpoint?.covered_by).length;
+  const endpointBoundCommands = commands.filter((command) =>
+    Array.isArray(command?.api_surface) && command.api_surface.length > 0).length;
+  const operationBoundCommands = commands.filter((command) =>
+    typeof command?.operation === 'string' && command.operation.trim() !== '').length;
 
   const rows = [
-    ['Declared command entries', commands.length],
+    ['Rendered command entries', commands.length],
     ...AVAILABILITY_ROWS.map(([label, value]) => [label, availability.get(value) ?? 0]),
-    ['GitHub read streams', streams.length],
-    ['GitHub write actions', writes.length],
-    ['Pinned REST operations', source.rest],
-    ['Pinned GraphQL Query roots', source.graphql_query],
-    ['Pinned GraphQL Mutation roots', source.graphql_mutation],
-    ['Pinned source operations', source.total],
-    ['Source inventory classification', `${progress.inventory.classified}/${progress.inventory.total} (${progress.inventory.percent}%)`],
-    ['Executable implementation', `${progress.implementation.implemented}/${progress.implementation.total} (${progress.implementation.percent}%)`],
-    ['Current-head live proof', `${progress.live_proof.proven}/${progress.live_proof.total} (${progress.live_proof.percent}%)`],
-    ['Tracked REST endpoints', restEndpoints.length],
-    ['Covered REST endpoints', coveredREST],
-    ['Blocked REST endpoints', blockedREST],
-    ['Fixed GraphQL transport endpoints', fixedGraphQLTransports.length],
-    ['Fixed GraphQL root-operation bindings', sourceGraphQLOperations.length],
-    ['Supplemental fixed GraphQL bindings', supplementalGraphQLOperations.length],
-    ['Legacy GraphQL compatibility bindings', legacyGraphQLBindings.length],
+    ['Rendered read streams', streams.length],
+    ['Rendered write actions', writes.length],
+    ['Authored canonical operations', sourceLock.operations.length],
+    ['Operation-bound commands', operationBoundCommands],
+    ['Endpoint-bound commands', endpointBoundCommands],
+    ...LANE_ROWS.map(([label, key]) => [label, sourceLock.lanes[key]]),
   ];
 
   return [
@@ -221,8 +142,6 @@ function executionModelTable() {
   ].join('\n');
 }
 
-// replaceBlock swaps the body between the generated markers, leaving the
-// markers in place so the page keeps declaring which lines are not hand-owned.
 function replaceBlock(page, id, body) {
   const open = `{/* generated:${id} — regenerate with \`pnpm run gen:website-data\`; do not hand-edit */}`;
   const close = `{/* /generated:${id} */}`;
@@ -236,14 +155,12 @@ function replaceBlock(page, id, body) {
 
 function main() {
   const commands = readJSON('cli_surface.json').commands ?? [];
-  const endpoints = readJSON('api_surface.json').endpoints ?? [];
   const streams = readJSON('streams.json').streams ?? [];
   const writes = readJSON('writes.json').actions ?? [];
-  const sourceLock = JSON.parse(readFileSync(SOURCE_LOCK, 'utf8'));
-  const ledger = JSON.parse(readFileSync(COMBINED_LEDGER, 'utf8'));
+  const sourceLock = readJSON('source.lock.json');
 
   let page = readFileSync(PAGE, 'utf8');
-  page = replaceBlock(page, 'current-surface', currentSurfaceTable({ commands, endpoints, streams, writes, sourceLock, ledger }));
+  page = replaceBlock(page, 'current-surface', currentSurfaceTable({ commands, streams, writes, sourceLock }));
   page = replaceBlock(page, 'execution-model', executionModelTable());
   writeFileSync(PAGE, page);
   console.log(`wrote ${PAGE}`);

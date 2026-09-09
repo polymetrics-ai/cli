@@ -1,12 +1,6 @@
 {
   "tagline": "Inspect, read, and safely plan typed Bahmni clinical operations.",
   "usage": "pm bahmni <command> [flags]",
-  "source_cli": {
-    "name": "Bahmni / OpenMRS REST + FHIR2",
-    "docs": "https://rest.openmrs.org/",
-    "reference": "OpenMRS REST v1, Bahmni-core REST, OpenMRS FHIR2 R4",
-    "source": "provider_api"
-  },
   "groups": [
     {
       "id": "clinical",
@@ -740,7 +734,6 @@
       "examples": [
         "pm bahmni bahmnicore patient-search --json --q <name> --max-bytes 1048576"
       ],
-      "source_url": "https://github.com/Bahmni/openmrs-module-bahmnicommons/blob/1.1.0/bahmni-commons-omod/src/main/java/org/bahmni/module/bahmnicommons/web/v1_0/controller/search/BahmniPatientSearchController.java#L30-L50",
       "redact_fields": [
         "identifier",
         "addressFieldValue",

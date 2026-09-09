@@ -1,16 +1,12 @@
 package cli
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
-	"net/http"
-	"net/http/httptest"
 	"os"
 	"path/filepath"
 	"regexp"
 	"strings"
-	"sync/atomic"
 	"testing"
 )
 
@@ -163,53 +159,6 @@ func TestPMBinaryExecutesInstalledApprovedJobFlow(t *testing.T) {
 //
 //	cmd/pm -> cli.Run -> connector command -> engine.Runtime.RequesterFor
 //	-> RateBudgetRefusalError(shared_coordinator_unavailable)
-func TestPMBinaryRefusesRequiredSharedRateBudgetBeforeSend(t *testing.T) {
-	var sends atomic.Int64
-	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
-		sends.Add(1)
-		w.WriteHeader(http.StatusInternalServerError)
-	}))
-	defer server.Close()
-
-	binary := buildTransportPM(t)
-	root := filepath.Join(t.TempDir(), "project")
-	t.Setenv("PM_DRAGONFLY_ADDR", "127.0.0.1:1")
-	if output, err := runTransportPM(binary, "", "init", "--root", root, "--json"); err != nil {
-		t.Fatalf("fresh pm init failed: %v, output length=%d", err, len(output))
-	}
-	if output, err := runTransportPM(binary, "",
-		"credentials", "add", "github-certification", "--connector", "github",
-		"--config", "owner=acme", "--config", "repo=widgets", "--config", "base_url="+server.URL,
-		"--config", "public_access=true", "--config", "tier=certification", "--config", "auth_type=public",
-		"--config", "rate_limit_ip=203.0.113.7", "--root", root, "--json",
-	); err != nil {
-		t.Fatalf("fresh pm credential setup failed: %v, output length=%d", err, len(output))
-	}
-
-	output, err := runTransportPM(binary, "",
-		"github", "issue", "list", "--credential", "github-certification", "--limit", "1", "--root", root, "--json",
-	)
-	if err == nil {
-		t.Fatal("require_shared request unexpectedly succeeded")
-	}
-	var refusal struct {
-		Error struct {
-			Category string `json:"category"`
-			Code     string `json:"code"`
-		} `json:"error"`
-	}
-	jsonStart := strings.IndexByte(output, '{')
-	if jsonStart < 0 || json.NewDecoder(bytes.NewBufferString(output[jsonStart:])).Decode(&refusal) != nil {
-		t.Fatalf("fresh pm refusal was not JSON; output length=%d", len(output))
-	}
-	if refusal.Error.Category != "policy" || refusal.Error.Code != "shared_coordinator_unavailable" {
-		t.Fatalf("fresh pm refusal = %+v, want policy/shared_coordinator_unavailable", refusal.Error)
-	}
-	if got := sends.Load(); got != 0 {
-		t.Fatalf("shared coordinator refusal sent %d HTTP requests, want zero", got)
-	}
-}
-
 func binaryApprovalToken(output string) string {
 	match := regexp.MustCompile(`Approval token:\s+(\S+)`).FindStringSubmatch(output)
 	if len(match) != 2 {

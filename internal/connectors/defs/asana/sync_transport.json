@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "source_transport": {
+    "delivery": {
+      "deletes": "tombstone",
+      "idempotency": "keyed",
+      "ordering": "window_coalesced"
+    },
+    "eligible_streams": [
+      "tasks"
+    ],
+    "executor": {
+      "family": "declarative_api",
+      "id": "asana_event_token_source"
+    },
+    "modes": [
+      "incremental_append",
+      "incremental_upsert",
+      "incremental_dedupe"
+    ]
+  }
+}

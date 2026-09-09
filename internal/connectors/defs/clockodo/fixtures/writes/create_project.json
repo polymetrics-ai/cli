@@ -1,4 +1,0 @@
-{
-  "record": { "name": "Fixture Project", "customers_id": 1 },
-  "expect": { "method": "POST", "path": "/v2/projects" }
-}

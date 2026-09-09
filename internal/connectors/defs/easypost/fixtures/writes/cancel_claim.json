@@ -1,5 +1,0 @@
-{
-  "record": { "id": "clm_fixture_1" },
-  "expect": { "method": "POST", "path": "/claims/clm_fixture_1/cancel" },
-  "response": { "status": 200, "body": { "id": "clm_fixture_1", "object": "Claim", "status": "cancelled" } }
-}

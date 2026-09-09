@@ -578,12 +578,12 @@ func newPostgresManagedTargetPollingApplyResult(write *database.DatabaseWriteExe
 	}
 	sourceReference := connectors.TransportExecutorReference{Family: connectors.TransportExecutorFamilyNativeDatabase, ID: "postgres_managed_target_polling_source"}
 	targetReference := connectors.TransportExecutorReference{Family: connectors.TransportExecutorFamilyNativeDatabase, ID: "postgres_managed_target_polling_target"}
-	apply, err := engine.NewDatabasePollingApplyExecutor(engine.DatabasePollingApplyConfig{Reference: targetReference, Evidence: engine.RequiredPollingWatermarkConformanceEvidence(), Write: write, Definition: definition, Control: control, Mapping: mapping, BatchSize: postgresCDCRouteTargetBatchLimit})
+	apply, err := engine.NewDatabasePollingApplyExecutor(engine.DatabasePollingApplyConfig{Reference: targetReference, Write: write, Definition: definition, Control: control, Mapping: mapping, BatchSize: postgresCDCRouteTargetBatchLimit})
 	if err != nil {
 		return result, err
 	}
 	registry := engine.NewPollingPreflightRegistry()
-	if err := registry.RegisterSource(&postgresManagedTargetPollingSource{reference: sourceReference, evidence: engine.RequiredPollingWatermarkConformanceEvidence(), definition: definition}); err != nil {
+	if err := registry.RegisterSource(&postgresManagedTargetPollingSource{reference: sourceReference, definition: definition}); err != nil {
 		return result, err
 	}
 	if err := registry.RegisterApply(apply); err != nil {

@@ -56,7 +56,7 @@ func TestDefinitionProviderRoundTrip(t *testing.T) {
 
 // TestDefinitionJSONShape locks the wire shape: field names/omitempty
 // behavior per API-CONTRACT.md §1, so downstream JSON consumers (CLI --json,
-// certify) don't silently drift.
+// connector inspection) don't silently drift.
 func TestDefinitionJSONShape(t *testing.T) {
 	def := Definition{
 		Name:            "acme",

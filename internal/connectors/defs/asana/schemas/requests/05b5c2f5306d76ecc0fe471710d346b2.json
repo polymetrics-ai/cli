@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "file_path": {
+      "description": "Project-relative path whose bytes become the source field `file`.",
+      "type": "string"
+    },
+    "parent": {
+      "description": "Required identifier of the parent task, project, or project brief.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "parent",
+    "file_path"
+  ],
+  "type": "object"
+}

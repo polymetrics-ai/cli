@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "data": {
+      "additionalProperties": false,
+      "properties": {
+        "dependencies": {
+          "items": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "maxItems": 256,
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "opt_pretty": {
+      "type": "boolean"
+    },
+    "task_gid": {
+      "maxLength": 8192,
+      "type": "string"
+    }
+  },
+  "required": [
+    "data",
+    "task_gid"
+  ],
+  "type": "object"
+}

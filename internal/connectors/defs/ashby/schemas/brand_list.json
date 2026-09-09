@@ -1,21 +1,21 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "brand_list",
-  "type": "object",
   "properties": {
+    "hostedJobsPageSlug": {
+      "description": "The slug used for the brand's hosted jobs page URL",
+      "type": "string"
+    },
     "id": {
-      "type": "string",
-      "description": "The unique identifier for the brand"
+      "description": "The unique identifier for the brand",
+      "type": "string"
     },
     "name": {
-      "type": "string",
-      "description": "The name of the brand"
-    },
-    "hostedJobsPageSlug": {
-      "type": "string",
-      "description": "The slug used for the brand's hosted jobs page URL"
+      "description": "The name of the brand",
+      "type": "string"
     }
   },
+  "title": "brand_list",
+  "type": "object",
   "x-primary-key": [
     "id"
   ]

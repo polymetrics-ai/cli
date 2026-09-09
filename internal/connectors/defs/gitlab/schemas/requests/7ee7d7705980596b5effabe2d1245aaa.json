@@ -1,0 +1,159 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "approver": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "change_reviewer_merge_request": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "close_issue": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "close_merge_request": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "failed_pipeline": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "fixed_pipeline": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "id": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "issue_due": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "level": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "merge_merge_request": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "merge_when_pipeline_succeeds": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "moved_project": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "new_issue": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "new_merge_request": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "new_note": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "new_release": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "push_to_merge_request": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "reassign_issue": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "reassign_merge_request": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "reopen_issue": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "reopen_merge_request": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "service_account_failed_pipeline": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "service_account_fixed_pipeline": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "service_account_success_pipeline": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "success_pipeline": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "id"
+  ],
+  "type": "object"
+}

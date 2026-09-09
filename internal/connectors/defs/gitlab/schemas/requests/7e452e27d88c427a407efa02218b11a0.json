@@ -1,0 +1,50 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "access_level": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "expires_at": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "id": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "invite_source": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "user_id": {
+      "maxLength": 1048576,
+      "type": [
+        "integer",
+        "null",
+        "string"
+      ]
+    },
+    "username": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "access_level",
+    "id"
+  ],
+  "type": "object"
+}

@@ -6,32 +6,58 @@ import (
 	"polymetrics.ai/internal/connectors/engine"
 )
 
-func TestGeneratedHooksetRegistersRepresentativeHooks(t *testing.T) {
+func TestGeneratedHooksetConstructsRepresentativeHooks(t *testing.T) {
+	factories := make(map[string]Factory, len(Factories()))
+	connectors := make(map[string]string, len(Factories()))
+	for _, factory := range Factories() {
+		if factory.ID == "" || factory.Connector == "" || factory.New == nil {
+			t.Fatalf("incomplete generated factory %#v", factory)
+		}
+		if _, exists := factories[factory.ID]; exists {
+			t.Fatalf("duplicate generated factory %q", factory.ID)
+		}
+		if _, exists := connectors[factory.Connector]; exists {
+			t.Fatalf("duplicate generated connector %q", factory.Connector)
+		}
+		factories[factory.ID] = factory
+		connectors[factory.Connector] = factory.ID
+	}
+	if len(factories) != 49 {
+		t.Fatalf("generated factory count = %d, want 49", len(factories))
+	}
 	cases := []struct {
-		name       string
+		connector  string
 		wantAuth   bool
 		wantStream bool
 	}{
-		{name: "ebay-fulfillment", wantAuth: true, wantStream: true},
-		{name: "hoorayhr", wantAuth: true},
-		{name: "snapchat-marketing", wantAuth: true},
-		{name: "strava", wantAuth: true},
-		{name: "uptick", wantAuth: true},
+		{connector: "ebay-fulfillment", wantAuth: true, wantStream: true},
+		{connector: "hoorayhr", wantAuth: true},
+		{connector: "snapchat-marketing", wantAuth: true},
+		{connector: "strava", wantAuth: true},
+		{connector: "uptick", wantAuth: true},
 	}
 
 	for _, tc := range cases {
-		t.Run(tc.name, func(t *testing.T) {
-			h := engine.HooksFor(tc.name)
-			if h == nil {
-				t.Fatalf("HooksFor(%q) = nil", tc.name)
+		t.Run(tc.connector, func(t *testing.T) {
+			id := "hook/" + tc.connector + ".v1"
+			factory, ok := factories[id]
+			if !ok {
+				t.Fatalf("factory %q is missing", id)
 			}
-			if h.ConnectorName() != tc.name {
-				t.Fatalf("ConnectorName() = %q, want %q", h.ConnectorName(), tc.name)
+			if factory.Connector != tc.connector {
+				t.Fatalf("factory %q connector = %q, want %q", id, factory.Connector, tc.connector)
 			}
-			if _, ok := h.(engine.AuthHook); ok != tc.wantAuth {
+			hooks := factory.New()
+			if hooks == nil {
+				t.Fatalf("factory for %q returned nil", tc.connector)
+			}
+			if hooks.ConnectorName() != tc.connector {
+				t.Fatalf("ConnectorName() = %q, want %q", hooks.ConnectorName(), tc.connector)
+			}
+			if _, ok := hooks.(engine.AuthHook); ok != tc.wantAuth {
 				t.Fatalf("AuthHook implemented = %v, want %v", ok, tc.wantAuth)
 			}
-			if _, ok := h.(engine.StreamHook); ok != tc.wantStream {
+			if _, ok := hooks.(engine.StreamHook); ok != tc.wantStream {
 				t.Fatalf("StreamHook implemented = %v, want %v", ok, tc.wantStream)
 			}
 		})

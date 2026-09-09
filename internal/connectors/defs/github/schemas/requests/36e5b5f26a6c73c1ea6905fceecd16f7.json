@@ -1,0 +1,55 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "auto_merge": {
+      "type": "boolean"
+    },
+    "description": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "environment": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "payload": {
+      "additionalProperties": true,
+      "maxLength": 1048576,
+      "maxProperties": 256,
+      "type": [
+        "object",
+        "string"
+      ]
+    },
+    "production_environment": {
+      "type": "boolean"
+    },
+    "ref": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "required_contexts": {
+      "items": {
+        "maxLength": 8192,
+        "type": "string"
+      },
+      "maxItems": 256,
+      "type": "array"
+    },
+    "task": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "transient_environment": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "ref"
+  ],
+  "type": "object"
+}

@@ -386,7 +386,7 @@ func (s *connectionWarehouseStage) Reopen(ctx context.Context, receipt synctrans
 //
 // Connection-owned receipts intentionally do not implement the optional eager
 // RetirableWarehouseStage: their durable manifest and Parquet remain observable
-// through ordinary Open for recovery and certification. The generic
+// through ordinary Open for recovery and execution checks. The generic
 // pre-execution reconciliation path invokes this private operation instead.
 func (s *connectionWarehouseStage) retire(ctx context.Context, receipt synctransport.WarehouseReceipt) error {
 	if s == nil || s.app == nil {

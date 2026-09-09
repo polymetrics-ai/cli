@@ -1,0 +1,19 @@
+=== RUN   TestCP11OwnershipTempRetryMustNotSwallowCompletion
+    vnext_publication_ownership_test.go:143: Publish pointer=main.vNextGenerationPointer{Generation:"", IntegrityDigest:""} error=open publication temporary: file exists
+        close publication temporary root: review: failed allocator owned-directory real Close completion
+        identify publication temporary cleanup: publication temporary root identity changed A/B identities and bytes preserved=true
+--- PASS: TestCP11OwnershipTempRetryMustNotSwallowCompletion (0.13s)
+=== RUN   TestCP11OwnershipAllocatorClassifiesActualCleanup
+=== RUN   TestCP11OwnershipAllocatorClassifiesActualCleanup/pure-collision
+=== RUN   TestCP11OwnershipAllocatorClassifiesActualCleanup/exhaustion
+=== RUN   TestCP11OwnershipAllocatorClassifiesActualCleanup/parent-close
+=== RUN   TestCP11OwnershipAllocatorClassifiesActualCleanup/root-close
+=== RUN   TestCP11OwnershipAllocatorClassifiesActualCleanup/completion-matches-exist
+--- PASS: TestCP11OwnershipAllocatorClassifiesActualCleanup (0.07s)
+    --- PASS: TestCP11OwnershipAllocatorClassifiesActualCleanup/pure-collision (0.00s)
+    --- PASS: TestCP11OwnershipAllocatorClassifiesActualCleanup/exhaustion (0.06s)
+    --- PASS: TestCP11OwnershipAllocatorClassifiesActualCleanup/parent-close (0.00s)
+    --- PASS: TestCP11OwnershipAllocatorClassifiesActualCleanup/root-close (0.00s)
+    --- PASS: TestCP11OwnershipAllocatorClassifiesActualCleanup/completion-matches-exist (0.00s)
+PASS
+ok  	polymetrics.ai/cmd/connectorgen	2.273s

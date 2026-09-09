@@ -1,0 +1,147 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "channel_blobs": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "channel": {
+            "maxLength": 255,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "data": {
+            "maxLength": 1398104,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "step_action": {
+            "enum": [
+              "conversation",
+              "compaction"
+            ],
+            "maxLength": 8192,
+            "minLength": 1,
+            "type": "string"
+          },
+          "version": {
+            "maxLength": 255,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "write_type": {
+            "maxLength": 255,
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "channel",
+          "version",
+          "write_type",
+          "step_action",
+          "data"
+        ],
+        "type": "object"
+      },
+      "maxItems": 256,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "channel_keys": {
+      "items": {
+        "maxLength": 8192,
+        "type": "string"
+      },
+      "maxItems": 256,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "checkpoint": {
+      "additionalProperties": false,
+      "properties": {},
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "checkpoint_ns": {
+      "maxLength": 4096,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "compressed_checkpoint": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "current_thread": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "flow_metadata_json": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "id": {
+      "type": "integer"
+    },
+    "metadata": {
+      "additionalProperties": false,
+      "properties": {},
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "model_metadata_json": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "parent_ts": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "thread_ts": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "id",
+    "metadata",
+    "thread_ts"
+  ],
+  "type": "object"
+}

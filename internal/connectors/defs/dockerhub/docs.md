@@ -61,5 +61,5 @@ tag data.
 
 - Batch defaults: read_page_size=100.
 - API coverage includes 4 stream-backed endpoint group(s).
-- Other cited artifact endpoints are explicitly classified in `api_surface.json`; no undocumented
+- Other cited artifact endpoints are explicitly classified in `execution bundle`; no undocumented
   legacy endpoint is exposed by this bundle.

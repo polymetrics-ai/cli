@@ -1,8 +1,0 @@
-{
-  "record": { "id": "1" },
-  "expect": {
-    "method": "PUT",
-    "path": "/tasks/1/complete.json"
-  },
-  "response": { "status": 200, "body": {} }
-}

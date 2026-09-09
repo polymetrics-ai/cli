@@ -1,7 +1,0 @@
-# T18 GREEN — discarded sealed recovery
-
-Command:
-go test -count=1 -timeout 20m ./internal/connectors/database -run '^(TestCommittedTransactionStageFailedAppendCleanupStaysTerminalUntilAbortRetries|TestCommittedTransactionStageDiscardedSealedStageNeverRecoversOrDelivers|TestCommittedTransactionStagePostReceiptCleanupFailurePreservesOnlyDurableReceipt|TestTransactionReceiptCannotForgeAcknowledgementEligibility)$'
-
-Result: PASS
-The discarded sealed stage is removed on recovery, cannot commit, and does not invoke a receiver.

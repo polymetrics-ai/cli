@@ -63,10 +63,6 @@ const (
 	defaultDisputesSize = 50
 )
 
-func init() {
-	engine.RegisterHooks("paypal-transaction", func() engine.Hooks { return New() })
-}
-
 // Hooks is the paypal-transaction hook set: AuthHook + StreamHook. Now/Client
 // are test-injection overrides; every method is otherwise a pure function of
 // its arguments (the returned Authenticator carries its own token cache,

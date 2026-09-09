@@ -1,29 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "annotations",
-  "type": "object",
   "properties": {
-    "id": {
-      "type": "string"
-    },
-    "type": {
-      "type": "string"
-    },
-    "text": {
-      "type": "string"
-    },
-    "document_id": {
-      "type": "string"
-    },
-    "profile_id": {
-      "type": "string"
-    },
-    "privacy_level": {
-      "type": "string"
-    },
-    "filehash": {
-      "type": "string"
-    },
     "created": {
       "type": [
         "string",
@@ -35,6 +12,15 @@
         "null"
       ]
     },
+    "document_id": {
+      "type": "string"
+    },
+    "filehash": {
+      "type": "string"
+    },
+    "id": {
+      "type": "string"
+    },
     "last_modified": {
       "type": [
         "string",
@@ -45,10 +31,24 @@
         "array",
         "null"
       ]
+    },
+    "privacy_level": {
+      "type": "string"
+    },
+    "profile_id": {
+      "type": "string"
+    },
+    "text": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string"
     }
   },
+  "title": "annotations",
+  "type": "object",
+  "x-cursor-field": "last_modified",
   "x-primary-key": [
     "id"
-  ],
-  "x-cursor-field": "last_modified"
+  ]
 }

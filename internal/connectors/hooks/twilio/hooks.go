@@ -44,10 +44,6 @@ const (
 	maxPageSize     = 1000
 )
 
-func init() {
-	engine.RegisterHooks("twilio", func() engine.Hooks { return New() })
-}
-
 // Hooks is the twilio hook set: StreamHook only. It has no state of its
 // own; every method is a pure function of its arguments.
 type Hooks struct{}

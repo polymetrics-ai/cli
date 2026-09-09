@@ -1,28 +1,75 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "author_association": {
+      "type": "string"
+    },
+    "body": {
+      "type": "string"
+    },
+    "commit_id": {
+      "type": "string"
+    },
+    "created_at": {
+      "type": "string"
+    },
+    "html_url": {
+      "type": "string"
+    },
+    "id": {
+      "type": "integer"
+    },
+    "line": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "node_id": {
+      "type": "string"
+    },
+    "path": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "position": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "repository": {
+      "description": "Config-derived per-record marker field (\"owner/repo\"), matching every other stream in this bundle.",
+      "type": "string"
+    },
+    "updated_at": {
+      "type": "string"
+    },
+    "url": {
+      "type": "string"
+    },
+    "user_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "user_login": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "id"
+  ],
   "title": "commit_comments",
   "type": "object",
-  "x-primary-key": ["id"],
   "x-cursor-field": "updated_at",
-  "required": ["id"],
-  "properties": {
-    "repository": {
-      "type": "string",
-      "description": "Config-derived per-record marker field (\"owner/repo\"), matching every other stream in this bundle."
-    },
-    "id": { "type": "integer" },
-    "node_id": { "type": "string" },
-    "commit_id": { "type": "string" },
-    "body": { "type": "string" },
-    "path": { "type": ["string", "null"] },
-    "position": { "type": ["integer", "null"] },
-    "line": { "type": ["integer", "null"] },
-    "user_login": { "type": ["string", "null"] },
-    "user_id": { "type": ["integer", "null"] },
-    "author_association": { "type": "string" },
-    "html_url": { "type": "string" },
-    "url": { "type": "string" },
-    "created_at": { "type": "string" },
-    "updated_at": { "type": "string" }
-  }
+  "x-primary-key": [
+    "id"
+  ]
 }

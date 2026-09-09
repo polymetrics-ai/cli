@@ -1,0 +1,223 @@
+{
+  "base": {
+    "path": "internal/connectors/defs/gitlab/source.lock.json",
+    "sha256": "2d07ef307e5aa4e5eed631a1cbf3d29f54087b4a12f4f87d4075c229d6812067",
+    "bytes": 4587708
+  },
+  "source_pins": [
+    {
+      "path": "internal/connectors/defs/gitlab/sources/artifacts/53244a720b8509536290e0058c946a246817c775c797df36f4c9aa1225fdf0a4.artifact",
+      "sha256": "53244a720b8509536290e0058c946a246817c775c797df36f4c9aa1225fdf0a4",
+      "bytes": 102560
+    },
+    {
+      "path": "internal/connectors/defs/gitlab/sources/artifacts/f59c93194c095d0e925a5751a08eb7a2176a26c6b5f38bda52f805154219d0f0.artifact",
+      "sha256": "f59c93194c095d0e925a5751a08eb7a2176a26c6b5f38bda52f805154219d0f0",
+      "bytes": 103189
+    },
+    {
+      "path": "internal/connectors/defs/gitlab/sources/gitlab-binary-operation-source-lock.json",
+      "sha256": "8ccd5184448121eafe1062b76578c733798c93a3e5e3251c63ce3adae167b924",
+      "bytes": 3058
+    },
+    {
+      "path": "internal/connectors/defs/gitlab/sources/gitlab-operation-source-lock.json",
+      "sha256": "de7010cc2a2088b8da33f50312db4d5129fd167b53ef1e028ccf72cae5c72b8d",
+      "bytes": 5783052
+    }
+  ],
+  "items": [
+    {
+      "id": "CP18-01",
+      "status": "pending",
+      "action": "Complete the source \u2192 artifact \u2192 runtime-proof issue chain, using the immutable source lock and retained artifact; maintain primary and supplemental identities separately.",
+      "evidence_class": "partial_observation_not_acceptance",
+      "receipt": null,
+      "gap": "Retained pins/IDs preserved. Source-only reader mislabels both supplements primary: CP18-248-05 RED. Full source\u2192artifact\u2192runtime chain pending.",
+      "metadata_observation": "SOURCE-JOIN-OBSERVATIONS.json; all retained identities, not runtime certification",
+      "evidence_248": [
+        "lane-proof-240/source-identity248/RECEIPT.json"
+      ]
+    },
+    {
+      "id": "CP18-02",
+      "status": "pending",
+      "action": "Reconcile every source-backed cell across all seven lanes and all applicable source/destination/mode roles. Use CP12 keys and CP13 owners; never infer support from source counts.",
+      "evidence_class": "partial_observation_not_acceptance",
+      "receipt": null,
+      "gap": "All12278 cells retained, source/variant and applicability reconciliation incomplete. Actual transport roles are5 source streams and1 destination action; reverse_etl alone is not sync.",
+      "evidence_248": [
+        "lane-proof-240/CASES.json",
+        "lane-proof-240/RESULTS.json"
+      ]
+    },
+    {
+      "id": "CP18-03",
+      "status": "pending",
+      "action": "Preserve 1,752 primary operations plus exactly two separately labelled supplements and the /api/v4 bridge.",
+      "evidence_class": "partial_observation_not_acceptance",
+      "receipt": null,
+      "gap": "Primary1752 exact positive control passes;2 exact supplement IDs retain inventory but lose class in source_projection reader. Existing /api/v4 requests are verified only for named cases.",
+      "metadata_observation": "SOURCE-JOIN-OBSERVATIONS.json; all retained identities, not runtime certification",
+      "evidence_248": [
+        "lane-proof-240/source-identity248/RECEIPT.json",
+        "evidence-248/SOURCE-JOINS.json"
+      ]
+    },
+    {
+      "id": "CP18-04",
+      "status": "pending",
+      "action": "Reconcile binary unsupported contradictions; cover HEAD/semantic POST reads, four bodyless status POSTs and four typed Conan upload-URL requests.",
+      "evidence_class": "partial_observation_not_acceptance",
+      "receipt": null,
+      "gap": "Four202 and one204 bodyless status writes pass approval/send/receipt controls. HEAD3, Conan4, remote-mirror204 and2 binary directions lack projections.",
+      "evidence_248": [
+        "evidence-248-status/RECEIPT.json",
+        "lane-proof-240/FINDINGS/"
+      ]
+    },
+    {
+      "id": "CP18-05",
+      "status": "pending",
+      "action": "Prove Link pagination and the two-page MLflow warehouse 502 failure with no materialization; prove raw-file/generic-package byte paths.",
+      "evidence_class": "partial_observation_not_acceptance",
+      "receipt": null,
+      "gap": "Direct Link and51groups warehouse baseline pass; explicit legacy MLflow overwrite502 tests pass with preserved table/history; canonical append retains acknowledged page. Binary execution remains blocked. Four REST legacy streams pass20 reached pagination cases.",
+      "additional_evidence": "direct-link-198.jsonl: exact two direct pages and zero-I/O invalid navigation; remaining gaps unchanged",
+      "mode_disposition": "Firstmate212/214: no-materialization uses full_refresh_overwrite; old full_append RED is mode-expectation mismatch. Canonical append acknowledged page-one/checkpoint witness passes.",
+      "evidence_248": [
+        "evidence-248/RECEIPT.json",
+        "lane-proof-240/baseline240/RECEIPT.json"
+      ]
+    },
+    {
+      "id": "CP18-06",
+      "status": "pending",
+      "action": "Prove groups full-append destination behavior and single-attempt ambiguous mutations; reconcile all three receiver candidates.",
+      "evidence_class": "partial_observation_not_acceptance",
+      "receipt": null,
+      "gap": "Existing groups destination lifecycle/ambiguous-send coverage passes. Three webhook registration operations do not themselves establish inbound receivers; source-specific receiver dispositions remain incomplete.",
+      "evidence_248": [
+        "lane-proof-240/baseline240/RECEIPT.json"
+      ]
+    },
+    {
+      "id": "CP18-07",
+      "status": "pending",
+      "action": "Author only reviewed source inputs, non-inferable typed semantics, narrow constraints, sanitized fixtures and explanations. Run existing connectorgen import/materialize/surface/admission paths; do not hand-edit generated maps, cursors, execution selection, index or proof rows.",
+      "evidence_class": "partial_observation_not_acceptance",
+      "receipt": null,
+      "gap": "Only authored test/evidence changes; original admitted render retained. Shared source compiler still lacks required projections and supplemental class. No execution maps, source rows or shared outputs manually changed.",
+      "evidence_248": [
+        "lane-proof-240/FINDINGS/CP18-248-05.md"
+      ]
+    },
+    {
+      "id": "CP18-08",
+      "status": "pending",
+      "action": "Prove source-to-canonical-to-execution joins, parser-valid generated paths, exact method/path/query/header/body/media/auth behavior and byte/count bounds through the production path.",
+      "evidence_class": "partial_observation_not_acceptance",
+      "receipt": null,
+      "gap": "Four stream and five status action exact source-path joins recorded. Full canonical/variant/auth/media/size joins and parser coverage still incomplete.",
+      "metadata_observation": "SOURCE-JOIN-OBSERVATIONS.json; all retained identities, not runtime certification",
+      "additional_evidence": "direct-link-198.jsonl: exact two direct pages and zero-I/O invalid navigation; remaining gaps unchanged",
+      "evidence_248": [
+        "evidence-248/SOURCE-JOINS.json",
+        "evidence-248-status/SOURCE-JOINS.json"
+      ]
+    },
+    {
+      "id": "CP18-09",
+      "status": "pending",
+      "action": "Use known-larger multi-page fixtures and assert exact returned IDs/counts; cover repeated/missing cursor, failure/resume and non-materialization after failed retrieval where applicable.",
+      "evidence_class": "partial_observation_not_acceptance",
+      "receipt": null,
+      "gap": "Known larger51group and3row four-stream fixtures verify exact membership; repeated/malformed/foreign pagination failures reached. Failure/resume coverage remains partial.",
+      "additional_evidence": "direct-link-198.jsonl: exact two direct pages and zero-I/O invalid navigation; remaining gaps unchanged",
+      "warehouse_evidence": "groups-exact-pages-196.jsonl: exact 51 warehouse rows and falsified membership oracle; other modes pending",
+      "mode_disposition": "Firstmate212/214: no-materialization uses full_refresh_overwrite; old full_append RED is mode-expectation mismatch. Canonical append acknowledged page-one/checkpoint witness passes.",
+      "evidence_248": [
+        "evidence-248/RECEIPT.json"
+      ]
+    },
+    {
+      "id": "CP18-10",
+      "status": "pending",
+      "action": "For mutations, prove the declared approval boundary, physical send counts, response/readback reconciliation, durable receipt/ack/checkpoint order and ambiguous-outcome handling without blind replay.",
+      "evidence_class": "partial_observation_not_acceptance",
+      "receipt": null,
+      "gap": "Five status sources verify zero-send plan/preview/unconfirmed boundaries, one approved physical send, exact response status/body receipt and spent-token refusal. Other mutation variants and durable readback/ack/checkpoint ordering remain unproven.",
+      "evidence_248": [
+        "evidence-248-status/RECEIPT.json"
+      ]
+    },
+    {
+      "id": "CP18-11",
+      "status": "pending",
+      "action": "For binary lanes, assert exact bytes, media types, request encoding and size limits. A text stub or HTTP success is not binary evidence.",
+      "evidence_class": "partial_observation_not_acceptance",
+      "receipt": null,
+      "gap": "Binary descriptor absence prevents raw-file/generic-package byte execution. Engine failing fixtures retained; do not count bytes never sent/received as evidence.",
+      "evidence_248": [
+        "lane-proof-240/discovery-engine240/RECEIPT.json"
+      ]
+    },
+    {
+      "id": "CP18-12",
+      "status": "pending",
+      "action": "For ETL, reverse ETL and sync, prove warehouse-mediated source/destination roles and applicable modes; direct read/write counts do not establish sync capability.",
+      "evidence_class": "partial_observation_not_acceptance",
+      "receipt": null,
+      "gap": "Warehouse-mediated legacy source proofs and existing groups destination baseline retained;14mode guard cases pass with source incremental_append expressly legacy admission-only. New advertised canonical source-mode batch pending.",
+      "warehouse_evidence": "groups-exact-pages-196.jsonl: exact 51 warehouse rows and falsified membership oracle; other modes pending",
+      "mode_disposition": "Firstmate212/214: no-materialization uses full_refresh_overwrite; old full_append RED is mode-expectation mismatch. Canonical append acknowledged page-one/checkpoint witness passes.",
+      "evidence_248": [
+        "evidence-248/RECEIPT.json"
+      ]
+    },
+    {
+      "id": "CP18-13",
+      "status": "pending",
+      "action": "Bind each executable C2 claim to real hermetic production-path evidence, and each C3/C4 claim to typed zero-I/O refusal or exact source-cited limitation. C2 is not provider-live C1.",
+      "evidence_class": "partial_observation_not_acceptance",
+      "receipt": null,
+      "gap": "No source C2 claims promoted. Positive subset receipts are unadmitted until complete variants/current input identity and trusted review. C3/C4 exclusions/refusals not approved by metadata.",
+      "evidence_248": [
+        "lane-proof-240/RESULTS.json"
+      ]
+    },
+    {
+      "id": "CP18-14",
+      "status": "pending",
+      "action": "Generate/reconcile command surface and evidence; run the selected connector shard plus batch consistency checks; preserve existing generations and unrelated connectors.",
+      "evidence_class": "partial_observation_not_acceptance",
+      "receipt": null,
+      "gap": "Two focused passing test increments committed. Full GitLab shard and integrated aggregate checks remain owner-gated; no unrelated corpus generation performed.",
+      "evidence_248": [
+        "PASSING-INCREMENT-248.md"
+      ]
+    },
+    {
+      "id": "CP18-15",
+      "status": "pending",
+      "action": "Freeze the coherent connector candidate, disposition all actionable findings and obtain required independent Astra/xhigh review through the owning workflow.",
+      "evidence_class": "partial_observation_not_acceptance",
+      "receipt": null,
+      "gap": "No full candidate frozen or independent review requested. Five grouped mapping/class findings are source-backed; all original failures and setup corrections retained.",
+      "evidence_248": [
+        "lane-proof-240/FINDINGS/"
+      ]
+    },
+    {
+      "id": "CP18-16",
+      "status": "pending",
+      "action": "Update the three existing issues and completion ledger from accepted evidence, retaining honest gaps. Only then advance to the next connector on the same branch.",
+      "evidence_class": "partial_observation_not_acceptance",
+      "receipt": null,
+      "gap": "No issue closure, accepted completion-ledger update or connector advancement. Partial commits handed to integration owner with exactSHA/tree/selection; entire connector remains pending.",
+      "evidence_248": [
+        "PASSING-INCREMENT-248.md"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "packs": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "expires_at": {
+            "maxLength": 8192,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "number_of_minutes": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "purchase_xid": {
+            "maxLength": 8192,
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "number_of_minutes",
+          "expires_at",
+          "purchase_xid"
+        ],
+        "type": "object"
+      },
+      "maxItems": 256,
+      "type": [
+        "array",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "id",
+    "packs"
+  ],
+  "type": "object"
+}

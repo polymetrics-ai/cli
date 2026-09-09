@@ -63,7 +63,7 @@ func TestCLI_OrdinaryETLFailurePublishesOneTerminalRun(t *testing.T) {
 	}
 }
 
-func TestCLI_CertificationPreIORefusalsPersistExactTerminalRun(t *testing.T) {
+func TestCLI_PreIORefusalsPersistExactTerminalRun(t *testing.T) {
 	for _, mode := range []string{"full_refresh_overwrite_deduped", "incremental_append_deduped"} {
 		t.Run(mode, func(t *testing.T) {
 			root := t.TempDir()

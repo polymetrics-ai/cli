@@ -1,9 +1,0 @@
-{
-  "request": { "method": "GET", "path": "/clients/client_fixture_1/segments.json" },
-  "response": {
-    "status": 200,
-    "body": [
-      { "ListID": "list_fixture_1", "SegmentID": "segment_fixture_1", "Title": "Fixture Segment" }
-    ]
-  }
-}

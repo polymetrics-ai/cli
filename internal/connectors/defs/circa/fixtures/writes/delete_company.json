@@ -1,9 +1,0 @@
-{
-  "record": {
-    "id": "co_fixture_1"
-  },
-  "expect": {
-    "method": "DELETE",
-    "path": "/companies/co_fixture_1"
-  }
-}

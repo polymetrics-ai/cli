@@ -20,17 +20,18 @@ import (
 )
 
 const (
-	declarativeStreamSourceExecutorID          = "declarative_stream_source"
-	declarativeTypedDestinationExecutorID      = "declarative_typed_destination"
-	issueLabelDestinationExecutorID            = "issue_label_destination"
-	issueLabelTransportSourceIssueConfig       = "transport_source_issue_number"
-	issueLabelTransportTargetIssueConfig       = "transport_target_issue_number"
-	issueLabelTransportLabelConfig             = "transport_label"
-	issueLabelTransportSetReplaceConsentConfig = "transport_allow_set_replace"
-	issueLabelTransportKeyedConsentConfig      = "transport_allow_keyed"
-	issueLabelTransportMaxReadPages            = 1
-	issueCollectionTransportMaxRecords         = 1000
-	declarativeTransportMaxPagesConfig         = "max_pages"
+	declarativeStreamSourceExecutorID             = "declarative_stream_source"
+	declarativeTypedDestinationExecutorID         = "declarative_typed_destination"
+	declarativeSingleAttemptDestinationExecutorID = "declarative_single_attempt_destination"
+	issueLabelDestinationExecutorID               = "issue_label_destination"
+	issueLabelTransportSourceIssueConfig          = "transport_source_issue_number"
+	issueLabelTransportTargetIssueConfig          = "transport_target_issue_number"
+	issueLabelTransportLabelConfig                = "transport_label"
+	issueLabelTransportSetReplaceConsentConfig    = "transport_allow_set_replace"
+	issueLabelTransportKeyedConsentConfig         = "transport_allow_keyed"
+	issueLabelTransportMaxReadPages               = 1
+	issueCollectionTransportMaxRecords            = 1000
+	declarativeTransportMaxPagesConfig            = "max_pages"
 )
 
 var (
@@ -41,6 +42,10 @@ var (
 	declarativeTypedDestinationReference = connectors.TransportExecutorReference{
 		Family: connectors.TransportExecutorFamilyDeclarativeAPI,
 		ID:     declarativeTypedDestinationExecutorID,
+	}
+	declarativeSingleAttemptDestinationReference = connectors.TransportExecutorReference{
+		Family: connectors.TransportExecutorFamilyDeclarativeAPI,
+		ID:     declarativeSingleAttemptDestinationExecutorID,
 	}
 	issueLabelDestinationReference = connectors.TransportExecutorReference{
 		Family: connectors.TransportExecutorFamilyDeclarativeAPI,
@@ -75,13 +80,21 @@ var declarativeDestinationAdapters = []struct {
 			return &declarativeTypedDestinationExecutor{}, nil
 		},
 	},
+	{
+		reference: declarativeSingleAttemptDestinationReference,
+		build: func(_ *App, connector connectors.Connector) (synctransport.DestinationExecutor, error) {
+			if _, err := declarativeSingleAttemptDestinationContractFor(connector); err != nil {
+				return nil, err
+			}
+			return &declarativeSingleAttemptDestinationExecutor{}, nil
+		},
+	},
 }
 
 // definitionTransportDefinitionFactories supplies the reusable declarative
 // source and closed typed-action destination adapters from definitions already
-// admitted to the registry. Evidence comes only from the role declaration that
-// selected the adapter; the loop is intentionally over descriptors and exact
-// executor references, never connector names.
+// admitted to the registry. The loop is intentionally over descriptors and
+// exact executor references, never connector names or historical evidence.
 func definitionTransportDefinitionFactories(a *App, registry *connectors.Registry) ([]synctransport.DefinitionFactory, error) {
 	if a == nil {
 		return nil, fmt.Errorf("definition transport factories require an app")
@@ -89,8 +102,9 @@ func definitionTransportDefinitionFactories(a *App, registry *connectors.Registr
 	if registry == nil {
 		return nil, fmt.Errorf("definition transport factories require a connector registry")
 	}
-	var sourceEvidences []connectors.ConformanceEvidenceReference
-	destinationEvidences := make(map[connectors.TransportExecutorReference][]connectors.ConformanceEvidenceReference, len(declarativeDestinationAdapters))
+	declarativeSourceDeclared := false
+	asanaEventSourceDeclared := false
+	destinationDeclarations := make(map[connectors.TransportExecutorReference]bool, len(declarativeDestinationAdapters))
 	for _, metadata := range registry.List() {
 		connector, ok := registry.Get(metadata.Name)
 		if !ok {
@@ -101,22 +115,23 @@ func definitionTransportDefinitionFactories(a *App, registry *connectors.Registr
 			continue
 		}
 		if descriptor.Source != nil && descriptor.Source.Executor == declarativeStreamSourceReference {
-			sourceEvidences = appendDefinitionTransportEvidence(sourceEvidences, descriptor.Source.Conformance)
+			declarativeSourceDeclared = true
+		}
+		if descriptor.Source != nil && descriptor.Source.Executor == asanaEventSourceReference {
+			asanaEventSourceDeclared = true
 		}
 		if descriptor.Destination != nil {
 			for _, adapter := range declarativeDestinationAdapters {
 				if descriptor.Destination.Executor == adapter.reference {
-					destinationEvidences[adapter.reference] = appendDefinitionTransportEvidence(destinationEvidences[adapter.reference], descriptor.Destination.Conformance)
+					destinationDeclarations[adapter.reference] = true
 				}
 			}
 		}
 	}
 	factories := make([]synctransport.DefinitionFactory, 0, 1+len(declarativeDestinationAdapters))
-	if len(sourceEvidences) != 0 {
+	if declarativeSourceDeclared {
 		factories = append(factories, synctransport.DefinitionFactory{
-			Reference:               declarativeStreamSourceReference,
-			SourceEvidence:          sourceEvidences[0],
-			AcceptedSourceEvidences: append([]connectors.ConformanceEvidenceReference(nil), sourceEvidences[1:]...),
+			Reference: declarativeStreamSourceReference,
 			BuildSource: func(connector connectors.Connector) (synctransport.SourceExecutor, error) {
 				if _, _, err := declarativeStreamTransportConnector(connector); err != nil {
 					return nil, err
@@ -125,31 +140,34 @@ func definitionTransportDefinitionFactories(a *App, registry *connectors.Registr
 			},
 		})
 	}
+	if asanaEventSourceDeclared {
+		factories = append(factories, synctransport.DefinitionFactory{
+			Reference: asanaEventSourceReference,
+			BuildSource: func(connector connectors.Connector) (synctransport.SourceExecutor, error) {
+				descriptor, ok := connectors.SourceTransportDescriptorOf(connector)
+				if !ok || descriptor.Executor != asanaEventSourceReference {
+					return nil, fmt.Errorf("Asana event-token source received an incompatible declaration")
+				}
+				if _, ok := connector.(connectors.OperationDirectReader); !ok {
+					return nil, fmt.Errorf("Asana event-token source requires source-bound operation reads")
+				}
+				return &asanaEventSourceExecutor{}, nil
+			},
+		})
+	}
 	for _, adapter := range declarativeDestinationAdapters {
-		evidences := destinationEvidences[adapter.reference]
-		if len(evidences) == 0 {
+		if !destinationDeclarations[adapter.reference] {
 			continue
 		}
 		build := adapter.build
 		factories = append(factories, synctransport.DefinitionFactory{
-			Reference:                    adapter.reference,
-			DestinationEvidence:          evidences[0],
-			AcceptedDestinationEvidences: append([]connectors.ConformanceEvidenceReference(nil), evidences[1:]...),
+			Reference: adapter.reference,
 			BuildDestination: func(connector connectors.Connector) (synctransport.DestinationExecutor, error) {
 				return build(a, connector)
 			},
 		})
 	}
 	return factories, nil
-}
-
-func appendDefinitionTransportEvidence(values []connectors.ConformanceEvidenceReference, evidence connectors.ConformanceEvidenceReference) []connectors.ConformanceEvidenceReference {
-	for _, value := range values {
-		if value == evidence {
-			return values
-		}
-	}
-	return append(values, evidence)
 }
 
 // declarativeTypedDestinationExecutor applies one named writes.json action
@@ -602,8 +620,8 @@ func validateDeclarativeTypedDestinationTombstoneApprovalDefinition(approval syn
 	return nil
 }
 
-// validateDeclarativeTypedDestinationIdempotencyProof keeps declaration
-// conformance separate from action admission. The descriptor can honestly say
+// validateDeclarativeTypedDestinationIdempotencyProof keeps descriptor facts
+// separate from action admission. The descriptor can honestly say
 // it expects keyed delivery, but only the approved, definition-bound action
 // proof can show which provider header carries that stable key. Fixture scope
 // remains a hermetic test seam; production plans are always sealed below.
@@ -967,9 +985,6 @@ func declarativeTypedDestinationContractFor(connector connectors.Connector) (dec
 		if strategy.ReadBack.ReceiptLocator.ResponseIndex != 0 {
 			return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination action %q receipt locator response_index %d requires a dedicated compound destination adapter", action.Name, strategy.ReadBack.ReceiptLocator.ResponseIndex)
 		}
-		if strategy.ReadBack.Conformance != descriptor.Conformance {
-			return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination action %q read-back conformance is not bound to the admitted destination evidence", action.Name)
-		}
 		if descriptor.Delivery.Deletes == connectors.DeliveryDeletesUnavailable {
 			if strategy.TombstoneAction != "" || strategy.TombstoneReadBack != nil {
 				return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination unavailable deletes cannot select tombstone action %q", strategy.TombstoneAction)
@@ -999,9 +1014,6 @@ func declarativeTypedDestinationContractFor(connector connectors.Connector) (dec
 		}
 		if strategy.TombstoneReadBack.ReceiptLocator.ResponseIndex != 0 {
 			return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination tombstone action %q receipt locator response_index %d requires a dedicated compound destination adapter", deleteAction.Name, strategy.TombstoneReadBack.ReceiptLocator.ResponseIndex)
-		}
-		if strategy.TombstoneReadBack.Conformance != descriptor.Conformance {
-			return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination tombstone action %q read-back conformance is not bound to the admitted destination evidence", deleteAction.Name)
 		}
 		if len(strategy.TombstoneReadBack.Identity) != 1 {
 			return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination tombstone action %q requires exactly one identity for bounded absence read-back", deleteAction.Name)
@@ -1159,12 +1171,65 @@ func (c declarativeTypedDestinationContract) idempotencyHeader(action string) (s
 // eligibility; this adds the exact writes.json record-property proof for the
 // selected action without accepting a caller-provided request shape.
 func validateDeclarativeTypedDestinationSelection(source, destination connectors.Connector, stream string, mode synccontract.Mode, strategy connectors.DestinationApplyStrategy) error {
-	contract, err := declarativeTypedDestinationContractFor(destination)
-	if err != nil {
-		return err
+	descriptor, declared := connectors.DestinationTransportDescriptorOf(destination)
+	if !declared {
+		return fmt.Errorf("destination connector %q has no declarative destination declaration", destination.Name())
 	}
-	_, err = contract.plan(source, stream, mode, strategy)
-	return err
+	switch descriptor.Executor {
+	case declarativeTypedDestinationReference:
+		contract, err := declarativeTypedDestinationContractFor(destination)
+		if err != nil {
+			return err
+		}
+		_, err = contract.plan(source, stream, mode, strategy)
+		return err
+	case declarativeSingleAttemptDestinationReference:
+		contract, err := declarativeSingleAttemptDestinationContractFor(destination)
+		if err != nil {
+			return err
+		}
+		_, err = contract.plan(source, stream, mode, strategy)
+		return err
+	default:
+		return fmt.Errorf("destination connector %q does not select a declarative definition-owned destination", destination.Name())
+	}
+}
+
+func isDeclarativeDefinitionOwnedDestination(reference connectors.TransportExecutorReference) bool {
+	return reference == declarativeTypedDestinationReference || reference == declarativeSingleAttemptDestinationReference
+}
+
+func isDeclarativeSingleAttemptDestination(reference connectors.TransportExecutorReference) bool {
+	return reference == declarativeSingleAttemptDestinationReference
+}
+
+func declarativeDefinitionOwnedDestinationEffectiveBatchSize(source, destination connectors.Connector, stream string, mode synccontract.Mode, strategy connectors.DestinationApplyStrategy, requested int) (int, error) {
+	descriptor, declared := connectors.DestinationTransportDescriptorOf(destination)
+	if !declared {
+		return 0, fmt.Errorf("destination connector %q has no declarative destination declaration", destination.Name())
+	}
+	switch descriptor.Executor {
+	case declarativeTypedDestinationReference:
+		return declarativeTypedDestinationEffectiveBatchSize(source, destination, stream, mode, strategy, requested)
+	case declarativeSingleAttemptDestinationReference:
+		if requested < 1 {
+			return 0, fmt.Errorf("declarative single-attempt requested batch size must be positive")
+		}
+		contract, err := declarativeSingleAttemptDestinationContractFor(destination)
+		if err != nil {
+			return 0, err
+		}
+		binding, err := contract.plan(source, stream, mode, strategy)
+		if err != nil {
+			return 0, err
+		}
+		if binding.Batch.MaxRecords < requested {
+			return binding.Batch.MaxRecords, nil
+		}
+		return requested, nil
+	default:
+		return 0, fmt.Errorf("destination connector %q does not select a declarative definition-owned destination", destination.Name())
+	}
 }
 
 // declarativeTypedDestinationEffectiveBatchSize clamps the source page to the
@@ -2020,7 +2085,7 @@ func (e *declarativeStreamSourceExecutor) readConfiguredIssue(ctx context.Contex
 // and suppressed on resume, so acknowledged pages are not re-delivered even
 // though the provider sequence must be traversed again to recover its position.
 func (e *declarativeStreamSourceExecutor) readDeclarativeCollection(ctx context.Context, connector connectors.Connector, request synctransport.SourceRequest, emit func(synctransport.SourcePage) error) (synctransport.SourceReadOutcome, error) {
-	maxPages, err := declarativeTransportMaxPages(request.Runtime.Config)
+	maxPages, err := declarativeTransportMaxPages(request.Connector, request.Stream, request.Mode, request.Runtime.Config)
 	if err != nil {
 		return synctransport.SourceReadOutcome{}, err
 	}
@@ -2113,9 +2178,16 @@ func declarativeCollectionIncrementalMode(mode synccontract.Mode) bool {
 	}
 }
 
-func declarativeTransportMaxPages(config map[string]string) (int, error) {
+func declarativeTransportMaxPages(connector connectors.Connector, stream string, mode synccontract.Mode, config map[string]string) (int, error) {
 	raw := strings.TrimSpace(config[declarativeTransportMaxPagesConfig])
 	if raw == "" {
+		if declaredFullSnapshotTransportSource(connector, stream, mode) {
+			// A full mode must finish the declared provider collection before
+			// reporting success. The opted-in source owns its paginator's
+			// continuation and bounded request controls; treating its default
+			// one-page convenience budget as a complete snapshot would be false.
+			return 0, nil
+		}
 		return 1, nil
 	}
 	switch strings.ToLower(raw) {

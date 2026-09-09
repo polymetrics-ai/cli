@@ -38,7 +38,7 @@ func doAuthenticatedRequest(t *testing.T, auth connsdk.Authenticator) *http.Requ
 // --- registration ---
 
 func TestInit_RegistersHooks(t *testing.T) {
-	h := engine.HooksFor("wasabi-stats-api")
+	h := ExplicitFactory()
 	if h == nil {
 		t.Fatal("engine.HooksFor(\"wasabi-stats-api\") = nil, want a registered hook set (init() must call engine.RegisterHooks)")
 	}

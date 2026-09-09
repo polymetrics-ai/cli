@@ -44,7 +44,7 @@ func (c Connector) catalog(ctx context.Context, cfg connectors.RuntimeConfig) (c
 }
 
 // fixtureStreams is the canned catalog returned in fixture mode so the
-// conformance harness and unit tests can run without a live database. It is
+// fixture tests and unit tests can run without a live database. It is
 // deliberately confined to mode=fixture and is never used by live pg_catalog
 // discovery (ported verbatim from legacy internal/connectors/postgres/streams.go).
 func fixtureStreams() []connectors.Stream {

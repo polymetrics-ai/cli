@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "network_configuration_id": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "org": {
+      "maxLength": 8192,
+      "type": "string"
+    }
+  },
+  "required": [
+    "network_configuration_id",
+    "org"
+  ],
+  "type": "object"
+}

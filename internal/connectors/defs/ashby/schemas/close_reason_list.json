@@ -1,21 +1,21 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "close_reason_list",
-  "type": "object",
   "properties": {
     "id": {
-      "type": "string",
-      "description": "The reason's unique id"
-    },
-    "reasonText": {
-      "type": "string",
-      "description": "The text of the reason"
+      "description": "The reason's unique id",
+      "type": "string"
     },
     "isArchived": {
-      "type": "boolean",
-      "description": "Whether the close reason has been archived"
+      "description": "Whether the close reason has been archived",
+      "type": "boolean"
+    },
+    "reasonText": {
+      "description": "The text of the reason",
+      "type": "string"
     }
   },
+  "title": "close_reason_list",
+  "type": "object",
   "x-primary-key": [
     "id"
   ]

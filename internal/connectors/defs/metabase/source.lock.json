@@ -1,0 +1,383 @@
+{
+  "schema_version": 4,
+  "connector": "metabase",
+  "lanes": {
+    "binary_download": "unsupported",
+    "binary_upload": "unsupported",
+    "direct_read": "unsupported",
+    "direct_write": "unsupported",
+    "etl": "implemented",
+    "reverse_etl": "unsupported",
+    "sync_transport": "unsupported"
+  },
+  "provider_evidence": {
+    "documentation": [
+      {
+        "role": "provider_reference",
+        "url": "https://www.metabase.com/docs/latest/api-documentation"
+      }
+    ]
+  },
+  "metadata": {
+    "name": "metabase",
+    "display_name": "Metabase",
+    "description": "Reads Metabase cards, dashboards, collections, databases, and users through the Metabase REST API using a declared session token.",
+    "integration_type": "api",
+    "release_stage": "alpha",
+    "capabilities": {
+      "check": true,
+      "read": true,
+      "write": false,
+      "query": false,
+      "cdc": false,
+      "dynamic_schema": false
+    },
+    "risk": {
+      "read": "external Metabase API reads through a declaration-bound tenant origin and session authentication",
+      "write": "unsupported",
+      "approval": "none; read-only"
+    },
+    "docs_url": "https://www.metabase.com/docs/latest/api-documentation"
+  },
+  "config_schema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Metabase Connection Specification",
+    "type": "object",
+    "required": [
+      "instance_api_url",
+      "username"
+    ],
+    "properties": {
+      "instance_api_url": {
+        "type": "string",
+        "description": "Required Metabase instance HTTPS origin, or declared loopback HTTP for local testing."
+      },
+      "password": {
+        "type": "string",
+        "x-secret": true,
+        "description": "Metabase password used only for the fixed declared session exchange when session_token is absent."
+      },
+      "session_token": {
+        "type": "string",
+        "x-secret": true,
+        "description": "Existing Metabase session token sent only as X-Metabase-Session."
+      },
+      "username": {
+        "type": "string"
+      }
+    },
+    "x-reject-unknown-config": true
+  },
+  "http": {
+    "url": "https://unused.invalid",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "api_key_header",
+        "header": "X-Metabase-Session",
+        "value": "{{ secrets.session_token }}",
+        "when": "{{ secrets.session_token }}"
+      },
+      {
+        "mode": "declared_session",
+        "token_url": "https://unused.invalid/session",
+        "username": "{{ config.username }}",
+        "password": "{{ secrets.password }}"
+      }
+    ],
+    "pagination": {
+      "type": "none"
+    },
+    "check": {
+      "method": "GET",
+      "path": "/card"
+    },
+    "error_map": [],
+    "tenant_origin": {
+      "config_key": "instance_api_url",
+      "append_path": "/api",
+      "allow_loopback_http": true
+    }
+  },
+  "schemas": {
+    "schemas/cards.json": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "cards",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "collection_id": {
+          "type": "integer"
+        },
+        "database_id": {
+          "type": "integer"
+        },
+        "query_type": {
+          "type": "string"
+        },
+        "display": {
+          "type": "string"
+        },
+        "archived": {
+          "type": "boolean"
+        },
+        "creator_id": {
+          "type": "integer"
+        },
+        "created_at": {
+          "type": "string"
+        },
+        "updated_at": {
+          "type": "string"
+        }
+      },
+      "x-primary-key": [
+        "id"
+      ]
+    },
+    "schemas/dashboards.json": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "dashboards",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "collection_id": {
+          "type": "integer"
+        },
+        "archived": {
+          "type": "boolean"
+        },
+        "creator_id": {
+          "type": "integer"
+        },
+        "created_at": {
+          "type": "string"
+        },
+        "updated_at": {
+          "type": "string"
+        }
+      },
+      "x-primary-key": [
+        "id"
+      ]
+    },
+    "schemas/collections.json": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "collections",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "slug": {
+          "type": "string"
+        },
+        "archived": {
+          "type": "boolean"
+        },
+        "personal_owner_id": {
+          "type": "integer"
+        },
+        "location": {
+          "type": "string"
+        }
+      },
+      "x-primary-key": [
+        "id"
+      ]
+    },
+    "schemas/databases.json": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "databases",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "engine": {
+          "type": "string"
+        },
+        "is_sample": {
+          "type": "boolean"
+        },
+        "is_on_demand": {
+          "type": "boolean"
+        },
+        "timezone": {
+          "type": "string"
+        },
+        "created_at": {
+          "type": "string"
+        },
+        "updated_at": {
+          "type": "string"
+        }
+      },
+      "x-primary-key": [
+        "id"
+      ]
+    },
+    "schemas/users.json": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "users",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "email": {
+          "type": "string"
+        },
+        "first_name": {
+          "type": "string"
+        },
+        "last_name": {
+          "type": "string"
+        },
+        "common_name": {
+          "type": "string"
+        },
+        "is_active": {
+          "type": "boolean"
+        },
+        "is_superuser": {
+          "type": "boolean"
+        },
+        "last_login": {
+          "type": "string"
+        },
+        "date_joined": {
+          "type": "string"
+        },
+        "updated_at": {
+          "type": "string"
+        }
+      },
+      "x-primary-key": [
+        "id"
+      ]
+    }
+  },
+  "operations": [
+    {
+      "id": "metabase.cards",
+      "source": {
+        "provider_reference": "https://www.metabase.com/docs/latest/api-documentation"
+      },
+      "schema_refs": {
+        "record": "schemas/cards.json"
+      },
+      "stream_order": 1,
+      "stream": {
+        "name": "cards",
+        "method": "GET",
+        "path": "/card",
+        "records": {
+          "path": "."
+        },
+        "schema": "schemas/cards.json"
+      }
+    },
+    {
+      "id": "metabase.dashboards",
+      "source": {
+        "provider_reference": "https://www.metabase.com/docs/latest/api-documentation"
+      },
+      "schema_refs": {
+        "record": "schemas/dashboards.json"
+      },
+      "stream_order": 2,
+      "stream": {
+        "name": "dashboards",
+        "method": "GET",
+        "path": "/dashboard",
+        "records": {
+          "path": "."
+        },
+        "schema": "schemas/dashboards.json"
+      }
+    },
+    {
+      "id": "metabase.collections",
+      "source": {
+        "provider_reference": "https://www.metabase.com/docs/latest/api-documentation"
+      },
+      "schema_refs": {
+        "record": "schemas/collections.json"
+      },
+      "stream_order": 3,
+      "stream": {
+        "name": "collections",
+        "method": "GET",
+        "path": "/collection",
+        "records": {
+          "path": "."
+        },
+        "schema": "schemas/collections.json"
+      }
+    },
+    {
+      "id": "metabase.databases",
+      "source": {
+        "provider_reference": "https://www.metabase.com/docs/latest/api-documentation"
+      },
+      "schema_refs": {
+        "record": "schemas/databases.json"
+      },
+      "stream_order": 4,
+      "stream": {
+        "name": "databases",
+        "method": "GET",
+        "path": "/database",
+        "records": {
+          "path": "."
+        },
+        "schema": "schemas/databases.json"
+      }
+    },
+    {
+      "id": "metabase.users",
+      "source": {
+        "provider_reference": "https://www.metabase.com/docs/latest/api-documentation"
+      },
+      "schema_refs": {
+        "record": "schemas/users.json"
+      },
+      "stream_order": 5,
+      "stream": {
+        "name": "users",
+        "method": "GET",
+        "path": "/user",
+        "records": {
+          "path": "."
+        },
+        "schema": "schemas/users.json"
+      }
+    }
+  ]
+}

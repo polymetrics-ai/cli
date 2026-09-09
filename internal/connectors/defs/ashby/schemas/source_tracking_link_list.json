@@ -1,29 +1,29 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "source_tracking_link_list",
-  "type": "object",
   "properties": {
-    "id": {
-      "type": "string",
-      "description": "The tracking link's unique identifier"
-    },
     "code": {
-      "type": "string",
-      "description": "The tracking code appended to the link as a UTM source"
+      "description": "The tracking code appended to the link as a UTM source",
+      "type": "string"
     },
     "enabled": {
-      "type": "boolean",
-      "description": "Whether the tracking link is enabled"
+      "description": "Whether the tracking link is enabled",
+      "type": "boolean"
     },
-    "sourceId": {
-      "type": "string",
-      "description": "The id of the source this tracking link is associated with"
+    "id": {
+      "description": "The tracking link's unique identifier",
+      "type": "string"
     },
     "link": {
-      "type": "string",
-      "description": "The fully-formed candidate-facing URL with the tracking code applied"
+      "description": "The fully-formed candidate-facing URL with the tracking code applied",
+      "type": "string"
+    },
+    "sourceId": {
+      "description": "The id of the source this tracking link is associated with",
+      "type": "string"
     }
   },
+  "title": "source_tracking_link_list",
+  "type": "object",
   "x-primary-key": [
     "id"
   ]

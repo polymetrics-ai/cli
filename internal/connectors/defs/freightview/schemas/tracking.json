@@ -1,12 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "tracking",
-  "type": "object",
   "properties": {
     "createdDate": {
-      "type": "string"
-    },
-    "summary": {
       "type": "string"
     },
     "eventDate": {
@@ -17,8 +12,13 @@
     },
     "eventType": {
       "type": "string"
+    },
+    "summary": {
+      "type": "string"
     }
   },
+  "title": "tracking",
+  "type": "object",
   "x-primary-key": [
     "createdDate"
   ]

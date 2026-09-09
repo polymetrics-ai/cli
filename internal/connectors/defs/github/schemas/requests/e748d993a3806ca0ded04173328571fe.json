@@ -1,0 +1,61 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "assignee": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "assignees": {
+      "items": {
+        "maxLength": 8192,
+        "type": "string"
+      },
+      "maxItems": 256,
+      "type": "array"
+    },
+    "body": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "issue_field_values": {
+      "items": {},
+      "maxItems": 256,
+      "type": "array"
+    },
+    "labels": {
+      "items": {},
+      "maxItems": 256,
+      "type": "array"
+    },
+    "milestone": {
+      "maxLength": 1048576,
+      "type": [
+        "integer",
+        "null",
+        "string"
+      ]
+    },
+    "title": {
+      "maxLength": 1048576,
+      "type": [
+        "integer",
+        "string"
+      ]
+    },
+    "type": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "title"
+  ],
+  "type": "object"
+}

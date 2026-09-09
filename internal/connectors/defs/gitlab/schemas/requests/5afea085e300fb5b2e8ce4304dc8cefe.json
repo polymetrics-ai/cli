@@ -1,0 +1,106 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "description": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "expires_at": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "granular_scopes": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "access": {
+            "enum": [
+              "personal_projects",
+              "all_memberships",
+              "selected_memberships",
+              "user",
+              "instance"
+            ],
+            "maxLength": 8192,
+            "minLength": 1,
+            "type": "string"
+          },
+          "group_ids": {
+            "items": {
+              "type": "integer"
+            },
+            "maxItems": 256,
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "permissions": {
+            "items": {
+              "maxLength": 8192,
+              "type": "string"
+            },
+            "maxItems": 256,
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "project_ids": {
+            "items": {
+              "type": "integer"
+            },
+            "maxItems": 256,
+            "type": [
+              "array",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "access",
+          "permissions"
+        ],
+        "type": "object"
+      },
+      "maxItems": 256,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "name": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "scopes": {
+      "items": {
+        "maxLength": 8192,
+        "type": "string"
+      },
+      "maxItems": 256,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "user_id": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "name",
+    "user_id"
+  ],
+  "type": "object"
+}

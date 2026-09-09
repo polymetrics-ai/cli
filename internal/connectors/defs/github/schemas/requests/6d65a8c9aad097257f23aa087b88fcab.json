@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "color": {
+      "enum": [
+        "gray",
+        "blue",
+        "green",
+        "yellow",
+        "orange",
+        "red",
+        "pink",
+        "purple"
+      ],
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "description": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "is_enabled": {
+      "type": "boolean"
+    },
+    "name": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "org": {
+      "maxLength": 8192,
+      "type": "string"
+    }
+  },
+  "required": [
+    "is_enabled",
+    "name",
+    "org"
+  ],
+  "type": "object"
+}

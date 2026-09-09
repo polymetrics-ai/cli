@@ -43,7 +43,6 @@ func TestConnectorsHelpExplainsDeclaredNoneInspectionPolicy(t *testing.T) {
 	for _, want := range []string{
 		"acknowledgement=none remains declared",
 		"only durable_warehouse can execute",
-		"externally verified conformance",
 		"POLLING-WATERMARK ELIGIBILITY",
 		"not CDC or change capture",
 		"hard deletes after a",

@@ -1,9 +1,0 @@
-{
-  "request": { "method": "GET", "path": "/tasks/fixture_task_2/stories" },
-  "response": {
-    "status": 200,
-    "body": {
-      "data": []
-    }
-  }
-}

@@ -1,7 +1,0 @@
-{
-  "record": { "id": 100 },
-  "expect": {
-    "method": "DELETE",
-    "path": "/workspaces/synthetic-conformance-value/projects/100"
-  }
-}

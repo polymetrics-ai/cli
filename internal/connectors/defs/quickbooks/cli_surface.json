@@ -7,8 +7,7 @@
       "summary": "Declared direct read: GET /entitlements/v3/{realmID}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.entitlements-read-0-1 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -21,8 +20,7 @@
       "summary": "Declared direct write: POST /v3/company/{realmID}/account.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.account-create-0-2 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -31,8 +29,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/account/{accountId}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.account-read-0-3 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -45,8 +42,7 @@
       "summary": "Declared direct write: POST /v3/company/{realmID}/attachable.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.attachable-create-0-4 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -55,8 +51,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/attachable/{attachableId}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.attachable-read-0-5 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -69,8 +64,7 @@
       "summary": "Declared direct write: POST /v3/company/{realmID}/batch.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.batch-default-0-6 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -79,8 +73,7 @@
       "summary": "Declared direct write: POST /v3/company/{realmID}/bill.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.bill-create-0-7 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -89,8 +82,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/bill/{billId}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.bill-read-0-8 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -103,8 +95,7 @@
       "summary": "Declared direct write: POST /v3/company/{realmID}/billpayment.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.billpayment-create-0-9 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -113,8 +104,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/billpayment/{billpaymentId}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.billpayment-read-0-10 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -127,8 +117,7 @@
       "summary": "Declared direct write: POST /v3/company/{realmID}/budget.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.budget-create-0-11 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -137,8 +126,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/budget/{budgetId}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.budget-read-0-12 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -151,8 +139,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/cdc.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.changedatacapture-default-0-13 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -165,8 +152,7 @@
       "summary": "Declared direct write: POST /v3/company/{realmID}/changeorder.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.changeorder-create-0-14 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -175,8 +161,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/changeorder/{changeorderId}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.changeorder-read-0-15 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -189,8 +174,7 @@
       "summary": "Declared direct write: POST /v3/company/{realmID}/class.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.class-create-0-16 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -199,8 +183,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/class/{classId}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.class-read-0-17 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -213,8 +196,7 @@
       "summary": "Declared direct write: POST /v3/company/{realmID}/companycurrency.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.companycurrency-create-0-18 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -223,8 +205,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/companycurrency/{companycurrencyId}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.companycurrency-read-0-19 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -237,8 +218,7 @@
       "summary": "Declared direct write: POST /v3/company/{realmID}/companyinfo.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.companyinfo-update-0-20 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -247,8 +227,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/companyinfo/{realmID}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.companyinfo-read-0-21 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -261,8 +240,7 @@
       "summary": "Declared direct write: POST /v3/company/{realmID}/creditcardpayment.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.creditcardpayment-create-0-22 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -271,8 +249,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/creditcardpayment/{creditcardpaymentId}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.creditcardpayment-read-0-23 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -285,8 +262,7 @@
       "summary": "Declared direct write: POST /v3/company/{realmID}/creditmemo.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.creditmemo-create-0-24 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -295,8 +271,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/creditmemo/{creditmemoId}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.creditmemo-read-0-25 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -309,8 +284,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/creditmemo/{creditmemoId}/pdf.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.creditmemo-pdf-0-26 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -323,8 +297,7 @@
       "summary": "Declared direct write: POST /v3/company/{realmID}/creditmemo/{creditmemoId}/send.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.creditmemo-send-0-27 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -333,8 +306,7 @@
       "summary": "Declared direct write: POST /v3/company/{realmID}/customer.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.customer-create-0-28 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -343,8 +315,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/customer/{customerId}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.customer-read-0-29 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -357,8 +328,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/customertype/{Id}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.customertype-read-0-30 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -371,8 +341,7 @@
       "summary": "Declared direct write: POST /v3/company/{realmID}/department.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.department-create-0-31 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -381,8 +350,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/department/{departmentId}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.department-read-0-32 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -395,8 +363,7 @@
       "summary": "Declared direct write: POST /v3/company/{realmID}/deposit.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.deposit-create-0-33 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -405,8 +372,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/deposit/{depositId}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.deposit-read-0-34 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -419,8 +385,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/download/{attachableId}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.attachable-download-0-35 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -433,8 +398,7 @@
       "summary": "Declared direct write: POST /v3/company/{realmID}/employee.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.employee-create-0-36 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -443,8 +407,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/employee/{employeeId}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.employee-read-0-37 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -457,8 +420,7 @@
       "summary": "Declared direct write: POST /v3/company/{realmID}/estimate.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.estimate-create-0-38 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -467,8 +429,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/estimate/{estimateId}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.estimate-read-0-39 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -481,8 +442,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/estimate/{estimateId}/pdf.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.estimate-pdf-0-40 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -495,8 +455,7 @@
       "summary": "Declared direct write: POST /v3/company/{realmID}/estimate/{estimateId}/send.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.estimate-send-0-41 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -505,8 +464,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/exchangerate.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.exchangerate-query-0-42 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -519,8 +477,7 @@
       "summary": "Declared direct write: POST /v3/company/{realmID}/exchangerate.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.exchangerate-update-0-43 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -529,8 +486,7 @@
       "summary": "Declared direct write: POST /v3/company/{realmID}/inventoryadjustment.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.inventoryadjustment-create-0-44 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -539,8 +495,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/inventoryadjustment/{inventoryadjustmentId}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.inventoryadjustment-read-0-45 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -553,8 +508,7 @@
       "summary": "Declared direct write: POST /v3/company/{realmID}/invoice.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.invoice-create-0-46 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -563,8 +517,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/invoice/{invoiceId}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.invoice-read-0-47 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -577,8 +530,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/invoice/{invoiceId}/pdf.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.invoice-pdf-0-48 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -591,8 +543,7 @@
       "summary": "Declared direct write: POST /v3/company/{realmID}/invoice/{invoiceId}/send.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.invoice-send-0-49 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -601,8 +552,7 @@
       "summary": "Declared direct write: POST /v3/company/{realmID}/item.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.item-create-0-50 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -611,8 +561,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/item/{itemId}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.item-read-0-51 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -625,8 +574,7 @@
       "summary": "Declared direct write: POST /v3/company/{realmID}/journalentry.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.journalentry-create-0-52 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -635,8 +583,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/journalentry/{journalentryId}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.journalentry-read-0-53 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -649,8 +596,7 @@
       "summary": "Declared direct write: POST /v3/company/{realmID}/payment.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.payment-create-0-54 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -659,8 +605,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/payment/{paymentId}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.payment-read-0-55 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -673,8 +618,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/payment/{paymentId}/pdf.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.payment-pdf-0-56 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -687,8 +631,7 @@
       "summary": "Declared direct write: POST /v3/company/{realmID}/payment/{paymentId}/send.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.payment-send-0-57 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -697,8 +640,7 @@
       "summary": "Declared direct write: POST /v3/company/{realmID}/paymentmethod.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.paymentmethod-create-0-58 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -707,8 +649,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/paymentmethod/{paymentmethodId}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.paymentmethod-read-0-59 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -721,8 +662,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/preferences.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.preferences-read-0-60 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -735,8 +675,7 @@
       "summary": "Declared direct write: POST /v3/company/{realmID}/preferences.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.preferences-update-0-61 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -745,8 +684,7 @@
       "summary": "Declared direct write: POST /v3/company/{realmID}/purchase.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.purchase-create-0-62 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -755,8 +693,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/purchase/{purchaseId}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.purchase-read-0-63 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -769,8 +706,7 @@
       "summary": "Declared direct write: POST /v3/company/{realmID}/purchaseorder.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.purchaseorder-create-0-64 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -779,8 +715,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/purchaseorder/{purchaseorderId}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.purchaseorder-read-0-65 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -793,8 +728,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/purchaseorder/{purchaseorderId}/pdf.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.purchaseorder-pdf-0-66 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -807,8 +741,7 @@
       "summary": "Declared direct write: POST /v3/company/{realmID}/purchaseorder/{purchaseorderId}/send.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.purchaseorder-send-0-67 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -817,8 +750,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/query.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.account-query-0-68 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -831,8 +763,7 @@
       "summary": "Declared direct write: POST /v3/company/{realmID}/recurringtransaction.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.recurringtransaction-create-0-69 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -841,8 +772,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/recurringtransaction/{recurringtransactionId}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.recurringtransaction-read-0-70 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -855,8 +785,7 @@
       "summary": "Declared direct write: POST /v3/company/{realmID}/refundreceipt.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.refundreceipt-create-0-71 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -865,8 +794,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/refundreceipt/{refundreceiptId}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.refundreceipt-read-0-72 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -879,8 +807,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/refundreceipt/{refundreceiptId}/pdf.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.refundreceipt-pdf-0-73 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -893,8 +820,7 @@
       "summary": "Declared direct write: POST /v3/company/{realmID}/refundreceipt/{refundreceiptId}/send.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.refundreceipt-send-0-74 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -903,8 +829,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/reimbursecharge/{taxrateId}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.reimbursecharge-read-0-75 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -917,8 +842,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/reports/AccountList.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.accountlistdetail-query-0-76 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -931,8 +855,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/reports/AgedPayableDetail.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.apagingdetail-query-0-77 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -945,8 +868,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/reports/AgedPayables.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.apagingsummary-query-0-78 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -959,8 +881,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/reports/AgedReceivableDetail.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.aragingdetail-query-0-79 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -973,8 +894,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/reports/AgedReceivables.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.aragingsummary-query-0-80 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -987,8 +907,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/reports/BalanceSheet.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.balancesheet-query-0-81 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1001,8 +920,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/reports/CashFlow.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.cashflow-query-0-82 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1015,8 +933,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/reports/ClassSales.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.salesbyclasssummary-query-0-83 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1029,8 +946,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/reports/CustomerBalance.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.customerbalance-query-0-84 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1043,8 +959,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/reports/CustomerBalanceDetail.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.customerbalancedetail-query-0-85 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1057,8 +972,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/reports/CustomerIncome.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.customerincome-query-0-86 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1071,8 +985,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/reports/CustomerSales.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.salesbycustomer-query-0-87 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1085,8 +998,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/reports/DepartmentSales.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.salesbydepartment-query-0-88 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1099,8 +1011,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/reports/GeneralLedger.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.generalledger-query-0-89 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1113,8 +1024,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/reports/InventoryValuationDetail.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.inventoryvaluationdetail-query-0-90 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1127,8 +1037,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/reports/InventoryValuationSummary.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.inventoryvaluationsummary-query-0-91 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1141,8 +1050,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/reports/ItemSales.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.salesbyproduct-query-0-92 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1155,8 +1063,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/reports/JournalReport.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.journalreport-query-0-93 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1169,8 +1076,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/reports/ProfitAndLoss.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.profitandloss-query-0-94 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1183,8 +1089,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/reports/ProfitAndLossDetail.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.profitandlossdetail-query-0-95 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1197,8 +1102,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/reports/TaxSummary.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.taxsummary-query-0-96 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1211,8 +1115,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/reports/TransactionList.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.transactionlist-query-0-97 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1225,8 +1128,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/reports/TransactionListByCustomer.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.transactionlistbycustomer-query-0-98 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1239,8 +1141,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/reports/TransactionListByVendor.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.transactionlistbyvendor-query-0-99 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1253,8 +1154,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/reports/TransactionListWithSplits.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.transactionlistwithsplits-query-0-100 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1267,8 +1167,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/reports/TrialBalance.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.trialbalance-query-0-101 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1281,8 +1180,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/reports/TrialBalanceFR.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.trialbalance-query-0-102 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1295,8 +1193,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/reports/VendorBalance.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.vendorbalance-query-0-103 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1309,8 +1206,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/reports/VendorBalanceDetail.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.vendorbalancedetail-query-0-104 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1323,8 +1219,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/reports/VendorExpenses.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.vendorexpenses-query-0-105 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1337,8 +1232,7 @@
       "summary": "Declared direct write: POST /v3/company/{realmID}/salesreceipt.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.salesreceipt-create-0-106 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1347,8 +1241,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/salesreceipt/{salesreceiptId}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.salesreceipt-read-0-107 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1361,8 +1254,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/salesreceipt/{salesreceiptId}/pdf.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.salesreceipt-pdf-0-108 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1375,8 +1267,7 @@
       "summary": "Declared direct write: POST /v3/company/{realmID}/salesreceipt/{salesreceiptId}/send.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.salesreceipt-send-0-109 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1385,8 +1276,7 @@
       "summary": "Declared direct write: POST /v3/company/{realmID}/taxagency.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.taxagency-create-0-110 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1395,8 +1285,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/taxagency/{taxagencyId}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.taxagency-read-0-111 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1409,8 +1298,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/taxclassification.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.taxclassification-read-2-112 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1423,8 +1311,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/taxclassification/{parentid}/children.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.taxclassification-read-1-113 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1437,8 +1324,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/taxclassification/{taxClassificationId}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.taxclassification-read-0-114 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1451,8 +1337,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/taxcode/{taxcodeId}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.taxcode-read-0-115 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1465,8 +1350,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/taxpayment/{taxPaymentId}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.taxpayment-read-0-116 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1479,8 +1363,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/taxrate/{taxrateId}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.taxrate-read-0-117 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1493,8 +1376,7 @@
       "summary": "Declared direct write: POST /v3/company/{realmID}/taxservice/taxcode.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.taxservice-create-0-118 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1503,8 +1385,7 @@
       "summary": "Declared direct write: POST /v3/company/{realmID}/term.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.term-create-0-119 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1513,8 +1394,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/term/{termId}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.term-read-0-120 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1527,8 +1407,7 @@
       "summary": "Declared direct write: POST /v3/company/{realmID}/timeactivity.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.timeactivity-create-0-121 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1537,8 +1416,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/timeactivity/{timeactivityId}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.timeactivity-read-0-122 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1551,8 +1429,7 @@
       "summary": "Declared direct write: POST /v3/company/{realmID}/transfer.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.transfer-create-0-123 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1561,8 +1438,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/transfer/{transferId}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.transfer-read-0-124 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1575,8 +1451,7 @@
       "summary": "Declared direct write: POST /v3/company/{realmID}/upload.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.attachable-upload-0-125 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1585,8 +1460,7 @@
       "summary": "Declared direct write: POST /v3/company/{realmID}/vendor.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.vendor-create-0-126 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1595,8 +1469,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/vendor/{vendorId}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.vendor-read-0-127 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1609,8 +1482,7 @@
       "summary": "Declared direct write: POST /v3/company/{realmID}/vendorcredit.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.vendorcredit-create-0-128 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1619,8 +1491,7 @@
       "summary": "Declared direct read: GET /v3/company/{realmID}/vendorcredit/{vendorcreditId}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.provider.vendorcredit-read-0-129 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1633,40 +1504,35 @@
       "summary": "Declared etl: GET /v3/company/{realmId}/query?query=SELECT * FROM Customer STARTPOSITION <n> MAXRESULTS <size>.",
       "intent": "etl",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.local-api-surface.get-v3-company-realmid-query-query-select-from-customer-startposition-n-maxresults-size-130 has no declaration-owned executable etl route."
+      "notes": "Unavailable: no ETL executor is declared for this provider operation."
     },
     {
       "path": "operations get-v3-company-realm-id-query-query-select-from-invoice-startposition-n-maxresults-size",
       "summary": "Declared etl: GET /v3/company/{realmId}/query?query=SELECT * FROM Invoice STARTPOSITION <n> MAXRESULTS <size>.",
       "intent": "etl",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.local-api-surface.get-v3-company-realmid-query-query-select-from-invoice-startposition-n-maxresults-size-131 has no declaration-owned executable etl route."
+      "notes": "Unavailable: no ETL executor is declared for this provider operation."
     },
     {
       "path": "operations get-v3-company-realm-id-query-query-select-from-payment-startposition-n-maxresults-size",
       "summary": "Declared etl: GET /v3/company/{realmId}/query?query=SELECT * FROM Payment STARTPOSITION <n> MAXRESULTS <size>.",
       "intent": "etl",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.local-api-surface.get-v3-company-realmid-query-query-select-from-payment-startposition-n-maxresults-size-132 has no declaration-owned executable etl route."
+      "notes": "Unavailable: no ETL executor is declared for this provider operation."
     },
     {
       "path": "operations get-v3-company-realm-id-query-query-select-from-account-startposition-n-maxresults-size",
       "summary": "Declared etl: GET /v3/company/{realmId}/query?query=SELECT * FROM Account STARTPOSITION <n> MAXRESULTS <size>.",
       "intent": "etl",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.local-api-surface.get-v3-company-realmid-query-query-select-from-account-startposition-n-maxresults-size-133 has no declaration-owned executable etl route."
+      "notes": "Unavailable: no ETL executor is declared for this provider operation."
     },
     {
       "path": "operations get-v3-company-realm-id-query-query-select-from-vendor-startposition-n-maxresults-size",
       "summary": "Declared etl: GET /v3/company/{realmId}/query?query=SELECT * FROM Vendor STARTPOSITION <n> MAXRESULTS <size>.",
       "intent": "etl",
       "availability": "partial",
-      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.local-api-surface.get-v3-company-realmid-query-query-select-from-vendor-startposition-n-maxresults-size-134 has no declaration-owned executable etl route."
+      "notes": "Unavailable: no ETL executor is declared for this provider operation."
     }
   ]
 }

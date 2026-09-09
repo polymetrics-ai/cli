@@ -8,7 +8,7 @@ reference corpus (881 reads and 1,032 writes), retrieved on 2026-08-05 from the 
 `pm zoom users list`, `pm zoom meetings list`, and `pm zoom webinars list`.
 
 No Zoom write action is implemented in this slice. The remaining provider operations stay explicitly
-disposed in `api_surface.json`; the ledger is not a claim that those operations are executable.
+disposed in `execution bundle`; the ledger is not a claim that those operations are executable.
 
 Service API documentation: https://developers.zoom.us/docs/api/.
 

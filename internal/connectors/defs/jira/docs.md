@@ -6,7 +6,7 @@ Reads and writes the documented Jira Cloud platform REST API v3 surface using HT
 Current official operation ledger: 617 documented HTTP operations (276 GET, 134 POST, 118 PUT, 89
 DELETE). Implemented rows: 584 = 3 stream-backed reads + 292 bounded direct reads + 286 typed writes
 + 3 binary downloads. Declared `partial` and not executable: 6 typed writes. Blocked/planned rows:
-27. Certified rows: 0 (fixture-only; no live provider calls were made).
+27. Validated rows: 0 (fixture-only; no live provider calls were made).
 
 Readable streams: `issues`, `projects`, `users`.
 
@@ -70,4 +70,4 @@ Read behavior: external Jira Cloud API read of issue, project, and user data.
 - Other documented endpoints are not exposed by this connector where they are blocked in the
   operation ledger as sensitive_reverse_etl=25, direct_read=2.
 - Fixture-only evidence: no live Jira credentials, provider calls, provider writes, or
-  certification run were used.
+  validation run were used.

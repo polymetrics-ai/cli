@@ -1,0 +1,5 @@
+# polymetrics.ai/cmd/connectorgen [polymetrics.ai/cmd/connectorgen.test]
+cmd/connectorgen/vnext_publication_durable_matrix_test.go:749:5: undefined: expectedCut
+cmd/connectorgen/vnext_publication_durable_matrix_test.go:765:90: undefined: expectedCut
+FAIL	polymetrics.ai/cmd/connectorgen [build failed]
+FAIL

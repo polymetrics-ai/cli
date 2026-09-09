@@ -1,0 +1,53 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "data": {
+      "additionalProperties": false,
+      "properties": {
+        "parent": {
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "rate": {
+          "type": "number"
+        },
+        "resource": {
+          "maxLength": 8192,
+          "type": "string"
+        }
+      },
+      "required": [
+        "parent",
+        "resource",
+        "rate"
+      ],
+      "type": "object"
+    },
+    "opt_fields": {
+      "items": {
+        "enum": [
+          "created_by",
+          "created_by.name",
+          "currency_code",
+          "parent",
+          "parent.name",
+          "rate",
+          "resource",
+          "resource.name"
+        ],
+        "maxLength": 8192,
+        "type": "string"
+      },
+      "maxItems": 256,
+      "type": "array"
+    },
+    "opt_pretty": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "data"
+  ],
+  "type": "object"
+}

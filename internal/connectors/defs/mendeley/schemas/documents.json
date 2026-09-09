@@ -1,30 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "documents",
-  "type": "object",
   "properties": {
-    "id": {
-      "type": "string"
-    },
-    "title": {
-      "type": "string"
-    },
-    "type": {
-      "type": "string"
-    },
-    "source": {
-      "type": "string"
-    },
-    "year": {
-      "type": "integer"
-    },
     "abstract": {
-      "type": "string"
-    },
-    "profile_id": {
-      "type": "string"
-    },
-    "group_id": {
       "type": "string"
     },
     "created": {
@@ -38,6 +15,12 @@
         "null"
       ]
     },
+    "group_id": {
+      "type": "string"
+    },
+    "id": {
+      "type": "string"
+    },
     "last_modified": {
       "type": [
         "string",
@@ -48,10 +31,27 @@
         "array",
         "null"
       ]
+    },
+    "profile_id": {
+      "type": "string"
+    },
+    "source": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string"
+    },
+    "year": {
+      "type": "integer"
     }
   },
+  "title": "documents",
+  "type": "object",
+  "x-cursor-field": "last_modified",
   "x-primary-key": [
     "id"
-  ],
-  "x-cursor-field": "last_modified"
+  ]
 }

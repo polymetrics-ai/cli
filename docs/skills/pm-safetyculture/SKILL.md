@@ -7,7 +7,7 @@ description: SafetyCulture connector knowledge and safe action guide.
 
 ## Purpose
 
-Reads SafetyCulture audits, templates, and users through the SafetyCulture API. Read-only.
+Reads SafetyCulture audits, templates, and users through fixed REST routes.
 
 ## Icon
 
@@ -24,17 +24,34 @@ Reads SafetyCulture audits, templates, and users through the SafetyCulture API. 
 
 ## Authentication
 
-- No secret authentication is required for this connector.
+- Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 ## Configuration
 
-- No connector-specific config fields.
+- start_date (required)
+- access_token (secret) (required)
+
+## ETL Streams
+
+- audits:
+  - primary key: id
+  - fields: id(string), modified_at(string), name(string)
+- templates:
+  - primary key: id
+  - fields: id(string), modified_at(string), name(string)
+- users:
+  - primary key: id
+  - fields: id(string), modified_at(string), name(string)
+
+## Sync Modes
+
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Security
 
-- read risk: connector-specific
-- write risk: connector-specific
-- approval: external mutations require preview and approval
+- read risk: Bounded GET reads use the fixed SafetyCulture origin and declared bearer authentication.
+- write risk: unsupported
+- approval: none; read-only
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 ## Commands

@@ -1,0 +1,45 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "maxLength": 1048576,
+      "type": [
+        "integer",
+        "null",
+        "string"
+      ]
+    },
+    "jsonrpc": {
+      "enum": [
+        "2.0"
+      ],
+      "maxLength": 8192,
+      "minLength": 1,
+      "type": "string"
+    },
+    "method": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "params": {
+      "additionalProperties": true,
+      "items": {},
+      "maxItems": 256,
+      "maxProperties": 256,
+      "type": [
+        "array",
+        "null",
+        "object"
+      ]
+    }
+  },
+  "required": [
+    "jsonrpc",
+    "method"
+  ],
+  "type": "object"
+}

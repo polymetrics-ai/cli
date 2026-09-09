@@ -1,0 +1,599 @@
+package main
+
+import (
+	"bytes"
+	"context"
+	"crypto/sha256"
+	"encoding/hex"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"io"
+	"os"
+	"path"
+	"sort"
+	"strings"
+	"syscall"
+	"unicode"
+)
+
+// sourceOperationKey identifies retained evidence, never an execution unit.
+type sourceOperationKey struct {
+	Connector string `json:"connector"`
+	Inventory string `json:"inventory"`
+	ID        string `json:"id"`
+}
+
+type sourceArtifactPin struct {
+	Path   string `json:"path"`
+	SHA256 string `json:"sha256"`
+	Bytes  int64  `json:"bytes"`
+}
+
+type sourceInventoryAnchor struct {
+	Connector       string              `json:"connector"`
+	Inventory       string              `json:"inventory"`
+	Class           string              `json:"class"`
+	Path            string              `json:"path"`
+	SHA256          string              `json:"sha256"`
+	AcquisitionRef  string              `json:"acquisition_ref"`
+	AcquisitionPath string              `json:"acquisition_path"`
+	ExpectedIDs     []string            `json:"expected_ids"`
+	ExpectedCount   int                 `json:"expected_count"`
+	Artifacts       []sourceArtifactPin `json:"artifacts"`
+}
+
+type sourceLaneCohort struct {
+	SchemaVersion int                     `json:"schema_version"`
+	CohortID      string                  `json:"cohort_id"`
+	Inventories   []sourceInventoryAnchor `json:"inventories"`
+}
+
+type sourceLaneDiagnostic struct {
+	Key      sourceOperationKey `json:"key"`
+	Lanes    []string           `json:"lanes"`
+	Stage    string             `json:"stage"`
+	Code     string             `json:"code"`
+	Pointer  string             `json:"pointer"`
+	Owner    string             `json:"owner"`
+	Severity string             `json:"severity"`
+}
+
+type retainedSourceOperation struct {
+	RawDocumentID  string                 `json:"raw_document_id"`
+	Key            sourceOperationKey     `json:"key"`
+	Class          string                 `json:"class"`
+	DocumentID     string                 `json:"document_id"`
+	Pointer        string                 `json:"pointer"`
+	SourceLocation string                 `json:"source_location"`
+	Observed       bool                   `json:"observed"`
+	Node           json.RawMessage        `json:"-"`
+	Diagnostics    []sourceLaneDiagnostic `json:"diagnostics"`
+}
+
+type retainedSourceDocument struct {
+	documentaryBytes       []byte              `json:"-"`
+	view                   *sourceDocumentView `json:"-"`
+	ContentType            string              `json:"content_type"`
+	ID                     string              `json:"id"`
+	Path                   string              `json:"path"`
+	RetainedFileSHA256     string              `json:"retained_file_sha256"`
+	Bytes                  int64               `json:"bytes"`
+	UpstreamDeclaredSHA256 string              `json:"upstream_declared_sha256"`
+	UpstreamDeclaredBytes  int64               `json:"upstream_declared_bytes"`
+	UpstreamBytesVerified  bool                `json:"upstream_bytes_verified"`
+	Payload                json.RawMessage     `json:"payload"`
+}
+
+type retainedSourceInventory struct {
+	Operations  []retainedSourceOperation `json:"operations"`
+	Documents   []retainedSourceDocument  `json:"documents"`
+	Diagnostics []sourceLaneDiagnostic    `json:"diagnostics"`
+}
+
+// loadRetainedSourceInventory allocates the anchored universe before reading
+// provider evidence. A failed source cannot change that universe.
+func loadRetainedSourceInventory(ctx context.Context, repo string, cohort sourceLaneCohort) retainedSourceInventory {
+	return loadRetainedSourceInventoryWithNodeLimits(ctx, repo, cohort, 1000000, 8000000)
+}
+
+func loadRetainedSourceInventoryWithNodeLimits(ctx context.Context, repo string, cohort sourceLaneCohort, documentLimit, aggregateLimit int64) retainedSourceInventory {
+	return loadRetainedSourceInventoryUsingReader(ctx, repo, cohort, documentLimit, aggregateLimit, nil)
+}
+
+// A supplied reader retains the caller's directory authority across admission
+// and publication. The inventory parser and all identity/budget checks stay shared.
+func loadRetainedSourceInventoryUsingReader(ctx context.Context, repo string, cohort sourceLaneCohort, documentLimit, aggregateLimit int64, read func(string, int64) ([]byte, error)) retainedSourceInventory {
+	result := retainedSourceInventory{Operations: []retainedSourceOperation{}, Documents: []retainedSourceDocument{}, Diagnostics: []sourceLaneDiagnostic{}}
+	if err := validateSourceLaneCohort(cohort); err != nil {
+		result.Diagnostics = append(result.Diagnostics, sourceLaneDiagnostic{Lanes: sourceLaneNames(), Stage: "inventory", Code: "cohort_anchor_invalid", Owner: "batch1", Severity: "error"})
+		return result
+	}
+	index := map[sourceOperationKey]int{}
+	for _, anchor := range cohort.Inventories {
+		for _, id := range anchor.ExpectedIDs {
+			key := sourceOperationKey{Connector: anchor.Connector, Inventory: anchor.Inventory, ID: id}
+			if _, exists := index[key]; exists {
+				continue
+			}
+			index[key] = len(result.Operations)
+			result.Operations = append(result.Operations, retainedSourceOperation{Key: key, Class: anchor.Class, DocumentID: anchor.Connector + ":" + anchor.Inventory, Node: json.RawMessage("null"), Diagnostics: []sourceLaneDiagnostic{}})
+		}
+	}
+	add := func(key sourceOperationKey, code, pointer string) {
+		d := sourceLaneDiagnostic{Key: key, Lanes: sourceLaneNames(), Stage: "inventory", Code: code, Pointer: pointer, Owner: key.Connector, Severity: "error"}
+		result.Diagnostics = append(result.Diagnostics, d)
+		if n, ok := index[key]; ok {
+			result.Operations[n].Diagnostics = append(result.Operations[n].Diagnostics, d)
+		}
+	}
+	if read == nil {
+		root, err := os.OpenRoot(repo)
+		if err != nil {
+			for key := range index {
+				add(key, "source_root_unavailable", "")
+			}
+			sortSourceInventory(&result)
+			return result
+		}
+		defer func() { _ = root.Close() }() // Read-only authority; no durable writes.
+		read = func(name string, limit int64) ([]byte, error) { return readSourceInput(root, name, limit) }
+	}
+	var totalBytes, totalNodes int64
+	checkNodes := func(data []byte) string {
+		remaining := min(documentLimit, aggregateLimit-totalNodes)
+		nodes, err := countSourceJSONNodes(ctx, data, max(remaining, 0))
+		totalNodes += nodes
+		if err != nil {
+			if ctx.Err() != nil {
+				return "source_canceled"
+			}
+			return "source_invalid"
+		}
+		if nodes > documentLimit || totalNodes > aggregateLimit {
+			return "source_node_budget_exceeded"
+		}
+		return ""
+	}
+	for _, anchor := range cohort.Inventories {
+		base := sourceOperationKey{Connector: anchor.Connector, Inventory: anchor.Inventory}
+		fail := func(code string) {
+			for _, id := range anchor.ExpectedIDs {
+				key := base
+				key.ID = id
+				add(key, code, anchor.Path)
+			}
+		}
+		if err := ctx.Err(); err != nil {
+			fail("source_canceled")
+			continue
+		}
+		data, err := read(anchor.Path, 64<<20)
+		if err != nil {
+			fail("source_unavailable")
+			continue
+		}
+		totalBytes += int64(len(data))
+		if totalBytes > 512<<20 {
+			fail("source_budget_exceeded")
+			continue
+		}
+		if sourceBytesHash(data) != anchor.SHA256 {
+			fail("source_hash_mismatch")
+			continue
+		}
+		validArtifacts := true
+		artifactBytes := map[string][]byte{}
+		for _, pin := range anchor.Artifacts {
+			raw, readErr := read(pin.Path, 64<<20)
+			artifactBytes[pin.Path] = raw
+			totalBytes += int64(len(raw))
+			if readErr != nil || int64(len(raw)) != pin.Bytes || sourceBytesHash(raw) != pin.SHA256 || totalBytes > 512<<20 {
+				validArtifacts = false
+			}
+		}
+		if !validArtifacts {
+			fail("source_artifact_invalid")
+			continue
+		}
+		if code := checkNodes(data); code != "" {
+			fail(code)
+			continue
+		}
+		var envelope map[string]json.RawMessage
+		if err := decodeSourceJSON(data, &envelope); err != nil {
+			fail("source_invalid")
+			continue
+		}
+		var version int
+		if err := json.Unmarshal(envelope["schema_version"], &version); err != nil || (version != 2 && version != 3) {
+			fail("source_schema_invalid")
+			continue
+		}
+		var connector string
+		if err := json.Unmarshal(envelope["connector"], &connector); err != nil || connector != anchor.Connector {
+			fail("source_connector_mismatch")
+			continue
+		}
+		var rest struct {
+			SHA256     string            `json:"sha256"`
+			Bytes      int64             `json:"bytes"`
+			Operations []json.RawMessage `json:"operations"`
+			Documents  []struct {
+				ID          string `json:"id"`
+				ContentType string `json:"content_type"`
+				Artifact    struct {
+					SHA256  string `json:"sha256"`
+					Bytes   int64  `json:"bytes"`
+					OpenAPI string `json:"openapi"`
+				} `json:"artifact"`
+				Operations []json.RawMessage `json:"operations"`
+			} `json:"source_documents"`
+		}
+		if err := json.Unmarshal(envelope["rest"], &rest); err != nil {
+			fail("source_invalid")
+			continue
+		}
+
+		rawDocuments := map[int]retainedSourceDocument{}
+		rawIDs := map[string]bool{}
+		rawValid := true
+		for i, doc := range rest.Documents {
+			if !sourceLaneIdentityPart(doc.ID) || rawIDs[doc.ID] {
+				rawValid = false
+				continue
+			}
+			rawIDs[doc.ID] = true
+			var matched *sourceArtifactPin
+			for j := range anchor.Artifacts {
+				pin := &anchor.Artifacts[j]
+				if pin.SHA256 == doc.Artifact.SHA256 && pin.Bytes == doc.Artifact.Bytes {
+					if matched != nil {
+						rawValid = false
+					}
+					matched = pin
+				}
+			}
+			if matched == nil {
+				rawValid = false
+				continue
+			}
+			raw := artifactBytes[matched.Path]
+			var payload json.RawMessage
+			kind := doc.ContentType
+			var decodeErr error
+			switch {
+			case kind == "text/html":
+				payload, decodeErr = json.Marshal(string(raw))
+			case kind == "application/json":
+				if code := checkNodes(raw); code != "" {
+					fail(code)
+					rawValid = false
+					continue
+				}
+				payload, decodeErr = canonicalSourceJSON(raw)
+			case kind == "application/yaml" || (kind == "" && doc.Artifact.OpenAPI != ""):
+				kind = "application/yaml"
+				payload, decodeErr = sourceYAMLDocument(raw)
+			default:
+				decodeErr = fmt.Errorf("unsupported retained artifact representation")
+			}
+			if decodeErr == nil && kind != "application/json" {
+				if code := checkNodes(payload); code != "" {
+					fail(code)
+					rawValid = false
+					continue
+				}
+			}
+			if decodeErr != nil {
+				rawValid = false
+				continue
+			}
+			rawDocuments[i] = retainedSourceDocument{ID: anchor.Connector + ":" + anchor.Inventory + ":raw:" + matched.SHA256, ContentType: kind, Path: matched.Path, RetainedFileSHA256: matched.SHA256, Bytes: matched.Bytes, UpstreamDeclaredSHA256: doc.Artifact.SHA256, UpstreamDeclaredBytes: doc.Artifact.Bytes, UpstreamBytesVerified: true, Payload: payload}
+		}
+		if !rawValid {
+			fail("source_artifact_binding_invalid")
+			continue
+		}
+		for i := range rest.Documents {
+			if doc, ok := rawDocuments[i]; ok {
+				result.Documents = append(result.Documents, doc)
+			}
+		}
+		result.Documents = append(result.Documents, retainedSourceDocument{ContentType: "application/json", ID: anchor.Connector + ":" + anchor.Inventory, Path: anchor.Path, RetainedFileSHA256: anchor.SHA256, Bytes: int64(len(data)), UpstreamDeclaredSHA256: rest.SHA256, UpstreamDeclaredBytes: rest.Bytes, Payload: append(json.RawMessage(nil), data...)})
+		rows := rest.Operations
+		pointers := []string{}
+		rawBindings := map[string]string{}
+		if version == 3 {
+			rows = []json.RawMessage{}
+			for d, doc := range rest.Documents {
+				for n, row := range doc.Operations {
+					rows = append(rows, row)
+					pointer := fmt.Sprintf("/rest/source_documents/%d/operations/%d", d, n)
+					pointers = append(pointers, pointer)
+					rawBindings[pointer] = rawDocuments[d].ID
+				}
+			}
+		} else {
+			for n := range rows {
+				pointers = append(pointers, fmt.Sprintf("/rest/operations/%d", n))
+			}
+		}
+		observed := map[string]bool{}
+		for n, row := range rows {
+			var node struct {
+				ID       string `json:"id"`
+				Location string `json:"source_location"`
+			}
+			if err := json.Unmarshal(row, &node); err != nil || !validSourceID(node.ID) {
+				add(base, "source_id_invalid", pointers[n])
+				continue
+			}
+			key := base
+			key.ID = node.ID
+			if observed[node.ID] {
+				add(key, "source_duplicate", pointers[n])
+				continue
+			}
+			observed[node.ID] = true
+			target, exists := index[key]
+			if !exists {
+				add(key, "source_unexpected", pointers[n])
+				continue
+			}
+			result.Operations[target].Observed = true
+			result.Operations[target].Node = append(json.RawMessage(nil), row...)
+			result.Operations[target].RawDocumentID = rawBindings[pointers[n]]
+			result.Operations[target].Pointer = pointers[n]
+			result.Operations[target].SourceLocation = node.Location
+		}
+		for _, id := range anchor.ExpectedIDs {
+			if !observed[id] {
+				key := base
+				key.ID = id
+				add(key, "source_missing", anchor.Path)
+			}
+		}
+		var counts struct {
+			Total *int `json:"total"`
+		}
+		if err := json.Unmarshal(envelope["counts"], &counts); err != nil || counts.Total == nil || *counts.Total != len(observed) || *counts.Total != anchor.ExpectedCount || anchor.ExpectedCount != len(anchor.ExpectedIDs) {
+			add(base, "source_count_mismatch", "/counts/total")
+		}
+	}
+	sortSourceInventory(&result)
+	return result
+}
+
+func sourceLaneNames() []string {
+	return []string{"direct_read", "direct_write", "binary_download", "binary_upload", "etl", "reverse_etl", "sync_transport"}
+}
+
+func sourceBytesHash(data []byte) string {
+	sum := sha256.Sum256(data)
+	return hex.EncodeToString(sum[:])
+}
+
+func validSourceID(id string) bool {
+	return id != "" && strings.IndexFunc(id, unicode.IsControl) < 0
+}
+
+func sourceKeyLess(a, b sourceOperationKey) bool {
+	if a.Connector != b.Connector {
+		return a.Connector < b.Connector
+	}
+	if a.Inventory != b.Inventory {
+		return a.Inventory < b.Inventory
+	}
+	return a.ID < b.ID
+}
+
+func sortSourceInventory(inv *retainedSourceInventory) {
+	sort.Slice(inv.Operations, func(i, j int) bool { return sourceKeyLess(inv.Operations[i].Key, inv.Operations[j].Key) })
+	sort.Slice(inv.Documents, func(i, j int) bool { return inv.Documents[i].ID < inv.Documents[j].ID })
+	sort.Slice(inv.Diagnostics, func(i, j int) bool {
+		a, b := inv.Diagnostics[i], inv.Diagnostics[j]
+		if a.Key != b.Key {
+			return sourceKeyLess(a.Key, b.Key)
+		}
+		if a.Code != b.Code {
+			return a.Code < b.Code
+		}
+		return a.Pointer < b.Pointer
+	})
+}
+
+// readSourceInput is confined to a caller-owned root and opens only regular
+// no-follow files. Nonblocking open prevents substituted FIFOs from hanging.
+func readSourceInput(root *os.Root, name string, limit int64) ([]byte, error) {
+	if name == "" || strings.Contains(name, "\\") || strings.HasPrefix(name, "/") || path.Clean(name) != name || strings.IndexFunc(name, unicode.IsControl) >= 0 {
+		return nil, fmt.Errorf("invalid source path %q", name)
+	}
+	prefix := ""
+	for _, part := range strings.Split(name, "/") {
+		if part == "." || part == ".." || part == "" {
+			return nil, fmt.Errorf("invalid source path %q", name)
+		}
+		prefix = path.Join(prefix, part)
+		info, err := root.Lstat(prefix)
+		if err != nil {
+			return nil, fmt.Errorf("inspect source: %w", err)
+		}
+		if info.Mode()&os.ModeSymlink != 0 {
+			return nil, fmt.Errorf("source path is a symlink")
+		}
+	}
+	f, err := root.OpenFile(name, os.O_RDONLY|syscall.O_NOFOLLOW|syscall.O_NONBLOCK, 0)
+	if err != nil {
+		return nil, fmt.Errorf("open source: %w", err)
+	}
+	info, statErr := f.Stat()
+	if statErr != nil || !info.Mode().IsRegular() {
+		if statErr == nil {
+			statErr = fmt.Errorf("source is not a regular file")
+		}
+		return nil, errors.Join(statErr, f.Close())
+	}
+	data, readErr := io.ReadAll(io.LimitReader(f, limit+1))
+	closeErr := f.Close()
+	if readErr != nil || closeErr != nil {
+		return nil, errors.Join(readErr, closeErr)
+	}
+	if int64(len(data)) > limit {
+		return nil, fmt.Errorf("source byte limit exceeded")
+	}
+	return data, nil
+}
+
+// Provider objects deliberately remain opaque; the envelope around them is
+// validated separately. Numbers retain their lexical precision.
+func decodeSourceJSON(data []byte, destination any) error {
+	depth := 0
+	inString, escaped := false, false
+	for _, b := range data {
+		if inString {
+			if escaped {
+				escaped = false
+			} else if b == '\\' {
+				escaped = true
+			} else if b == '"' {
+				inString = false
+			}
+			continue
+		}
+		switch b {
+		case '"':
+			inString = true
+		case '{', '[':
+			depth++
+			if depth > 256 {
+				return fmt.Errorf("source nesting limit exceeded")
+			}
+		case '}', ']':
+			depth--
+		}
+	}
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.UseNumber()
+	if err := rejectDuplicateJSONMembers(decoder); err != nil {
+		return err
+	}
+	decoder = json.NewDecoder(bytes.NewReader(data))
+	decoder.UseNumber()
+	if err := decoder.Decode(destination); err != nil {
+		return err
+	}
+	return nil
+}
+
+// validateSourceLaneCohort refuses ambiguous authority before allocating rows.
+func validateSourceLaneCohort(cohort sourceLaneCohort) error {
+	if cohort.SchemaVersion != 1 || !validSourceID(cohort.CohortID) || len(cohort.Inventories) == 0 || len(cohort.Inventories) > 1024 {
+		return fmt.Errorf("invalid cohort envelope")
+	}
+	seen := map[string]bool{}
+	total := 0
+	for _, anchor := range cohort.Inventories {
+		if !sourceLaneIdentityPart(anchor.Connector) || !sourceLaneIdentityPart(anchor.Inventory) {
+			return fmt.Errorf("invalid inventory identity")
+		}
+		identity := anchor.Connector + ":" + anchor.Inventory
+		if seen[identity] {
+			return fmt.Errorf("duplicate inventory")
+		}
+		seen[identity] = true
+		if anchor.Class != "primary" && anchor.Class != "supplement" {
+			return fmt.Errorf("invalid inventory class")
+		}
+		if !sourceLaneRelativePath(anchor.Path) || !sourceLaneDigest(anchor.SHA256) || anchor.ExpectedCount <= 0 || anchor.ExpectedCount != len(anchor.ExpectedIDs) {
+			return fmt.Errorf("invalid inventory pin or count")
+		}
+		ids := map[string]bool{}
+		for _, id := range anchor.ExpectedIDs {
+			if !validSourceID(id) || ids[id] {
+				return fmt.Errorf("invalid or duplicate source identity")
+			}
+			ids[id] = true
+		}
+		total += len(ids)
+		if total > 100000 {
+			return fmt.Errorf("source identity budget exceeded")
+		}
+		pins := map[string]bool{}
+		for _, pin := range anchor.Artifacts {
+			if !sourceLaneRelativePath(pin.Path) || !sourceLaneDigest(pin.SHA256) || pin.Bytes <= 0 || pin.Bytes > 64<<20 || pins[pin.Path] {
+				return fmt.Errorf("invalid or duplicate artifact pin")
+			}
+			pins[pin.Path] = true
+		}
+	}
+	return nil
+}
+
+func sourceLaneDigest(value string) bool {
+	if len(value) != 64 || strings.ToLower(value) != value {
+		return false
+	}
+	_, err := hex.DecodeString(value)
+	return err == nil
+}
+
+func sourceLaneIdentityPart(value string) bool {
+	if value == "" || value == "." || value == ".." {
+		return false
+	}
+	for _, c := range value {
+		if (c < 'a' || c > 'z') && (c < '0' || c > '9') && c != '-' && c != '_' && c != '.' {
+			return false
+		}
+	}
+	return true
+}
+
+func sourceLaneRelativePath(value string) bool {
+	if value == "" || !validSourceID(value) || path.IsAbs(value) || path.Clean(value) != value || strings.Contains(value, "\\") {
+		return false
+	}
+	for _, part := range strings.Split(value, "/") {
+		if part == "" || part == "." || part == ".." {
+			return false
+		}
+	}
+	return true
+}
+
+// countSourceJSONNodes charges containers, scalar values and object member names.
+// The member-name charge also bounds wide-object duplicate-key bookkeeping.
+// It stops after one excess token, before allocating a provider object graph.
+func countSourceJSONNodes(ctx context.Context, data []byte, limit int64) (int64, error) {
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.UseNumber()
+	var nodes int64
+	depth := 0
+	for {
+		if err := ctx.Err(); err != nil {
+			return nodes, err
+		}
+		token, err := decoder.Token()
+		if err == io.EOF {
+			return nodes, nil
+		}
+		if err != nil {
+			return nodes, err
+		}
+		if delimiter, ok := token.(json.Delim); ok {
+			if delimiter == '}' || delimiter == ']' {
+				depth--
+				continue
+			}
+			depth++
+			if depth > 256 {
+				return nodes, fmt.Errorf("source nesting limit exceeded")
+			}
+		}
+		nodes++
+		if nodes > limit {
+			return nodes, nil
+		}
+	}
+}

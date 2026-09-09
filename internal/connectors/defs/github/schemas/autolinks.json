@@ -1,15 +1,34 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "is_alphanumeric": {
+      "type": "boolean"
+    },
+    "key_prefix": {
+      "type": "string"
+    },
+    "repository": {
+      "type": "string"
+    },
+    "updated_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "url_template": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "id"
+  ],
   "title": "autolinks",
   "type": "object",
-  "x-primary-key": ["id"],
-  "required": ["id"],
-  "properties": {
-    "repository": { "type": "string" },
-    "id": { "type": "integer" },
-    "key_prefix": { "type": "string" },
-    "url_template": { "type": "string" },
-    "is_alphanumeric": { "type": "boolean" },
-    "updated_at": { "type": ["string", "null"] }
-  }
+  "x-primary-key": [
+    "id"
+  ]
 }

@@ -1,0 +1,20 @@
+=== RUN   TestCP11ExpectedWitnessRejectsReplacedPriorRoot
+--- PASS: TestCP11ExpectedWitnessRejectsReplacedPriorRoot (1.02s)
+=== RUN   TestCP11ExpectedTreeRejectsWrongReadableState
+=== RUN   TestCP11ExpectedTreeRejectsWrongReadableState/same-bytes-wrong-inode
+=== RUN   TestCP11ExpectedTreeRejectsWrongReadableState/empty-B-replaced-by-C
+=== RUN   TestCP11ExpectedTreeRejectsWrongReadableState/nonempty-B-replaced-by-C
+=== RUN   TestCP11ExpectedTreeRejectsWrongReadableState/missing-history
+=== RUN   TestCP11ExpectedTreeRejectsWrongReadableState/replaced-history
+=== RUN   TestCP11ExpectedTreeRejectsWrongReadableState/changed-bytes
+=== RUN   TestCP11ExpectedTreeRejectsWrongReadableState/extra-member
+--- PASS: TestCP11ExpectedTreeRejectsWrongReadableState (0.01s)
+    --- PASS: TestCP11ExpectedTreeRejectsWrongReadableState/same-bytes-wrong-inode (0.00s)
+    --- PASS: TestCP11ExpectedTreeRejectsWrongReadableState/empty-B-replaced-by-C (0.00s)
+    --- PASS: TestCP11ExpectedTreeRejectsWrongReadableState/nonempty-B-replaced-by-C (0.00s)
+    --- PASS: TestCP11ExpectedTreeRejectsWrongReadableState/missing-history (0.00s)
+    --- PASS: TestCP11ExpectedTreeRejectsWrongReadableState/replaced-history (0.00s)
+    --- PASS: TestCP11ExpectedTreeRejectsWrongReadableState/changed-bytes (0.00s)
+    --- PASS: TestCP11ExpectedTreeRejectsWrongReadableState/extra-member (0.00s)
+PASS
+ok  	polymetrics.ai/cmd/connectorgen	3.128s

@@ -1,0 +1,87 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "code_scanning_alerts": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "alert_numbers": {
+            "items": {
+              "type": "integer"
+            },
+            "maxItems": 256,
+            "minItems": 1,
+            "type": "array"
+          },
+          "repository_id": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "repository_id",
+          "alert_numbers"
+        ],
+        "type": "object"
+      },
+      "maxItems": 256,
+      "minItems": 1,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "contact_link": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "description": {
+      "maxLength": 255,
+      "minLength": 1,
+      "type": "string"
+    },
+    "ends_at": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "generate_issues": {
+      "type": "boolean"
+    },
+    "managers": {
+      "items": {
+        "maxLength": 8192,
+        "type": "string"
+      },
+      "maxItems": 10,
+      "type": "array"
+    },
+    "name": {
+      "maxLength": 50,
+      "minLength": 1,
+      "type": "string"
+    },
+    "org": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "team_managers": {
+      "items": {
+        "maxLength": 8192,
+        "type": "string"
+      },
+      "maxItems": 10,
+      "type": "array"
+    }
+  },
+  "required": [
+    "code_scanning_alerts",
+    "description",
+    "ends_at",
+    "name",
+    "org"
+  ],
+  "type": "object"
+}

@@ -1,11 +1,5 @@
 {
   "base": {
-    "url": "{{ config.base_url }}",
-    "user_agent": "polymetrics-go-cli",
-    "headers": {
-      "Accept": "application/vnd.github+json",
-      "X-GitHub-Api-Version": "2026-03-10"
-    },
     "auth": [
       {
         "mode": "bearer",
@@ -13,8 +7,8 @@
         "when": "{{ secrets.token }}"
       },
       {
-        "mode": "custom",
         "hook": "github",
+        "mode": "custom",
         "when": "{{ config.app_id }}"
       },
       {
@@ -26,76 +20,94 @@
         "when": "{{ config.auth_type in ['public', 'none', 'anonymous', 'unauthenticated'] }}"
       }
     ],
-    "pagination": {
-      "type": "page_number",
-      "page_param": "page",
-      "size_param": "per_page",
-      "start_page": 1,
-      "page_size": 100
-    },
     "check": {
       "method": "GET",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}"
     },
     "error_map": [
       {
-        "status": 401,
-        "hint": "github token or app credentials are missing or invalid; re-run pm credentials add github"
+        "hint": "github token or app credentials are missing or invalid; re-run pm credentials add github",
+        "status": 401
       },
       {
-        "status": 403,
-        "hint": "github token lacks access for this request, or a secondary rate limit was hit"
+        "hint": "github token lacks access for this request, or a secondary rate limit was hit",
+        "status": 403
       },
       {
-        "status": 404,
-        "hint": "repository not found or not visible to the configured credentials"
+        "hint": "repository not found or not visible to the configured credentials",
+        "status": 404
       },
       {
-        "status": 429,
         "class": "rate_limited",
-        "hint": "github rate limit exceeded; the connector will retry with backoff"
+        "hint": "github rate limit exceeded; the connector will retry with backoff",
+        "status": 429
       }
-    ]
+    ],
+    "headers": {
+      "Accept": "application/vnd.github+json",
+      "X-GitHub-Api-Version": "2026-03-10"
+    },
+    "pagination": {
+      "page_param": "page",
+      "page_size": 100,
+      "size_param": "per_page",
+      "start_page": 1,
+      "type": "page_number"
+    },
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli"
   },
   "streams": [
     {
+      "computed_fields": {
+        "repository": "{{ config.owner }}/{{ config.repo }}"
+      },
       "name": "repository",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}",
       "records": {
         "path": ".",
         "single_object": true
       },
-      "computed_fields": {
-        "repository": "{{ config.owner }}/{{ config.repo }}"
-      },
       "schema": "schemas/repository.json"
     },
     {
+      "computed_fields": {
+        "repository": "{{ config.owner }}/{{ config.repo }}",
+        "user_id": "{{ record.user.id }}",
+        "user_login": "{{ record.user.login }}"
+      },
+      "incremental": {
+        "cursor_field": "updated_at",
+        "param_format": "rfc3339",
+        "request_param": "since",
+        "start_config_key": "since"
+      },
       "name": "issues",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues",
       "query": {
         "state": "all"
       },
       "records": {
-        "path": ".",
         "filter": {
           "field_absent": "pull_request"
-        }
-      },
-      "incremental": {
-        "cursor_field": "updated_at",
-        "request_param": "since",
-        "param_format": "rfc3339",
-        "start_config_key": "since"
-      },
-      "computed_fields": {
-        "repository": "{{ config.owner }}/{{ config.repo }}",
-        "user_login": "{{ record.user.login }}",
-        "user_id": "{{ record.user.id }}"
+        },
+        "path": "."
       },
       "schema": "schemas/issues.json"
     },
     {
+      "computed_fields": {
+        "base_ref": "{{ record.base.ref }}",
+        "base_sha": "{{ record.base.sha }}",
+        "head_ref": "{{ record.head.ref }}",
+        "head_sha": "{{ record.head.sha }}",
+        "repository": "{{ config.owner }}/{{ config.repo }}",
+        "user_id": "{{ record.user.id }}",
+        "user_login": "{{ record.user.login }}"
+      },
+      "incremental": {
+        "cursor_field": "updated_at"
+      },
       "name": "pull_requests",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/pulls",
       "query": {
@@ -104,96 +116,91 @@
       "records": {
         "path": "."
       },
-      "incremental": {
-        "cursor_field": "updated_at"
-      },
-      "computed_fields": {
-        "repository": "{{ config.owner }}/{{ config.repo }}",
-        "user_login": "{{ record.user.login }}",
-        "user_id": "{{ record.user.id }}",
-        "base_ref": "{{ record.base.ref }}",
-        "base_sha": "{{ record.base.sha }}",
-        "head_ref": "{{ record.head.ref }}",
-        "head_sha": "{{ record.head.sha }}"
-      },
       "schema": "schemas/pull_requests.json"
     },
     {
+      "computed_fields": {
+        "commit_sha": "{{ record.commit.sha }}",
+        "commit_url": "{{ record.commit.url }}",
+        "repository": "{{ config.owner }}/{{ config.repo }}"
+      },
       "name": "branches",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches",
       "records": {
         "path": "."
       },
-      "computed_fields": {
-        "repository": "{{ config.owner }}/{{ config.repo }}",
-        "commit_sha": "{{ record.commit.sha }}",
-        "commit_url": "{{ record.commit.url }}"
-      },
       "schema": "schemas/branches.json"
     },
     {
+      "computed_fields": {
+        "author_id": "{{ record.author.id }}",
+        "author_login": "{{ record.author.login }}",
+        "commit_author_date": "{{ record.commit.author.date }}",
+        "commit_author_email": "{{ record.commit.author.email }}",
+        "commit_author_name": "{{ record.commit.author.name }}",
+        "commit_committer_date": "{{ record.commit.committer.date }}",
+        "commit_committer_email": "{{ record.commit.committer.email }}",
+        "commit_committer_name": "{{ record.commit.committer.name }}",
+        "commit_message": "{{ record.commit.message }}",
+        "committer_id": "{{ record.committer.id }}",
+        "committer_login": "{{ record.committer.login }}",
+        "repository": "{{ config.owner }}/{{ config.repo }}"
+      },
       "name": "commits",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/commits",
       "records": {
         "path": "."
       },
-      "computed_fields": {
-        "repository": "{{ config.owner }}/{{ config.repo }}",
-        "author_login": "{{ record.author.login }}",
-        "author_id": "{{ record.author.id }}",
-        "committer_login": "{{ record.committer.login }}",
-        "committer_id": "{{ record.committer.id }}",
-        "commit_message": "{{ record.commit.message }}",
-        "commit_author_name": "{{ record.commit.author.name }}",
-        "commit_author_email": "{{ record.commit.author.email }}",
-        "commit_author_date": "{{ record.commit.author.date }}",
-        "commit_committer_name": "{{ record.commit.committer.name }}",
-        "commit_committer_email": "{{ record.commit.committer.email }}",
-        "commit_committer_date": "{{ record.commit.committer.date }}"
-      },
       "schema": "schemas/commits.json"
     },
     {
+      "computed_fields": {
+        "commit_sha": "{{ record.commit.sha }}",
+        "commit_url": "{{ record.commit.url }}",
+        "repository": "{{ config.owner }}/{{ config.repo }}"
+      },
       "name": "tags",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/tags",
       "records": {
         "path": "."
       },
-      "computed_fields": {
-        "repository": "{{ config.owner }}/{{ config.repo }}",
-        "commit_sha": "{{ record.commit.sha }}",
-        "commit_url": "{{ record.commit.url }}"
-      },
       "schema": "schemas/tags.json"
     },
     {
+      "computed_fields": {
+        "assets_count": "{{ record.assets | length }}",
+        "author_login": "{{ record.author.login }}",
+        "repository": "{{ config.owner }}/{{ config.repo }}"
+      },
+      "incremental": {
+        "cursor_field": "published_at"
+      },
       "name": "releases",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/releases",
       "records": {
         "path": "."
       },
-      "incremental": {
-        "cursor_field": "published_at"
-      },
-      "computed_fields": {
-        "repository": "{{ config.owner }}/{{ config.repo }}",
-        "author_login": "{{ record.author.login }}",
-        "assets_count": "{{ record.assets | length }}"
-      },
       "schema": "schemas/releases.json"
     },
     {
+      "computed_fields": {
+        "repository": "{{ config.owner }}/{{ config.repo }}"
+      },
       "name": "labels",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/labels",
       "records": {
         "path": "."
       },
-      "computed_fields": {
-        "repository": "{{ config.owner }}/{{ config.repo }}"
-      },
       "schema": "schemas/labels.json"
     },
     {
+      "computed_fields": {
+        "creator_login": "{{ record.creator.login }}",
+        "repository": "{{ config.owner }}/{{ config.repo }}"
+      },
+      "incremental": {
+        "cursor_field": "updated_at"
+      },
       "name": "milestones",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/milestones",
       "query": {
@@ -202,396 +209,400 @@
       "records": {
         "path": "."
       },
-      "incremental": {
-        "cursor_field": "updated_at"
-      },
-      "computed_fields": {
-        "repository": "{{ config.owner }}/{{ config.repo }}",
-        "creator_login": "{{ record.creator.login }}"
-      },
       "schema": "schemas/milestones.json"
     },
     {
+      "computed_fields": {
+        "repository": "{{ config.owner }}/{{ config.repo }}",
+        "user_id": "{{ record.user.id }}",
+        "user_login": "{{ record.user.login }}"
+      },
+      "incremental": {
+        "cursor_field": "updated_at",
+        "param_format": "rfc3339",
+        "request_param": "since",
+        "start_config_key": "since"
+      },
       "name": "issue_comments",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/comments",
       "records": {
         "path": "."
       },
-      "incremental": {
-        "cursor_field": "updated_at",
-        "request_param": "since",
-        "param_format": "rfc3339",
-        "start_config_key": "since"
-      },
-      "computed_fields": {
-        "repository": "{{ config.owner }}/{{ config.repo }}",
-        "user_login": "{{ record.user.login }}",
-        "user_id": "{{ record.user.id }}"
-      },
       "schema": "schemas/issue_comments.json"
     },
     {
+      "computed_fields": {
+        "repository": "{{ config.owner }}/{{ config.repo }}",
+        "user_login": "{{ record.user.login }}"
+      },
+      "incremental": {
+        "cursor_field": "updated_at",
+        "param_format": "rfc3339",
+        "request_param": "since",
+        "start_config_key": "since"
+      },
       "name": "pull_request_review_comments",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/pulls/comments",
       "records": {
         "path": "."
       },
-      "incremental": {
-        "cursor_field": "updated_at",
-        "request_param": "since",
-        "param_format": "rfc3339",
-        "start_config_key": "since"
-      },
-      "computed_fields": {
-        "repository": "{{ config.owner }}/{{ config.repo }}",
-        "user_login": "{{ record.user.login }}"
-      },
       "schema": "schemas/pull_request_review_comments.json"
     },
     {
+      "computed_fields": {
+        "relation": "collaborator",
+        "repository": "{{ config.owner }}/{{ config.repo }}"
+      },
       "name": "collaborators",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/collaborators",
       "records": {
         "path": "."
       },
-      "computed_fields": {
-        "repository": "{{ config.owner }}/{{ config.repo }}",
-        "relation": "collaborator"
-      },
       "schema": "schemas/collaborators.json"
     },
     {
+      "computed_fields": {
+        "relation": "contributor",
+        "repository": "{{ config.owner }}/{{ config.repo }}"
+      },
       "name": "contributors",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/contributors",
       "records": {
         "path": "."
       },
-      "computed_fields": {
-        "repository": "{{ config.owner }}/{{ config.repo }}",
-        "relation": "contributor"
-      },
       "schema": "schemas/contributors.json"
     },
     {
+      "computed_fields": {
+        "relation": "stargazer",
+        "repository": "{{ config.owner }}/{{ config.repo }}"
+      },
       "name": "stargazers",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/stargazers",
       "records": {
         "path": "."
       },
-      "computed_fields": {
-        "repository": "{{ config.owner }}/{{ config.repo }}",
-        "relation": "stargazer"
-      },
       "schema": "schemas/stargazers.json"
     },
     {
+      "computed_fields": {
+        "relation": "subscriber",
+        "repository": "{{ config.owner }}/{{ config.repo }}"
+      },
       "name": "subscribers",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/subscribers",
       "records": {
         "path": "."
       },
-      "computed_fields": {
-        "repository": "{{ config.owner }}/{{ config.repo }}",
-        "relation": "subscriber"
-      },
       "schema": "schemas/subscribers.json"
     },
     {
+      "computed_fields": {
+        "repository": "{{ config.owner }}/{{ config.repo }}"
+      },
       "name": "workflows",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/workflows",
       "records": {
         "path": "workflows"
       },
-      "computed_fields": {
-        "repository": "{{ config.owner }}/{{ config.repo }}"
-      },
       "schema": "schemas/workflows.json"
     },
     {
+      "computed_fields": {
+        "repository": "{{ config.owner }}/{{ config.repo }}"
+      },
       "name": "workflow_runs",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/runs",
       "records": {
         "path": "workflow_runs"
       },
-      "computed_fields": {
-        "repository": "{{ config.owner }}/{{ config.repo }}"
-      },
       "schema": "schemas/workflow_runs.json"
     },
     {
+      "computed_fields": {
+        "repository": "{{ config.owner }}/{{ config.repo }}",
+        "workflow_run_id": "{{ record.workflow_run.id }}"
+      },
       "name": "workflow_artifacts",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/artifacts",
       "records": {
         "path": "artifacts"
       },
-      "computed_fields": {
-        "repository": "{{ config.owner }}/{{ config.repo }}",
-        "workflow_run_id": "{{ record.workflow_run.id }}"
-      },
       "schema": "schemas/workflow_artifacts.json"
     },
     {
+      "computed_fields": {
+        "creator_login": "{{ record.creator.login }}",
+        "repository": "{{ config.owner }}/{{ config.repo }}"
+      },
       "name": "deployments",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/deployments",
       "records": {
         "path": "."
       },
-      "computed_fields": {
-        "repository": "{{ config.owner }}/{{ config.repo }}",
-        "creator_login": "{{ record.creator.login }}"
-      },
       "schema": "schemas/deployments.json"
     },
     {
+      "computed_fields": {
+        "repository": "{{ config.owner }}/{{ config.repo }}",
+        "user_id": "{{ record.user.id }}",
+        "user_login": "{{ record.user.login }}"
+      },
+      "incremental": {
+        "cursor_field": "updated_at"
+      },
       "name": "commit_comments",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/comments",
       "records": {
         "path": "."
       },
-      "incremental": {
-        "cursor_field": "updated_at"
-      },
-      "computed_fields": {
-        "repository": "{{ config.owner }}/{{ config.repo }}",
-        "user_login": "{{ record.user.login }}",
-        "user_id": "{{ record.user.id }}"
-      },
       "schema": "schemas/commit_comments.json"
     },
     {
+      "computed_fields": {
+        "repository": "{{ config.owner }}/{{ config.repo }}"
+      },
       "name": "deploy_keys",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/keys",
       "records": {
         "path": "."
       },
-      "computed_fields": {
-        "repository": "{{ config.owner }}/{{ config.repo }}"
-      },
       "schema": "schemas/deploy_keys.json"
     },
     {
+      "computed_fields": {
+        "config_url": "{{ record.config.url }}",
+        "repository": "{{ config.owner }}/{{ config.repo }}"
+      },
       "name": "webhooks",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/hooks",
       "records": {
         "path": "."
       },
-      "computed_fields": {
-        "repository": "{{ config.owner }}/{{ config.repo }}",
-        "config_url": "{{ record.config.url }}"
-      },
       "schema": "schemas/webhooks.json"
     },
     {
+      "computed_fields": {
+        "repository": "{{ config.owner }}/{{ config.repo }}"
+      },
       "name": "environments",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/environments",
       "records": {
         "path": "environments"
       },
-      "computed_fields": {
-        "repository": "{{ config.owner }}/{{ config.repo }}"
-      },
       "schema": "schemas/environments.json"
     },
     {
+      "computed_fields": {
+        "owner_login": "{{ record.owner.login }}",
+        "repository": "{{ config.owner }}/{{ config.repo }}"
+      },
       "name": "forks",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/forks",
       "records": {
         "path": "."
       },
-      "computed_fields": {
-        "repository": "{{ config.owner }}/{{ config.repo }}",
-        "owner_login": "{{ record.owner.login }}"
-      },
       "schema": "schemas/forks.json"
     },
     {
+      "computed_fields": {
+        "invitee_login": "{{ record.invitee.login }}",
+        "inviter_login": "{{ record.inviter.login }}",
+        "repository": "{{ config.owner }}/{{ config.repo }}"
+      },
       "name": "invitations",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/invitations",
       "records": {
         "path": "."
       },
-      "computed_fields": {
-        "repository": "{{ config.owner }}/{{ config.repo }}",
-        "invitee_login": "{{ record.invitee.login }}",
-        "inviter_login": "{{ record.inviter.login }}"
-      },
       "schema": "schemas/invitations.json"
     },
     {
+      "computed_fields": {
+        "actor_login": "{{ record.actor.login }}",
+        "repository": "{{ config.owner }}/{{ config.repo }}"
+      },
       "name": "issue_events",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/events",
       "records": {
         "path": "."
       },
-      "computed_fields": {
-        "repository": "{{ config.owner }}/{{ config.repo }}",
-        "actor_login": "{{ record.actor.login }}"
-      },
       "schema": "schemas/issue_events.json"
     },
     {
+      "computed_fields": {
+        "dismissed_by_login": "{{ record.dismissed_by.login }}",
+        "repository": "{{ config.owner }}/{{ config.repo }}",
+        "rule_id": "{{ record.rule.id }}",
+        "rule_severity": "{{ record.rule.severity }}",
+        "tool_name": "{{ record.tool.name }}"
+      },
+      "incremental": {
+        "cursor_field": "updated_at"
+      },
       "name": "code_scanning_alerts",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/code-scanning/alerts",
       "records": {
         "path": "."
       },
-      "incremental": {
-        "cursor_field": "updated_at"
-      },
-      "computed_fields": {
-        "repository": "{{ config.owner }}/{{ config.repo }}",
-        "dismissed_by_login": "{{ record.dismissed_by.login }}",
-        "rule_id": "{{ record.rule.id }}",
-        "rule_severity": "{{ record.rule.severity }}",
-        "tool_name": "{{ record.tool.name }}"
-      },
       "schema": "schemas/code_scanning_alerts.json"
     },
     {
+      "computed_fields": {
+        "dismissed_by_login": "{{ record.dismissed_by.login }}",
+        "package_ecosystem": "{{ record.dependency.package.ecosystem }}",
+        "package_name": "{{ record.dependency.package.name }}",
+        "repository": "{{ config.owner }}/{{ config.repo }}"
+      },
+      "incremental": {
+        "cursor_field": "updated_at"
+      },
       "name": "dependabot_alerts",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/dependabot/alerts",
       "records": {
         "path": "."
       },
-      "incremental": {
-        "cursor_field": "updated_at"
-      },
-      "computed_fields": {
-        "repository": "{{ config.owner }}/{{ config.repo }}",
-        "dismissed_by_login": "{{ record.dismissed_by.login }}",
-        "package_name": "{{ record.dependency.package.name }}",
-        "package_ecosystem": "{{ record.dependency.package.ecosystem }}"
-      },
       "schema": "schemas/dependabot_alerts.json"
     },
     {
+      "computed_fields": {
+        "repository": "{{ config.owner }}/{{ config.repo }}",
+        "resolved_by_login": "{{ record.resolved_by.login }}"
+      },
+      "incremental": {
+        "cursor_field": "updated_at"
+      },
       "name": "secret_scanning_alerts",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/secret-scanning/alerts",
       "records": {
         "path": "."
       },
-      "incremental": {
-        "cursor_field": "updated_at"
-      },
-      "computed_fields": {
-        "repository": "{{ config.owner }}/{{ config.repo }}",
-        "resolved_by_login": "{{ record.resolved_by.login }}"
-      },
       "schema": "schemas/secret_scanning_alerts.json"
     },
     {
+      "computed_fields": {
+        "author_login": "{{ record.author.login }}",
+        "publisher_login": "{{ record.publisher.login }}",
+        "repository": "{{ config.owner }}/{{ config.repo }}"
+      },
+      "incremental": {
+        "cursor_field": "updated_at"
+      },
       "name": "security_advisories",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/security-advisories",
       "records": {
         "path": "."
       },
-      "incremental": {
-        "cursor_field": "updated_at"
-      },
-      "computed_fields": {
-        "repository": "{{ config.owner }}/{{ config.repo }}",
-        "author_login": "{{ record.author.login }}",
-        "publisher_login": "{{ record.publisher.login }}"
-      },
       "schema": "schemas/security_advisories.json"
     },
     {
+      "computed_fields": {
+        "repository": "{{ config.owner }}/{{ config.repo }}"
+      },
       "name": "repo_rulesets",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/rulesets",
       "records": {
         "path": "."
       },
-      "computed_fields": {
-        "repository": "{{ config.owner }}/{{ config.repo }}"
-      },
       "schema": "schemas/repo_rulesets.json"
     },
     {
+      "computed_fields": {
+        "repository": "{{ config.owner }}/{{ config.repo }}"
+      },
       "name": "autolinks",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/autolinks",
       "records": {
         "path": "."
       },
-      "computed_fields": {
-        "repository": "{{ config.owner }}/{{ config.repo }}"
-      },
       "schema": "schemas/autolinks.json"
     },
     {
+      "computed_fields": {
+        "repository": "{{ config.owner }}/{{ config.repo }}"
+      },
       "name": "languages",
-      "path": "/repos/{{ config.owner }}/{{ config.repo }}/languages",
       "pagination": {
         "type": "none"
       },
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/languages",
+      "projection": "passthrough",
       "records": {
         "path": ".",
         "single_object": true
       },
-      "projection": "passthrough",
-      "computed_fields": {
-        "repository": "{{ config.owner }}/{{ config.repo }}"
-      },
       "schema": "schemas/languages.json"
     },
     {
-      "name": "projects",
-      "method": "POST",
-      "path": "/graphql",
-      "pagination": {
-        "type": "cursor",
-        "cursor_param": "after",
-        "token_path": "data.repository.owner.projectsV2.pageInfo.endCursor",
-        "stop_path": "data.repository.owner.projectsV2.pageInfo.hasNextPage",
-        "page_size": 100
+      "computed_fields": {
+        "owner": "{{ config.owner }}",
+        "repository": "{{ config.owner }}/{{ config.repo }}",
+        "updated_at": "{{ record.updatedAt }}"
       },
       "graphql": {
-        "operation_name": "ListProjects",
         "document": "query ListProjects($owner: String!, $repo: String!, $first: Int!, $after: String) { repository(owner: $owner, name: $repo) { owner { __typename login ... on Organization { projectsV2(first: $first, after: $after) { nodes { id number title url closed updatedAt } pageInfo { hasNextPage endCursor } } } ... on User { projectsV2(first: $first, after: $after) { nodes { id number title url closed updatedAt } pageInfo { hasNextPage endCursor } } } } } }",
+        "operation_name": "ListProjects",
         "variables": {
-          "owner": "{{ config.owner }}",
-          "repo": "{{ config.repo }}",
-          "first": 100,
           "after": {
-            "template": "{{ cursor }}",
-            "omit_when_empty": true
-          }
+            "omit_when_empty": true,
+            "template": "{{ cursor }}"
+          },
+          "first": 100,
+          "owner": "{{ config.owner }}",
+          "repo": "{{ config.repo }}"
         }
       },
+      "method": "POST",
+      "name": "projects",
+      "pagination": {
+        "cursor_param": "after",
+        "page_size": 100,
+        "stop_path": "data.repository.owner.projectsV2.pageInfo.hasNextPage",
+        "token_path": "data.repository.owner.projectsV2.pageInfo.endCursor",
+        "type": "cursor"
+      },
+      "path": "/graphql",
       "records": {
         "path": "data.repository.owner.projectsV2.nodes"
-      },
-      "computed_fields": {
-        "repository": "{{ config.owner }}/{{ config.repo }}",
-        "owner": "{{ config.owner }}",
-        "updated_at": "{{ record.updatedAt }}"
       },
       "schema": "schemas/projects.json"
     },
     {
-      "name": "project_items",
-      "method": "POST",
-      "path": "/graphql",
-      "pagination": {
-        "type": "cursor",
-        "cursor_param": "after",
-        "token_path": "data.node.items.pageInfo.endCursor",
-        "stop_path": "data.node.items.pageInfo.hasNextPage",
-        "page_size": 100
+      "computed_fields": {
+        "content_id": "{{ record.content.id }}",
+        "content_number": "{{ record.content.number }}",
+        "content_state": "{{ record.content.state }}",
+        "content_title": "{{ record.content.title }}",
+        "content_type": "{{ record.content.__typename }}",
+        "content_url": "{{ record.content.url }}",
+        "created_at": "{{ record.createdAt }}",
+        "repository": "{{ config.owner }}/{{ config.repo }}",
+        "updated_at": "{{ record.updatedAt }}"
       },
       "graphql": {
-        "operation_name": "ListProjectItems",
         "document": "query ListProjectItems($projectId: ID!, $first: Int!, $after: String) { node(id: $projectId) { ... on ProjectV2 { id number title items(first: $first, after: $after) { nodes { id type createdAt updatedAt content { __typename ... on Issue { id number title url state } ... on PullRequest { id number title url state } } } pageInfo { hasNextPage endCursor } } } } }",
+        "operation_name": "ListProjectItems",
         "variables": {
-        "projectId": {
-          "template": "{{ query.project_id }}"
-        },
-          "first": 100,
           "after": {
-            "template": "{{ cursor }}",
-            "omit_when_empty": true
+            "omit_when_empty": true,
+            "template": "{{ cursor }}"
+          },
+          "first": 100,
+          "projectId": {
+            "template": "{{ query.project_id }}"
           }
         }
       },
+      "method": "POST",
+      "name": "project_items",
+      "pagination": {
+        "cursor_param": "after",
+        "page_size": 100,
+        "stop_path": "data.node.items.pageInfo.hasNextPage",
+        "token_path": "data.node.items.pageInfo.endCursor",
+        "type": "cursor"
+      },
+      "path": "/graphql",
       "records": {
         "path": "data.node.items.nodes"
       },
@@ -600,92 +611,81 @@
         "project_number": "data.node.number",
         "project_title": "data.node.title"
       },
-      "computed_fields": {
-        "repository": "{{ config.owner }}/{{ config.repo }}",
-        "created_at": "{{ record.createdAt }}",
-        "updated_at": "{{ record.updatedAt }}",
-        "content_type": "{{ record.content.__typename }}",
-        "content_id": "{{ record.content.id }}",
-        "content_number": "{{ record.content.number }}",
-        "content_title": "{{ record.content.title }}",
-        "content_url": "{{ record.content.url }}",
-        "content_state": "{{ record.content.state }}"
-      },
       "schema": "schemas/project_items.json"
     },
     {
-      "name": "discussions",
-      "method": "POST",
-      "path": "/graphql",
-      "pagination": {
-        "type": "cursor",
-        "cursor_param": "after",
-        "token_path": "data.repository.discussions.pageInfo.endCursor",
-        "stop_path": "data.repository.discussions.pageInfo.hasNextPage",
-        "page_size": 100
-      },
-      "graphql": {
-        "operation_name": "ListDiscussions",
-        "document": "query ListDiscussions($owner: String!, $repo: String!, $first: Int!, $after: String) { repository(owner: $owner, name: $repo) { discussions(first: $first, after: $after, orderBy: {field: UPDATED_AT, direction: DESC}) { nodes { id number title url isAnswered answerChosenAt createdAt updatedAt author { login } category { id name slug } } pageInfo { hasNextPage endCursor } } } }",
-        "variables": {
-          "owner": "{{ config.owner }}",
-          "repo": "{{ config.repo }}",
-          "first": 100,
-          "after": {
-            "template": "{{ cursor }}",
-            "omit_when_empty": true
-          }
-        }
-      },
-      "records": {
-        "path": "data.repository.discussions.nodes"
-      },
       "computed_fields": {
-        "repository": "{{ config.owner }}/{{ config.repo }}",
+        "answer_chosen_at": "{{ record.answerChosenAt }}",
         "author_login": "{{ record.author.login }}",
         "category_id": "{{ record.category.id }}",
         "category_name": "{{ record.category.name }}",
         "category_slug": "{{ record.category.slug }}",
-        "is_answered": "{{ record.isAnswered }}",
-        "answer_chosen_at": "{{ record.answerChosenAt }}",
         "created_at": "{{ record.createdAt }}",
+        "is_answered": "{{ record.isAnswered }}",
+        "repository": "{{ config.owner }}/{{ config.repo }}",
         "updated_at": "{{ record.updatedAt }}"
+      },
+      "graphql": {
+        "document": "query ListDiscussions($owner: String!, $repo: String!, $first: Int!, $after: String) { repository(owner: $owner, name: $repo) { discussions(first: $first, after: $after, orderBy: {field: UPDATED_AT, direction: DESC}) { nodes { id number title url isAnswered answerChosenAt createdAt updatedAt author { login } category { id name slug } } pageInfo { hasNextPage endCursor } } } }",
+        "operation_name": "ListDiscussions",
+        "variables": {
+          "after": {
+            "omit_when_empty": true,
+            "template": "{{ cursor }}"
+          },
+          "first": 100,
+          "owner": "{{ config.owner }}",
+          "repo": "{{ config.repo }}"
+        }
+      },
+      "method": "POST",
+      "name": "discussions",
+      "pagination": {
+        "cursor_param": "after",
+        "page_size": 100,
+        "stop_path": "data.repository.discussions.pageInfo.hasNextPage",
+        "token_path": "data.repository.discussions.pageInfo.endCursor",
+        "type": "cursor"
+      },
+      "path": "/graphql",
+      "records": {
+        "path": "data.repository.discussions.nodes"
       },
       "schema": "schemas/discussions.json"
     },
     {
-      "name": "discussion",
-      "method": "POST",
-      "path": "/graphql",
-      "pagination": {
-        "type": "none"
-      },
-      "graphql": {
-        "operation_name": "ViewDiscussion",
-        "document": "query ViewDiscussion($owner: String!, $repo: String!, $number: Int!) { repository(owner: $owner, name: $repo) { discussion(number: $number) { id number title body url isAnswered answerChosenAt createdAt updatedAt author { login } category { id name slug } comments(first: 20) { totalCount nodes { id body url isAnswer createdAt updatedAt author { login } } } } } }",
-        "variables": {
-          "owner": "{{ config.owner }}",
-          "repo": "{{ config.repo }}",
-        "number": {
-          "template": "{{ query.number }}",
-          "type": "integer"
-        }
-        }
-      },
-      "records": {
-        "path": "data.repository.discussion",
-        "single_object": true
-      },
       "computed_fields": {
-        "repository": "{{ config.owner }}/{{ config.repo }}",
+        "answer_chosen_at": "{{ record.answerChosenAt }}",
         "author_login": "{{ record.author.login }}",
         "category_id": "{{ record.category.id }}",
         "category_name": "{{ record.category.name }}",
         "category_slug": "{{ record.category.slug }}",
-        "is_answered": "{{ record.isAnswered }}",
-        "answer_chosen_at": "{{ record.answerChosenAt }}",
         "created_at": "{{ record.createdAt }}",
+        "is_answered": "{{ record.isAnswered }}",
+        "repository": "{{ config.owner }}/{{ config.repo }}",
         "updated_at": "{{ record.updatedAt }}"
+      },
+      "graphql": {
+        "document": "query ViewDiscussion($owner: String!, $repo: String!, $number: Int!) { repository(owner: $owner, name: $repo) { discussion(number: $number) { id number title body url isAnswered answerChosenAt createdAt updatedAt author { login } category { id name slug } comments(first: 20) { totalCount nodes { id body url isAnswer createdAt updatedAt author { login } } } } } }",
+        "operation_name": "ViewDiscussion",
+        "variables": {
+          "number": {
+            "template": "{{ query.number }}",
+            "type": "integer"
+          },
+          "owner": "{{ config.owner }}",
+          "repo": "{{ config.repo }}"
+        }
+      },
+      "method": "POST",
+      "name": "discussion",
+      "pagination": {
+        "type": "none"
+      },
+      "path": "/graphql",
+      "records": {
+        "path": "data.repository.discussion",
+        "single_object": true
       },
       "schema": "schemas/discussion.json"
     }

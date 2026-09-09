@@ -1,7 +1,0 @@
-{
-  "request": { "method": "GET", "path": "/resource", "query": { "page": "0", "limit": "1" } },
-  "response": {
-    "status": 200,
-    "body": []
-  }
-}

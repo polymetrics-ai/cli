@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "board_id": {
+      "type": "integer"
+    },
+    "id": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "list_id": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "board_id",
+    "id",
+    "list_id"
+  ],
+  "type": "object"
+}

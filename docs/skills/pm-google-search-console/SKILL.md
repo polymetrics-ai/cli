@@ -112,7 +112,6 @@ Reads Google Search Console sites, sitemaps, and Search Analytics performance re
 
 - Inspect, read, and safely plan typed Google Search Console operations.
 - Usage: pm google-search-console <command> [flags]
-- Source CLI: Google Search Console API (Official REST discovery documents for Search Console v3 and searchconsole v1)
 - Global flags:
   - --credential (string): Credential name to use for the Google Search Console request.
   - --connection (string): Alias for --credential.

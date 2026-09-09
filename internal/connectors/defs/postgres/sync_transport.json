@@ -19,10 +19,6 @@
       "idempotency": "at_least_once",
       "ordering": "source_ordered",
       "deletes": "not_available"
-    },
-    "conformance": {
-      "suite": "postgres_polling_watermark",
-      "run_id": "shared_source_v1"
     }
   },
   "destination_transport": {
@@ -52,10 +48,6 @@
       "idempotency": "keyed",
       "ordering": "source_ordered",
       "deletes": "tombstone"
-    },
-    "conformance": {
-      "suite": "postgres_managed_target",
-      "run_id": "warehouse_workset_v1"
     },
     "acknowledgement": "durable_warehouse",
     "apply_strategies": [

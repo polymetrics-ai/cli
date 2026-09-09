@@ -1,73 +1,98 @@
 {
   "base": {
-    "url": "{{ config.base_url }}",
-    "user_agent": "polymetrics-go-cli",
     "auth": [
       {
-        "mode": "none"
+        "mode": "bearer",
+        "token": "{{ secrets.api_token }}"
       }
     ],
+    "check": {
+      "method": "GET",
+      "path": "/conversation_export",
+      "query": {
+        "updated_after": "{{ config.updated_after }}",
+        "updated_before": "{{ config.updated_before }}"
+      }
+    },
+    "error_map": [],
     "pagination": {
       "type": "none"
     },
-    "check": {
-      "method": "GET",
-      "path": "/__legacy_hook/check"
-    },
-    "error_map": []
+    "url": "https://exports.dixa.io",
+    "user_agent": "polymetrics-go-cli"
   },
   "streams": [
     {
+      "incremental": {
+        "client_filtered": true,
+        "cursor_field": "updated_at"
+      },
+      "method": "GET",
       "name": "conversations",
-      "method": "GET",
-      "path": "/__legacy_hook/conversations",
-      "records": {
-        "path": "data"
+      "path": "/conversation_export",
+      "projection": "passthrough",
+      "query": {
+        "updated_after": "{{ config.updated_after }}",
+        "updated_before": "{{ config.updated_before }}"
       },
-      "schema": "schemas/conversations.json",
-      "incremental": {
-        "cursor_field": "updated_at",
-        "client_filtered": true
-      }
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/conversations.json"
     },
     {
+      "incremental": {
+        "client_filtered": true,
+        "cursor_field": "updated_at"
+      },
+      "method": "GET",
       "name": "conversation_queue",
-      "method": "GET",
-      "path": "/__legacy_hook/conversation_queue",
-      "records": {
-        "path": "data"
+      "path": "/conversation_export",
+      "projection": "passthrough",
+      "query": {
+        "updated_after": "{{ config.updated_after }}",
+        "updated_before": "{{ config.updated_before }}"
       },
-      "schema": "schemas/conversation_queue.json",
-      "incremental": {
-        "cursor_field": "updated_at",
-        "client_filtered": true
-      }
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/conversation_queue.json"
     },
     {
+      "incremental": {
+        "client_filtered": true,
+        "cursor_field": "updated_at"
+      },
+      "method": "GET",
       "name": "conversation_rating",
-      "method": "GET",
-      "path": "/__legacy_hook/conversation_rating",
-      "records": {
-        "path": "data"
+      "path": "/conversation_export",
+      "projection": "passthrough",
+      "query": {
+        "updated_after": "{{ config.updated_after }}",
+        "updated_before": "{{ config.updated_before }}"
       },
-      "schema": "schemas/conversation_rating.json",
-      "incremental": {
-        "cursor_field": "updated_at",
-        "client_filtered": true
-      }
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/conversation_rating.json"
     },
     {
-      "name": "conversation_assignment",
-      "method": "GET",
-      "path": "/__legacy_hook/conversation_assignment",
-      "records": {
-        "path": "data"
-      },
-      "schema": "schemas/conversation_assignment.json",
       "incremental": {
-        "cursor_field": "updated_at",
-        "client_filtered": true
-      }
+        "client_filtered": true,
+        "cursor_field": "updated_at"
+      },
+      "method": "GET",
+      "name": "conversation_assignment",
+      "path": "/conversation_export",
+      "projection": "passthrough",
+      "query": {
+        "updated_after": "{{ config.updated_after }}",
+        "updated_before": "{{ config.updated_before }}"
+      },
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/conversation_assignment.json"
     }
   ]
 }

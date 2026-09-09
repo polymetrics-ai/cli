@@ -37,10 +37,6 @@ const (
 	defaultMaxPages = 1
 )
 
-func init() {
-	engine.RegisterHooks("serpstat", func() engine.Hooks { return Hooks{} })
-}
-
 // Hooks is serpstat's Tier-2 hook set: StreamHook only (auth is fully
 // declarative via streams.json's api_key_query "token" param -- see docs.md
 // "Auth setup").
@@ -59,7 +55,7 @@ var jsonRPCMethod = map[string]string{
 // ReadStream implements engine.StreamHook, handling both declared streams
 // (domain_keywords, domain_competitors) with handled=true always -- the
 // declarative streams.json fallback is a structural "shadow" path never
-// exercised by production traffic (conformance's dynamic checks run with
+// exercised by production traffic (fixture execution checks run with
 // Hooks=nil, so it never reaches this hook at all).
 func (h Hooks) ReadStream(ctx context.Context, stream engine.StreamSpec, req connectors.ReadRequest, rt *engine.Runtime, emit func(connectors.Record) error) (bool, error) {
 	name := stream.Name

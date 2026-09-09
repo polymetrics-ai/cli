@@ -1,0 +1,210 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "allow_deletions": {
+      "type": "boolean"
+    },
+    "allow_force_pushes": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "allow_fork_syncing": {
+      "type": "boolean"
+    },
+    "block_creations": {
+      "type": "boolean"
+    },
+    "branch": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "enforce_admins": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "lock_branch": {
+      "type": "boolean"
+    },
+    "required_conversation_resolution": {
+      "type": "boolean"
+    },
+    "required_linear_history": {
+      "type": "boolean"
+    },
+    "required_pull_request_reviews": {
+      "additionalProperties": false,
+      "properties": {
+        "bypass_pull_request_allowances": {
+          "additionalProperties": false,
+          "properties": {
+            "apps": {
+              "items": {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "maxItems": 256,
+              "type": "array"
+            },
+            "teams": {
+              "items": {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "maxItems": 256,
+              "type": "array"
+            },
+            "users": {
+              "items": {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "maxItems": 256,
+              "type": "array"
+            }
+          },
+          "type": "object"
+        },
+        "dismiss_stale_reviews": {
+          "type": "boolean"
+        },
+        "dismissal_restrictions": {
+          "additionalProperties": false,
+          "properties": {
+            "apps": {
+              "items": {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "maxItems": 256,
+              "type": "array"
+            },
+            "teams": {
+              "items": {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "maxItems": 256,
+              "type": "array"
+            },
+            "users": {
+              "items": {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "maxItems": 256,
+              "type": "array"
+            }
+          },
+          "type": "object"
+        },
+        "require_code_owner_reviews": {
+          "type": "boolean"
+        },
+        "require_last_push_approval": {
+          "type": "boolean"
+        },
+        "required_approving_review_count": {
+          "type": "integer"
+        }
+      },
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "required_status_checks": {
+      "additionalProperties": false,
+      "properties": {
+        "checks": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "app_id": {
+                "type": "integer"
+              },
+              "context": {
+                "maxLength": 8192,
+                "type": "string"
+              }
+            },
+            "required": [
+              "context"
+            ],
+            "type": "object"
+          },
+          "maxItems": 256,
+          "type": "array"
+        },
+        "contexts": {
+          "items": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "maxItems": 256,
+          "type": "array"
+        },
+        "strict": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "strict",
+        "contexts"
+      ],
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "restrictions": {
+      "additionalProperties": false,
+      "properties": {
+        "apps": {
+          "items": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "maxItems": 256,
+          "type": "array"
+        },
+        "teams": {
+          "items": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "maxItems": 256,
+          "type": "array"
+        },
+        "users": {
+          "items": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "maxItems": 256,
+          "type": "array"
+        }
+      },
+      "required": [
+        "users",
+        "teams"
+      ],
+      "type": [
+        "object",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "branch",
+    "enforce_admins",
+    "required_pull_request_reviews",
+    "required_status_checks",
+    "restrictions"
+  ],
+  "type": "object"
+}

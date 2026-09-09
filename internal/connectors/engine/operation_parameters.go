@@ -40,25 +40,25 @@ func validateOperationParameterNumericBounds(parameter OperationParameter) error
 	}
 	typeName := strings.ToLower(strings.TrimSpace(parameter.Type))
 	if typeName != "integer" && typeName != "number" {
-		return fmt.Errorf("%s parameter %q numeric bounds require integer or number type", parameter.In, parameter.Name)
+		return diagnosticAt("", "parameter_numeric_type", "numeric bounds require integer or number type", fmt.Errorf("%s parameter %q numeric bounds require integer or number type", parameter.In, parameter.Name))
 	}
 	var minimum, maximum *big.Rat
 	if parameter.Minimum != nil {
 		var ok bool
 		minimum, ok = new(big.Rat).SetString(parameter.Minimum.String())
 		if !ok {
-			return fmt.Errorf("%s parameter %q has invalid minimum", parameter.In, parameter.Name)
+			return diagnosticAt("/minimum", "parameter_minimum_invalid", "minimum must be a valid number", fmt.Errorf("%s parameter %q has invalid minimum", parameter.In, parameter.Name))
 		}
 	}
 	if parameter.Maximum != nil {
 		var ok bool
 		maximum, ok = new(big.Rat).SetString(parameter.Maximum.String())
 		if !ok {
-			return fmt.Errorf("%s parameter %q has invalid maximum", parameter.In, parameter.Name)
+			return diagnosticAt("/maximum", "parameter_maximum_invalid", "maximum must be a valid number", fmt.Errorf("%s parameter %q has invalid maximum", parameter.In, parameter.Name))
 		}
 	}
 	if minimum != nil && maximum != nil && minimum.Cmp(maximum) > 0 {
-		return fmt.Errorf("%s parameter %q has contradictory numeric bounds", parameter.In, parameter.Name)
+		return diagnosticAt("", "parameter_numeric_bounds", "minimum must not exceed maximum", fmt.Errorf("%s parameter %q has contradictory numeric bounds", parameter.In, parameter.Name))
 	}
 	return nil
 }
@@ -193,7 +193,7 @@ func operationBinaryDownloadQuery(op OperationSpec, requested map[string]string)
 }
 
 func validateOperationParameterWireValue(op OperationSpec, parameter OperationParameter, location, value string) error {
-	if location == "query" && parameter.Required && strings.TrimSpace(value) == "" {
+	if location == "query" && parameter.Required && strings.TrimSpace(value) == "" && (op.REST == nil || op.REST.RequestInputs == nil) {
 		return fmt.Errorf("operation %q requires non-blank query parameter %q", op.ID, parameter.Name)
 	}
 	if err := safety.RejectDangerousChars(value, location+" parameter "+parameter.Name); err != nil {

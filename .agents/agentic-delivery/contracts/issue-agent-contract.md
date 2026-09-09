@@ -57,11 +57,11 @@ before implementation.
      deliberate parent seed commit first; use an empty commit only when a real scaffold file would be
      noise.
 8. For behavior changes, write or update a failing test before production code.
-9. For connector implementation lanes, confirm exactly one target connector before editing. If the
-   issue needs shared runtime/tooling, schema, generated-index, or unrelated connector changes,
-   stop the connector lane and split that work into a separate foundation issue/PR instead of
-   absorbing it into the connector PR. no-mistakes validation must treat this as a stop/ask-user
-   foundation split, not an auto-fixable connector diff.
+9. For connector implementation lanes, confirm a bounded named connector cohort before editing.
+   The issue must retain an immutable source-lock ledger and per-connector ownership/path matrix.
+   A shared runtime/tooling, schema, or generated-index foundation and its affected mappings may
+   be in the same bounded PR only after the Foundation Atlas check and with source evidence, TDD,
+   review, CI, and safety gates intact. Unrelated connector changes remain out of scope.
 10. Implement the smallest slice that satisfies the issue.
 11. Run targeted tests, then broader verification from the issue. For CLI feature work, verify
     runtime help (`pm help <topic>`, `pm <namespace>`, `pm <command> --help`), docs under
@@ -135,7 +135,7 @@ The parent PR into `main` always requires human approval.
 Every implementation PR must include:
 
 - issue link, or the complete generated no-mistakes delivery record when the PR is not issue-backed
-- connector implementation evidence when applicable: exactly one target connector, ownership guard evidence, changed-path compliance, and any foundation issue/PR path
+- connector implementation evidence when applicable: named cohort, immutable source-lock ledger, ownership/path matrix, changed-path compliance, Foundation Atlas disposition, and any in-PR shared-foundation scope
 - summary of changes
 - red/green/refactor evidence when behavior changed
 - GSD lifecycle evidence, including the `/gsd-*` or `scripts/gsd prompt ...` commands used and any

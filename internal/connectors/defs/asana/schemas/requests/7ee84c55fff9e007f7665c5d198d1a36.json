@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "data": {
+      "additionalProperties": false,
+      "properties": {
+        "attributable_to": {
+          "type": "string"
+        },
+        "billable_status": {
+          "type": "string"
+        },
+        "categories": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "description": {
+          "type": "string"
+        },
+        "duration_minutes": {
+          "type": "integer"
+        },
+        "entered_on": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "time_tracking_entry_gid": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "time_tracking_entry_gid",
+    "data"
+  ],
+  "type": "object"
+}

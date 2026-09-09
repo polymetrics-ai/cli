@@ -44,10 +44,6 @@ import (
 	"polymetrics.ai/internal/connectors/engine"
 )
 
-func init() {
-	engine.RegisterHooks("akeneo", func() engine.Hooks { return New() })
-}
-
 // Hooks is the akeneo hook set. It implements engine.AuthHook only.
 type Hooks struct {
 	// Client overrides the HTTP client used for the token exchange; nil uses

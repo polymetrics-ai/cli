@@ -1,44 +1,36 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "candidate_list_fraud_checks",
-  "type": "object",
   "properties": {
-    "id": {
-      "type": "string",
-      "description": "The unique identifier of this fraud check"
-    },
-    "candidateId": {
-      "type": "string",
-      "description": "The id of the candidate this fraud check belongs to"
-    },
     "applicationId": {
       "type": "string"
     },
+    "candidateId": {
+      "description": "The id of the candidate this fraud check belongs to",
+      "type": "string"
+    },
     "createdAt": {
-      "type": "string",
-      "description": "When this fraud check was performed"
+      "description": "When this fraud check was performed",
+      "type": "string"
     },
     "fraudSignals": {
-      "type": "array",
       "description": "The fraud signals detected during this fraud check",
       "items": {
-        "type": "object",
         "properties": {
-          "id": {
-            "type": "string",
-            "description": "The unique identifier of this fraud signal instance"
-          },
           "category": {
-            "type": "string",
-            "description": "The category of the fraud signal. Possible values include \"Social\", \"Automation\", \"Geographic\", and \"Spoofing\". Note: this field is unstable and may change over time."
-          },
-          "name": {
-            "type": "string",
-            "description": "A human-readable name for this fraud signal. Note: this field is unstable and may change over time."
+            "description": "The category of the fraud signal. Possible values include \"Social\", \"Automation\", \"Geographic\", and \"Spoofing\". Note: this field is unstable and may change over time.",
+            "type": "string"
           },
           "description": {
-            "type": "string",
-            "description": "A description of what this fraud signal means. Note: this field is unstable and may change over time."
+            "description": "A description of what this fraud signal means. Note: this field is unstable and may change over time.",
+            "type": "string"
+          },
+          "id": {
+            "description": "The unique identifier of this fraud signal instance",
+            "type": "string"
+          },
+          "name": {
+            "description": "A human-readable name for this fraud signal. Note: this field is unstable and may change over time.",
+            "type": "string"
           },
           "value": {
             "type": "string"
@@ -49,10 +41,18 @@
           "category",
           "name",
           "description"
-        ]
-      }
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "id": {
+      "description": "The unique identifier of this fraud check",
+      "type": "string"
     }
   },
+  "title": "candidate_list_fraud_checks",
+  "type": "object",
   "x-primary-key": [
     "id"
   ]

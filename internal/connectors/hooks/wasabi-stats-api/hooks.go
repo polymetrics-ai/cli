@@ -30,10 +30,6 @@ import (
 	"polymetrics.ai/internal/credential"
 )
 
-func init() {
-	engine.RegisterHooks("wasabi-stats-api", func() engine.Hooks { return Hooks{} })
-}
-
 // Hooks is the wasabi-stats-api hook set. It implements engine.AuthHook and
 // engine.RecordHook.
 type Hooks struct{}

@@ -36,7 +36,7 @@
     "mode": {
       "type": "string",
       "enum": ["fixture"],
-      "description": "Set to fixture to short-circuit all network access and use canned catalog/rows (test/conformance harness use only; never set in production config)."
+      "description": "Set to fixture to short-circuit all network access and use canned catalog/rows (test/execution-contract harness use only; never set in production config)."
     }
   }
 }

@@ -1,12 +1,6 @@
 {
   "tagline": "Read Crisp conversation resources through bounded, typed Wave 1 REST commands.",
   "usage": "pm crisp <conversations|conversation> <command> [flags]",
-  "source_cli": {
-    "name": "Crisp REST API Reference (V1)",
-    "docs": "https://docs.crisp.chat/references/rest-api/v1/",
-    "reference": "Official Postman Collection v2.1.0, retrieved 2026-08-05; ETag 6a6b6306-32de7",
-    "source": "provider_api"
-  },
   "groups": [
     {
       "id": "conversations",
@@ -54,7 +48,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "list_conversations",
-      "source_url": "https://docs.crisp.chat/static/data/collections/rest-api-v1.postman",
       "api_surface": [
         {
           "method": "GET",
@@ -82,9 +75,37 @@
           "summary": "Crisp conversation page size, bounded by the provider to 20 through 50.",
           "maps_to": "query.per_page",
           "values": [
-            "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30",
-            "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41",
-            "42", "43", "44", "45", "46", "47", "48", "49", "50"
+            "20",
+            "21",
+            "22",
+            "23",
+            "24",
+            "25",
+            "26",
+            "27",
+            "28",
+            "29",
+            "30",
+            "31",
+            "32",
+            "33",
+            "34",
+            "35",
+            "36",
+            "37",
+            "38",
+            "39",
+            "40",
+            "41",
+            "42",
+            "43",
+            "44",
+            "45",
+            "46",
+            "47",
+            "48",
+            "49",
+            "50"
           ]
         },
         {
@@ -99,21 +120,31 @@
           "type": "enum",
           "summary": "Crisp search interpretation.",
           "maps_to": "query.search_type",
-          "values": ["text", "segment", "filter"]
+          "values": [
+            "text",
+            "segment",
+            "filter"
+          ]
         },
         {
           "name": "search-operator",
           "type": "enum",
           "summary": "Boolean operator for filter search.",
           "maps_to": "query.search_operator",
-          "values": ["and", "or"]
+          "values": [
+            "and",
+            "or"
+          ]
         },
         {
           "name": "include-empty",
           "type": "enum",
           "summary": "Include conversations without messages (1) or not (0).",
           "maps_to": "query.include_empty",
-          "values": ["0", "1"]
+          "values": [
+            "0",
+            "1"
+          ]
         },
         {
           "name": "filter-inbox-id",
@@ -127,28 +158,40 @@
           "type": "enum",
           "summary": "Filter unread conversations (1) or leave disabled (0).",
           "maps_to": "query.filter_unread",
-          "values": ["0", "1"]
+          "values": [
+            "0",
+            "1"
+          ]
         },
         {
           "name": "filter-resolved",
           "type": "enum",
           "summary": "Filter resolved conversations (1) or leave disabled (0).",
           "maps_to": "query.filter_resolved",
-          "values": ["0", "1"]
+          "values": [
+            "0",
+            "1"
+          ]
         },
         {
           "name": "filter-not-resolved",
           "type": "enum",
           "summary": "Filter unresolved conversations (1) or leave disabled (0).",
           "maps_to": "query.filter_not_resolved",
-          "values": ["0", "1"]
+          "values": [
+            "0",
+            "1"
+          ]
         },
         {
           "name": "filter-mention",
           "type": "enum",
           "summary": "Filter conversations mentioning the token user (1) or leave disabled (0).",
           "maps_to": "query.filter_mention",
-          "values": ["0", "1"]
+          "values": [
+            "0",
+            "1"
+          ]
         },
         {
           "name": "filter-assigned",
@@ -162,7 +205,10 @@
           "type": "enum",
           "summary": "Filter conversations without an assigned user (1) or leave disabled (0).",
           "maps_to": "query.filter_unassigned",
-          "values": ["0", "1"]
+          "values": [
+            "0",
+            "1"
+          ]
         },
         {
           "name": "filter-date-start",
@@ -185,21 +231,30 @@
           "type": "enum",
           "summary": "Order by creation date (1) or retain the provider default (0).",
           "maps_to": "query.order_date_created",
-          "values": ["0", "1"]
+          "values": [
+            "0",
+            "1"
+          ]
         },
         {
           "name": "order-date-updated",
           "type": "enum",
           "summary": "Order by update date (1) or retain the provider default (0).",
           "maps_to": "query.order_date_updated",
-          "values": ["0", "1"]
+          "values": [
+            "0",
+            "1"
+          ]
         },
         {
           "name": "order-date-waiting",
           "type": "enum",
           "summary": "Order/filter by longest waiting date (1) or retain the provider default (0).",
           "maps_to": "query.order_date_waiting",
-          "values": ["0", "1"]
+          "values": [
+            "0",
+            "1"
+          ]
         }
       ],
       "constraints": [
@@ -222,11 +277,27 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "suggested_conversation_segments",
-      "source_url": "https://docs.crisp.chat/static/data/collections/rest-api-v1.postman",
-      "api_surface": [{"method": "GET", "path": "/v1/website/{website_id}/conversations/suggest/segments/{page_number}"}],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/website/{website_id}/conversations/suggest/segments/{page_number}"
+        }
+      ],
       "flags": [
-        {"name": "website-id", "type": "string", "summary": "Crisp website identifier.", "maps_to": "config.website_id", "allow_empty": false},
-        {"name": "page-number", "type": "integer", "summary": "Positive Crisp page number; defaults to 1 from config.", "maps_to": "config.page_number", "minimum": 1}
+        {
+          "name": "website-id",
+          "type": "string",
+          "summary": "Crisp website identifier.",
+          "maps_to": "config.website_id",
+          "allow_empty": false
+        },
+        {
+          "name": "page-number",
+          "type": "integer",
+          "summary": "Positive Crisp page number; defaults to 1 from config.",
+          "maps_to": "config.page_number",
+          "minimum": 1
+        }
       ]
     },
     {
@@ -235,11 +306,27 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "suggested_conversation_data",
-      "source_url": "https://docs.crisp.chat/static/data/collections/rest-api-v1.postman",
-      "api_surface": [{"method": "GET", "path": "/v1/website/{website_id}/conversations/suggest/data/{page_number}"}],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/website/{website_id}/conversations/suggest/data/{page_number}"
+        }
+      ],
       "flags": [
-        {"name": "website-id", "type": "string", "summary": "Crisp website identifier.", "maps_to": "config.website_id", "allow_empty": false},
-        {"name": "page-number", "type": "integer", "summary": "Positive Crisp page number; defaults to 1 from config.", "maps_to": "config.page_number", "minimum": 1}
+        {
+          "name": "website-id",
+          "type": "string",
+          "summary": "Crisp website identifier.",
+          "maps_to": "config.website_id",
+          "allow_empty": false
+        },
+        {
+          "name": "page-number",
+          "type": "integer",
+          "summary": "Positive Crisp page number; defaults to 1 from config.",
+          "maps_to": "config.page_number",
+          "minimum": 1
+        }
       ]
     },
     {
@@ -248,12 +335,34 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "spam_conversations",
-      "source_url": "https://docs.crisp.chat/static/data/collections/rest-api-v1.postman",
-      "api_surface": [{"method": "GET", "path": "/v1/website/{website_id}/conversations/spams/{page_number}"}],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/website/{website_id}/conversations/spams/{page_number}"
+        }
+      ],
       "flags": [
-        {"name": "website-id", "type": "string", "summary": "Crisp website identifier.", "maps_to": "config.website_id", "allow_empty": false},
-        {"name": "page-number", "type": "integer", "summary": "Positive Crisp page number; defaults to 1 from config.", "maps_to": "config.page_number", "minimum": 1},
-        {"name": "filter-type", "type": "string", "summary": "Optional Crisp spam type filter, such as email.", "maps_to": "query.filter_type", "allow_empty": false}
+        {
+          "name": "website-id",
+          "type": "string",
+          "summary": "Crisp website identifier.",
+          "maps_to": "config.website_id",
+          "allow_empty": false
+        },
+        {
+          "name": "page-number",
+          "type": "integer",
+          "summary": "Positive Crisp page number; defaults to 1 from config.",
+          "maps_to": "config.page_number",
+          "minimum": 1
+        },
+        {
+          "name": "filter-type",
+          "type": "string",
+          "summary": "Optional Crisp spam type filter, such as email.",
+          "maps_to": "query.filter_type",
+          "allow_empty": false
+        }
       ]
     },
     {
@@ -262,11 +371,27 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "spam_conversation_content",
-      "source_url": "https://docs.crisp.chat/static/data/collections/rest-api-v1.postman",
-      "api_surface": [{"method": "GET", "path": "/v1/website/{website_id}/conversations/spam/{spam_id}/content"}],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/website/{website_id}/conversations/spam/{spam_id}/content"
+        }
+      ],
       "flags": [
-        {"name": "website-id", "type": "string", "summary": "Crisp website identifier.", "maps_to": "config.website_id", "allow_empty": false},
-        {"name": "spam-id", "type": "string", "summary": "Crisp spam conversation identifier.", "maps_to": "config.spam_id", "allow_empty": false}
+        {
+          "name": "website-id",
+          "type": "string",
+          "summary": "Crisp website identifier.",
+          "maps_to": "config.website_id",
+          "allow_empty": false
+        },
+        {
+          "name": "spam-id",
+          "type": "string",
+          "summary": "Crisp spam conversation identifier.",
+          "maps_to": "config.spam_id",
+          "allow_empty": false
+        }
       ]
     },
     {
@@ -275,11 +400,27 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "conversation",
-      "source_url": "https://docs.crisp.chat/static/data/collections/rest-api-v1.postman",
-      "api_surface": [{"method": "GET", "path": "/v1/website/{website_id}/conversation/{session_id}"}],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/website/{website_id}/conversation/{session_id}"
+        }
+      ],
       "flags": [
-        {"name": "website-id", "type": "string", "summary": "Crisp website identifier.", "maps_to": "config.website_id", "allow_empty": false},
-        {"name": "session-id", "type": "string", "summary": "Crisp conversation session identifier.", "maps_to": "config.session_id", "allow_empty": false}
+        {
+          "name": "website-id",
+          "type": "string",
+          "summary": "Crisp website identifier.",
+          "maps_to": "config.website_id",
+          "allow_empty": false
+        },
+        {
+          "name": "session-id",
+          "type": "string",
+          "summary": "Crisp conversation session identifier.",
+          "maps_to": "config.session_id",
+          "allow_empty": false
+        }
       ]
     },
     {
@@ -288,14 +429,48 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "conversation_messages",
-      "source_url": "https://docs.crisp.chat/static/data/collections/rest-api-v1.postman",
-      "api_surface": [{"method": "GET", "path": "/v1/website/{website_id}/conversation/{session_id}/messages"}],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/website/{website_id}/conversation/{session_id}/messages"
+        }
+      ],
       "flags": [
-        {"name": "website-id", "type": "string", "summary": "Crisp website identifier.", "maps_to": "config.website_id", "allow_empty": false},
-        {"name": "session-id", "type": "string", "summary": "Crisp conversation session identifier.", "maps_to": "config.session_id", "allow_empty": false},
-        {"name": "timestamp-before", "type": "string", "summary": "Return a message batch ending before this Crisp timestamp.", "maps_to": "query.timestamp_before", "allow_empty": false},
-        {"name": "timestamp-after", "type": "string", "summary": "Return a message batch starting after this Crisp timestamp.", "maps_to": "query.timestamp_after", "allow_empty": false},
-        {"name": "timestamp-around", "type": "string", "summary": "Return a message batch centered around this Crisp timestamp.", "maps_to": "query.timestamp_around", "allow_empty": false}
+        {
+          "name": "website-id",
+          "type": "string",
+          "summary": "Crisp website identifier.",
+          "maps_to": "config.website_id",
+          "allow_empty": false
+        },
+        {
+          "name": "session-id",
+          "type": "string",
+          "summary": "Crisp conversation session identifier.",
+          "maps_to": "config.session_id",
+          "allow_empty": false
+        },
+        {
+          "name": "timestamp-before",
+          "type": "string",
+          "summary": "Return a message batch ending before this Crisp timestamp.",
+          "maps_to": "query.timestamp_before",
+          "allow_empty": false
+        },
+        {
+          "name": "timestamp-after",
+          "type": "string",
+          "summary": "Return a message batch starting after this Crisp timestamp.",
+          "maps_to": "query.timestamp_after",
+          "allow_empty": false
+        },
+        {
+          "name": "timestamp-around",
+          "type": "string",
+          "summary": "Return a message batch centered around this Crisp timestamp.",
+          "maps_to": "query.timestamp_around",
+          "allow_empty": false
+        }
       ]
     },
     {
@@ -304,12 +479,34 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "conversation_message",
-      "source_url": "https://docs.crisp.chat/static/data/collections/rest-api-v1.postman",
-      "api_surface": [{"method": "GET", "path": "/v1/website/{website_id}/conversation/{session_id}/message/{fingerprint}"}],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/website/{website_id}/conversation/{session_id}/message/{fingerprint}"
+        }
+      ],
       "flags": [
-        {"name": "website-id", "type": "string", "summary": "Crisp website identifier.", "maps_to": "config.website_id", "allow_empty": false},
-        {"name": "session-id", "type": "string", "summary": "Crisp conversation session identifier.", "maps_to": "config.session_id", "allow_empty": false},
-        {"name": "fingerprint", "type": "string", "summary": "Crisp message fingerprint.", "maps_to": "config.fingerprint", "allow_empty": false}
+        {
+          "name": "website-id",
+          "type": "string",
+          "summary": "Crisp website identifier.",
+          "maps_to": "config.website_id",
+          "allow_empty": false
+        },
+        {
+          "name": "session-id",
+          "type": "string",
+          "summary": "Crisp conversation session identifier.",
+          "maps_to": "config.session_id",
+          "allow_empty": false
+        },
+        {
+          "name": "fingerprint",
+          "type": "string",
+          "summary": "Crisp message fingerprint.",
+          "maps_to": "config.fingerprint",
+          "allow_empty": false
+        }
       ]
     },
     {
@@ -318,11 +515,27 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "conversation_routing",
-      "source_url": "https://docs.crisp.chat/static/data/collections/rest-api-v1.postman",
-      "api_surface": [{"method": "GET", "path": "/v1/website/{website_id}/conversation/{session_id}/routing"}],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/website/{website_id}/conversation/{session_id}/routing"
+        }
+      ],
       "flags": [
-        {"name": "website-id", "type": "string", "summary": "Crisp website identifier.", "maps_to": "config.website_id", "allow_empty": false},
-        {"name": "session-id", "type": "string", "summary": "Crisp conversation session identifier.", "maps_to": "config.session_id", "allow_empty": false}
+        {
+          "name": "website-id",
+          "type": "string",
+          "summary": "Crisp website identifier.",
+          "maps_to": "config.website_id",
+          "allow_empty": false
+        },
+        {
+          "name": "session-id",
+          "type": "string",
+          "summary": "Crisp conversation session identifier.",
+          "maps_to": "config.session_id",
+          "allow_empty": false
+        }
       ]
     },
     {
@@ -331,11 +544,27 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "conversation_meta",
-      "source_url": "https://docs.crisp.chat/static/data/collections/rest-api-v1.postman",
-      "api_surface": [{"method": "GET", "path": "/v1/website/{website_id}/conversation/{session_id}/meta"}],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/website/{website_id}/conversation/{session_id}/meta"
+        }
+      ],
       "flags": [
-        {"name": "website-id", "type": "string", "summary": "Crisp website identifier.", "maps_to": "config.website_id", "allow_empty": false},
-        {"name": "session-id", "type": "string", "summary": "Crisp conversation session identifier.", "maps_to": "config.session_id", "allow_empty": false}
+        {
+          "name": "website-id",
+          "type": "string",
+          "summary": "Crisp website identifier.",
+          "maps_to": "config.website_id",
+          "allow_empty": false
+        },
+        {
+          "name": "session-id",
+          "type": "string",
+          "summary": "Crisp conversation session identifier.",
+          "maps_to": "config.session_id",
+          "allow_empty": false
+        }
       ]
     },
     {
@@ -344,12 +573,34 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "conversation_original_message",
-      "source_url": "https://docs.crisp.chat/static/data/collections/rest-api-v1.postman",
-      "api_surface": [{"method": "GET", "path": "/v1/website/{website_id}/conversation/{session_id}/original/{original_id}"}],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/website/{website_id}/conversation/{session_id}/original/{original_id}"
+        }
+      ],
       "flags": [
-        {"name": "website-id", "type": "string", "summary": "Crisp website identifier.", "maps_to": "config.website_id", "allow_empty": false},
-        {"name": "session-id", "type": "string", "summary": "Crisp conversation session identifier.", "maps_to": "config.session_id", "allow_empty": false},
-        {"name": "original-id", "type": "string", "summary": "Crisp original-message identifier.", "maps_to": "config.original_id", "allow_empty": false}
+        {
+          "name": "website-id",
+          "type": "string",
+          "summary": "Crisp website identifier.",
+          "maps_to": "config.website_id",
+          "allow_empty": false
+        },
+        {
+          "name": "session-id",
+          "type": "string",
+          "summary": "Crisp conversation session identifier.",
+          "maps_to": "config.session_id",
+          "allow_empty": false
+        },
+        {
+          "name": "original-id",
+          "type": "string",
+          "summary": "Crisp original-message identifier.",
+          "maps_to": "config.original_id",
+          "allow_empty": false
+        }
       ]
     },
     {
@@ -358,12 +609,34 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "conversation_pages",
-      "source_url": "https://docs.crisp.chat/static/data/collections/rest-api-v1.postman",
-      "api_surface": [{"method": "GET", "path": "/v1/website/{website_id}/conversation/{session_id}/pages/{page_number}"}],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/website/{website_id}/conversation/{session_id}/pages/{page_number}"
+        }
+      ],
       "flags": [
-        {"name": "website-id", "type": "string", "summary": "Crisp website identifier.", "maps_to": "config.website_id", "allow_empty": false},
-        {"name": "session-id", "type": "string", "summary": "Crisp conversation session identifier.", "maps_to": "config.session_id", "allow_empty": false},
-        {"name": "page-number", "type": "integer", "summary": "Positive Crisp page number; defaults to 1 from config.", "maps_to": "config.page_number", "minimum": 1}
+        {
+          "name": "website-id",
+          "type": "string",
+          "summary": "Crisp website identifier.",
+          "maps_to": "config.website_id",
+          "allow_empty": false
+        },
+        {
+          "name": "session-id",
+          "type": "string",
+          "summary": "Crisp conversation session identifier.",
+          "maps_to": "config.session_id",
+          "allow_empty": false
+        },
+        {
+          "name": "page-number",
+          "type": "integer",
+          "summary": "Positive Crisp page number; defaults to 1 from config.",
+          "maps_to": "config.page_number",
+          "minimum": 1
+        }
       ]
     },
     {
@@ -372,12 +645,34 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "conversation_events",
-      "source_url": "https://docs.crisp.chat/static/data/collections/rest-api-v1.postman",
-      "api_surface": [{"method": "GET", "path": "/v1/website/{website_id}/conversation/{session_id}/events/{page_number}"}],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/website/{website_id}/conversation/{session_id}/events/{page_number}"
+        }
+      ],
       "flags": [
-        {"name": "website-id", "type": "string", "summary": "Crisp website identifier.", "maps_to": "config.website_id", "allow_empty": false},
-        {"name": "session-id", "type": "string", "summary": "Crisp conversation session identifier.", "maps_to": "config.session_id", "allow_empty": false},
-        {"name": "page-number", "type": "integer", "summary": "Positive Crisp page number; defaults to 1 from config.", "maps_to": "config.page_number", "minimum": 1}
+        {
+          "name": "website-id",
+          "type": "string",
+          "summary": "Crisp website identifier.",
+          "maps_to": "config.website_id",
+          "allow_empty": false
+        },
+        {
+          "name": "session-id",
+          "type": "string",
+          "summary": "Crisp conversation session identifier.",
+          "maps_to": "config.session_id",
+          "allow_empty": false
+        },
+        {
+          "name": "page-number",
+          "type": "integer",
+          "summary": "Positive Crisp page number; defaults to 1 from config.",
+          "maps_to": "config.page_number",
+          "minimum": 1
+        }
       ]
     },
     {
@@ -386,12 +681,34 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "conversation_files",
-      "source_url": "https://docs.crisp.chat/static/data/collections/rest-api-v1.postman",
-      "api_surface": [{"method": "GET", "path": "/v1/website/{website_id}/conversation/{session_id}/files/{page_number}"}],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/website/{website_id}/conversation/{session_id}/files/{page_number}"
+        }
+      ],
       "flags": [
-        {"name": "website-id", "type": "string", "summary": "Crisp website identifier.", "maps_to": "config.website_id", "allow_empty": false},
-        {"name": "session-id", "type": "string", "summary": "Crisp conversation session identifier.", "maps_to": "config.session_id", "allow_empty": false},
-        {"name": "page-number", "type": "integer", "summary": "Positive Crisp page number; defaults to 1 from config.", "maps_to": "config.page_number", "minimum": 1}
+        {
+          "name": "website-id",
+          "type": "string",
+          "summary": "Crisp website identifier.",
+          "maps_to": "config.website_id",
+          "allow_empty": false
+        },
+        {
+          "name": "session-id",
+          "type": "string",
+          "summary": "Crisp conversation session identifier.",
+          "maps_to": "config.session_id",
+          "allow_empty": false
+        },
+        {
+          "name": "page-number",
+          "type": "integer",
+          "summary": "Positive Crisp page number; defaults to 1 from config.",
+          "maps_to": "config.page_number",
+          "minimum": 1
+        }
       ]
     },
     {
@@ -400,11 +717,27 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "conversation_state",
-      "source_url": "https://docs.crisp.chat/static/data/collections/rest-api-v1.postman",
-      "api_surface": [{"method": "GET", "path": "/v1/website/{website_id}/conversation/{session_id}/state"}],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/website/{website_id}/conversation/{session_id}/state"
+        }
+      ],
       "flags": [
-        {"name": "website-id", "type": "string", "summary": "Crisp website identifier.", "maps_to": "config.website_id", "allow_empty": false},
-        {"name": "session-id", "type": "string", "summary": "Crisp conversation session identifier.", "maps_to": "config.session_id", "allow_empty": false}
+        {
+          "name": "website-id",
+          "type": "string",
+          "summary": "Crisp website identifier.",
+          "maps_to": "config.website_id",
+          "allow_empty": false
+        },
+        {
+          "name": "session-id",
+          "type": "string",
+          "summary": "Crisp conversation session identifier.",
+          "maps_to": "config.session_id",
+          "allow_empty": false
+        }
       ]
     },
     {
@@ -413,11 +746,27 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "conversation_relations",
-      "source_url": "https://docs.crisp.chat/static/data/collections/rest-api-v1.postman",
-      "api_surface": [{"method": "GET", "path": "/v1/website/{website_id}/conversation/{session_id}/relations"}],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/website/{website_id}/conversation/{session_id}/relations"
+        }
+      ],
       "flags": [
-        {"name": "website-id", "type": "string", "summary": "Crisp website identifier.", "maps_to": "config.website_id", "allow_empty": false},
-        {"name": "session-id", "type": "string", "summary": "Crisp conversation session identifier.", "maps_to": "config.session_id", "allow_empty": false}
+        {
+          "name": "website-id",
+          "type": "string",
+          "summary": "Crisp website identifier.",
+          "maps_to": "config.website_id",
+          "allow_empty": false
+        },
+        {
+          "name": "session-id",
+          "type": "string",
+          "summary": "Crisp conversation session identifier.",
+          "maps_to": "config.session_id",
+          "allow_empty": false
+        }
       ]
     },
     {
@@ -426,11 +775,27 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "conversation_participants",
-      "source_url": "https://docs.crisp.chat/static/data/collections/rest-api-v1.postman",
-      "api_surface": [{"method": "GET", "path": "/v1/website/{website_id}/conversation/{session_id}/participants"}],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/website/{website_id}/conversation/{session_id}/participants"
+        }
+      ],
       "flags": [
-        {"name": "website-id", "type": "string", "summary": "Crisp website identifier.", "maps_to": "config.website_id", "allow_empty": false},
-        {"name": "session-id", "type": "string", "summary": "Crisp conversation session identifier.", "maps_to": "config.session_id", "allow_empty": false}
+        {
+          "name": "website-id",
+          "type": "string",
+          "summary": "Crisp website identifier.",
+          "maps_to": "config.website_id",
+          "allow_empty": false
+        },
+        {
+          "name": "session-id",
+          "type": "string",
+          "summary": "Crisp conversation session identifier.",
+          "maps_to": "config.session_id",
+          "allow_empty": false
+        }
       ]
     },
     {
@@ -439,11 +804,27 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "conversation_block_status",
-      "source_url": "https://docs.crisp.chat/static/data/collections/rest-api-v1.postman",
-      "api_surface": [{"method": "GET", "path": "/v1/website/{website_id}/conversation/{session_id}/block"}],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/website/{website_id}/conversation/{session_id}/block"
+        }
+      ],
       "flags": [
-        {"name": "website-id", "type": "string", "summary": "Crisp website identifier.", "maps_to": "config.website_id", "allow_empty": false},
-        {"name": "session-id", "type": "string", "summary": "Crisp conversation session identifier.", "maps_to": "config.session_id", "allow_empty": false}
+        {
+          "name": "website-id",
+          "type": "string",
+          "summary": "Crisp website identifier.",
+          "maps_to": "config.website_id",
+          "allow_empty": false
+        },
+        {
+          "name": "session-id",
+          "type": "string",
+          "summary": "Crisp conversation session identifier.",
+          "maps_to": "config.session_id",
+          "allow_empty": false
+        }
       ]
     },
     {
@@ -452,11 +833,27 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "conversation_verify_status",
-      "source_url": "https://docs.crisp.chat/static/data/collections/rest-api-v1.postman",
-      "api_surface": [{"method": "GET", "path": "/v1/website/{website_id}/conversation/{session_id}/verify"}],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/website/{website_id}/conversation/{session_id}/verify"
+        }
+      ],
       "flags": [
-        {"name": "website-id", "type": "string", "summary": "Crisp website identifier.", "maps_to": "config.website_id", "allow_empty": false},
-        {"name": "session-id", "type": "string", "summary": "Crisp conversation session identifier.", "maps_to": "config.session_id", "allow_empty": false}
+        {
+          "name": "website-id",
+          "type": "string",
+          "summary": "Crisp website identifier.",
+          "maps_to": "config.website_id",
+          "allow_empty": false
+        },
+        {
+          "name": "session-id",
+          "type": "string",
+          "summary": "Crisp conversation session identifier.",
+          "maps_to": "config.session_id",
+          "allow_empty": false
+        }
       ]
     },
     {
@@ -465,11 +862,27 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "conversation_browsing",
-      "source_url": "https://docs.crisp.chat/static/data/collections/rest-api-v1.postman",
-      "api_surface": [{"method": "GET", "path": "/v1/website/{website_id}/conversation/{session_id}/browsing"}],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/website/{website_id}/conversation/{session_id}/browsing"
+        }
+      ],
       "flags": [
-        {"name": "website-id", "type": "string", "summary": "Crisp website identifier.", "maps_to": "config.website_id", "allow_empty": false},
-        {"name": "session-id", "type": "string", "summary": "Crisp conversation session identifier.", "maps_to": "config.session_id", "allow_empty": false}
+        {
+          "name": "website-id",
+          "type": "string",
+          "summary": "Crisp website identifier.",
+          "maps_to": "config.website_id",
+          "allow_empty": false
+        },
+        {
+          "name": "session-id",
+          "type": "string",
+          "summary": "Crisp conversation session identifier.",
+          "maps_to": "config.session_id",
+          "allow_empty": false
+        }
       ]
     },
     {
@@ -478,11 +891,27 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "conversation_call",
-      "source_url": "https://docs.crisp.chat/static/data/collections/rest-api-v1.postman",
-      "api_surface": [{"method": "GET", "path": "/v1/website/{website_id}/conversation/{session_id}/call"}],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/website/{website_id}/conversation/{session_id}/call"
+        }
+      ],
       "flags": [
-        {"name": "website-id", "type": "string", "summary": "Crisp website identifier.", "maps_to": "config.website_id", "allow_empty": false},
-        {"name": "session-id", "type": "string", "summary": "Crisp conversation session identifier.", "maps_to": "config.session_id", "allow_empty": false}
+        {
+          "name": "website-id",
+          "type": "string",
+          "summary": "Crisp website identifier.",
+          "maps_to": "config.website_id",
+          "allow_empty": false
+        },
+        {
+          "name": "session-id",
+          "type": "string",
+          "summary": "Crisp conversation session identifier.",
+          "maps_to": "config.session_id",
+          "allow_empty": false
+        }
       ]
     }
   ],
@@ -493,7 +922,7 @@
     },
     {
       "name": "wave-1",
-      "summary": "Wave 1 exposes 21 read-only conversation GET operations; later provider operations remain explicitly blocked in api_surface.json."
+      "summary": "Wave 1 exposes 21 read-only conversation GET operations; later provider operations remain explicitly blocked in execution bundle."
     }
   ]
 }

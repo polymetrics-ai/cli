@@ -1,4 +1,0 @@
-{
-  "record": { "name": "Fixture Team" },
-  "expect": { "method": "POST", "path": "/teams" }
-}

@@ -1,0 +1,34 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "conan_package_reference": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "package_channel": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "package_name": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "package_username": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "package_version": {
+      "maxLength": 8192,
+      "type": "string"
+    }
+  },
+  "required": [
+    "conan_package_reference",
+    "package_channel",
+    "package_name",
+    "package_username",
+    "package_version"
+  ],
+  "type": "object"
+}

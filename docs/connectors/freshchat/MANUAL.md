@@ -188,7 +188,6 @@ SECURITY
 COMMAND SURFACE
   Read Freshchat data and safely plan Freshchat write actions without raw provider escape hatches.
   Usage: pm freshchat <account|agents|users|conversations|groups|channels|roles|outbound|reports|metrics|business-hours|csat|direct|binary> <command> [flags]
-  Source CLI: Freshchat API (Freshchat API docs ETag W/"26e4fd8b1fe01578eae1dbaff6b69224")
   Global flags:
     --credential (non-empty) (string): Credential profile name; never pass secret values as flags.: maps_to=config.credential
     --config (string_array): Connector config override as key=value; never pass secret values here.

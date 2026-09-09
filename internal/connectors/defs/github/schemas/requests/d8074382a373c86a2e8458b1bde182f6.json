@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "allowed_actions": {
+      "enum": [
+        "all",
+        "local_only",
+        "selected"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "enabled_repositories": {
+      "enum": [
+        "all",
+        "none",
+        "selected"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "org": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "sha_pinning_required": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "enabled_repositories",
+    "org"
+  ],
+  "type": "object"
+}

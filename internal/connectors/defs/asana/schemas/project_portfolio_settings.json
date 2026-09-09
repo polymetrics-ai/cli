@@ -1,0 +1,40 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "gid": {
+      "type": "string"
+    },
+    "is_access_control_inherited": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "portfolio": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "project": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "resource_type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "gid"
+  ],
+  "title": "project_portfolio_settings",
+  "type": "object",
+  "x-primary-key": [
+    "gid"
+  ]
+}

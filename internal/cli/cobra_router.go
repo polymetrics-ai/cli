@@ -11,7 +11,23 @@ import (
 
 	"polymetrics.ai/internal/app"
 	"polymetrics.ai/internal/config"
+	"polymetrics.ai/internal/connectors"
 )
+
+// cobraRegistrySource keeps construction scoped to one fresh command tree.
+// The factory is instance-owned; it never caches a registry or command verdict.
+type cobraRegistrySource struct {
+	registry *connectors.Registry
+	fallback func() *connectors.Registry
+}
+
+func registrySource(registries []*connectors.Registry) cobraRegistrySource {
+	source := cobraRegistrySource{fallback: appRegistry}
+	if len(registries) == 1 {
+		source.registry = registries[0]
+	}
+	return source
+}
 
 type cobraLegacyHandler func(context.Context, string, []string, io.Writer, bool) error
 type cobraLegacyManualResolver func([]string) (string, bool)
@@ -42,7 +58,19 @@ func markCobraLegacyError(err error) error {
 	return &cobraLegacyError{err: err}
 }
 
-func newRootCmd(ctx context.Context, cfg config.Config, stdout, stderr io.Writer) *cobra.Command {
+func newRootCmd(ctx context.Context, cfg config.Config, stdout, stderr io.Writer, candidates ...appOpeners) *cobra.Command {
+	openers := selectAppOpeners(candidates...)
+	source := cobraRegistrySource{registry: openers.registry, fallback: openers.registryFallback}
+	if source.fallback == nil {
+		source.fallback = appRegistry
+	}
+	if source.registry == nil {
+		source.registry = source.fallback()
+	}
+	registry := source.registry
+	if openers.mode == appOpenerProduction {
+		openers.registry = registry
+	}
 	root := cfg.Root
 	jsonOut := cfg.JSON
 	cmd := &cobra.Command{
@@ -54,24 +82,24 @@ func newRootCmd(ctx context.Context, cfg config.Config, stdout, stderr io.Writer
 		SilenceUsage:       true,
 		RunE: func(_ *cobra.Command, args []string) error {
 			if len(args) == 0 || isRootManualArg(args[0]) {
-				return markCobraLegacyError(writeRootManual(stdout, jsonOut))
+				return markCobraLegacyError(writeRootManualWithRegistry(stdout, jsonOut, registry))
 			}
 			if len(args) > 1 && isHelpArg(args[1]) {
-				if isDynamicConnectorCommand(args[0]) {
-					return markCobraLegacyError(runMaybeConnectorCommand(ctx, root, args[0], args[1:], stdout, stderr, jsonOut))
+				if isDynamicConnectorCommandWithRegistry(args[0], registry) {
+					return markCobraLegacyError(runMaybeConnectorCommandWithRegistry(ctx, root, args[0], args[1:], stdout, stderr, jsonOut, registry, openers))
 				}
 				return markCobraLegacyError(usageErrorf("unknown command %q", args[0]))
 			}
-			return markCobraLegacyError(runMaybeConnectorCommand(ctx, root, args[0], args[1:], stdout, stderr, jsonOut))
+			return markCobraLegacyError(runMaybeConnectorCommandWithRegistry(ctx, root, args[0], args[1:], stdout, stderr, jsonOut, registry, openers))
 		},
 	}
 	cmd.SetOut(stdout)
 	cmd.SetErr(stderr)
 	cmd.PersistentFlags().String("root", root, "project root (parsed by the legacy global parser)")
 	cmd.PersistentFlags().Bool("json", jsonOut, "write machine-readable JSON output (parsed by the legacy global parser)")
-	setManualHelp(cmd, "", stdout, jsonOut)
-	for _, spec := range cobraLegacyCommands(cfg, stderr) {
-		cmd.AddCommand(newLegacyCobraCommand(ctx, root, stdout, jsonOut, spec))
+	source.setManualHelp(cmd, "", stdout, jsonOut)
+	for _, spec := range cobraLegacyCommandsWithRegistry(cfg, openers, registry, stderr) {
+		cmd.AddCommand(source.newLegacyCommand(ctx, root, stdout, jsonOut, spec))
 	}
 	return cmd
 }
@@ -88,7 +116,15 @@ func executeRootCmd(cmd *cobra.Command, args []string) error {
 	return err
 }
 
-func cobraLegacyCommands(cfg config.Config, stderrWriters ...io.Writer) []cobraLegacyCommand {
+func cobraLegacyCommands(cfg config.Config, openers appOpeners, stderrWriters ...io.Writer) []cobraLegacyCommand {
+	registry := openers.registry
+	if registry == nil {
+		registry = appRegistry()
+	}
+	return cobraLegacyCommandsWithRegistry(cfg, openers, registry, stderrWriters...)
+}
+
+func cobraLegacyCommandsWithRegistry(cfg config.Config, openers appOpeners, registry *connectors.Registry, stderrWriters ...io.Writer) []cobraLegacyCommand {
 	stderr := io.Discard
 	if len(stderrWriters) > 0 && stderrWriters[0] != nil {
 		stderr = stderrWriters[0]
@@ -97,25 +133,29 @@ func cobraLegacyCommands(cfg config.Config, stderrWriters ...io.Writer) []cobraL
 		{name: "init", handler: func(_ context.Context, root string, _ []string, stdout io.Writer, jsonOut bool) error {
 			return runInit(root, stdout, jsonOut)
 		}},
-		{name: "help", handler: runManualAlias},
-		{name: "man", handler: runManualAlias},
+		{name: "help", handler: func(_ context.Context, _ string, args []string, stdout io.Writer, jsonOut bool) error {
+			return runManualAliasWithRegistry(args, stdout, jsonOut, registry)
+		}},
+		{name: "man", handler: func(_ context.Context, _ string, args []string, stdout io.Writer, jsonOut bool) error {
+			return runManualAliasWithRegistry(args, stdout, jsonOut, registry)
+		}},
 		{name: "connectors", handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
-			return runConnectors(ctx, root, args, stdout, stderr, jsonOut)
+			return runConnectorsWithRegistry(ctx, root, args, stdout, stderr, jsonOut, registry)
 		}},
 		{name: "credentials", handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
-			return withApp(root, func(a *app.App) error { return runCredentials(ctx, a, args, stdout, jsonOut) })
+			return withApp(openers, root, func(a *app.App) error { return runCredentials(ctx, a, args, stdout, jsonOut) })
 		}},
 		{name: "connections", handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
-			return withApp(root, func(a *app.App) error { return runConnections(ctx, a, args, stdout, jsonOut) })
+			return withApp(openers, root, func(a *app.App) error { return runConnections(ctx, a, args, stdout, jsonOut) })
 		}},
 		{name: "catalog", handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
-			return withApp(root, func(a *app.App) error { return runCatalog(ctx, a, args, stdout, jsonOut) })
+			return withApp(openers, root, func(a *app.App) error { return runCatalog(ctx, a, args, stdout, jsonOut) })
 		}},
 		{name: "etl", manualResolver: etlTransportManualCommand, handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
-			return withApp(root, func(a *app.App) error { return runETL(ctx, a, args, stdout, jsonOut, cfg) })
+			return withApp(openers, root, func(a *app.App) error { return runETL(ctx, a, args, stdout, jsonOut, cfg) })
 		}},
 		{name: "query", handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
-			return withApp(root, func(a *app.App) error { return runQuery(ctx, a, args, stdout, jsonOut) })
+			return withApp(openers, root, func(a *app.App) error { return runQuery(ctx, a, args, stdout, jsonOut) })
 		}},
 		{name: "reverse", handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
 			approval, err := prepareReverseRunApproval(args, os.Stdin)
@@ -123,9 +163,9 @@ func cobraLegacyCommands(cfg config.Config, stderrWriters ...io.Writer) []cobraL
 				return err
 			}
 			if approval.supplied {
-				return withReverseExecutionApp(root, func(a *app.App) error { return runReverse(ctx, a, args, approval, stdout, jsonOut) })
+				return withReverseExecutionApp(openers, root, func(a *app.App) error { return runReverse(ctx, a, args, approval, stdout, jsonOut) })
 			}
-			return withApp(root, func(a *app.App) error { return runReverse(ctx, a, args, approval, stdout, jsonOut) })
+			return withApp(openers, root, func(a *app.App) error { return runReverse(ctx, a, args, approval, stdout, jsonOut) })
 		}},
 		{name: "agent", handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
 			return runAgent(ctx, cfg, root, args, stdout, jsonOut)
@@ -134,19 +174,19 @@ func cobraLegacyCommands(cfg config.Config, stderrWriters ...io.Writer) []cobraL
 			return runRuntime(ctx, cfg, args, stdout, jsonOut)
 		}},
 		{name: "flow", handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
-			return withApp(root, func(a *app.App) error { return runFlow(ctx, cfg, a, args, stdout, jsonOut) })
+			return withApp(openers, root, func(a *app.App) error { return runFlow(ctx, cfg, a, args, stdout, jsonOut) })
 		}},
 		{name: "extract", hidden: true, handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
-			return withApp(root, func(a *app.App) error { return runExtract(ctx, a, cfg, root, args, stdout, jsonOut) })
+			return withApp(openers, root, func(a *app.App) error { return runExtract(ctx, a, cfg, root, args, stdout, jsonOut) })
 		}},
 		{name: "perf", handler: func(ctx context.Context, _ string, args []string, stdout io.Writer, jsonOut bool) error {
 			return runPerf(ctx, cfg, args, stdout, jsonOut)
 		}},
 		{name: "docs", handler: func(_ context.Context, _ string, args []string, stdout io.Writer, _ bool) error {
-			return runDocs(args, stdout)
+			return runDocsWithRegistry(args, stdout, registry)
 		}},
 		{name: "skills", handler: func(_ context.Context, _ string, args []string, stdout io.Writer, jsonOut bool) error {
-			return runSkills(args, stdout, jsonOut)
+			return runSkillsWithRegistry(args, stdout, jsonOut, registry)
 		}},
 		{name: "version", handler: func(_ context.Context, _ string, args []string, stdout io.Writer, jsonOut bool) error {
 			return runVersion(args, stdout, jsonOut)
@@ -155,7 +195,7 @@ func cobraLegacyCommands(cfg config.Config, stderrWriters ...io.Writer) []cobraL
 			return runRLM(ctx, cfg, root, args, stdout, jsonOut)
 		}},
 		{name: "schedule", handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
-			return runSchedule(ctx, cfg, root, args, stdout, jsonOut)
+			return runSchedule(ctx, cfg, root, args, stdout, jsonOut, openers)
 		}},
 		{name: "worker", hidden: true, handler: func(ctx context.Context, _ string, args []string, stdout io.Writer, jsonOut bool) error {
 			return runWorker(ctx, cfg, args, stdout, jsonOut)
@@ -163,7 +203,15 @@ func cobraLegacyCommands(cfg config.Config, stderrWriters ...io.Writer) []cobraL
 	}
 }
 
-func newLegacyCobraCommand(ctx context.Context, root string, stdout io.Writer, jsonOut bool, spec cobraLegacyCommand) *cobra.Command {
+func newLegacyCobraCommand(ctx context.Context, root string, stdout io.Writer, jsonOut bool, spec cobraLegacyCommand, registries ...*connectors.Registry) *cobra.Command {
+	return registrySource(registries).newLegacyCommand(ctx, root, stdout, jsonOut, spec)
+}
+
+func (source cobraRegistrySource) newLegacyCommand(ctx context.Context, root string, stdout io.Writer, jsonOut bool, spec cobraLegacyCommand) *cobra.Command {
+	registry := source.registry
+	if registry == nil {
+		registry = source.fallback()
+	}
 	cmd := &cobra.Command{
 		Use:                spec.name,
 		Hidden:             spec.hidden,
@@ -173,7 +221,7 @@ func newLegacyCobraCommand(ctx context.Context, root string, stdout io.Writer, j
 		SilenceUsage:       true,
 		RunE: func(_ *cobra.Command, args []string) error {
 			if len(args) > 0 && isHelpArg(args[0]) {
-				return markCobraLegacyError(writeManual(spec.name, stdout, jsonOut))
+				return markCobraLegacyError(writeManualWithRegistry(spec.name, stdout, jsonOut, registry))
 			}
 			if spec.manualResolver != nil {
 				if command, ok := spec.manualResolver(args); ok {
@@ -181,45 +229,58 @@ func newLegacyCobraCommand(ctx context.Context, root string, stdout io.Writer, j
 				}
 			}
 			if containsHelpFlag(args) {
-				// All legacy leaves share static manuals. Resolve a help request before
-				// the handler so it cannot open project state, validate required flags,
-				// read credentials, or execute a command just to describe its flags.
 				if manualDocumentsInvocation(spec.name, args) {
-					return markCobraLegacyError(writeManual(spec.name, stdout, jsonOut))
+					return markCobraLegacyError(writeManualWithRegistry(spec.name, stdout, jsonOut, registry))
 				}
 				return markCobraLegacyError(usageErrorf("unknown command %q", strings.Join(commandPath(args), " ")))
 			}
 			if len(args) == 0 && isManualCommand(spec.name) {
-				return markCobraLegacyError(writeManual(spec.name, stdout, jsonOut))
+				return markCobraLegacyError(writeManualWithRegistry(spec.name, stdout, jsonOut, registry))
 			}
 			return markCobraLegacyError(spec.handler(ctx, root, args, stdout, jsonOut))
 		},
 	}
-	setManualHelp(cmd, spec.name, stdout, jsonOut)
+	cobraRegistrySource{registry: registry, fallback: source.fallback}.setManualHelp(cmd, spec.name, stdout, jsonOut)
 	return cmd
 }
 
 func runManualAlias(_ context.Context, _ string, args []string, stdout io.Writer, jsonOut bool) error {
-	if len(args) == 0 {
-		return writeRootManual(stdout, jsonOut)
-	}
-	return runHelp(args, stdout, jsonOut)
+	return runManualAliasWithRegistry(args, stdout, jsonOut, appRegistry())
 }
 
-func setManualHelp(cmd *cobra.Command, topic string, stdout io.Writer, jsonOut bool) {
+func runManualAliasWithRegistry(args []string, stdout io.Writer, jsonOut bool, registry *connectors.Registry) error {
+	if len(args) == 0 {
+		return writeRootManualWithRegistry(stdout, jsonOut, registry)
+	}
+	return runHelpWithRegistry(args, stdout, jsonOut, registry)
+}
+
+func setManualHelp(cmd *cobra.Command, topic string, stdout io.Writer, jsonOut bool, registries ...*connectors.Registry) {
+	registrySource(registries).setManualHelp(cmd, topic, stdout, jsonOut)
+}
+
+func (source cobraRegistrySource) setManualHelp(cmd *cobra.Command, topic string, stdout io.Writer, jsonOut bool) {
+	registry := source.registry
+	if registry == nil {
+		registry = source.fallback()
+	}
 	cmd.SetHelpFunc(func(_ *cobra.Command, _ []string) {
-		_ = writeManualTopic(topic, stdout, jsonOut)
+		_ = writeManualTopicWithRegistry(topic, stdout, jsonOut, registry)
 	})
 	cmd.SetUsageFunc(func(_ *cobra.Command) error {
-		return writeManualTopic(topic, stdout, jsonOut)
+		return writeManualTopicWithRegistry(topic, stdout, jsonOut, registry)
 	})
 }
 
 func writeManualTopic(topic string, stdout io.Writer, jsonOut bool) error {
+	return writeManualTopicWithRegistry(topic, stdout, jsonOut, appRegistry())
+}
+
+func writeManualTopicWithRegistry(topic string, stdout io.Writer, jsonOut bool, registry *connectors.Registry) error {
 	if topic == "" {
-		return writeRootManual(stdout, jsonOut)
+		return writeRootManualWithRegistry(stdout, jsonOut, registry)
 	}
-	return writeManual(topic, stdout, jsonOut)
+	return writeManualWithRegistry(topic, stdout, jsonOut, registry)
 }
 
 func lookupTopLevelCommand(root *cobra.Command, name string) *cobra.Command {

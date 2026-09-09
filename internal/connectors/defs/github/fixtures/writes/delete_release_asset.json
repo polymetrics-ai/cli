@@ -1,7 +1,0 @@
-{
-  "record": { "asset_id": 1 },
-  "expect": {
-    "method": "DELETE",
-    "path": "/repos/synthetic-conformance-value/synthetic-conformance-value/releases/assets/1"
-  }
-}

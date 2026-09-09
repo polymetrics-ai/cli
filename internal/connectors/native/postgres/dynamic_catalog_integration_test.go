@@ -171,7 +171,7 @@ func TestPostgresDynamicTypedCatalogUsesLiveMetadata(t *testing.T) {
 // registered executor rather than a connector.Read compatibility path.
 func assertPostgresRegisteredSnapshotTransport(t *testing.T, ctx context.Context, connector native.Connector, endpoint dbtest.Endpoint) {
 	t.Helper()
-	registry := synctransport.NewRegistry(postgresSnapshotTransportVerifier{})
+	registry := synctransport.NewRegistry()
 	if err := native.RegisterPollingTransportSource(registry, connector); err != nil {
 		t.Fatalf("register PostgreSQL polling source: %v", err)
 	}
@@ -397,12 +397,6 @@ var postgresSnapshotTransportDestinationReference = connectors.TransportExecutor
 	ID:     "postgres_snapshot_integration_destination",
 }
 
-type postgresSnapshotTransportVerifier struct{}
-
-func (postgresSnapshotTransportVerifier) VerifyTransportConformance(synctransport.ConformanceVerification) error {
-	return nil
-}
-
 // postgresSnapshotTransportDestination is deliberately inert: it exists only
 // to satisfy source-registry preflight in the live source test. It is never
 // invoked as an apply path.
@@ -446,7 +440,6 @@ func (postgresSnapshotTransportDestination) Definition() connectors.Definition {
 				Ordering:    connectors.DeliveryOrderingSource,
 				Deletes:     connectors.DeliveryDeletesUnavailable,
 			},
-			Conformance:     connectors.ConformanceEvidenceReference{Suite: "postgres_snapshot_integration", RunID: "source_read_v1"},
 			Acknowledgement: connectors.TransportAcknowledgementDurableWarehouse,
 			ApplyStrategies: []connectors.DestinationApplyStrategy{{
 				Mode:     synccontract.ModeFullAppend,
@@ -642,9 +635,7 @@ func seedPostgresCatalogs(t *testing.T, ctx context.Context, source *pgx.Conn) {
 }
 
 // assertPostgresLiveReads proves the settled cursor contract through the
-// definition-selected shared polling source. It intentionally does not use
-// Connector.Read's legacy compatibility reader: #3976 is about the source
-// path that owns resumable ETL checkpoints.
+// definition-selected shared polling source that owns resumable ETL checkpoints.
 func assertPostgresLiveReads(t *testing.T, ctx context.Context, connector native.Connector, endpoint dbtest.Endpoint) {
 	t.Helper()
 	config := postgresCatalogConfig(t, endpoint, postgresCatalogAlphaSchema)

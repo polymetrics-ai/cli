@@ -1,12 +1,6 @@
 {
   "tagline": "Read Greenhouse Harvest records and safely plan typed Greenhouse mutations.",
   "usage": "pm greenhouse <command> [flags]",
-  "source_cli": {
-    "name": "Greenhouse Harvest API",
-    "docs": "https://developers.greenhouse.io/harvest.html",
-    "reference": "Greenhouse Harvest reference fetched 2026-08-07 (HTTP 200, 1,636,662 bytes)",
-    "source": "provider_api"
-  },
   "groups": [
     {
       "id": "etl",
@@ -202,7 +196,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "candidates",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-candidates",
       "examples": [
         "pm greenhouse candidates list --json"
       ]
@@ -213,7 +206,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "applications",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-applications",
       "examples": [
         "pm greenhouse applications list --json"
       ]
@@ -224,7 +216,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "jobs",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-jobs",
       "examples": [
         "pm greenhouse jobs list --json"
       ]
@@ -235,7 +226,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "offers",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-offers",
       "examples": [
         "pm greenhouse offers list --json"
       ]
@@ -246,7 +236,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "users",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-users",
       "examples": [
         "pm greenhouse users list --json"
       ]
@@ -257,7 +246,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "activity_feed",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-retrieve-activity-feed",
       "examples": [
         "pm greenhouse activity-feed list --json --candidate-id <candidate-id>"
       ],
@@ -278,7 +266,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "application",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-retrieve-application",
       "examples": [
         "pm greenhouse application list --json --application-id <application-id>"
       ],
@@ -299,7 +286,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "approvals_for_job",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-approvals-for-job",
       "examples": [
         "pm greenhouse approvals-for-job list --json --job-id <job-id>"
       ],
@@ -320,7 +306,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "approval_flow",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-retrieve-approval-flow",
       "examples": [
         "pm greenhouse approval-flow list --json --approval-flow-id <approval-flow-id>"
       ],
@@ -341,7 +326,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "pending_approvals_for_user",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-pending-approvals-for-user",
       "examples": [
         "pm greenhouse pending-approvals-for-user list --json --user-id <user-id>"
       ],
@@ -362,7 +346,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "candidate",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-retrieve-candidate",
       "examples": [
         "pm greenhouse candidate list --json --candidate-id <candidate-id>"
       ],
@@ -383,7 +366,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "close_reasons",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-close-reasons",
       "examples": [
         "pm greenhouse close-reasons list --json"
       ]
@@ -394,7 +376,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "custom_fields",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-custom-fields",
       "examples": [
         "pm greenhouse custom-fields list --json --field-type <field-type>"
       ],
@@ -415,7 +396,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "custom_field",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-retrieve-custom-field",
       "examples": [
         "pm greenhouse custom-field list --json --custom-field-id <custom-field-id>"
       ],
@@ -436,7 +416,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "custom_field_options",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-custom-field-options",
       "examples": [
         "pm greenhouse custom-field-options list --json --custom-field-id <custom-field-id>"
       ],
@@ -457,7 +436,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "demographic_question_sets",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-demographic-question-sets",
       "examples": [
         "pm greenhouse demographic-question-sets list --json"
       ]
@@ -468,7 +446,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "demographic_question_set",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-retrieve-demographic-question-set",
       "examples": [
         "pm greenhouse demographic-question-set list --json --demographic-question-set-id <demographic-question-set-id>"
       ],
@@ -489,7 +466,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "demographic_questions",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-demographic-questions",
       "examples": [
         "pm greenhouse demographic-questions list --json"
       ]
@@ -500,7 +476,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "demographic_questions_for_demographic_question_set",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-demographic-questions-for-demographic-question-set",
       "examples": [
         "pm greenhouse demographic-questions-for-demographic-question-set list --json --demographic-question-set-id <demographic-question-set-id>"
       ],
@@ -521,7 +496,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "demographic_question",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-retrieve-demographic-question",
       "examples": [
         "pm greenhouse demographic-question list --json --demographic-question-id <demographic-question-id>"
       ],
@@ -542,7 +516,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "demographic_answer_options",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-demographic-answer-options",
       "examples": [
         "pm greenhouse demographic-answer-options list --json"
       ]
@@ -553,7 +526,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "demographic_answer_options_for_demographic_question",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-demographic-answer-options-for-demographic-question",
       "examples": [
         "pm greenhouse demographic-answer-options-for-demographic-question list --json --demographic-question-id <demographic-question-id>"
       ],
@@ -574,7 +546,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "demographic_answer_option",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-retrieve-demographic-answer-option",
       "examples": [
         "pm greenhouse demographic-answer-option list --json --demographic-answer-option-id <demographic-answer-option-id>"
       ],
@@ -595,7 +566,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "demographic_answers",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-demographic-answers",
       "examples": [
         "pm greenhouse demographic-answers list --json"
       ]
@@ -606,7 +576,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "demographic_answers_for_application",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-demographic-answers-for-application",
       "examples": [
         "pm greenhouse demographic-answers-for-application list --json --application-id <application-id>"
       ],
@@ -627,7 +596,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "demographic_answer",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-retrieve-demographic-answer",
       "examples": [
         "pm greenhouse demographic-answer list --json --demographic-answer-id <demographic-answer-id>"
       ],
@@ -648,7 +616,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "departments",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-departments",
       "examples": [
         "pm greenhouse departments list --json"
       ]
@@ -659,7 +626,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "department",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-retrieve-department",
       "examples": [
         "pm greenhouse department list --json --department-id <department-id>"
       ],
@@ -680,7 +646,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "degrees",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-degrees",
       "examples": [
         "pm greenhouse degrees list --json"
       ]
@@ -691,7 +656,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "disciplines",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-disciplines",
       "examples": [
         "pm greenhouse disciplines list --json"
       ]
@@ -702,7 +666,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "schools",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-schools",
       "examples": [
         "pm greenhouse schools list --json"
       ]
@@ -713,7 +676,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "eeoc",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-eeoc",
       "examples": [
         "pm greenhouse eeoc list --json"
       ]
@@ -724,7 +686,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "eeoc_data_for_application",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-retrieve-eeoc-data-for-application",
       "examples": [
         "pm greenhouse eeoc-data-for-application list --json --application-id <application-id>"
       ],
@@ -745,7 +706,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "email_templates",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-email-templates",
       "examples": [
         "pm greenhouse email-templates list --json"
       ]
@@ -756,7 +716,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "email_template",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-retrieve-email-template",
       "examples": [
         "pm greenhouse email-template list --json --email-template-id <email-template-id>"
       ],
@@ -777,7 +736,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "job_openings",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-job-openings",
       "examples": [
         "pm greenhouse job-openings list --json --job-id <job-id>"
       ],
@@ -798,7 +756,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "opening_for_job",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-single-opening-for-job",
       "examples": [
         "pm greenhouse opening-for-job list --json --job-id <job-id> --opening-id <opening-id>"
       ],
@@ -827,7 +784,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "job_posts",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-job-posts",
       "examples": [
         "pm greenhouse job-posts list --json"
       ]
@@ -838,7 +794,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "job_post",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-retrieve-job-post",
       "examples": [
         "pm greenhouse job-post list --json --job-post-id <job-post-id>"
       ],
@@ -859,7 +814,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "job_posts_for_job",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-job-posts-for-job",
       "examples": [
         "pm greenhouse job-posts-for-job list --json --job-id <job-id>"
       ],
@@ -880,7 +834,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "job_post_for_job",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-retrieve-job-post-for-job",
       "examples": [
         "pm greenhouse job-post-for-job list --json --job-id <job-id>"
       ],
@@ -901,7 +854,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "custom_locations_for_job_post",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-retrieve-custom-locations-for-job-post",
       "examples": [
         "pm greenhouse custom-locations-for-job-post list --json --job-post-id <job-post-id>"
       ],
@@ -922,7 +874,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "job_stages",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-job-stages",
       "examples": [
         "pm greenhouse job-stages list --json"
       ]
@@ -933,7 +884,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "job_stages_for_job",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-job-stages-for-job",
       "examples": [
         "pm greenhouse job-stages-for-job list --json --job-id <job-id>"
       ],
@@ -954,7 +904,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "job_stage",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-retrieve-job-stage",
       "examples": [
         "pm greenhouse job-stage list --json --job-stage-id <job-stage-id>"
       ],
@@ -975,7 +924,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "job",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-retrieve-job",
       "examples": [
         "pm greenhouse job list --json --job-id <job-id>"
       ],
@@ -996,7 +944,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "hiring_team",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-hiring-team",
       "examples": [
         "pm greenhouse hiring-team list --json --job-id <job-id>"
       ],
@@ -1017,7 +964,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "offers_for_application",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-offers-for-application",
       "examples": [
         "pm greenhouse offers-for-application list --json --application-id <application-id>"
       ],
@@ -1038,7 +984,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "current_offer_for_application",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-retrieve-current-offer-for-application",
       "examples": [
         "pm greenhouse current-offer-for-application list --json --application-id <application-id>"
       ],
@@ -1059,7 +1004,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "offer",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-retrieve-offer",
       "examples": [
         "pm greenhouse offer list --json --offer-id <offer-id>"
       ],
@@ -1080,7 +1024,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "offices",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-offices",
       "examples": [
         "pm greenhouse offices list --json"
       ]
@@ -1091,7 +1034,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "office",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-retrieve-office",
       "examples": [
         "pm greenhouse office list --json --office-id <office-id>"
       ],
@@ -1112,7 +1054,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "prospect_pools",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-prospect-pools",
       "examples": [
         "pm greenhouse prospect-pools list --json"
       ]
@@ -1123,7 +1064,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "prospect_pool",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-retrieve-prospect-pool",
       "examples": [
         "pm greenhouse prospect-pool list --json --prospect-pool-id <prospect-pool-id>"
       ],
@@ -1144,7 +1084,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "rejection_reasons",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-rejection-reasons",
       "examples": [
         "pm greenhouse rejection-reasons list --json"
       ]
@@ -1155,7 +1094,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "scheduled_interviews",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-scheduled-interviews",
       "examples": [
         "pm greenhouse scheduled-interviews list --json"
       ]
@@ -1166,7 +1104,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "scheduled_interviews_for_application",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-scheduled-interviews-for-application",
       "examples": [
         "pm greenhouse scheduled-interviews-for-application list --json --application-id <application-id>"
       ],
@@ -1187,7 +1124,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "scheduled_interview",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-retrieve-scheduled-interview",
       "examples": [
         "pm greenhouse scheduled-interview list --json --scheduled-interview-id <scheduled-interview-id>"
       ],
@@ -1208,7 +1144,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "scorecards",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-scorecards",
       "examples": [
         "pm greenhouse scorecards list --json"
       ]
@@ -1219,7 +1154,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "scorecards_for_application",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-scorecards-for-application",
       "examples": [
         "pm greenhouse scorecards-for-application list --json --application-id <application-id>"
       ],
@@ -1240,7 +1174,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "scorecard",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-retrieve-scorecard",
       "examples": [
         "pm greenhouse scorecard list --json --scorecard-id <scorecard-id>"
       ],
@@ -1261,7 +1194,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "sources",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-sources",
       "examples": [
         "pm greenhouse sources list --json"
       ]
@@ -1272,7 +1204,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "candidate_tags",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-candidate-tags",
       "examples": [
         "pm greenhouse candidate-tags list --json"
       ]
@@ -1283,7 +1214,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "tags_applied_to_candidate",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-tags-applied-to-candidate",
       "examples": [
         "pm greenhouse tags-applied-to-candidate list --json --candidate-id <candidate-id>"
       ],
@@ -1304,7 +1234,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "tracking_link_data_for_token",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-tracking-link-data-for-token",
       "examples": [
         "pm greenhouse tracking-link-data-for-token list --json --token <token>"
       ],
@@ -1325,7 +1254,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "user",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-retrieve-user",
       "examples": [
         "pm greenhouse user list --json --user-id <user-id>"
       ],
@@ -1346,7 +1274,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "job_permissions",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-job-permissions",
       "examples": [
         "pm greenhouse job-permissions list --json --user-id <user-id>"
       ],
@@ -1367,7 +1294,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "future_job_permissions",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-future-job-permissions",
       "examples": [
         "pm greenhouse future-job-permissions list --json --user-id <user-id>"
       ],
@@ -1388,7 +1314,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "user_roles",
-      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-user-roles",
       "examples": [
         "pm greenhouse user-roles list --json"
       ]
@@ -1399,7 +1324,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "delete_application",
-      "source_url": "https://developers.greenhouse.io/harvest.html#delete-delete-application",
       "flags": [
         {
           "name": "application-id",
@@ -1422,7 +1346,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "add_application_to_candidate_prospect",
-      "source_url": "https://developers.greenhouse.io/harvest.html#post-add-application-to-candidate-prospect",
       "flags": [
         {
           "name": "candidate-id",
@@ -1445,7 +1368,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "update_application",
-      "source_url": "https://developers.greenhouse.io/harvest.html#patch-update-application",
       "flags": [
         {
           "name": "application-id",
@@ -1468,7 +1390,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "advance_application",
-      "source_url": "https://developers.greenhouse.io/harvest.html#post-advance-application",
       "flags": [
         {
           "name": "application-id",
@@ -1491,7 +1412,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "move_application_different_job",
-      "source_url": "https://developers.greenhouse.io/harvest.html#post-move-application-different-job",
       "flags": [
         {
           "name": "application-id",
@@ -1514,7 +1434,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "move_application_same_job",
-      "source_url": "https://developers.greenhouse.io/harvest.html#post-move-application-same-job",
       "flags": [
         {
           "name": "application-id",
@@ -1537,7 +1456,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "convert_prospect_to_candidate",
-      "source_url": "https://developers.greenhouse.io/harvest.html#patch-convert-prospect-to-candidate",
       "flags": [
         {
           "name": "application-id",
@@ -1560,7 +1478,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "add_attachment_to_application",
-      "source_url": "https://developers.greenhouse.io/harvest.html#post-add-attachment-to-application",
       "flags": [
         {
           "name": "application-id",
@@ -1583,7 +1500,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "hire_application",
-      "source_url": "https://developers.greenhouse.io/harvest.html#post-hire-application",
       "flags": [
         {
           "name": "application-id",
@@ -1606,7 +1522,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "reject_application",
-      "source_url": "https://developers.greenhouse.io/harvest.html#post-reject-application",
       "flags": [
         {
           "name": "application-id",
@@ -1629,7 +1544,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "update_rejection_reason",
-      "source_url": "https://developers.greenhouse.io/harvest.html#patch-update-rejection-reason",
       "flags": [
         {
           "name": "application-id",
@@ -1652,7 +1566,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "unreject_application",
-      "source_url": "https://developers.greenhouse.io/harvest.html#post-unreject-application",
       "flags": [
         {
           "name": "application-id",
@@ -1675,7 +1588,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "request_approvals",
-      "source_url": "https://developers.greenhouse.io/harvest.html#post-request-approvals",
       "flags": [
         {
           "name": "approval-flow-id",
@@ -1698,7 +1610,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "replace_an_approver_in_an_approver_group",
-      "source_url": "https://developers.greenhouse.io/harvest.html#put-replace-an-approver-in-an-approver-group",
       "flags": [
         {
           "name": "approver-group-id",
@@ -1721,7 +1632,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_or_replace_an_approval_flow",
-      "source_url": "https://developers.greenhouse.io/harvest.html#put-create-or-replace-an-approval-flow",
       "flags": [
         {
           "name": "job-id",
@@ -1744,7 +1654,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "delete_candidate",
-      "source_url": "https://developers.greenhouse.io/harvest.html#delete-delete-candidate",
       "flags": [
         {
           "name": "candidate-id",
@@ -1767,7 +1676,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "edit_candidate",
-      "source_url": "https://developers.greenhouse.io/harvest.html#patch-edit-candidate",
       "flags": [
         {
           "name": "candidate-id",
@@ -1790,7 +1698,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "add_attachment",
-      "source_url": "https://developers.greenhouse.io/harvest.html#post-add-attachment",
       "flags": [
         {
           "name": "candidate-id",
@@ -1813,7 +1720,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "add_candidate",
-      "source_url": "https://developers.greenhouse.io/harvest.html#post-add-candidate",
       "flags": [],
       "risk": "Greenhouse mutation: POST: Add Candidate.",
       "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
@@ -1827,7 +1733,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "add_note",
-      "source_url": "https://developers.greenhouse.io/harvest.html#post-add-note",
       "flags": [
         {
           "name": "candidate-id",
@@ -1850,7 +1755,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "add_e_mail_note",
-      "source_url": "https://developers.greenhouse.io/harvest.html#post-add-e-mail-note",
       "flags": [
         {
           "name": "candidate-id",
@@ -1873,7 +1777,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "add_education",
-      "source_url": "https://developers.greenhouse.io/harvest.html#post-add-education",
       "flags": [
         {
           "name": "candidate-id",
@@ -1896,7 +1799,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "remove_education_from_candidate",
-      "source_url": "https://developers.greenhouse.io/harvest.html#delete-remove-education-from-candidate",
       "flags": [
         {
           "name": "candidate-id",
@@ -1927,7 +1829,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "add_employment",
-      "source_url": "https://developers.greenhouse.io/harvest.html#post-add-employment",
       "flags": [
         {
           "name": "candidate-id",
@@ -1950,7 +1851,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "remove_employment_from_candidate",
-      "source_url": "https://developers.greenhouse.io/harvest.html#delete-remove-employment-from-candidate",
       "flags": [
         {
           "name": "candidate-id",
@@ -1981,7 +1881,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "add_prospect",
-      "source_url": "https://developers.greenhouse.io/harvest.html#post-add-prospect",
       "flags": [],
       "risk": "Greenhouse mutation: POST: Add Prospect.",
       "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
@@ -1995,7 +1894,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "anonymize_candidate",
-      "source_url": "https://developers.greenhouse.io/harvest.html#put-anonymize-candidate",
       "flags": [
         {
           "name": "candidate-id",
@@ -2026,7 +1924,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "merge_candidates",
-      "source_url": "https://developers.greenhouse.io/harvest.html#put-merge-candidates",
       "flags": [],
       "risk": "Destructive Greenhouse mutation: PUT: Merge Candidates.",
       "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute. This action is destructive and additionally requires a typed confirmation.",
@@ -2040,7 +1937,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_custom_field",
-      "source_url": "https://developers.greenhouse.io/harvest.html#post-create-custom-field",
       "flags": [],
       "risk": "Greenhouse mutation: POST: Create Custom Field.",
       "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
@@ -2054,7 +1950,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "update_custom_field",
-      "source_url": "https://developers.greenhouse.io/harvest.html#patch-update-custom-field",
       "flags": [
         {
           "name": "custom-field-id",
@@ -2077,7 +1972,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "delete_custom_field",
-      "source_url": "https://developers.greenhouse.io/harvest.html#delete-delete-custom-field",
       "flags": [
         {
           "name": "custom-field-id",
@@ -2100,7 +1994,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_custom_field_options",
-      "source_url": "https://developers.greenhouse.io/harvest.html#post-create-custom-field-options",
       "flags": [
         {
           "name": "custom-field-id",
@@ -2123,7 +2016,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "update_custom_field_options",
-      "source_url": "https://developers.greenhouse.io/harvest.html#patch-update-custom-field-options",
       "flags": [
         {
           "name": "custom-field-id",
@@ -2146,7 +2038,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "remove_custom_field_options",
-      "source_url": "https://developers.greenhouse.io/harvest.html#delete-remove-custom-field-options",
       "flags": [
         {
           "name": "custom-field-id",
@@ -2169,7 +2060,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "edit_department",
-      "source_url": "https://developers.greenhouse.io/harvest.html#patch-edit-department",
       "flags": [
         {
           "name": "department-id",
@@ -2192,7 +2082,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "add_department",
-      "source_url": "https://developers.greenhouse.io/harvest.html#post-add-department",
       "flags": [],
       "risk": "Greenhouse mutation: POST: Add Department.",
       "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
@@ -2206,7 +2095,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "edit_openings",
-      "source_url": "https://developers.greenhouse.io/harvest.html#patch-edit-openings",
       "flags": [
         {
           "name": "job-id",
@@ -2237,7 +2125,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_new_openings",
-      "source_url": "https://developers.greenhouse.io/harvest.html#post-create-new-openings",
       "flags": [
         {
           "name": "job-id",
@@ -2260,7 +2147,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "update_job",
-      "source_url": "https://developers.greenhouse.io/harvest.html#patch-update-job",
       "flags": [
         {
           "name": "job-id",
@@ -2283,7 +2169,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_job",
-      "source_url": "https://developers.greenhouse.io/harvest.html#post-create-job",
       "flags": [],
       "risk": "Greenhouse mutation: POST: Create Job.",
       "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
@@ -2297,7 +2182,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "replace_hiring_team",
-      "source_url": "https://developers.greenhouse.io/harvest.html#put-replace-hiring-team",
       "flags": [
         {
           "name": "job-id",
@@ -2320,7 +2204,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "add_hiring_team_members",
-      "source_url": "https://developers.greenhouse.io/harvest.html#post-add-hiring-team-members",
       "flags": [
         {
           "name": "job-id",
@@ -2343,7 +2226,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "remove_hiring_team_member",
-      "source_url": "https://developers.greenhouse.io/harvest.html#delete-remove-hiring-team-member",
       "flags": [
         {
           "name": "job-id",
@@ -2366,7 +2248,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "update_current_offer",
-      "source_url": "https://developers.greenhouse.io/harvest.html#patch-update-current-offer",
       "flags": [
         {
           "name": "application-id",
@@ -2389,7 +2270,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "edit_office",
-      "source_url": "https://developers.greenhouse.io/harvest.html#patch-edit-office",
       "flags": [
         {
           "name": "office-id",
@@ -2412,7 +2292,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "add_office",
-      "source_url": "https://developers.greenhouse.io/harvest.html#post-add-office",
       "flags": [],
       "risk": "Greenhouse mutation: POST: Add Office.",
       "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
@@ -2426,7 +2305,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "remove_scheduled_interview",
-      "source_url": "https://developers.greenhouse.io/harvest.html#delete-remove-scheduled-interview",
       "flags": [
         {
           "name": "scheduled-interview-id",
@@ -2449,7 +2327,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "add_candidate_tag",
-      "source_url": "https://developers.greenhouse.io/harvest.html#post-add-new-candidate-tag",
       "flags": [],
       "risk": "Greenhouse mutation: POST: Add New Candidate Tag.",
       "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
@@ -2463,7 +2340,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "remove_tag_from_candidate",
-      "source_url": "https://developers.greenhouse.io/harvest.html#delete-remove-tag-from-candidate",
       "flags": [
         {
           "name": "candidate-id",
@@ -2494,7 +2370,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "destroy_candidate_tag",
-      "source_url": "https://developers.greenhouse.io/harvest.html#delete-destroy-a-candidate-tag",
       "flags": [
         {
           "name": "tag-id",
@@ -2517,7 +2392,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "add_a_candidate_tag",
-      "source_url": "https://developers.greenhouse.io/harvest.html#put-add-a-candidate-tag",
       "flags": [
         {
           "name": "candidate-id",
@@ -2548,7 +2422,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "change_user_permission_level",
-      "source_url": "https://developers.greenhouse.io/harvest.html#patch-change-user-permission-level",
       "flags": [],
       "risk": "Greenhouse mutation: PATCH: Change user permission level.",
       "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
@@ -2562,7 +2435,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "add_user",
-      "source_url": "https://developers.greenhouse.io/harvest.html#post-add-user",
       "flags": [],
       "risk": "Greenhouse mutation: POST: Add User.",
       "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
@@ -2576,7 +2448,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "add_e_mail_address_to_user",
-      "source_url": "https://developers.greenhouse.io/harvest.html#post-add-e-mail-address-to-user",
       "flags": [
         {
           "name": "user-id",
@@ -2599,7 +2470,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "remove_a_job_permission",
-      "source_url": "https://developers.greenhouse.io/harvest.html#delete-remove-a-job-permission",
       "flags": [
         {
           "name": "user-id",
@@ -2622,7 +2492,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "add_a_job_permission",
-      "source_url": "https://developers.greenhouse.io/harvest.html#put-add-a-job-permission",
       "flags": [
         {
           "name": "user-id",
@@ -2645,7 +2514,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "remove_a_future_job_permission",
-      "source_url": "https://developers.greenhouse.io/harvest.html#delete-remove-a-future-job-permission",
       "flags": [
         {
           "name": "user-id",
@@ -2668,7 +2536,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "add_a_future_job_permission",
-      "source_url": "https://developers.greenhouse.io/harvest.html#put-add-a-future-job-permission",
       "flags": [
         {
           "name": "user-id",

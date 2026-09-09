@@ -1,0 +1,146 @@
+package main
+
+import (
+	"bytes"
+	"context"
+	"errors"
+	"os"
+	"path/filepath"
+	"testing"
+
+	"golang.org/x/sys/unix"
+)
+
+func TestCP11OwnershipPreparedOpenCompletionMustRemainRecoverable(t *testing.T) {
+	root := t.TempDir()
+	baseline, _ := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
+	old := vNextPublicationArtifactsForTest("old", true)
+	if _, err := baseline.Publish(old); err != nil {
+		t.Fatal(err)
+	}
+	before, err := os.ReadFile(filepath.Join(root, "acme", "CURRENT"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	completion := errors.New("review: real prepared-open parent Close completed with error")
+	armed, fired := false, false
+	writer, _ := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{
+		At: func(point vNextPublicationFaultPoint) error {
+			if point == vNextPublicationBeforeControlRepairRecord {
+				armed = true
+			}
+			return nil
+		},
+		CloseDirectory: func(file *os.File, label string) error {
+			err := file.Close()
+			if armed && !fired && label == "publication control repair prepared authority" {
+				fired = true
+				return errors.Join(err, completion)
+			}
+			return err
+		},
+	})
+	_, publishErr := writer.Publish(vNextPublicationArtifactsForTest("new", true))
+	if !fired || !errors.Is(publishErr, completion) {
+		t.Fatalf("fault placement failed: fired=%t err=%v", fired, publishErr)
+	}
+	after, err := os.ReadFile(filepath.Join(root, "acme", "CURRENT"))
+	if err != nil || !bytes.Equal(before, after) {
+		t.Fatalf("CURRENT changed: %v", err)
+	}
+	txs, err := filepath.Glob(filepath.Join(root, "acme", vNextPublicationControlRepairDirectoryPrefix+"*"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, tx := range txs {
+		entries, err := os.ReadDir(tx)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if len(entries) == 1 && entries[0].Name() == vNextPublicationControlRepairPreparedFile {
+			payload, err := os.ReadFile(filepath.Join(tx, entries[0].Name()))
+			if err != nil {
+				t.Fatal(err)
+			}
+			t.Logf("stranded transaction=%s members=[prepared.json] bytes=%d", filepath.Base(tx), len(payload))
+		}
+	}
+	fresh, _ := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
+	checkErr := fresh.Check(old)
+	recoveryErr := fresh.Recover(context.Background())
+	t.Logf("Publish=%v; Check=%v; Recover=%v; CURRENT unchanged=true", publishErr, checkErr, recoveryErr)
+	if recoveryErr != nil {
+		t.Fatalf("F03-A first real creation frontier must recover after owned prepared-open parent Close failure: %v", recoveryErr)
+	}
+}
+
+func TestCP11OwnershipTempRetryMustNotSwallowCompletion(t *testing.T) {
+	root := t.TempDir()
+	completion := errors.New("review: failed allocator owned-directory real Close completion")
+	fired, closeFired := false, false
+	var aPath, bPath string
+	var aBefore, bBefore os.FileInfo
+	writer, _ := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{
+		AfterTemporaryOpen: func(_ *vNextPublicationDirectory, name string, opened *vNextPublicationDirectory) error {
+			if fired {
+				return nil
+			}
+			fired = true
+			var err error
+			aBefore, err = opened.file.Stat()
+			if err != nil {
+				return err
+			}
+			blocker, err := opened.openFile("control", "review real EEXIST blocker", unix.O_CREAT|unix.O_EXCL|unix.O_WRONLY, 0o600, false)
+			if err != nil {
+				return err
+			}
+			if _, err := blocker.Write([]byte("A blocker")); err != nil {
+				blocker.Close()
+				return err
+			}
+			if err := blocker.Close(); err != nil {
+				return err
+			}
+			bPath = filepath.Join(root, "acme", name)
+			aPath = bPath + "-A"
+			if err := os.Rename(bPath, aPath); err != nil {
+				return err
+			}
+			if err := os.Mkdir(bPath, 0o700); err != nil {
+				return err
+			}
+			if err := os.WriteFile(filepath.Join(bPath, "foreign"), []byte("B bytes"), 0o600); err != nil {
+				return err
+			}
+			bBefore, err = os.Lstat(bPath)
+			return err
+		},
+		CloseDirectory: func(file *os.File, label string) error {
+			err := file.Close()
+			if fired && !closeFired && label == "publication temporary root" {
+				closeFired = true
+				return errors.Join(err, completion)
+			}
+			return err
+		},
+	})
+	pointer, err := writer.Publish(vNextPublicationArtifactsForTest("new", true))
+	if !fired || !closeFired {
+		t.Fatalf("fault did not hit failed allocator: allocation=%t close=%t err=%v", fired, closeFired, err)
+	}
+	aAfter, aErr := os.Lstat(aPath)
+	bAfter, bErr := os.Lstat(bPath)
+	if aErr != nil || bErr != nil || !os.SameFile(aBefore, aAfter) || !os.SameFile(bBefore, bAfter) {
+		t.Fatalf("A/B preservation failed: %v %v", aErr, bErr)
+	}
+	blocker, _ := os.ReadFile(filepath.Join(aPath, "control"))
+	foreign, _ := os.ReadFile(filepath.Join(bPath, "foreign"))
+	if string(blocker) != "A blocker" || string(foreign) != "B bytes" {
+		t.Fatalf("A/B bytes changed")
+	}
+	t.Logf("Publish pointer=%#v error=%v A/B identities and bytes preserved=true", pointer, err)
+	if !errors.Is(err, completion) {
+		t.Fatalf("EEXIST retry swallowed meaningful owned Close completion: %v", err)
+	}
+}

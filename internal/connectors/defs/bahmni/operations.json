@@ -5,7 +5,6 @@
       "kind": "rest_read",
       "summary": "Search patients with the pinned bahmni-commons GET patient search route.",
       "description": "Version-pinned bahmni-commons 1.1.0 GET /bahmni/search/patient typed read. Query parameters are allow-listed and declared sensitive fields are redacted from output.",
-      "source_url": "https://github.com/Bahmni/openmrs-module-bahmnicommons/blob/1.1.0/bahmni-commons-omod/src/main/java/org/bahmni/module/bahmnicommons/web/v1_0/controller/search/BahmniPatientSearchController.java#L30-L50",
       "risk": "high",
       "approval": "none: read-only GET query with allow-listed query parameters and bounded JSON output; declared patient-search sensitive fields are redacted from output, while remaining clinical PHI fields should still be treated as clinical data",
       "output_policy": "json_redacted",

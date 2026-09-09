@@ -1,9 +1,0 @@
-{
-  "record": {
-    "id": "ip_fixture_1"
-  },
-  "expect": {
-    "method": "POST",
-    "path": "/item_prices/ip_fixture_1/delete"
-  }
-}

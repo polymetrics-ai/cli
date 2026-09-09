@@ -120,13 +120,6 @@ const validWidgetsSchema = `{
 	}
 }`
 
-const validAPISurface = `{
-	"api": "test API v1",
-	"endpoints": [
-		{ "method": "GET", "path": "/widgets", "covered_by": { "stream": "widgets" } }
-	]
-}`
-
 const validDocs = `# Overview
 
 test
@@ -153,7 +146,6 @@ func fullValidBundleFS(name string) fstest.MapFS {
 		name + "/metadata.json":                        &fstest.MapFile{Data: []byte(validMetadata(name))},
 		name + "/spec.json":                            &fstest.MapFile{Data: []byte(validSpec)},
 		name + "/streams.json":                         &fstest.MapFile{Data: []byte(validStreams)},
-		name + "/api_surface.json":                     &fstest.MapFile{Data: []byte(validAPISurface)},
 		name + "/schemas/widgets.json":                 &fstest.MapFile{Data: []byte(validWidgetsSchema)},
 		name + "/docs.md":                              &fstest.MapFile{Data: []byte(validDocs)},
 		name + "/fixtures/streams/widgets/page_1.json": &fstest.MapFile{Data: []byte(`{"request":{"method":"GET","path":"/widgets","query":{}},"response":{"status":200,"body":{"data":[]}}}`)},
@@ -198,14 +190,50 @@ func TestBundleLoadHappyPathFullBundle(t *testing.T) {
 	if sch.CursorField != "updated_at" {
 		t.Fatalf("CursorField = %q", sch.CursorField)
 	}
-	if b.Surface == nil {
-		t.Fatalf("Surface not parsed")
+}
+
+func TestBundleLoadAcceptsDeclaredStaticVendorStreamHeaders(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/streams.json"] = &fstest.MapFile{Data: []byte(strings.Replace(validStreams, `"schema": "schemas/widgets.json"`, `"headers": {"Accept": "application/vnd.acme-widget.1+json"}, "schema": "schemas/widgets.json"`, 1))}
+
+	bundle, err := Load(fsys, "acme")
+	if err != nil {
+		t.Fatalf("Load: %v", err)
 	}
-	if b.Docs == "" {
-		t.Fatalf("Docs not loaded")
+	if got := bundle.Streams[0].Headers["Accept"]; got != "application/vnd.acme-widget.1+json" {
+		t.Fatalf("stream headers = %#v, want declared static vendor Accept header", bundle.Streams[0].Headers)
 	}
-	if b.Fixtures == nil {
-		t.Fatalf("Fixtures should be non-nil when fixtures/ present")
+}
+
+func TestBundleLoadRejectsUnsafeStaticStreamHeaders(t *testing.T) {
+	public := map[string]struct{ field, code, reason string }{
+		"authorization": {"/streams/0/headers/<member:0>", "stream_header_unsupported", "only fixed Accept headers are supported"},
+		"interpolation": {"/streams/0/headers/Accept", "stream_header_dynamic", "Accept header must be static"},
+		"generic media": {"/streams/0/headers/Accept", "stream_header_media_invalid", "Accept header must be one fixed vendor JSON media type"},
+		"parameters":    {"/streams/0/headers/Accept", "stream_header_media_invalid", "Accept header must be one fixed vendor JSON media type"},
+	}
+	for _, testCase := range []struct {
+		name    string
+		headers string
+		want    string
+	}{
+		{name: "authorization", headers: `{"Authorization":"forbidden"}`, want: "only fixed Accept headers"},
+		{name: "interpolation", headers: `{"Accept":"{{ config.accept }}"}`, want: "must be static"},
+		{name: "generic media", headers: `{"Accept":"application/json"}`, want: "vendor JSON media type"},
+		{name: "parameters", headers: `{"Accept":"application/vnd.acme-widget.1+json; q=1"}`, want: "vendor JSON media type"},
+	} {
+		t.Run(testCase.name, func(t *testing.T) {
+			fsys := fullValidBundleFS("acme")
+			fsys["acme/streams.json"] = &fstest.MapFile{Data: []byte(strings.Replace(validStreams, `"schema": "schemas/widgets.json"`, `"headers": `+testCase.headers+`, "schema": "schemas/widgets.json"`, 1))}
+			_, err := Load(fsys, "acme")
+			want, ok := public[testCase.name]
+			if !ok || !publicBundleMatches167(err, "streams.json", want.field, want.code, want.reason) {
+				t.Fatalf("wrong public header diagnostic: %v", err)
+			}
+			if err == nil || !strings.Contains(bundleCauseText165(err), testCase.want) {
+				t.Fatalf("Load error = %v, want %q", err, testCase.want)
+			}
+		})
 	}
 }
 
@@ -237,7 +265,11 @@ func TestBundleLoadRejectsDuplicateWriteActionNames(t *testing.T) {
 	}`)}
 
 	_, err := Load(fsys, "acme")
-	if err == nil || !strings.Contains(err.Error(), `duplicates write action name "apply_widget"`) {
+	if !publicBundleMatches167(err, "writes.json", "/actions/1/name", "write_name_duplicate", "write action name is duplicated") {
+		t.Fatalf("wrong public declaration diagnostic: %v", err)
+	}
+
+	if err == nil || !strings.Contains(bundleCauseText165(err), `duplicates write action name "apply_widget"`) {
 		t.Fatalf("Load duplicate action names error = %v, want duplicate-name rejection", err)
 	}
 }
@@ -253,14 +285,8 @@ func TestBundleLoadOptionalFilesAbsent(t *testing.T) {
 	if b.Writes != nil {
 		t.Fatalf("Writes should be nil when writes.json absent")
 	}
-	if b.Fixtures != nil {
-		t.Fatalf("Fixtures should be nil when fixtures/ absent")
-	}
 	if b.CLISurface != nil {
 		t.Fatalf("CLISurface should be nil when cli_surface.json is absent")
-	}
-	if b.Certification != nil {
-		t.Fatalf("Certification should be nil when certification.json is absent")
 	}
 	if b.Changefeed != nil {
 		t.Fatalf("Changefeed should be nil when changefeed.json is absent")
@@ -275,15 +301,13 @@ func TestBundleLoadSyncTransportProjectsIndependentDefinition(t *testing.T) {
 			"executor": {"family": "native_api", "id": "acme_snapshot_source"},
 			"eligible_streams": ["widgets"],
 			"modes": ["full_append"],
-			"delivery": {"idempotency": "at_least_once", "ordering": "source_ordered", "deletes": "not_available"},
-			"conformance": {"suite": "acme_transport", "run_id": "source_v1"}
+			"delivery": {"idempotency": "at_least_once", "ordering": "source_ordered", "deletes": "not_available"}
 		},
 		"destination_transport": {
 			"executor": {"family": "native_database", "id": "acme_stage_destination"},
 			"eligible_actions": ["stage_append"],
 			"modes": ["full_append"],
 			"delivery": {"idempotency": "keyed", "ordering": "source_ordered", "deletes": "not_available"},
-			"conformance": {"suite": "acme_transport", "run_id": "destination_v1"},
 			"acknowledgement": "durable_warehouse",
 			"apply_strategies": [{"mode": "full_append", "strategy": "append", "action": "stage_append"}],
 			"source_bindings": [{
@@ -329,7 +353,6 @@ func TestBundleLoadSyncTransportRefusesUnknownOrUnsafeDeclarations(t *testing.T)
 			"eligible_actions": ["stage_append"],
 			"modes": ["full_append"],
 			"delivery": {"idempotency": "keyed", "ordering": "source_ordered", "deletes": "not_available"},
-			"conformance": {"suite": "acme_transport", "run_id": "destination_v1"},
 			"acknowledgement": "durable_warehouse",
 			"apply_strategies": [{"mode": "full_append", "strategy": "append", "action": "stage_append"}]
 		}
@@ -420,98 +443,12 @@ func TestBundleLoadRejectsUnsupportedChangefeedWithExecutor(t *testing.T) {
 	}`)}
 
 	_, err := Load(fsys, "acme")
-	if err == nil || !strings.Contains(err.Error(), "unsupported changefeed cannot declare an executor") {
+	if !publicBundleMatches167(err, "changefeed.json", "/status", "changefeed_unsupported_execution", "unsupported changefeed cannot declare an executor, checkpoint, delivery, or polling watermark") {
+		t.Fatalf("wrong public declaration diagnostic: %v", err)
+	}
+
+	if err == nil || !strings.Contains(bundleCauseText165(err), "unsupported changefeed cannot declare an executor") {
 		t.Fatalf("Load error = %v, want unsupported executor rejection", err)
-	}
-}
-
-func TestBundleLoadParsesCertification(t *testing.T) {
-	fsys := fullValidBundleFS("acme")
-	fsys["acme/certification.json"] = &fstest.MapFile{Data: []byte(`{
-		"schema_version": 1,
-		"source": {
-			"default_stream": "widgets",
-			"source_credential_defaults": {"base_url": "https://api.example.test"},
-			"live_unavailable": [{"kind": "Error", "contains": ["status 403"]}]
-		},
-		"direct_read_candidates": [{
-			"stage_name": "direct_read_sweep_widget",
-			"command": "widget get",
-			"args": [
-				{"connector": true},
-				{"literal": "widget"},
-				{"config_key": "widget_id", "default": "fixture-widget"},
-				{"source_credential": true}
-			]
-		}]
-	}`)}
-
-	b, err := Load(fsys, "acme")
-	if err != nil {
-		t.Fatalf("Load: %v", err)
-	}
-	if b.Certification == nil {
-		t.Fatalf("Certification is nil")
-	}
-	if b.Certification.Source.DefaultStream != "widgets" {
-		t.Fatalf("default_stream = %q", b.Certification.Source.DefaultStream)
-	}
-	if got := b.Certification.Source.SourceCredentialDefaults["base_url"]; got != "https://api.example.test" {
-		t.Fatalf("source_credential_defaults.base_url = %q", got)
-	}
-	if b.Certification.Source.RequiredCredentialConfig != nil {
-		t.Fatalf("required_credential_config = %+v, want absent when it was not declared", b.Certification.Source.RequiredCredentialConfig)
-	}
-	if len(b.Certification.DirectReadCandidates) != 1 {
-		t.Fatalf("DirectReadCandidates = %+v", b.Certification.DirectReadCandidates)
-	}
-	assertions := b.Certification.DirectReadCandidates[0].OutputAssertions
-	if len(assertions) != 0 {
-		t.Fatalf("OutputAssertions = %+v, want no assertions when omitted", assertions)
-	}
-}
-
-func TestBundleLoadRejectsInvalidCertificationDirectReadOutputAssertion(t *testing.T) {
-	fsys := fullValidBundleFS("acme")
-	fsys["acme/certification.json"] = &fstest.MapFile{Data: []byte(`{
-		"schema_version": 1,
-		"direct_read_candidates": [{
-			"stage_name": "direct_read_sweep_widget",
-			"command": "widget get",
-			"args": [{"connector": true}],
-			"output_assertions": [{"json_pointer": "/kind", "equals": "ConnectorCommandDirectRead"}]
-		}]
-	}`)}
-
-	_, err := Load(fsys, "acme")
-	if err == nil || !strings.Contains(err.Error(), "output_assertions") || !strings.Contains(err.Error(), "response") {
-		t.Fatalf("Load error = %v, want response-only direct-read assertion rejection", err)
-	}
-}
-
-func TestBundleLoadRejectsUnknownCertificationKey(t *testing.T) {
-	fsys := fullValidBundleFS("acme")
-	fsys["acme/certification.json"] = &fstest.MapFile{Data: []byte(`{"schema_version":1,"surprise":true}`)}
-
-	_, err := Load(fsys, "acme")
-	if err == nil {
-		t.Fatalf("Load: expected unknown certification key to fail")
-	}
-	if !strings.Contains(err.Error(), "certification.json") || !strings.Contains(err.Error(), "surprise") {
-		t.Fatalf("Load error = %q, want certification.json surprise rejection", err.Error())
-	}
-}
-
-func TestBundleLoadRejectsCertificationUnknownStream(t *testing.T) {
-	fsys := fullValidBundleFS("acme")
-	fsys["acme/certification.json"] = &fstest.MapFile{Data: []byte(`{"schema_version":1,"source":{"default_stream":"missing"}}`)}
-
-	_, err := Load(fsys, "acme")
-	if err == nil {
-		t.Fatalf("Load: expected unknown default stream to fail")
-	}
-	if !strings.Contains(err.Error(), "certification.json") || !strings.Contains(err.Error(), "default_stream") {
-		t.Fatalf("Load error = %q, want default_stream rejection", err.Error())
 	}
 }
 
@@ -747,6 +684,34 @@ func TestBundleLoadRejectsUncitedOrMalformedRateLimits(t *testing.T) {
 		},
 	}
 
+	public := map[string]struct{ field, code, reason string }{
+		"policy lacks provider source":                                           {"/policies/0/source", "required_property_missing", "required property is missing"},
+		"policy scope must name a non-secret config key":                         {"/policies/0/scope/subject_config", "required_property_missing", "required property is missing"},
+		"policy scope kind must be declared":                                     {"/policies/0/scope/subject_kind", "enum_mismatch", "value is not an allowed alternative"},
+		"policy scope config must exist in spec":                                 {"/policies/0/scope/subject_config", "scope_property_absent", "subject_config must name a spec.json property"},
+		"policy scope config cannot be secret":                                   {"/policies/0/scope/subject_config", "scope_property_secret", "subject_config must name a non-secret spec.json property"},
+		"retrieval date is not a date":                                           {"/policies/0/source/retrieved_at", "source_date_invalid", "retrieved_at must be an ISO date"},
+		"unknown cannot publish a policy":                                        {"/reason", "reason_required", "state requires a nonblank reason"},
+		"not applicable requires a reason":                                       {"/reason", "reason_required", "state requires a nonblank reason"},
+		"all selector cannot exclude endpoints":                                  {"/policies/0/selector", "selector_conflict", "all cannot be combined with endpoint, tier, or auth selectors"},
+		"leaky bucket needs a positive restore rate":                             {"/policies/0/budgets/1/restore_per_second", "positive_number_required", "value must be a positive number"},
+		"policy cannot declare multiple cost headers":                            {"/policies/0/budgets/1/cost/response_header", "cost_headers_conflict", "cost response_header must name at most one header per policy"},
+		"provider source cannot carry credentials":                               {"/policies/0/source/url", "source_url_invalid", "source URL must be absolute HTTPS without userinfo or query parameters"},
+		"provider source cannot carry credential-like query parameters":          {"/policies/0/source/url", "source_url_invalid", "source URL must be absolute HTTPS without userinfo or query parameters"},
+		"provider source cannot carry credential-like fragment parameters":       {"/policies/0/source/url", "source_url_fragment_invalid", "source URL must not carry credential-like fragment parameters"},
+		"provider source cannot carry access key fragment parameters":            {"/policies/0/source/url", "source_url_fragment_invalid", "source URL must not carry credential-like fragment parameters"},
+		"provider source cannot carry hyphenated access key fragment parameters": {"/policies/0/source/url", "source_url_fragment_invalid", "source URL must not carry credential-like fragment parameters"},
+		"provider source cannot carry dotted access key fragment parameters":     {"/policies/0/source/url", "source_url_fragment_invalid", "source URL must not carry credential-like fragment parameters"},
+		"provider source cannot carry api token fragment parameters":             {"/policies/0/source/url", "source_url_fragment_invalid", "source URL must not carry credential-like fragment parameters"},
+		"provider source cannot carry hyphenated api token fragment parameters":  {"/policies/0/source/url", "source_url_fragment_invalid", "source URL must not carry credential-like fragment parameters"},
+		"provider source cannot carry dotted api token fragment parameters":      {"/policies/0/source/url", "source_url_fragment_invalid", "source URL must not carry credential-like fragment parameters"},
+		"provider source cannot hide credential-like fragment parameters":        {"/policies/0/source/url", "source_url_fragment_invalid", "source URL must not carry credential-like fragment parameters"},
+		"endpoint must be connector relative":                                    {"/policies/0/selector/endpoints/0/path", "selector_path_invalid", "endpoint path must be rooted and connector-relative"},
+		"endpoint path cannot carry outer whitespace":                            {"/policies/0/selector/endpoints/0/path", "selector_path_invalid", "endpoint path must be rooted and connector-relative"},
+		"cost header must be an HTTP field name":                                 {"/policies/0/budgets/0/cost/response_header", "cost_header_invalid", "cost response_header must be an HTTP field name"},
+		"cost header cannot be whitespace":                                       {"/policies/0/budgets/0/cost/response_header", "cost_header_invalid", "cost response_header must be an HTTP field name"},
+	}
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			fsys := fullValidBundleFS("acme")
@@ -755,7 +720,12 @@ func TestBundleLoadRejectsUncitedOrMalformedRateLimits(t *testing.T) {
 			if err == nil {
 				t.Fatal("Load: expected error")
 			}
-			if !strings.Contains(err.Error(), "rate_limits.json") || !strings.Contains(err.Error(), tt.want) {
+			want, ok := public[tt.name]
+			if !ok || !publicBundleMatches167(err, "rate_limits.json", want.field, want.code, want.reason) {
+				t.Fatalf("wrong public rate diagnostic: %v", err)
+			}
+
+			if !strings.Contains(bundleCauseText165(err), "rate_limits.json") || !strings.Contains(bundleCauseText165(err), tt.want) {
 				t.Fatalf("Load error = %q, want rate_limits.json and %q", err, tt.want)
 			}
 		})
@@ -786,11 +756,15 @@ func TestBundleLoadRejectsOverlappingRateLimitCostHeaders(t *testing.T) {
 	}`)}
 
 	_, err := Load(fsys, "acme")
+	if !publicBundleMatches167(err, "rate_limits.json", "/policies/1/budgets", "policy_cost_headers_conflict", "overlapping policies must not declare different cost response headers") {
+		t.Fatalf("wrong public rate diagnostic: %v", err)
+	}
+
 	if err == nil {
 		t.Fatal("Load: expected overlapping actual-cost headers to be rejected")
 	}
 	for _, want := range []string{"rate_limits.json", "connector-points", "graphql-points"} {
-		if !strings.Contains(err.Error(), want) {
+		if !strings.Contains(bundleCauseText165(err), want) {
 			t.Fatalf("Load error = %q, want %q", err, want)
 		}
 	}
@@ -868,7 +842,11 @@ func TestBundleLoadRejectsCredentialLikeRateLimitFragmentKeyVariants(t *testing.
 			))}
 
 			_, err := Load(fsys, "acme")
-			if err == nil || !strings.Contains(err.Error(), "credential-like fragment") {
+			if !publicBundleMatches167(err, "rate_limits.json", "/policies/0/source/url", "source_url_fragment_invalid", "source URL must not carry credential-like fragment parameters") {
+				t.Fatalf("wrong public rate diagnostic: %v", err)
+			}
+
+			if err == nil || !strings.Contains(bundleCauseText165(err), "credential-like fragment") {
 				t.Fatalf("Load error = %v, want credential-like fragment rejection", err)
 			}
 		})
@@ -902,41 +880,6 @@ func TestBundleLoadParsesHonestRateLimitStates(t *testing.T) {
 				t.Fatalf("RateLimits state = %#v, want %q", b.RateLimits, tt.state)
 			}
 		})
-	}
-}
-
-func TestBundleLoadEmbeddedGitHubCertification(t *testing.T) {
-	b, err := Load(defs.FS, "github")
-	if err != nil {
-		t.Fatalf("Load(defs.FS, github): %v", err)
-	}
-	if b.Certification == nil {
-		t.Fatalf("GitHub Certification is nil; defs.FS must embed certification.json")
-	}
-	if b.Certification.Source.DefaultStream != "issues" {
-		t.Fatalf("GitHub certification default stream = %q", b.Certification.Source.DefaultStream)
-	}
-	if got := b.Certification.Source.RequiredCredentialConfig["tier"]; got != "certification" {
-		t.Fatalf("GitHub certification required tier = %q, want certification", got)
-	}
-	if len(b.Certification.WritePairings) != 3 {
-		t.Fatalf("GitHub certification write pairings = %d, want 3", len(b.Certification.WritePairings))
-	}
-}
-
-func TestBundleLoadEmbeddedPostgresCertification(t *testing.T) {
-	b, err := Load(defs.FS, "postgres")
-	if err != nil {
-		t.Fatalf("Load(defs.FS, postgres): %v", err)
-	}
-	if b.Certification == nil {
-		t.Fatal("PostgreSQL Certification is nil; defs.FS must embed certification.json")
-	}
-	if got := b.Certification.Source.SourceCredentialDefaults["read_limit"]; got != "100" {
-		t.Fatalf("PostgreSQL certification read_limit = %q, want bounded 100", got)
-	}
-	if got := b.Certification.Source.SourceCredentialDefaults["sslmode"]; got != "disabled" {
-		t.Fatalf("PostgreSQL certification sslmode = %q, want disabled for the local container", got)
 	}
 }
 
@@ -1014,11 +957,15 @@ func TestBundleLoadRejectsGraphQLWriteWithoutGraphQLBlock(t *testing.T) {
 	}`)}
 
 	_, err := Load(fsys, "acme")
+	if !publicBundleMatches167(err, "writes.json", "/actions/0/graphql", "write_graphql_missing", "body_type graphql requires graphql") {
+		t.Fatalf("wrong public declaration diagnostic: %v", err)
+	}
+
 	if err == nil {
 		t.Fatalf("Load: expected body_type graphql without graphql block to fail")
 	}
-	if !strings.Contains(err.Error(), "writes.json") || !strings.Contains(err.Error(), "body_type graphql requires graphql") {
-		t.Fatalf("Load error = %q, want graphql block requirement", err.Error())
+	if !strings.Contains(bundleCauseText165(err), "writes.json") || !strings.Contains(bundleCauseText165(err), "body_type graphql requires graphql") {
+		t.Fatalf("Load error = %q, want graphql block requirement", bundleCauseText165(err))
 	}
 }
 
@@ -1045,8 +992,8 @@ func TestBundleLoadRejectsTemplatedGraphQLDocument(t *testing.T) {
 	if err == nil {
 		t.Fatalf("Load: expected templated GraphQL document to fail")
 	}
-	if !strings.Contains(err.Error(), "streams.json") || !strings.Contains(err.Error(), "fixed bundle metadata") {
-		t.Fatalf("Load error = %q, want fixed document rejection", err.Error())
+	if !strings.Contains(bundleCauseText165(err), "streams.json") || !strings.Contains(bundleCauseText165(err), "fixed bundle metadata") {
+		t.Fatalf("Load error = %q, want fixed document rejection", bundleCauseText165(err))
 	}
 }
 
@@ -1072,11 +1019,15 @@ func TestBundleLoadRejectsGraphQLWriteQueryDocument(t *testing.T) {
 	}`)}
 
 	_, err := Load(fsys, "acme")
+	if !publicBundleMatches167(err, "writes.json", "/actions/0/graphql/document", "graphql_document_kind_invalid", "GraphQL document must match the declared operation kind") {
+		t.Fatalf("wrong public diagnostic: %v", err)
+	}
+
 	if err == nil {
 		t.Fatalf("Load: expected query document in write action to fail")
 	}
-	if !strings.Contains(err.Error(), "writes.json") || !strings.Contains(err.Error(), "must start with mutation") {
-		t.Fatalf("Load error = %q, want mutation document rejection", err.Error())
+	if !strings.Contains(bundleCauseText165(err), "writes.json") || !strings.Contains(bundleCauseText165(err), "must start with mutation") {
+		t.Fatalf("Load error = %q, want mutation document rejection", bundleCauseText165(err))
 	}
 }
 
@@ -1106,8 +1057,8 @@ func TestBundleLoadRejectsGraphQLVariableUnsupportedType(t *testing.T) {
 	if err == nil {
 		t.Fatalf("Load: expected unsupported GraphQL variable type to fail")
 	}
-	if !strings.Contains(err.Error(), "streams.json") || !strings.Contains(err.Error(), "unsupported type") {
-		t.Fatalf("Load error = %q, want unsupported type rejection", err.Error())
+	if !strings.Contains(bundleCauseText165(err), "streams.json") || !strings.Contains(bundleCauseText165(err), "unsupported type") {
+		t.Fatalf("Load error = %q, want unsupported type rejection", bundleCauseText165(err))
 	}
 }
 
@@ -1165,8 +1116,8 @@ func TestBundleLoadRejectsGraphQLVariableDefaultNonString(t *testing.T) {
 	if err == nil {
 		t.Fatalf("Load: expected non-string default to fail")
 	}
-	if !strings.Contains(err.Error(), "streams.json") || !strings.Contains(err.Error(), "default must be a string") {
-		t.Fatalf("Load error = %q, want default string rejection", err.Error())
+	if !strings.Contains(bundleCauseText165(err), "streams.json") || !strings.Contains(bundleCauseText165(err), "default must be a string") {
+		t.Fatalf("Load error = %q, want default string rejection", bundleCauseText165(err))
 	}
 }
 
@@ -1196,8 +1147,8 @@ func TestBundleLoadRejectsGraphQLVariableOmitWhenEmptyNonBoolean(t *testing.T) {
 	if err == nil {
 		t.Fatalf("Load: expected non-boolean omit_when_empty to fail")
 	}
-	if !strings.Contains(err.Error(), "streams.json") || !strings.Contains(err.Error(), "omit_when_empty must be a boolean") {
-		t.Fatalf("Load error = %q, want omit_when_empty boolean rejection", err.Error())
+	if !strings.Contains(bundleCauseText165(err), "streams.json") || !strings.Contains(bundleCauseText165(err), "omit_when_empty must be a boolean") {
+		t.Fatalf("Load error = %q, want omit_when_empty boolean rejection", bundleCauseText165(err))
 	}
 }
 
@@ -1227,8 +1178,8 @@ func TestBundleLoadRejectsGraphQLVariableDefaultTypeMismatch(t *testing.T) {
 	if err == nil {
 		t.Fatalf("Load: expected default/type mismatch to fail")
 	}
-	if !strings.Contains(err.Error(), "streams.json") || !strings.Contains(err.Error(), "default") {
-		t.Fatalf("Load error = %q, want default/type mismatch rejection", err.Error())
+	if !strings.Contains(bundleCauseText165(err), "streams.json") || !strings.Contains(bundleCauseText165(err), "default") {
+		t.Fatalf("Load error = %q, want default/type mismatch rejection", bundleCauseText165(err))
 	}
 }
 
@@ -1288,11 +1239,6 @@ func TestBundleLoadParsesCLISurface(t *testing.T) {
 	fsys["acme/cli_surface.json"] = &fstest.MapFile{Data: []byte(`{
 		"tagline": "Work with Acme from the command line.",
 		"usage": "pm acme <command> [flags]",
-		"source_cli": {
-			"name": "acmectl",
-			"docs": "https://example.com/acmectl",
-			"reference": "https://example.com/acmectl/reference"
-		},
 		"groups": [
 			{ "id": "core", "title": "Core Commands", "commands": ["widget"] }
 		],
@@ -1306,7 +1252,6 @@ func TestBundleLoadParsesCLISurface(t *testing.T) {
 				"intent": "etl",
 				"availability": "implemented",
 				"stream": "widgets",
-				"source_cli_path": "acmectl widget list",
 				"flags": [
 					{ "name": "state", "type": "string", "summary": "Filter by state.", "maps_to": "query.state" }
 				],
@@ -1513,13 +1458,26 @@ func TestBundleLoadRejectsInvalidStatusAndTextExportDeclarations(t *testing.T) {
 		},
 	}
 
+	public := map[string]struct{ field, code, reason string }{
+		"status cannot declare JSON response body policy": {"/operations/0/output_policy", "status_output_invalid", "rest_status output_policy must be status"},
+		"status cannot declare a request body":            {"/operations/0/rest", "status_body_forbidden", "rest_status must not declare a request body"},
+		"status requires HEAD":                            {"/operations/0/rest/method", "status_method_invalid", "rest_status method must be HEAD"},
+		"text export requires a positive byte bound":      {"/operations/0/binary/max_bytes", "text_export_bound_invalid", "text_export must declare positive max_bytes"},
+		"text export requires the binary execution block": {"/operations/0/kind", "operation_execution_kind_mismatch", "execution block must match the operation kind"},
+	}
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			fsys := fullValidBundleFS("acme")
 			fsys["acme/operations.json"] = &fstest.MapFile{Data: []byte(`{"operations":[` + tt.operation + `]}`)}
 
 			_, err := Load(fsys, "acme")
-			if err == nil || !strings.Contains(err.Error(), tt.wantErr) {
+			want, ok := public[tt.name]
+			if !ok || !publicBundleMatches167(err, "operations.json", want.field, want.code, want.reason) {
+				t.Fatalf("wrong public status/export diagnostic: %v", err)
+			}
+
+			if err == nil || !strings.Contains(bundleCauseText165(err), tt.wantErr) {
 				t.Fatalf("Load error = %v, want %q", err, tt.wantErr)
 			}
 		})
@@ -1591,10 +1549,14 @@ func TestBundleLoadRejectsUnsafeOperationKind(t *testing.T) {
 	if err == nil {
 		t.Fatalf("Load: expected unsafe operation kind to be rejected")
 	}
-	if !strings.Contains(err.Error(), "operations.json") ||
-		!strings.Contains(err.Error(), "/operations/0/kind") ||
-		!strings.Contains(err.Error(), "not in enum") {
-		t.Fatalf("Load error = %q, want operations.json kind enum rejection", err.Error())
+	if !publicBundleMatches167(err, "operations.json", "/operations/0/kind", "enum_mismatch", "value is not an allowed alternative") {
+		t.Fatalf("wrong public operation kind diagnostic: %v", err)
+	}
+
+	if !strings.Contains(bundleCauseText165(err), "operations.json") ||
+		!strings.Contains(bundleCauseText165(err), "/operations/0/kind") ||
+		!strings.Contains(bundleCauseText165(err), "not in enum") {
+		t.Fatalf("Load error = %q, want operations.json kind enum rejection", bundleCauseText165(err))
 	}
 }
 
@@ -1621,10 +1583,10 @@ func TestBundleLoadRejectsOperationWithoutMatchingBlock(t *testing.T) {
 	if err == nil {
 		t.Fatalf("Load: expected graphql_query without graphql block to be rejected")
 	}
-	if !strings.Contains(err.Error(), "operations.json") ||
-		!strings.Contains(err.Error(), "graphql_query") ||
-		!strings.Contains(err.Error(), "graphql") {
-		t.Fatalf("Load error = %q, want operations.json matching-block rejection", err.Error())
+	if !strings.Contains(bundleCauseText165(err), "operations.json") ||
+		!strings.Contains(bundleCauseText165(err), "graphql_query") ||
+		!strings.Contains(bundleCauseText165(err), "graphql") {
+		t.Fatalf("Load error = %q, want operations.json matching-block rejection", bundleCauseText165(err))
 	}
 }
 
@@ -1652,12 +1614,16 @@ func TestBundleLoadRejectsOperationWithMultipleExecutionBlocks(t *testing.T) {
 	}`)}
 
 	_, err := Load(fsys, "acme")
+	if !publicBundleMatches167(err, "operations.json", "/operations/0", "operation_execution_count_invalid", "operation must declare exactly one execution block") {
+		t.Fatalf("wrong public diagnostic: %v", err)
+	}
+
 	if err == nil {
 		t.Fatalf("Load: expected operation with multiple execution blocks to be rejected")
 	}
-	if !strings.Contains(err.Error(), "operations.json") ||
-		!strings.Contains(err.Error(), "exactly one execution block") {
-		t.Fatalf("Load error = %q, want operations.json single-block rejection", err.Error())
+	if !strings.Contains(bundleCauseText165(err), "operations.json") ||
+		!strings.Contains(bundleCauseText165(err), "exactly one execution block") {
+		t.Fatalf("Load error = %q, want operations.json single-block rejection", bundleCauseText165(err))
 	}
 }
 
@@ -1684,11 +1650,11 @@ func TestBundleLoadRejectsSecretOperationWithoutPolicy(t *testing.T) {
 	if err == nil {
 		t.Fatalf("Load: expected secret-sensitive operation without sensitive_policy to be rejected")
 	}
-	if !strings.Contains(err.Error(), "sensitive_policy") {
-		t.Fatalf("Load error = %q, want sensitive_policy rejection", err.Error())
+	if !strings.Contains(bundleCauseText165(err), "sensitive_policy") {
+		t.Fatalf("Load error = %q, want sensitive_policy rejection", bundleCauseText165(err))
 	}
-	if strings.Contains(err.Error(), "redact_fields") {
-		t.Fatalf("Load error = %q, must not require redact_fields", err.Error())
+	if strings.Contains(bundleCauseText165(err), "redact_fields") {
+		t.Fatalf("Load error = %q, must not require redact_fields", bundleCauseText165(err))
 	}
 }
 
@@ -1701,8 +1667,12 @@ func TestBundleLoadRejectsInlineInputModeForSecretOperation(t *testing.T) {
 	if err == nil {
 		t.Fatalf("Load: expected inline input_mode for a secret operation to be rejected")
 	}
-	if !strings.Contains(err.Error(), "inline") || !strings.Contains(err.Error(), "input_mode") {
-		t.Fatalf("Load error = %q, want inline input_mode rejection", err.Error())
+	if !publicBundleMatches167(err, "operations.json", "/operations/0/sensitive_policy/input_mode", "sensitive_input_inline", "secret input must come from env, file, or stdin") {
+		t.Fatalf("wrong public operation diagnostic: %v", err)
+	}
+
+	if !strings.Contains(bundleCauseText165(err), "inline") || !strings.Contains(bundleCauseText165(err), "input_mode") {
+		t.Fatalf("Load error = %q, want inline input_mode rejection", bundleCauseText165(err))
 	}
 }
 
@@ -1751,8 +1721,12 @@ func TestBundleLoadRejectsSecretOperationWithoutTypedConfirmation(t *testing.T) 
 	if err == nil {
 		t.Fatalf("Load: expected secret operation without typed_confirmation to be rejected")
 	}
-	if !strings.Contains(err.Error(), "typed_confirmation") {
-		t.Fatalf("Load error = %q, want typed_confirmation rejection", err.Error())
+	if !publicBundleMatches167(err, "operations.json", "/operations/0/sensitive_policy/approval_mode", "sensitive_approval_invalid", "secret writes require typed_confirmation") {
+		t.Fatalf("wrong public operation diagnostic: %v", err)
+	}
+
+	if !strings.Contains(bundleCauseText165(err), "typed_confirmation") {
+		t.Fatalf("Load error = %q, want typed_confirmation rejection", bundleCauseText165(err))
 	}
 }
 
@@ -1850,9 +1824,9 @@ func TestBundleLoadRejectsDuplicateOperationIDs(t *testing.T) {
 	if err == nil {
 		t.Fatalf("Load: expected duplicate operation IDs to be rejected")
 	}
-	if !strings.Contains(err.Error(), "operations.json") ||
-		!strings.Contains(err.Error(), "duplicate operation id") {
-		t.Fatalf("Load error = %q, want duplicate operation id rejection", err.Error())
+	if !strings.Contains(bundleCauseText165(err), "operations.json") ||
+		!strings.Contains(bundleCauseText165(err), "duplicate operation id") {
+		t.Fatalf("Load error = %q, want duplicate operation id rejection", bundleCauseText165(err))
 	}
 }
 
@@ -1880,8 +1854,12 @@ func TestBundleLoadRejectsRestWriteWithReadMethod(t *testing.T) {
 	if err == nil {
 		t.Fatalf("Load: expected rest_write with GET to be rejected")
 	}
-	if !strings.Contains(err.Error(), "rest_write method must be mutating") {
-		t.Fatalf("Load error = %q, want rest_write method rejection", err.Error())
+	if !publicBundleMatches167(err, "operations.json", "/operations/0/rest/method", "rest_write_method_invalid", "rest_write method must be mutating") {
+		t.Fatalf("wrong public operation diagnostic: %v", err)
+	}
+
+	if !strings.Contains(bundleCauseText165(err), "rest_write method must be mutating") {
+		t.Fatalf("Load error = %q, want rest_write method rejection", bundleCauseText165(err))
 	}
 }
 
@@ -1908,8 +1886,12 @@ func TestBundleLoadRejectsBinaryDownloadWithoutPositiveLimit(t *testing.T) {
 	if err == nil {
 		t.Fatalf("Load: expected binary_download without max_bytes to be rejected")
 	}
-	if !strings.Contains(err.Error(), "binary_download must declare positive max_bytes") {
-		t.Fatalf("Load error = %q, want binary max_bytes rejection", err.Error())
+	if !publicBundleMatches167(err, "operations.json", "/operations/0/binary/max_bytes", "binary_bound_invalid", "binary_download must declare positive max_bytes") {
+		t.Fatalf("wrong public operation diagnostic: %v", err)
+	}
+
+	if !strings.Contains(bundleCauseText165(err), "binary_download must declare positive max_bytes") {
+		t.Fatalf("Load error = %q, want binary max_bytes rejection", bundleCauseText165(err))
 	}
 }
 
@@ -1969,17 +1951,20 @@ func TestBundleLoadRejectsUnknownCLISurfaceCommandKey(t *testing.T) {
 	if err == nil {
 		t.Fatalf("Load: expected an error for unknown cli_surface command key")
 	}
-	if !strings.Contains(err.Error(), "cli_surface.json") || !strings.Contains(err.Error(), "surprise") {
-		t.Fatalf("Load error = %q, want it to name cli_surface.json and surprise", err.Error())
+	if !publicBundleMatches167(err, "cli_surface.json", "/commands/0/<member:5>", "unknown_property", "additional property is not allowed") {
+		t.Fatalf("wrong public unknown-property diagnostic: %v", err)
+	}
+
+	if !strings.Contains(bundleCauseText165(err), "cli_surface.json") || !strings.Contains(bundleCauseText165(err), "surprise") {
+		t.Fatalf("Load error = %q, want it to name cli_surface.json and surprise", bundleCauseText165(err))
 	}
 }
 
 func TestBundleLoadStreamsOptionalIffDynamicSchema(t *testing.T) {
 	fsys := fstest.MapFS{
-		"pg/metadata.json":    &fstest.MapFile{Data: []byte(dynamicSchemaMetadata("pg"))},
-		"pg/spec.json":        &fstest.MapFile{Data: []byte(validSpec)},
-		"pg/api_surface.json": &fstest.MapFile{Data: []byte(`{"api":"pg","endpoints":[]}`)},
-		"pg/docs.md":          &fstest.MapFile{Data: []byte(validDocs)},
+		"pg/metadata.json": &fstest.MapFile{Data: []byte(dynamicSchemaMetadata("pg"))},
+		"pg/spec.json":     &fstest.MapFile{Data: []byte(validSpec)},
+		"pg/docs.md":       &fstest.MapFile{Data: []byte(validDocs)},
 	}
 
 	b, err := Load(fsys, "pg")
@@ -1996,6 +1981,10 @@ func TestBundleLoadStreamsRequiredWithoutDynamicSchema(t *testing.T) {
 	delete(fsys, "acme/streams.json")
 
 	_, err := Load(fsys, "acme")
+	if !publicBundleMatches167(err, "streams.json", "/", "bundle_file_missing", "readable connector requires streams.json unless dynamic_schema is declared") {
+		t.Fatalf("wrong public declaration diagnostic: %v", err)
+	}
+
 	if err == nil {
 		t.Fatalf("expected error: streams.json required when dynamic_schema=false")
 	}
@@ -2012,8 +2001,8 @@ func TestBundleLoadDirNameMismatch(t *testing.T) {
 	if err == nil {
 		t.Fatalf("expected dir-name/metadata.name mismatch error")
 	}
-	if !strings.Contains(err.Error(), "actual-dir") || !strings.Contains(err.Error(), "declared-name") {
-		t.Fatalf("error %q does not name both dir and metadata name", err.Error())
+	if !strings.Contains(bundleCauseText165(err), "actual-dir") || !strings.Contains(bundleCauseText165(err), "declared-name") {
+		t.Fatalf("error %q does not name both dir and metadata name", bundleCauseText165(err))
 	}
 }
 
@@ -2022,11 +2011,16 @@ func TestBundleLoadBadNameRegex(t *testing.T) {
 	fsys["Source-GitHub/metadata.json"] = &fstest.MapFile{Data: []byte(validMetadata("Source-GitHub"))}
 
 	_, err := Load(fsys, "Source-GitHub")
+	var diagnostic *BundleDiagnosticError
+	if !errors.As(err, &diagnostic) || diagnostic.Connector != "Source-GitHub" || diagnostic.Generation != "embedded-v1" || diagnostic.File != "metadata.json" || diagnostic.Field != "/name" || diagnostic.ReasonCode != "pattern_mismatch" || diagnostic.Reason != "value does not match the required pattern" {
+		t.Fatalf("wrong public name diagnostic: %v", err)
+	}
+
 	if err == nil {
 		t.Fatalf("expected bad name regex error")
 	}
-	if !strings.Contains(err.Error(), "Source-GitHub") {
-		t.Fatalf("error %q does not name the offending value", err.Error())
+	if !strings.Contains(bundleCauseText165(err), "Source-GitHub") {
+		t.Fatalf("error %q does not name the offending value", bundleCauseText165(err))
 	}
 }
 
@@ -2040,19 +2034,6 @@ func TestBundleLoadMissingRequiredFile(t *testing.T) {
 	}
 	if !strings.Contains(err.Error(), "metadata.json") {
 		t.Fatalf("error %q does not name the missing file", err.Error())
-	}
-}
-
-func TestBundleLoadAPISurfaceOptionalForRuntime(t *testing.T) {
-	fsys := fullValidBundleFS("acme")
-	delete(fsys, "acme/api_surface.json")
-
-	b, err := Load(fsys, "acme")
-	if err != nil {
-		t.Fatalf("Load without api_surface.json: %v", err)
-	}
-	if b.Surface != nil {
-		t.Fatalf("Surface = %+v, want nil when api_surface.json is absent", b.Surface)
 	}
 }
 
@@ -2138,7 +2119,7 @@ func TestBundleLoadAllEmptyTreeIsFine(t *testing.T) {
 // did not — the error names every failing bundle (not just the first) so a
 // caller that treats err!=nil as fatal still learns the full failing set
 // from the error text, and a caller that wants the good subset (this
-// package's own defs.FS-wide golden/parity tests, conformance) can keep
+// package's own defs.FS-wide execution tests) can keep
 // going against bundles.
 func TestBundleLoadAllOneBadBundleDoesNotHideTheRest(t *testing.T) {
 	fsys := fullValidBundleFS("acme")
@@ -2241,9 +2222,6 @@ func TestBundleLoadFromOnDiskTestdata(t *testing.T) {
 	if len(b.Streams) != 1 || b.Streams[0].Name != "widgets" {
 		t.Fatalf("Streams = %+v", b.Streams)
 	}
-	if b.Fixtures == nil {
-		t.Fatalf("Fixtures should be non-nil")
-	}
 
 	bundles, err := LoadAll(fsys)
 	if err != nil {
@@ -2258,119 +2236,6 @@ func TestBundleLoadFromOnDiskTestdata(t *testing.T) {
 	}
 	if byName["polling-watermark-demo"].Changefeed == nil {
 		t.Fatalf("LoadAll(testdata/bundles) omitted polling-watermark-demo changefeed: %+v", byName)
-	}
-}
-
-// --- optional conformance skip markers (R3: hook-aware dynamic conformance) --
-//
-// A bundle may declare an OPTIONAL, explicit "conformance" marker at either
-// stream level (streams.json's per-stream {"conformance": {"skip_dynamic":
-// true, "reason": "..."}}) or bundle level (metadata.json's top-level
-// equivalent), for connectors whose dynamic (fixture-replay) checks cannot
-// meaningfully run because the bundle's real behavior lives entirely behind
-// a Tier-2 hook that conformance's declarative-only replay harness cannot
-// exercise. This is parsed by the loader (no behavior beyond struct
-// population); dynamic.go interprets the marker, connectorgen validate
-// requires a non-empty reason.
-
-const streamsWithStreamConformanceMarker = `{
-	"base": {
-		"url": "{{ config.base_url }}",
-		"user_agent": "test-agent",
-		"headers": {},
-		"auth": [ { "mode": "bearer", "token": "{{ secrets.token }}", "when": "{{ cursor }}" } ],
-		"pagination": { "type": "none" },
-		"check": { "method": "GET", "path": "/ping" },
-		"error_map": []
-	},
-	"streams": [
-		{
-			"name": "widgets",
-			"path": "/widgets",
-			"records": { "path": "data" },
-			"schema": "schemas/widgets.json",
-			"conformance": { "skip_dynamic": true, "reason": "hook-covered; proven live by archived parity evidence for acme" }
-		}
-	]
-}`
-
-func TestBundleLoadParsesStreamConformanceMarker(t *testing.T) {
-	fsys := fullValidBundleFS("acme")
-	fsys["acme/streams.json"] = &fstest.MapFile{Data: []byte(streamsWithStreamConformanceMarker)}
-
-	b, err := Load(fsys, "acme")
-	if err != nil {
-		t.Fatalf("Load: %v", err)
-	}
-	if len(b.Streams) != 1 {
-		t.Fatalf("Streams = %+v, want 1", b.Streams)
-	}
-	s := b.Streams[0]
-	if s.Conformance == nil {
-		t.Fatalf("stream %q Conformance marker not parsed (got nil)", s.Name)
-	}
-	if !s.Conformance.SkipDynamic {
-		t.Fatalf("stream %q Conformance.SkipDynamic = false, want true", s.Name)
-	}
-	if s.Conformance.Reason == "" {
-		t.Fatalf("stream %q Conformance.Reason is empty", s.Name)
-	}
-}
-
-// TestBundleLoadStreamWithNoConformanceMarkerIsNil locks in that an ordinary
-// stream (no "conformance" key at all) parses with a nil marker, not a
-// zero-value non-nil struct — dynamic.go's marker-presence check must be
-// able to distinguish "no marker" from "marker present but false".
-func TestBundleLoadStreamWithNoConformanceMarkerIsNil(t *testing.T) {
-	fsys := fullValidBundleFS("acme")
-	b, err := Load(fsys, "acme")
-	if err != nil {
-		t.Fatalf("Load: %v", err)
-	}
-	if b.Streams[0].Conformance != nil {
-		t.Fatalf("Conformance = %+v, want nil for a stream with no conformance block", b.Streams[0].Conformance)
-	}
-}
-
-func metadataWithBundleConformanceMarker(name string) string {
-	return `{
-		"name": "` + name + `",
-		"display_name": "Test Connector",
-		"description": "a test connector",
-		"integration_type": "api",
-		"release_stage": "ga",
-		"capabilities": { "check": true, "read": true, "write": false, "query": false, "cdc": false, "dynamic_schema": false },
-		"conformance": { "skip_dynamic": true, "reason": "custom-auth-only; hook not registered in conformance's replay harness" }
-	}`
-}
-
-func TestBundleLoadParsesBundleLevelConformanceMarker(t *testing.T) {
-	fsys := fullValidBundleFS("acme")
-	fsys["acme/metadata.json"] = &fstest.MapFile{Data: []byte(metadataWithBundleConformanceMarker("acme"))}
-
-	b, err := Load(fsys, "acme")
-	if err != nil {
-		t.Fatalf("Load: %v", err)
-	}
-	if b.Metadata.Conformance == nil {
-		t.Fatalf("Metadata.Conformance marker not parsed (got nil)")
-	}
-	if !b.Metadata.Conformance.SkipDynamic {
-		t.Fatalf("Metadata.Conformance.SkipDynamic = false, want true")
-	}
-	if b.Metadata.Conformance.Reason == "" {
-		t.Fatalf("Metadata.Conformance.Reason is empty")
-	}
-}
-
-func TestBundleLoadMetadataWithNoConformanceMarkerIsNil(t *testing.T) {
-	fsys := fullValidBundleFS("acme")
-	b, err := Load(fsys, "acme")
-	if err != nil {
-		t.Fatalf("Load: %v", err)
-	}
-	if b.Metadata.Conformance != nil {
-		t.Fatalf("Metadata.Conformance = %+v, want nil for metadata with no conformance block", b.Metadata.Conformance)
 	}
 }
 
@@ -2472,8 +2337,12 @@ func TestBundleLoadRejectsUnknownBaseLevelKey(t *testing.T) {
 	if err == nil {
 		t.Fatalf("Load: expected an error for unknown base-level key %q, got nil", "query")
 	}
-	if !strings.Contains(err.Error(), "streams.json") || !strings.Contains(err.Error(), "query") {
-		t.Fatalf("Load error = %q, want it to name streams.json and the unknown key %q", err.Error(), "query")
+	if !publicBundleMatches167(err, "streams.json", "/base/<member:1>", "unknown_property", "additional property is not allowed") {
+		t.Fatalf("wrong public unknown-property diagnostic: %v", err)
+	}
+
+	if !strings.Contains(bundleCauseText165(err), "streams.json") || !strings.Contains(bundleCauseText165(err), "query") {
+		t.Fatalf("Load error = %q, want it to name streams.json and the unknown key %q", bundleCauseText165(err), "query")
 	}
 }
 
@@ -2584,8 +2453,12 @@ func TestBundleLoadRejectsUnknownStreamLevelKey(t *testing.T) {
 	if err == nil {
 		t.Fatalf("Load: expected an error for unknown stream-level key %q, got nil", "not_a_real_field")
 	}
-	if !strings.Contains(err.Error(), "streams.json") || !strings.Contains(err.Error(), "not_a_real_field") {
-		t.Fatalf("Load error = %q, want it to name streams.json and the unknown key %q", err.Error(), "not_a_real_field")
+	if !publicBundleMatches167(err, "streams.json", "/streams/0/<member:1>", "unknown_property", "additional property is not allowed") {
+		t.Fatalf("wrong public unknown-property diagnostic: %v", err)
+	}
+
+	if !strings.Contains(bundleCauseText165(err), "streams.json") || !strings.Contains(bundleCauseText165(err), "not_a_real_field") {
+		t.Fatalf("Load error = %q, want it to name streams.json and the unknown key %q", bundleCauseText165(err), "not_a_real_field")
 	}
 }
 
@@ -2606,8 +2479,12 @@ func TestBundleLoadRejectsUnknownAuthCandidateKey(t *testing.T) {
 	if err == nil {
 		t.Fatalf("Load: expected an error for unknown auth-candidate key %q (note: valid key is \"scopes\", not \"scope\"), got nil", "scope")
 	}
-	if !strings.Contains(err.Error(), "streams.json") || !strings.Contains(err.Error(), "scope") {
-		t.Fatalf("Load error = %q, want it to name streams.json and the unknown key %q", err.Error(), "scope")
+	if !publicBundleMatches167(err, "streams.json", "/base/auth/0/<member:1>", "unknown_property", "additional property is not allowed") {
+		t.Fatalf("wrong public unknown-property diagnostic: %v", err)
+	}
+
+	if !strings.Contains(bundleCauseText165(err), "streams.json") || !strings.Contains(bundleCauseText165(err), "scope") {
+		t.Fatalf("Load error = %q, want it to name streams.json and the unknown key %q", bundleCauseText165(err), "scope")
 	}
 }
 
@@ -2639,8 +2516,12 @@ func TestBundleLoadRejectsUnknownWritesActionKey(t *testing.T) {
 	if err == nil {
 		t.Fatalf("Load: expected an error for unknown writes-action key %q, got nil", "retries")
 	}
-	if !strings.Contains(err.Error(), "writes.json") || !strings.Contains(err.Error(), "retries") {
-		t.Fatalf("Load error = %q, want it to name writes.json and the unknown key %q", err.Error(), "retries")
+	if !publicBundleMatches167(err, "writes.json", "/actions/0/<member:5>", "unknown_property", "additional property is not allowed") {
+		t.Fatalf("wrong public unknown-property diagnostic: %v", err)
+	}
+
+	if !strings.Contains(bundleCauseText165(err), "writes.json") || !strings.Contains(bundleCauseText165(err), "retries") {
+		t.Fatalf("Load error = %q, want it to name writes.json and the unknown key %q", bundleCauseText165(err), "retries")
 	}
 }
 
@@ -2750,347 +2631,6 @@ func TestBundleLoadRejectsOpenDestructiveConfirmation(t *testing.T) {
 	}
 }
 
-func TestBundleLoadRejectsUnknownAPISurfaceEndpointKey(t *testing.T) {
-	fsys := fullValidBundleFS("acme")
-	fsys["acme/api_surface.json"] = &fstest.MapFile{Data: []byte(`{
-		"api": "test API v1",
-		"endpoints": [
-			{ "method": "GET", "path": "/widgets", "covered_by": { "stream": "widgets" }, "deprecated": true }
-		]
-	}`)}
-
-	_, err := Load(fsys, "acme")
-	if err == nil {
-		t.Fatalf("Load: expected an error for unknown api_surface.json endpoint key %q, got nil", "deprecated")
-	}
-	if !strings.Contains(err.Error(), "api_surface.json") || !strings.Contains(err.Error(), "deprecated") {
-		t.Fatalf("Load error = %q, want it to name api_surface.json and the unknown key %q", err.Error(), "deprecated")
-	}
-}
-
-func TestBundleLoadAPISurfaceOperationLedger(t *testing.T) {
-	fsys := fullValidBundleFS("acme")
-	fsys["acme/api_surface.json"] = &fstest.MapFile{Data: []byte(`{
-		"api": "test API v1",
-		"operation_ledger_version": 1,
-		"endpoints": [
-			{ "method": "GET", "path": "/widgets", "covered_by": { "stream": "widgets" } },
-			{
-				"method": "GET",
-				"path": "/widgets/{id}",
-				"operation": {
-					"model": "direct_read",
-					"status": "blocked",
-					"risk": "low",
-					"blocked_by_default": true,
-					"reason": "point lookup candidate, not yet modeled as a stream",
-					"source_url": "https://example.invalid/rest/widgets"
-				}
-			}
-		]
-	}`)}
-
-	b, err := Load(fsys, "acme")
-	if err != nil {
-		t.Fatalf("Load: %v", err)
-	}
-	if b.Surface.OperationLedgerVersion != 1 {
-		t.Fatalf("OperationLedgerVersion = %d, want 1", b.Surface.OperationLedgerVersion)
-	}
-	if len(b.Surface.Endpoints) != 2 {
-		t.Fatalf("endpoints = %d, want 2", len(b.Surface.Endpoints))
-	}
-	op := b.Surface.Endpoints[1].Operation
-	if op == nil {
-		t.Fatalf("Operation = nil, want operation metadata")
-	}
-	if op.Model != "direct_read" || op.Status != "blocked" || op.Risk != "low" {
-		t.Fatalf("Operation = %+v, want direct_read/blocked/low", op)
-	}
-	if !op.BlockedByDefault {
-		t.Fatalf("BlockedByDefault = false, want true")
-	}
-}
-
-func TestParseAPISurfaceOperationModelEnumRemainsClosedWithReadOnly(t *testing.T) {
-	const reason = "tracked blocked operation"
-	currentModels := []string{
-		"direct_read",
-		"binary_read",
-		"text_export",
-		"status_check",
-		"sensitive_reverse_etl",
-		"admin_reverse_etl",
-		"destructive_action",
-		"local_workflow",
-		"duplicate",
-		"deprecated",
-		"disallowed",
-	}
-
-	for _, model := range currentModels {
-		t.Run(model, func(t *testing.T) {
-			raw := []byte(fmt.Sprintf(`{"api":"test","endpoints":[{"method":"POST","path":"/widgets","operation":{"model":%q,"status":"blocked","risk":"low","blocked_by_default":true,"reason":%q}}]}`, model, reason))
-			surface, err := ParseAPISurface(raw)
-			if err != nil {
-				t.Fatalf("ParseAPISurface(%q): %v", model, err)
-			}
-			got, err := json.Marshal(surface.Endpoints[0].Operation)
-			if err != nil {
-				t.Fatalf("marshal operation %q: %v", model, err)
-			}
-			want := fmt.Sprintf(`{"model":%q,"status":"blocked","risk":"low","blocked_by_default":true,"reason":%q}`, model, reason)
-			if string(got) != want {
-				t.Fatalf("operation %q bytes = %s, want %s", model, got, want)
-			}
-		})
-	}
-
-	readOnlyRaw := []byte(fmt.Sprintf(`{"api":"test","endpoints":[{"method":"POST","path":"/widgets","operation":{"model":"read_only","status":"blocked","risk":"low","blocked_by_default":true,"reason":%q}}]}`, reason))
-	if _, err := ParseAPISurface(readOnlyRaw); err != nil {
-		t.Fatalf("ParseAPISurface(read_only): %v", err)
-	}
-
-	unknownRaw := []byte(fmt.Sprintf(`{"api":"test","endpoints":[{"method":"POST","path":"/widgets","operation":{"model":"made_up_model","status":"blocked","risk":"low","blocked_by_default":true,"reason":%q}}]}`, reason))
-	if _, err := ParseAPISurface(unknownRaw); err == nil || !strings.Contains(err.Error(), "value not in enum") {
-		t.Fatalf("ParseAPISurface(unknown model) error = %v, want closed-enum rejection", err)
-	}
-}
-
-// TestBundleLoadAPISurfaceV2ProvenanceContract is the #3785 red/green
-// contract: a v2 ledger carries an artifact table and endpoint-local
-// provenance without changing the endpoint's covered_by classifier.
-func TestBundleLoadAPISurfaceV2ProvenanceContract(t *testing.T) {
-	const validV2 = `{
-		"api": "test API v2",
-		"operation_ledger_version": 2,
-		"artifacts": [
-			{
-				"id": "acme-openapi-2026-08-06",
-				"url": "https://docs.acme.test/openapi.yaml",
-				"retrieved_at": "2026-08-06",
-				"sha256": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
-			}
-		],
-		"endpoints": [
-			{
-				"method": "GET",
-				"path": "/widgets",
-				"provenance": {
-					"artifact": "acme-openapi-2026-08-06",
-					"source_url": "https://docs.acme.test/api/widgets"
-				},
-				"covered_by": { "stream": "widgets" }
-			}
-		]
-	}`
-	const validV1 = `{
-		"api": "test API v1",
-		"operation_ledger_version": 1,
-		"endpoints": [
-			{
-				"method": "GET",
-				"path": "/widgets",
-				"covered_by": { "stream": "widgets" }
-			}
-		]
-	}`
-
-	tests := []struct {
-		name              string
-		apiSurface        string
-		wantLedgerVersion int
-		wantErrKey        string
-	}{
-		{name: "complete_v2", apiSurface: validV2, wantLedgerVersion: 2},
-		{name: "v1_ledger_compatibility", apiSurface: validV1, wantLedgerVersion: 1},
-		{
-			name:       "unknown_root_key",
-			apiSurface: strings.Replace(validV2, `"artifacts": [`, `"surprise": true, "artifacts": [`, 1),
-			wantErrKey: "surprise",
-		},
-		{
-			name:       "unknown_artifact_key",
-			apiSurface: strings.Replace(validV2, `"sha256":`, `"unexpected": true, "sha256":`, 1),
-			wantErrKey: "unexpected",
-		},
-		{
-			name:       "unknown_endpoint_key",
-			apiSurface: strings.Replace(validV2, `"covered_by": { "stream": "widgets" }`, `"covered_by": { "stream": "widgets" }, "unexpected_endpoint": true`, 1),
-			wantErrKey: "unexpected_endpoint",
-		},
-		{
-			name:       "provenance_cannot_be_a_classifier",
-			apiSurface: strings.Replace(validV2, `"source_url": "https://docs.acme.test/api/widgets"`, `"source_url": "https://docs.acme.test/api/widgets", "covered_by": { "stream": "widgets" }`, 1),
-			wantErrKey: "covered_by",
-		},
-	}
-
-	for _, tc := range tests {
-		t.Run(tc.name, func(t *testing.T) {
-			fsys := fullValidBundleFS("acme")
-			fsys["acme/api_surface.json"] = &fstest.MapFile{Data: []byte(tc.apiSurface)}
-
-			bundle, err := Load(fsys, "acme")
-			if tc.wantErrKey == "" {
-				if err != nil {
-					t.Fatalf("Load complete v2 api_surface: %v", err)
-				}
-				if bundle.Surface == nil || bundle.Surface.OperationLedgerVersion != tc.wantLedgerVersion {
-					t.Fatalf("Surface = %+v, want loaded operation_ledger_version %d", bundle.Surface, tc.wantLedgerVersion)
-				}
-				if tc.wantLedgerVersion == 1 {
-					if len(bundle.Surface.Artifacts) != 0 || bundle.Surface.Endpoints[0].Provenance != nil {
-						t.Fatalf("v1 Surface = %+v, want no v2 provenance data", bundle.Surface)
-					}
-					return
-				}
-				if got := bundle.Surface.Artifacts; len(got) != 1 || got[0].ID != "acme-openapi-2026-08-06" || got[0].RetrievedAt != "2026-08-06" {
-					t.Fatalf("Surface.Artifacts = %+v, want loaded provider artifact", got)
-				}
-				if got := bundle.Surface.Endpoints[0].Provenance; got == nil || got.Artifact != "acme-openapi-2026-08-06" || got.SourceURL != "https://docs.acme.test/api/widgets" {
-					t.Fatalf("Surface.Endpoints[0].Provenance = %+v, want loaded endpoint citation", got)
-				}
-				return
-			}
-			if err == nil {
-				t.Fatalf("Load error = nil, want unknown key %q to be rejected", tc.wantErrKey)
-			}
-			if !strings.Contains(err.Error(), tc.wantErrKey) {
-				t.Fatalf("Load error = %q, want it to name unknown key %q", err.Error(), tc.wantErrKey)
-			}
-		})
-	}
-}
-
-func TestParseAPISurfaceEnforcesLedgerSchema(t *testing.T) {
-	tests := []struct {
-		name        string
-		raw         string
-		wantVersion int
-		wantErr     bool
-	}{
-		{
-			name: "pre_ledger_remains_valid",
-			raw: `{
-				"api": "test API",
-				"endpoints": []
-			}`,
-		},
-		{
-			name: "v1_remains_valid",
-			raw: `{
-				"api": "test API",
-				"operation_ledger_version": 1,
-				"endpoints": []
-			}`,
-			wantVersion: 1,
-		},
-		{
-			name: "v2_is_valid",
-			raw: `{
-				"api": "test API",
-				"operation_ledger_version": 2,
-				"endpoints": []
-			}`,
-			wantVersion: 2,
-		},
-		{
-			name: "zero_is_rejected",
-			raw: `{
-				"api": "test API",
-				"operation_ledger_version": 0,
-				"endpoints": []
-			}`,
-			wantErr: true,
-		},
-		{
-			name: "null_is_rejected",
-			raw: `{
-				"api": "test API",
-				"operation_ledger_version": null,
-				"endpoints": []
-			}`,
-			wantErr: true,
-		},
-		{
-			name: "unsupported_version_is_rejected",
-			raw: `{
-				"api": "test API",
-				"operation_ledger_version": 3,
-				"endpoints": []
-			}`,
-			wantErr: true,
-		},
-		{
-			name: "noncanonical_version_key_is_rejected",
-			raw: `{
-				"api": "test API",
-				"Operation_Ledger_Version": 1,
-				"endpoints": []
-			}`,
-			wantErr: true,
-		},
-		{
-			name:    "trailing_json_value_is_rejected",
-			raw:     `{"api":"test API","endpoints":[]}{}`,
-			wantErr: true,
-		},
-		{
-			name:    "trailing_junk_is_rejected",
-			raw:     `{"api":"test API","endpoints":[]} junk`,
-			wantErr: true,
-		},
-	}
-
-	for _, tc := range tests {
-		t.Run(tc.name, func(t *testing.T) {
-			surface, err := ParseAPISurface([]byte(tc.raw))
-			if tc.wantErr {
-				if err == nil {
-					t.Fatal("ParseAPISurface error = nil, want schema rejection")
-				}
-				return
-			}
-			if err != nil {
-				t.Fatalf("ParseAPISurface: %v", err)
-			}
-			if surface.OperationLedgerVersion != tc.wantVersion {
-				t.Fatalf("OperationLedgerVersion = %d, want %d", surface.OperationLedgerVersion, tc.wantVersion)
-			}
-		})
-	}
-}
-
-func TestBundleLoadAPISurfaceOperationRejectsUnblockedDefault(t *testing.T) {
-	fsys := fullValidBundleFS("acme")
-	fsys["acme/api_surface.json"] = &fstest.MapFile{Data: []byte(`{
-		"api": "test API v1",
-		"operation_ledger_version": 1,
-		"endpoints": [
-			{
-				"method": "GET",
-				"path": "/widgets/{id}",
-				"operation": {
-					"model": "direct_read",
-					"status": "blocked",
-					"risk": "low",
-					"blocked_by_default": false,
-					"reason": "point lookup candidate, not yet modeled as a stream"
-				}
-			}
-		]
-	}`)}
-
-	_, err := Load(fsys, "acme")
-	if err == nil {
-		t.Fatalf("Load: expected api_surface.json schema error for blocked_by_default=false, got nil")
-	}
-	if !strings.Contains(err.Error(), "api_surface.json") || !strings.Contains(err.Error(), "enum") {
-		t.Fatalf("Load error = %q, want api_surface.json enum error", err.Error())
-	}
-}
-
 func TestBundleLoadRejectsUnknownMetadataTopLevelKey(t *testing.T) {
 	fsys := fullValidBundleFS("acme")
 	fsys["acme/metadata.json"] = &fstest.MapFile{Data: []byte(`{
@@ -3107,8 +2647,12 @@ func TestBundleLoadRejectsUnknownMetadataTopLevelKey(t *testing.T) {
 	if err == nil {
 		t.Fatalf("Load: expected an error for unknown metadata.json top-level key %q, got nil", "maintainer")
 	}
-	if !strings.Contains(err.Error(), "metadata.json") || !strings.Contains(err.Error(), "maintainer") {
-		t.Fatalf("Load error = %q, want it to name metadata.json and the unknown key %q", err.Error(), "maintainer")
+	if !publicBundleMatches167(err, "metadata.json", "/<member:4>", "unknown_property", "additional property is not allowed") {
+		t.Fatalf("wrong public unknown-property diagnostic: %v", err)
+	}
+
+	if !strings.Contains(bundleCauseText165(err), "metadata.json") || !strings.Contains(bundleCauseText165(err), "maintainer") {
+		t.Fatalf("Load error = %q, want it to name metadata.json and the unknown key %q", bundleCauseText165(err), "maintainer")
 	}
 }
 
@@ -3452,6 +2996,12 @@ func TestBundleLoadRejectsUnenforceableRequiredQuery(t *testing.T) {
 		{name: "missing any_of", group: `{}`},
 		{name: "blank parameter name", group: `{"any_of": ["email", "  "]}`},
 	}
+	public := map[string]struct{ field, code, reason string }{
+		"empty any_of":         {"/operations/0/rest/required_query/0/any_of", "array_too_short", "array has too few items"},
+		"missing any_of":       {"/operations/0/rest/required_query/0/any_of", "required_property_missing", "required property is missing"},
+		"blank parameter name": {"/operations/0/rest/required_query/0/any_of/1", "required_query_name_blank", "required query parameter name must not be blank"},
+	}
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			_, err := Load(operationsBundleFS(t, `{
@@ -3473,7 +3023,12 @@ func TestBundleLoadRejectsUnenforceableRequiredQuery(t *testing.T) {
 			if err == nil {
 				t.Fatal("want load error: a group that can never be satisfied is unenforceable and must fail loudly")
 			}
-			if !strings.Contains(err.Error(), "required_query") {
+			want, ok := public[tt.name]
+			if !ok || !publicBundleMatches167(err, "operations.json", want.field, want.code, want.reason) {
+				t.Fatalf("wrong public constraint diagnostic: %v", err)
+			}
+
+			if !strings.Contains(bundleCauseText165(err), "required_query") {
 				t.Fatalf("error should name required_query, got %v", err)
 			}
 		})
@@ -3572,13 +3127,28 @@ func TestBundleLoadRejectsInvalidBase64UploadAction(t *testing.T) {
 			want: "max_encoded_bytes",
 		},
 	}
+	public := map[string]struct{ field, code, reason string }{
+		"body_type without spec":                         {"/actions/0/base64_upload", "base64_spec_missing", "body_type base64_upload requires base64_upload"},
+		"spec without body_type":                         {"/actions/0/body_type", "base64_body_type_conflict", "base64_upload requires matching body_type"},
+		"missing content_field":                          {"/actions/0/base64_upload/content_field", "required_property_missing", "required property is missing"},
+		"non-positive max_decoded_bytes":                 {"/actions/0/base64_upload/max_decoded_bytes", "base64_decoded_bound_invalid", "base64_upload requires positive max_decoded_bytes"},
+		"unknown source mode":                            {"/actions/0/base64_upload/source", "enum_mismatch", "value is not an allowed alternative"},
+		"source_field equals content_field in path mode": {"/actions/0/base64_upload/source_field", "base64_fields_conflict", "source_field and content_field must differ in path mode"},
+		"unsatisfiable encoded bound":                    {"/actions/0/base64_upload/max_encoded_bytes", "base64_encoded_bound_invalid", "max_encoded_bytes must hold the encoded decoded-byte bound"},
+	}
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			_, err := Load(base64UploadBundleFS(t, tt.action), "acme")
 			if err == nil {
 				t.Fatal("want load error, got nil")
 			}
-			if !strings.Contains(err.Error(), tt.want) {
+			want, ok := public[tt.name]
+			if !ok || !publicBundleMatches167(err, "writes.json", want.field, want.code, want.reason) {
+				t.Fatalf("wrong public constraint diagnostic: %v", err)
+			}
+
+			if !strings.Contains(bundleCauseText165(err), tt.want) {
 				t.Fatalf("error should mention %q, got %v", tt.want, err)
 			}
 		})

@@ -1,7 +1,0 @@
-{
-  "record": { "id": "folder_fixture_1" },
-  "expect": {
-    "method": "DELETE",
-    "path": "/folder/folder_fixture_1"
-  }
-}

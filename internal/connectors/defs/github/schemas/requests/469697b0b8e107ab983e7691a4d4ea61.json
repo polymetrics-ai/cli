@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "auto_trigger_checks": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "app_id": {
+            "type": "integer"
+          },
+          "setting": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "app_id",
+          "setting"
+        ],
+        "type": "object"
+      },
+      "maxItems": 256,
+      "type": "array"
+    }
+  },
+  "required": [],
+  "type": "object"
+}

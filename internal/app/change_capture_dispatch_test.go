@@ -58,7 +58,6 @@ func (s *appChangeCaptureSource) Definition() connectors.Definition {
 				Ordering:    connectors.DeliveryOrderingSource,
 				Deletes:     connectors.DeliveryDeletesUnavailable,
 			},
-			Conformance: connectors.ConformanceEvidenceReference{Suite: "app_change_capture_snapshot", RunID: "bounded_full_v1"},
 		}},
 	}
 }

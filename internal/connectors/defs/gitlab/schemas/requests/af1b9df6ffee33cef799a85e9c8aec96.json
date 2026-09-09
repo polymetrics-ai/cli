@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "note_id": {
+      "type": "integer"
+    },
+    "noteable_id": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "id",
+    "note_id",
+    "noteable_id"
+  ],
+  "type": "object"
+}

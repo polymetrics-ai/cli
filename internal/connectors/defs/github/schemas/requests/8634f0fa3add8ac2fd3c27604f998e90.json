@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "org": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "role": {
+      "enum": [
+        "admin",
+        "member"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "username": {
+      "maxLength": 8192,
+      "type": "string"
+    }
+  },
+  "required": [
+    "org",
+    "username"
+  ],
+  "type": "object"
+}

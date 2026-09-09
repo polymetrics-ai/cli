@@ -1,0 +1,6 @@
+# Runtime next-link229 — type: tdd
+Task header: parent cli-batch1-pi-takeover owns issue/PR/base/integration; reused specialist native01a0825c-7fc6-7a73-bc66-60e837fcc00b, isolated fm/cli-batch1-ci-tests210 basee5e8282db. No PR/publication/review. Go skills/routing/canon/Atlas retained from218; inline GSD fallback because no delegation authorized.
+Discuss: selected196B B3/E3 and Firstmate212/229. Preserve complete returned URL bytes, link-owned positions, closed retained query set, same effective loop identity/direct and saved. Parent owns E1/E2/E4/E6/E7/forms/metadata lowering and Atlas aggregate. No production Requester semantics change.
+Plan --tdd: retain CP21 original45c source failure at5458ad05 and CP19a0f7ead3 source-next fixture; literal engine physical RequestURI/3 and5 identities RED; shared composition helper plus narrow optional query declaration/admission; fault-reached and no-third-send/loop/raw-byte/origin/retention/cancel/bounds/legacy controls; normal/race/vet; exact handoff. Missing strict completion/body/Link response dialect remain E2.
+Red: pending fresh source-bound first literal request comparison.
+Green: pending. All218 original evidence immutable; custody229 exact14 hash recovery separate.

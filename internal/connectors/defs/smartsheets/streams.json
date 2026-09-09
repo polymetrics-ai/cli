@@ -56,11 +56,7 @@
       "records": {
         "path": "rows"
       },
-      "schema": "schemas/sheet_rows.json",
-      "conformance": {
-        "skip_dynamic": true,
-        "reason": "StreamHook-handled (per-row cell flattening keyed by the page sibling columns[] array, which the declarative records/computed_fields dialect cannot express); hook-covered by internal/connectors/hooks/smartsheets/hooks_test.go"
-      }
+      "schema": "schemas/sheet_rows.json"
     },
     {
       "name": "contacts",

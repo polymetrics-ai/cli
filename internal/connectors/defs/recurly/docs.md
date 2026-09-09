@@ -14,7 +14,7 @@ Path-scoped operations use fixed connector config keys such as `account_id`, `su
 
 ## Streams notes
 
-Streams are fixed Recurly endpoints with provider-shaped JSON schemas and sanitized OAS-derived conformance fixtures. Record objects are closed while the provider's explicitly opaque objects remain free-form. List endpoints read the Recurly `data` array; singular GET endpoints emit the response object. No arbitrary query, body, path, shell, file, or generic HTTP passthrough is exposed.
+Streams are fixed Recurly endpoints with provider-shaped JSON schemas and sanitized OAS-derived execution-contract fixtures. Record objects are closed while the provider's explicitly opaque objects remain free-form. List endpoints read the Recurly `data` array; singular GET endpoints emit the response object. No arbitrary query, body, path, shell, file, or generic HTTP passthrough is exposed.
 
 ## Write actions & risks
 
@@ -28,4 +28,4 @@ The pinned operation descriptions do not independently declare any DELETE operat
 
 Recurly documents different fixed limits for sandbox traffic and production GET traffic, and returns the applicable limit in response headers. The connector therefore records the production GET figure as informational metadata but does not enforce a connector-wide runtime throttle; provider `429` responses are surfaced through the declared error map.
 
-The three official binary/export endpoints execute as bounded `binary_download` commands and write only below the caller-provided `--dest-root`. Their commandrunner/engine execution is covered by local synthetic fixtures. The connector has not been live-certified in this wave; no credentialed provider calls were run.
+The three official binary/export endpoints execute as bounded `binary_download` commands and write only below the caller-provided `--dest-root`. Their commandrunner/engine execution is covered by local synthetic fixtures. The connector has not been live-validated in this wave; no credentialed provider calls were run.

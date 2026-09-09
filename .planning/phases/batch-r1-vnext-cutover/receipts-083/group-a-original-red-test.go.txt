@@ -1,0 +1,47 @@
+package main
+
+import (
+	"context"
+	"os"
+	"path/filepath"
+	"strings"
+	"testing"
+)
+
+func TestCP11ExpectedLegacyWitnessRejectsReplacedPriorRoot(t *testing.T) {
+	root := t.TempDir()
+	publisher, _ := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
+	old, err := publisher.Publish(vNextPublicationArtifactsForTest("old", true))
+	if err != nil {
+		t.Fatal(err)
+	}
+	held, err := publisher.Open(context.Background())
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := publisher.Publish(vNextPublicationArtifactsForTest("new", false)); err != nil {
+		held.Release()
+		t.Fatal(err)
+	}
+	held.Release()
+	oldPath := filepath.Join(root, "acme", vNextPublicationGenerationDirectory, old.Generation)
+	before := vNextPublicationDirectoryIdentityForTest(t, oldPath, "review prior generation A")
+	if err := os.Rename(oldPath, oldPath+"-A"); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.Mkdir(oldPath, 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(oldPath, "foreign"), []byte("replacement B, not generation A"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	after := vNextPublicationDirectoryIdentityForTest(t, oldPath, "review replacement generation B")
+	if before == after {
+		t.Fatal("replacement control failed")
+	}
+	vNextPublicationAssertDurableCutWitnessForTest(t, root, "review deliberately replaced prior generation", old)
+	t.Logf("PROOF CONTROL: durable-cut helper accepted changed prior root identity and unrelated contents; A=%#v B=%#v", before, after)
+	if strings.Contains(t.Name(), "Rejects") {
+		t.Fatal("F05/F06 preservation oracle accepted replaced prior root B; helper has no pre-cut expected witness")
+	}
+}

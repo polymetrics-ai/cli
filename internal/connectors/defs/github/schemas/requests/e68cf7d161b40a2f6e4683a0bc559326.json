@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "issue_number": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "issue_number"
+  ],
+  "type": "object"
+}

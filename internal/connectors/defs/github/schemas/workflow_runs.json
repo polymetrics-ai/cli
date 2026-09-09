@@ -1,30 +1,17 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "workflow_runs",
-  "type": "object",
-  "x-primary-key": [
-    "id"
-  ],
-  "x-cursor-field": "updated_at",
-  "required": [
-    "id"
-  ],
   "properties": {
-    "repository": {
-      "type": "string",
-      "description": "Legacy's config-derived per-record marker field (\"owner/repo\"), restored via computed_fields' now-available config.* reference (ENGINE_GAP G0, RESOLVED)."
-    },
-    "id": {
-      "type": "integer"
-    },
-    "node_id": {
-      "type": "string"
-    },
-    "name": {
+    "conclusion": {
       "type": [
         "string",
         "null"
       ]
+    },
+    "created_at": {
+      "type": "string"
+    },
+    "event": {
+      "type": "string"
     },
     "head_branch": {
       "type": [
@@ -35,26 +22,24 @@
     "head_sha": {
       "type": "string"
     },
-    "status": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "conclusion": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "event": {
+    "html_url": {
       "type": "string"
     },
-    "workflow_id": {
+    "id": {
       "type": "integer"
     },
-    "run_number": {
-      "type": "integer"
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "node_id": {
+      "type": "string"
+    },
+    "repository": {
+      "description": "Repository marker derived from the configured owner and repository.",
+      "type": "string"
     },
     "run_attempt": {
       "type": [
@@ -62,14 +47,29 @@
         "null"
       ]
     },
-    "html_url": {
-      "type": "string"
+    "run_number": {
+      "type": "integer"
     },
-    "created_at": {
-      "type": "string"
+    "status": {
+      "type": [
+        "string",
+        "null"
+      ]
     },
     "updated_at": {
       "type": "string"
+    },
+    "workflow_id": {
+      "type": "integer"
     }
-  }
+  },
+  "required": [
+    "id"
+  ],
+  "title": "workflow_runs",
+  "type": "object",
+  "x-cursor-field": "updated_at",
+  "x-primary-key": [
+    "id"
+  ]
 }

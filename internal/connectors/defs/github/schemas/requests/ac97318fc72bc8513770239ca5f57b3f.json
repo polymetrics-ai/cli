@@ -1,0 +1,58 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "enable_static_ip": {
+      "type": "boolean"
+    },
+    "hosted_runner_id": {
+      "type": "integer"
+    },
+    "image_gen": {
+      "type": "boolean"
+    },
+    "image_id": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "image_source": {
+      "enum": [
+        "github",
+        "partner",
+        "custom"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "image_version": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "maximum_runners": {
+      "type": "integer"
+    },
+    "name": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "org": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "runner_group_id": {
+      "type": "integer"
+    },
+    "size": {
+      "maxLength": 8192,
+      "type": "string"
+    }
+  },
+  "required": [
+    "hosted_runner_id",
+    "org"
+  ],
+  "type": "object"
+}

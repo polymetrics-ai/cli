@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "after_id": {
+      "type": "integer"
+    },
+    "before_id": {
+      "type": "integer"
+    },
+    "issue_number": {
+      "type": "integer"
+    },
+    "sub_issue_id": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "issue_number",
+    "sub_issue_id"
+  ],
+  "type": "object"
+}

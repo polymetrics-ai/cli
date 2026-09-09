@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "description": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "files": {
+      "additionalProperties": true,
+      "maxProperties": 256,
+      "type": "object"
+    },
+    "gist_id": {
+      "maxLength": 8192,
+      "type": "string"
+    }
+  },
+  "required": [
+    "gist_id"
+  ],
+  "type": "object"
+}

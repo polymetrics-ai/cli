@@ -1,7 +1,0 @@
-{
-  "request": { "method": "GET", "path": "/protocols", "query": { "limit": "1" } },
-  "response": {
-    "status": 200,
-    "body": []
-  }
-}

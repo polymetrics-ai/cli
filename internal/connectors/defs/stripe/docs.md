@@ -8,7 +8,7 @@ Readable streams: `customers`, `charges`, `invoices`, `subscriptions`, `products
 Write actions: `create_customer`, `update_customer`, `delete_customer`.
 
 The operation ledger was refreshed against Stripe OpenAPI spec3 version `2026-07-29.dahlia`: 416
-paths and 589 documented HTTP operations are tracked exactly once in `api_surface.json`. Operations
+paths and 589 documented HTTP operations are tracked exactly once in `execution bundle`. Operations
 that are not declared as streams, writes, or provider commands remain blocked/planned metadata until
 their typed schemas, bounds, fixtures, and safety evidence are authored.
 
@@ -101,8 +101,8 @@ Reverse ETL writes should be planned, previewed, approved, and then executed. De
 - Official lane counts represented in the ledger: `etl_read=242`, `reverse_etl_write=316`,
   `direct_read_query_search=9`, `binary_file=7`, `cdc_changefeed=7`,
   `excluded_not_applicable=8`, `total=589`.
-- Fixture-backed executable coverage remains intentionally narrow and uncertified: 5 ETL streams and
-  3 customer write actions. No live Stripe credential check, provider call, write, or certification
+- Fixture-backed executable coverage remains intentionally narrow and unvalidated: 5 ETL streams and
+  3 customer write actions. No live Stripe credential check, provider call, write, or validation
   evidence is claimed by this bundle.
 - DELETE and destructive operations are not blanket-excluded as unsafe. They are in scope only when
   exposed as typed write actions with `confirm: "destructive"` and the existing reverse ETL plan →
@@ -117,4 +117,4 @@ Reverse ETL writes should be planned, previewed, approved, and then executed. De
 - CDC/changefeed rows remain blocked/planned on CDC truthfulness/state foundations tracked by issues
   #2986 and #2988 plus connector-owned event/webhook fixtures.
 - Binary/file rows remain blocked/planned until bounded provider command metadata, response
-  redaction, size limits, and conformance fixtures are authored.
+  redaction, size limits, and execution-contract fixtures are authored.

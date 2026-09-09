@@ -1,0 +1,146 @@
+{
+  "writes": {
+    "actions": [
+      {
+        "name": "attach",
+        "kind": "create",
+        "risk": "low",
+        "method": "POST",
+        "path": "/attachments",
+        "body_type": "multipart",
+        "multipart": {
+          "max_bytes": 2048,
+          "parts": [
+            {
+              "name": "message",
+              "type": "field",
+              "field": "message",
+              "required": true,
+              "allowed_media_types": [
+                "text/plain"
+              ]
+            },
+            {
+              "name": "attachment",
+              "type": "file",
+              "field": "media_file_path",
+              "required": true,
+              "max_bytes": 1024,
+              "content_type": "text/plain",
+              "allowed_media_types": [
+                "text/plain"
+              ]
+            }
+          ]
+        },
+        "record_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "message",
+            "media_file_path"
+          ],
+          "properties": {
+            "message": {
+              "type": "string"
+            },
+            "media_file_path": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    ]
+  },
+  "operations": {
+    "operations": [
+      {
+        "id": "github.attachments.create",
+        "kind": "rest_write",
+        "summary": "Attach file",
+        "risk": "high",
+        "approval": "plan-preview-confirm-execute",
+        "output_policy": "json",
+        "mutation_class": "destructive",
+        "confirmation": {
+          "kind": "destructive"
+        },
+        "rest": {
+          "method": "POST",
+          "path": "/attachments",
+          "content_type": "multipart/form-data",
+          "max_bytes": 1024,
+          "body_schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "message",
+              "media_file_path"
+            ],
+            "properties": {
+              "message": {
+                "type": "string"
+              },
+              "media_file_path": {
+                "type": "string"
+              }
+            }
+          },
+          "multipart": {
+            "max_bytes": 2048,
+            "parts": [
+              {
+                "name": "message",
+                "type": "field",
+                "field": "message",
+                "required": true,
+                "allowed_media_types": [
+                  "text/plain"
+                ]
+              },
+              {
+                "name": "attachment",
+                "type": "file",
+                "field": "media_file_path",
+                "required": true,
+                "max_bytes": 1024,
+                "content_type": "text/plain",
+                "allowed_media_types": [
+                  "text/plain"
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "sync_transport": {
+    "schema_version": 1,
+    "destination_transport": {
+      "executor": {
+        "family": "native_database",
+        "id": "acme_stage_destination"
+      },
+      "eligible_actions": [
+        "stage_append"
+      ],
+      "modes": [
+        "full_append"
+      ],
+      "delivery": {
+        "idempotency": "keyed",
+        "ordering": "source_ordered",
+        "deletes": "not_available"
+      },
+      "acknowledgement": "durable_warehouse",
+      "apply_strategies": [
+        {
+          "mode": "full_append",
+          "strategy": "change_apply",
+          "action": "stage_append"
+        }
+      ]
+    }
+  }
+}

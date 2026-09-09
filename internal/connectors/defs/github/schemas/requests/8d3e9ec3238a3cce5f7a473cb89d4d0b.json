@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "org": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "properties": {
+      "items": {},
+      "maxItems": 256,
+      "type": "array"
+    },
+    "repository_names": {
+      "items": {
+        "maxLength": 8192,
+        "type": "string"
+      },
+      "maxItems": 30,
+      "minItems": 1,
+      "type": "array"
+    }
+  },
+  "required": [
+    "org",
+    "properties",
+    "repository_names"
+  ],
+  "type": "object"
+}

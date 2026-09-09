@@ -1,24 +1,24 @@
 {
-  "name": "github",
-  "display_name": "GitHub",
-  "description": "Reads GitHub repository, issue, pull request, code, release, collaboration, Actions, security (code scanning/dependabot/secret scanning/advisories), webhook, deploy key, environment, and ruleset data, and plans approval-gated reverse ETL actions through fixed GitHub REST and GraphQL operations.",
-  "integration_type": "api",
-  "docs_url": "https://docs.github.com/en/rest",
-  "release_stage": "ga",
-  "capabilities": {
-    "check": true,
-    "read": true,
-    "write": true,
-    "query": false,
-    "cdc": false,
-    "dynamic_schema": false
-  },
   "batch": {
     "read_page_size": 100
   },
+  "capabilities": {
+    "cdc": false,
+    "check": true,
+    "dynamic_schema": false,
+    "query": false,
+    "read": true,
+    "write": true
+  },
+  "description": "Reads GitHub repository, issue, pull request, code, release, collaboration, Actions, security (code scanning/dependabot/secret scanning/advisories), webhook, deploy key, environment, and ruleset data, and plans approval-gated reverse ETL actions through fixed GitHub REST and GraphQL operations.",
+  "display_name": "GitHub",
+  "docs_url": "https://docs.github.com/en/rest",
+  "integration_type": "api",
+  "name": "github",
+  "release_stage": "ga",
   "risk": {
+    "approval": "reverse ETL plan approval required before writes",
     "read": "external API read",
-    "write": "external GitHub API mutation",
-    "approval": "reverse ETL plan approval required before writes"
+    "write": "external GitHub API mutation"
   }
 }

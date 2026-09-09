@@ -52,21 +52,21 @@ direct reads; create, update, batch, and delete commands remain subject to rever
 preview, approval, and execute safeguards.
 
 The documented batch commands stay implemented and user-reachable. Their
-application batch-dispatch certification is explicitly deferred to 0.3.1:
+application batch-dispatch validation is explicitly deferred to 0.3.1:
 `write_eligibility.json` source-traces every batch `POST /rest/batch/...`
 route to the published Twenty API, locks the provider-owned `records` envelope
 and 60-record limit, and names the foundation block. This is neither a partial
-command classification nor a claim that batch delivery was certified.
+command classification nor a claim that batch delivery was validated.
 
-## Fixture conformance and certification
+## Fixture execution-contract and validation
 
 S7 adds synthetic, credential-free replay fixtures for all 28 read streams and all 112 write actions.
 Stream fixtures mirror Twenty's `data.<object>` envelope and cursor-style `pageInfo` response shape.
 Write fixtures exercise create, update, batch, and delete request construction against the replay
 capture server only; they do not execute live reverse ETL writes.
 
-Local conformance is fixture-backed, runs without secrets, and is included in credential-free
-certification when the Twenty bundle fixtures are available. Live `pm connectors certify twenty`
+Local execution-contract is fixture-backed, runs without secrets, and is included in credential-free
+validation when the Twenty bundle fixtures are available. Live `pm connectors inspect twenty`
 remains credential-gated for real Twenty tenants; use placeholder env values only with localhost
 fixture replay. Reverse ETL still must follow plan, preview, approval, and execute before any live
 mutation.
@@ -80,7 +80,7 @@ than a duplicate, raw parallel command surface for the same REST CRUD operations
 ## Known limits
 
 - No live Twenty credentials are required for connector inspection, help rendering, docs generation,
-  validation, or fixture conformance.
+  validation, or fixture execution-contract.
 - Destructive delete actions are declarative only until a user follows reverse ETL plan, preview,
   approval, and execute.
 - The provider source used by this bundle does not document an idempotency-key

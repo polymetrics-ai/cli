@@ -193,8 +193,8 @@ func (m SyncMode) IsDeduped() bool {
 }
 
 // IsContractMode reports a new closed vocabulary entry. It may parse and be
-// persisted, but RunETL refuses to execute it until a native executor and the
-// shared conformance evidence have been admitted.
+// persisted, but RunETL refuses to execute it until a matching native executor
+// and mode have been admitted.
 func (m SyncMode) IsContractMode() bool {
 	return m.ContractMode != "" && !m.LegacyCompatibility
 }

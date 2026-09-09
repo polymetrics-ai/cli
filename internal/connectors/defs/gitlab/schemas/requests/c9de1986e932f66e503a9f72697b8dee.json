@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "confidence_score": {
+      "maximum": 100,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "description": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "origin": {
+      "maxLength": 8192,
+      "pattern": "^(?:[\\uD800-\\uDBFF][\\uDC00-\\uDFFF]|[^\\n\\uD800-\\uDFFF]){1,255}$",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "vulnerability_id": {
+      "maxLength": 8192,
+      "type": "string"
+    }
+  },
+  "required": [
+    "confidence_score",
+    "description",
+    "vulnerability_id"
+  ],
+  "type": "object"
+}

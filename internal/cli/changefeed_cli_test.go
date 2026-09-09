@@ -3,9 +3,6 @@ package cli_test
 import (
 	"bytes"
 	"encoding/json"
-	"os"
-	"path/filepath"
-	"runtime"
 	"testing"
 
 	"polymetrics.ai/internal/cli"
@@ -200,38 +197,7 @@ func TestPollingHelpDistinguishesStaticDeclarationsFromDynamicRuntimeEligibility
 	if code != 0 {
 		t.Fatalf("Run(connectors) code = %d stderr = %s", code, stderr.String())
 	}
-	if bytes.Contains(stdout.Bytes(), []byte("A planned, unsupported, or absent declaration\n  does not implement a polling mode.")) {
-		t.Fatalf("connectors help denies dynamically constructed polling declarations: %s", stdout.String())
-	}
-	if !bytes.Contains(stdout.Bytes(), []byte("declaration alone does not implement a polling mode")) {
-		t.Fatalf("connectors help omitted static declaration scope: %s", stdout.String())
-	}
-	if !bytes.Contains(stdout.Bytes(), []byte("constructs an implemented declaration per selected catalog object")) {
-		t.Fatalf("connectors help omitted dynamic runtime eligibility: %s", stdout.String())
-	}
-}
-
-func TestPostgresNativeAPISurfaceHasNoFabricatedRESTEndpoints(t *testing.T) {
-	_, thisFile, _, ok := runtime.Caller(0)
-	if !ok {
-		t.Fatal("runtime.Caller(0) failed")
-	}
-	apiSurfacePath := filepath.Join(filepath.Dir(thisFile), "..", "connectors", "defs", "postgres", "api_surface.json")
-	raw, err := os.ReadFile(apiSurfacePath)
-	if err != nil {
-		t.Fatalf("ReadFile(%s): %v", apiSurfacePath, err)
-	}
-	var surface struct {
-		API       string            `json:"api"`
-		Endpoints []json.RawMessage `json:"endpoints"`
-	}
-	if err := json.Unmarshal(raw, &surface); err != nil {
-		t.Fatalf("decode PostgreSQL api surface: %v", err)
-	}
-	if len(surface.Endpoints) != 0 {
-		t.Fatalf("PostgreSQL native API surface fabricated %d REST endpoints: %s", len(surface.Endpoints), raw)
-	}
-	if surface.API == "" {
-		t.Fatalf("PostgreSQL native API surface omitted protocol identity: %s", raw)
+	if !pollingHelpContract171(stdout.String()) {
+		t.Fatalf("connectors help lost static binding/dynamic preflight contract: %s", stdout.String())
 	}
 }

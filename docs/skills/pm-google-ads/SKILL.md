@@ -459,7 +459,6 @@ Declarative Google Ads connector for v22 customer, campaign, ad group, direct-re
 
 - Google Ads v22 fixed direct reads and limited guarded reverse/write actions.
 - Usage: pm google-ads <resource> <operation> [flags]
-- Source CLI: Google Ads API v22 REST discovery (https://developers.google.com/google-ads/api/reference/rpc/v22/overview)
 - Other Commands
   - audience-insights list-insights-eligible-dates - Read Google Ads audienceInsights.listInsightsEligibleDates. [intent=direct_read availability=implemented operation=google_ads.audience.insights.list.insights.eligible.dates]; approval: none; risk: Bounded JSON direct read; response fields with secret-like names are redacted.; flags: --insights-application-info, --page, --page-cursor
   - customers asset-generations generate-images - Read Google Ads customers.assetGenerations.generateImages. [intent=direct_read availability=implemented operation=google_ads.customers.asset.generations.generate.images]; approval: none; risk: Bounded JSON direct read; response fields with secret-like names are redacted.; flags: --advertising-channel-type, --asset-field-types, --final-url-generation, --freeform-generation, --product-recontext-generation, --page, --page-cursor

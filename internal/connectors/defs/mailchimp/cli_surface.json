@@ -1,12 +1,6 @@
 {
   "tagline": "Inspect, read, search, and safely plan typed Mailchimp Marketing API operations.",
   "usage": "pm mailchimp <command> [flags]",
-  "source_cli": {
-    "name": "Mailchimp Marketing API",
-    "docs": "https://api.mailchimp.com/schema/3.0/Swagger.json",
-    "reference": "Official Swagger 2.0 schema 3.0.91",
-    "source": "provider_api"
-  },
   "groups": [
     {
       "id": "streams",
@@ -7057,8 +7051,7 @@
       "summary": "Declared direct read: GET /.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Root/Namespace.json",
-      "notes": "Blocked: locked source operation mailchimp.provider.getroot-1 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -7071,8 +7064,7 @@
       "summary": "Declared direct write: POST /automations/{workflow_id}/emails.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Automations/Emails/Collection.json",
-      "notes": "Blocked: locked source operation mailchimp.provider.postcampaignsidactionsunschedule-22 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -7081,8 +7073,7 @@
       "summary": "Declared direct write: POST /automations/{workflow_id}/emails/{workflow_email_id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Automations/Emails/Instance.json",
-      "notes": "Blocked: locked source operation mailchimp.provider.postcampaignsidactionstest-23 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -7091,8 +7082,7 @@
       "summary": "Declared direct read: GET /automations/{workflow_id}/emails/{workflow_email_id}/actions/start.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Automations/Emails/Actions/Start.json",
-      "notes": "Blocked: locked source operation mailchimp.provider.getcampaignsidcontent-25 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -7105,8 +7095,7 @@
       "summary": "Declared direct write: PUT /automations/{workflow_id}/emails/{workflow_email_id}/actions/start.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Automations/Emails/Actions/Start.json",
-      "notes": "Blocked: locked source operation mailchimp.provider.putcampaignsidcontent-26 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -7115,8 +7104,7 @@
       "summary": "Declared direct write: POST /automations/{workflow_id}/emails/{workflow_email_id}/queue/{subscriber_hash}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Automations/Emails/Queue/Instance.json",
-      "notes": "Blocked: locked source operation mailchimp.provider.postcampaignsidactionsresume-28 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -7125,8 +7113,7 @@
       "summary": "Declared direct write: DELETE /automations/{workflow_id}/removed-subscribers/{subscriber_hash}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Automations/RemovedSubscribers/Instance.json",
-      "notes": "Blocked: locked source operation mailchimp.provider.deletecampaignsidfeedbackid-31 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -7135,8 +7122,7 @@
       "summary": "Declared direct write: PATCH /automations/{workflow_id}/removed-subscribers/{subscriber_hash}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Automations/RemovedSubscribers/Instance.json",
-      "notes": "Blocked: locked source operation mailchimp.provider.patchcampaignsidfeedbackid-33 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -7145,8 +7131,7 @@
       "summary": "Declared direct write: DELETE /batch-webhooks.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/BatchWebhooks/Collection.json",
-      "notes": "Blocked: locked source operation mailchimp.provider.deleteconnectedsitesid-34 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -7155,8 +7140,7 @@
       "summary": "Declared direct write: POST /batch-webhooks/{batch_webhook_id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/BatchWebhooks/Instance.json",
-      "notes": "Blocked: locked source operation mailchimp.provider.postconnectedsitesidactionsverifyscriptinstallation-36 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -7165,8 +7149,7 @@
       "summary": "Declared direct write: POST /batches/{batch_id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Batches/Instance.json",
-      "notes": "Blocked: locked source operation mailchimp.provider.postconnectedsites-39 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -7175,8 +7158,7 @@
       "summary": "Declared direct read: GET /campaigns/{campaign_id}/actions/create-resend.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Campaigns/Actions/Create-Resend.json",
-      "notes": "Blocked: locked source operation mailchimp.provider.getlistsidabusereports-45 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -7189,8 +7171,7 @@
       "summary": "Declared direct read: GET /campaigns/{campaign_id}/actions/pause.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Campaigns/Actions/Pause.json",
-      "notes": "Blocked: locked source operation mailchimp.provider.getlists-46 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -7203,8 +7184,7 @@
       "summary": "Declared direct read: GET /campaigns/{campaign_id}/actions/replicate.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Campaigns/Actions/Replicate.json",
-      "notes": "Blocked: locked source operation mailchimp.provider.getfilemanagerfiles-48 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -7217,8 +7197,7 @@
       "summary": "Declared direct write: DELETE /campaigns/{campaign_id}/actions/resume.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Campaigns/Actions/Resume.json",
-      "notes": "Blocked: locked source operation mailchimp.provider.deletelistsid-50 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -7227,8 +7206,7 @@
       "summary": "Declared direct read: GET /campaigns/{campaign_id}/actions/resume.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Campaigns/Actions/Resume.json",
-      "notes": "Blocked: locked source operation mailchimp.provider.getlistsid-51 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -7241,8 +7219,7 @@
       "summary": "Declared direct write: PATCH /campaigns/{campaign_id}/actions/resume.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Campaigns/Actions/Resume.json",
-      "notes": "Blocked: locked source operation mailchimp.provider.patchlistsid-52 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -7251,8 +7228,7 @@
       "summary": "Declared direct read: GET /campaigns/{campaign_id}/actions/schedule.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Campaigns/Actions/Schedule.json",
-      "notes": "Blocked: locked source operation mailchimp.provider.getfilemanagerfolders-54 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -7265,8 +7241,7 @@
       "summary": "Declared direct write: DELETE /campaigns/{campaign_id}/actions/send.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Campaigns/Actions/Send.json",
-      "notes": "Blocked: locked source operation mailchimp.provider.deletefilemanagerfilesid-56 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -7275,8 +7250,7 @@
       "summary": "Declared direct read: GET /campaigns/{campaign_id}/actions/send.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Campaigns/Actions/Send.json",
-      "notes": "Blocked: locked source operation mailchimp.provider.getfilemanagerfilesid-57 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -7289,8 +7263,7 @@
       "summary": "Declared direct write: PATCH /campaigns/{campaign_id}/actions/send.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Campaigns/Actions/Send.json",
-      "notes": "Blocked: locked source operation mailchimp.provider.patchfilemanagerfilesid-58 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -7299,8 +7272,7 @@
       "summary": "Declared direct read: GET /campaigns/{campaign_id}/actions/test.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Campaigns/Actions/Test.json",
-      "notes": "Blocked: locked source operation mailchimp.provider.getfilemanagerfoldersfiles-59 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -7313,8 +7285,7 @@
       "summary": "Declared direct write: DELETE /campaigns/{campaign_id}/actions/unschedule.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Campaigns/Actions/Unschedule.json",
-      "notes": "Blocked: locked source operation mailchimp.provider.deletefilemanagerfoldersid-60 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -7323,8 +7294,7 @@
       "summary": "Declared direct read: GET /campaigns/{campaign_id}/actions/unschedule.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Campaigns/Actions/Unschedule.json",
-      "notes": "Blocked: locked source operation mailchimp.provider.getfilemanagerfoldersid-61 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -7337,8 +7307,7 @@
       "summary": "Declared direct write: PATCH /campaigns/{campaign_id}/actions/unschedule.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Campaigns/Actions/Unschedule.json",
-      "notes": "Blocked: locked source operation mailchimp.provider.patchfilemanagerfoldersid-62 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -7347,8 +7316,7 @@
       "summary": "Declared direct read: GET /connected-sites/{connected_site_id}/actions/disable-pixel.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/ConnectedSites/Actions/Disable-Pixel.json",
-      "notes": "Blocked: locked source operation mailchimp.provider.previewasegment-73 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -7361,8 +7329,7 @@
       "summary": "Declared direct read: GET /ping.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Ping/Namespace.json",
-      "notes": "Blocked: locked source operation mailchimp.provider.getping-236 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -7375,8 +7342,7 @@
       "summary": "Declared direct write: POST /template-folders/{folder_id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/TemplateFolders/Instance.json",
-      "notes": "Blocked: locked source operation mailchimp.provider.postconnectedsitesidactionsdisablepixel-284 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     }

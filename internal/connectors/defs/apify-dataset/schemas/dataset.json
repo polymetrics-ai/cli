@@ -1,65 +1,50 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "dataset",
-  "type": "object",
   "properties": {
-    "id": {
-      "type": "string"
-    },
-    "name": {
-      "type": "string"
-    },
-    "userId": {
-      "type": "string"
-    },
-    "createdAt": {
-      "type": [
-        "string",
-        "number",
-        "integer",
-        "boolean",
-        "object",
-        "array",
-        "null"
-      ]
-    },
-    "modifiedAt": {
-      "type": [
-        "string",
-        "number",
-        "integer",
-        "boolean",
-        "object",
-        "array",
-        "null"
-      ]
-    },
     "accessedAt": {
       "type": [
         "string",
-        "number",
-        "integer",
-        "boolean",
-        "object",
-        "array",
         "null"
       ]
-    },
-    "itemCount": {
-      "type": "integer"
-    },
-    "cleanItemCount": {
-      "type": "integer"
     },
     "actId": {
       "type": "string"
     },
     "actRunId": {
       "type": "string"
+    },
+    "cleanItemCount": {
+      "type": "integer"
+    },
+    "createdAt": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "id": {
+      "type": "string"
+    },
+    "itemCount": {
+      "type": "integer"
+    },
+    "modifiedAt": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "name": {
+      "type": "string"
+    },
+    "userId": {
+      "type": "string"
     }
   },
+  "title": "dataset",
+  "type": "object",
+  "x-cursor-field": "modifiedAt",
   "x-primary-key": [
     "id"
-  ],
-  "x-cursor-field": "modifiedAt"
+  ]
 }

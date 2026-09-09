@@ -46,10 +46,6 @@ import (
 	"polymetrics.ai/internal/credential"
 )
 
-func init() {
-	engine.RegisterHooks("elasticsearch", func() engine.Hooks { return Hooks{} })
-}
-
 // Hooks is the elasticsearch hook set. It implements engine.AuthHook and
 // engine.RecordHook.
 type Hooks struct{}

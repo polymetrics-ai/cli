@@ -1,0 +1,74 @@
+{
+  "head": "d547497d893a0ce71752051cf01c9226522dfe3d",
+  "tree": "52e94e5ab10d6f1d80c9809b262703df290cf2f2",
+  "command": [
+    "/Users/karthiksivadas/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.6.darwin-arm64/bin/go",
+    "test",
+    "-json",
+    "-count=1",
+    "-timeout",
+    "20m",
+    "./cmd/connectorgen",
+    "-run",
+    "^TestBatch1CP18GitLabSourceIdentity248$"
+  ],
+  "go_version": "go version go1.26.6 darwin/arm64",
+  "go_sha256": "a1c83801d1756c3eca78366c6b585f2c21c20694fb1c7eb92c446a0580420412",
+  "go_env": {
+    "CC": "clang",
+    "CGO_ENABLED": "1",
+    "GOARCH": "arm64",
+    "GOCACHE": "/Users/karthiksivadas/Library/Caches/go-build",
+    "GOOS": "darwin",
+    "GOTOOLCHAIN": "local",
+    "GOVERSION": "go1.26.6"
+  },
+  "cache": "retained warm build cache; fresh -count=1 tests",
+  "before_uncommitted": [
+    {
+      "path": "cmd/connectorgen/batch1_cp18_gitlab_source_identity_248_test.go",
+      "sha256": "271be87f424fffa3df7cb50dfcdb595a33c25bda8bbf2218797fac7012d025d3",
+      "bytes": 3158
+    },
+    {
+      "path": "internal/cli/batch1_cp18_gitlab_lane_proof_240_pending_test.go",
+      "sha256": "6c4b4ab647f86592b6a982347b20e481530e411dea2a200f48be81b36b838e7d",
+      "bytes": 7308
+    },
+    {
+      "path": "internal/connectors/engine/batch1_cp18_gitlab_lane_proof_240_test.go",
+      "sha256": "4fdb83ec1abcb624e66320208647e2f3c285e052212ef1224c9a1188d0917180",
+      "bytes": 5844
+    },
+    {
+      "path": ".planning/phases/cp18-gitlab/PLAN.md",
+      "sha256": "594af7a2d4618be19021d7dd8574cc65f095ccbbc0766cda04360e4b47c97fd6",
+      "bytes": 4723
+    }
+  ],
+  "exit_code": 1,
+  "seconds": 5.901979207992554,
+  "output_sha256": "57b7ba9b2f27d9026f3411d905b3d8c6c449f6e01d5f9c5c527a11a77cf90509",
+  "output_bytes": 3899,
+  "test_events": [
+    {
+      "Package": "polymetrics.ai/cmd/connectorgen",
+      "Test": "TestBatch1CP18GitLabSourceIdentity248/primary_exact_identity_control",
+      "Action": "pass",
+      "Elapsed": 0
+    },
+    {
+      "Package": "polymetrics.ai/cmd/connectorgen",
+      "Test": "TestBatch1CP18GitLabSourceIdentity248/separate_supplement_identity",
+      "Action": "fail",
+      "Elapsed": 0
+    },
+    {
+      "Package": "polymetrics.ai/cmd/connectorgen",
+      "Test": "TestBatch1CP18GitLabSourceIdentity248",
+      "Action": "fail",
+      "Elapsed": 0.4
+    }
+  ],
+  "changed_after": []
+}

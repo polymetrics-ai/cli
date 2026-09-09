@@ -1,0 +1,63 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "budget_alerting": {
+      "additionalProperties": false,
+      "properties": {
+        "alert_recipients": {
+          "items": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "maxItems": 256,
+          "type": "array"
+        },
+        "will_alert": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "budget_amount": {
+      "type": "integer"
+    },
+    "budget_entity_name": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "budget_product_sku": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "budget_scope": {
+      "enum": [
+        "organization",
+        "repository",
+        "multi_user_customer",
+        "user"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "budget_type": {
+      "maxLength": 1048576,
+      "type": "string"
+    },
+    "org": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "prevent_further_usage": {
+      "type": "boolean"
+    },
+    "user": {
+      "maxLength": 8192,
+      "type": "string"
+    }
+  },
+  "required": [
+    "org"
+  ],
+  "type": "object"
+}

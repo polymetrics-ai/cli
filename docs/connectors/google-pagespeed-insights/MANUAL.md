@@ -10,7 +10,7 @@ SYNOPSIS
   pm credentials add <name> --connector google-pagespeed-insights [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads Lighthouse PageSpeed Insights reports (performance, accessibility, best-practices, SEO, PWA scores) for the configured URLs and strategies via the PageSpeed Insights v5 API.
+  Reads Lighthouse PageSpeed Insights reports for a bounded Cartesian product of configured HTTPS URLs and mobile or desktop strategies through the fixed PageSpeed Insights v5 API.
 
 ICON
   id: google-pagespeed-insights
@@ -24,15 +24,25 @@ CAPABILITIES
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  strategies (required)
+  urls (required)
+  api_key (secret)
+
+ETL STREAMS
+  pagespeed_reports:
+    primary key: url, strategy
+    fields: accessibility_score(number), analysis_utc_timestamp(string), best_practices_score(number), fetch_time(string), final_url(string), id(string), kind(string), lighthouse_version(string), overall_loading_experience(string), performance_score(number), pwa_score(number), requested_url(string), seo_score(number), strategy(string), url(string)
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: Each sync sends at most twenty bounded GET requests to the fixed PageSpeed Insights API origin; one report is emitted per configured URL and strategy pair.
+  write risk: unsupported
+  approval: none; read-only
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

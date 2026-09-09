@@ -1,0 +1,68 @@
+{
+  "schema_version": 4,
+  "connector": "free-agent-connector",
+  "lanes": {
+    "binary_download": "unsupported",
+    "binary_upload": "unsupported",
+    "direct_read": "unsupported",
+    "direct_write": "unsupported",
+    "etl": "implemented",
+    "reverse_etl": "unsupported",
+    "sync_transport": "unsupported"
+  },
+  "provider_evidence": {
+    "documentation": [{"role": "provider_reference", "url": "https://dev.freeagent.com/"}]
+  },
+  "metadata": {
+    "name": "free-agent-connector",
+    "display_name": "FreeAgent",
+    "description": "Reads FreeAgent contacts, invoices, bills, projects, and tasks through fixed FreeAgent v2 REST routes and OAuth2 refresh-token authentication.",
+    "integration_type": "api",
+    "release_stage": "alpha",
+    "capabilities": {"check": true, "read": true, "write": false, "query": false, "cdc": false, "dynamic_schema": false},
+    "risk": {"read": "Bounded FreeAgent v2 reads use declared OAuth2 refresh-token authentication and fixed provider routes.", "write": "unsupported", "approval": "none; read-only"},
+    "docs_url": "https://dev.freeagent.com/"
+  },
+  "config_schema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "FreeAgent Connection Specification",
+    "type": "object",
+    "x-reject-unknown-config": true,
+    "required": ["client_id", "client_secret", "client_refresh_token_2"],
+    "properties": {
+      "client_id": {"type": "string", "x-secret": true, "description": "FreeAgent OAuth client ID."},
+      "client_secret": {"type": "string", "x-secret": true, "description": "FreeAgent OAuth client secret."},
+      "client_refresh_token_2": {"type": "string", "x-secret": true, "description": "FreeAgent OAuth refresh token."},
+      "updated_since": {"type": "string", "format": "date-time", "description": "Optional FreeAgent update lower bound."}
+    }
+  },
+  "http": {
+    "url": "https://api.freeagent.com/v2",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [{
+      "mode": "oauth2_refresh_token",
+      "token_url": "https://api.freeagent.com/v2/token_endpoint",
+      "client_id": "{{ secrets.client_id }}",
+      "client_secret": "{{ secrets.client_secret }}",
+      "client_authentication": "basic",
+      "refresh_token": "{{ secrets.client_refresh_token_2 }}"
+    }],
+    "pagination": {"type": "page_number", "page_param": "page", "size_param": "per_page", "start_page": 1, "page_size": 100, "max_pages": 100},
+    "check": {"method": "GET", "path": "/contacts", "query": {"per_page": "1"}},
+    "error_map": []
+  },
+  "schemas": {
+    "schemas/contacts.json": {"$schema": "http://json-schema.org/draft-07/schema#", "title": "contacts", "type": "object", "properties": {"url": {"type": "string"}, "first_name": {"type": "string"}, "last_name": {"type": "string"}, "organisation_name": {"type": "string"}, "email": {"type": "string"}, "phone_number": {"type": "string"}, "status": {"type": "string"}, "account_balance": {"type": "string"}, "created_at": {"type": ["string", "number", "integer", "boolean", "object", "array", "null"]}, "updated_at": {"type": ["string", "number", "integer", "boolean", "object", "array", "null"]}}, "x-primary-key": ["url"], "x-cursor-field": "updated_at"},
+    "schemas/invoices.json": {"$schema": "http://json-schema.org/draft-07/schema#", "title": "invoices", "type": "object", "properties": {"url": {"type": "string"}, "reference": {"type": "string"}, "contact": {"type": "string"}, "dated_on": {"type": "string"}, "due_on": {"type": "string"}, "status": {"type": "string"}, "currency": {"type": "string"}, "net_value": {"type": "string"}, "total_value": {"type": "string"}, "due_value": {"type": "string"}, "created_at": {"type": ["string", "number", "integer", "boolean", "object", "array", "null"]}, "updated_at": {"type": ["string", "number", "integer", "boolean", "object", "array", "null"]}}, "x-primary-key": ["url"], "x-cursor-field": "updated_at"},
+    "schemas/bills.json": {"$schema": "http://json-schema.org/draft-07/schema#", "title": "bills", "type": "object", "properties": {"url": {"type": "string"}, "reference": {"type": "string"}, "contact": {"type": "string"}, "dated_on": {"type": "string"}, "due_on": {"type": "string"}, "status": {"type": "string"}, "currency": {"type": "string"}, "total_value": {"type": "string"}, "due_value": {"type": "string"}, "created_at": {"type": ["string", "number", "integer", "boolean", "object", "array", "null"]}, "updated_at": {"type": ["string", "number", "integer", "boolean", "object", "array", "null"]}}, "x-primary-key": ["url"], "x-cursor-field": "updated_at"},
+    "schemas/projects.json": {"$schema": "http://json-schema.org/draft-07/schema#", "title": "projects", "type": "object", "properties": {"url": {"type": "string"}, "name": {"type": "string"}, "contact": {"type": "string"}, "status": {"type": "string"}, "currency": {"type": "string"}, "budget": {"type": "string"}, "budget_units": {"type": "string"}, "created_at": {"type": ["string", "number", "integer", "boolean", "object", "array", "null"]}, "updated_at": {"type": ["string", "number", "integer", "boolean", "object", "array", "null"]}}, "x-primary-key": ["url"], "x-cursor-field": "updated_at"},
+    "schemas/tasks.json": {"$schema": "http://json-schema.org/draft-07/schema#", "title": "tasks", "type": "object", "properties": {"url": {"type": "string"}, "project": {"type": "string"}, "name": {"type": "string"}, "status": {"type": "string"}, "is_billable": {"type": "boolean"}, "billing_rate": {"type": "string"}, "billing_period": {"type": "string"}, "created_at": {"type": ["string", "number", "integer", "boolean", "object", "array", "null"]}, "updated_at": {"type": ["string", "number", "integer", "boolean", "object", "array", "null"]}}, "x-primary-key": ["url"], "x-cursor-field": "updated_at"}
+  },
+  "operations": [
+    {"id": "freeagent.contacts", "source": {"operation": "GET /v2/contacts", "method": "GET", "path": "/v2/contacts", "url": "https://dev.freeagent.com/"}, "schema_refs": {"record": "schemas/contacts.json"}, "stream_order": 1, "stream": {"name": "contacts", "method": "GET", "path": "/contacts", "records": {"path": "contacts"}, "schema": "schemas/contacts.json", "projection": "passthrough", "incremental": {"cursor_field": "updated_at", "request_param": "updated_since"}}},
+    {"id": "freeagent.invoices", "source": {"operation": "GET /v2/invoices", "method": "GET", "path": "/v2/invoices", "url": "https://dev.freeagent.com/"}, "schema_refs": {"record": "schemas/invoices.json"}, "stream_order": 2, "stream": {"name": "invoices", "method": "GET", "path": "/invoices", "records": {"path": "invoices"}, "schema": "schemas/invoices.json", "projection": "passthrough", "incremental": {"cursor_field": "updated_at", "request_param": "updated_since"}}},
+    {"id": "freeagent.bills", "source": {"operation": "GET /v2/bills", "method": "GET", "path": "/v2/bills", "url": "https://dev.freeagent.com/"}, "schema_refs": {"record": "schemas/bills.json"}, "stream_order": 3, "stream": {"name": "bills", "method": "GET", "path": "/bills", "records": {"path": "bills"}, "schema": "schemas/bills.json", "projection": "passthrough", "incremental": {"cursor_field": "updated_at", "request_param": "updated_since"}}},
+    {"id": "freeagent.projects", "source": {"operation": "GET /v2/projects", "method": "GET", "path": "/v2/projects", "url": "https://dev.freeagent.com/"}, "schema_refs": {"record": "schemas/projects.json"}, "stream_order": 4, "stream": {"name": "projects", "method": "GET", "path": "/projects", "records": {"path": "projects"}, "schema": "schemas/projects.json", "projection": "passthrough", "incremental": {"cursor_field": "updated_at", "request_param": "updated_since"}}},
+    {"id": "freeagent.tasks", "source": {"operation": "GET /v2/tasks", "method": "GET", "path": "/v2/tasks", "url": "https://dev.freeagent.com/"}, "schema_refs": {"record": "schemas/tasks.json"}, "stream_order": 5, "stream": {"name": "tasks", "method": "GET", "path": "/tasks", "records": {"path": "tasks"}, "schema": "schemas/tasks.json", "projection": "passthrough", "incremental": {"cursor_field": "updated_at", "request_param": "updated_since"}}}
+  ]
+}

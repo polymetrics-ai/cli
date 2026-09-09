@@ -1,40 +1,12 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "feedback_form_definition_list",
-  "type": "object",
   "properties": {
-    "id": {
-      "type": "string",
-      "description": "The unique identifier for the feedback form definition"
-    },
-    "organizationId": {
-      "type": "string",
-      "description": "The unique identifier for the organization"
-    },
-    "title": {
-      "type": "string",
-      "description": "The title of the feedback form definition"
-    },
-    "isArchived": {
-      "type": "boolean",
-      "description": "Whether the feedback form definition is archived"
-    },
-    "isDefaultForm": {
-      "type": "boolean",
-      "description": "Whether this is the organization's default feedback form definition"
-    },
     "formDefinition": {
-      "type": "object",
       "properties": {
         "sections": {
-          "type": "array",
           "description": "The sections in the form definition",
           "items": {
-            "type": "object",
             "properties": {
-              "title": {
-                "type": "string"
-              },
               "descriptionHtml": {
                 "type": "string"
               },
@@ -42,15 +14,9 @@
                 "type": "string"
               },
               "fields": {
-                "type": "array",
                 "description": "The fields in this form section",
                 "items": {
-                  "type": "object",
                   "properties": {
-                    "isRequired": {
-                      "type": "boolean",
-                      "description": "Whether this form field is required"
-                    },
                     "descriptionHtml": {
                       "type": "string"
                     },
@@ -58,51 +24,50 @@
                       "type": "string"
                     },
                     "field": {
-                      "type": "object",
                       "properties": {
-                        "id": {
-                          "type": "string",
-                          "description": "The unique identifier for the form definition field"
-                        },
-                        "type": {
-                          "type": "string",
-                          "description": "The type of the form definition field"
-                        },
-                        "path": {
-                          "type": "string",
-                          "description": "The path used to submit values for this field"
-                        },
                         "humanReadablePath": {
-                          "type": "string",
-                          "description": "The human-readable path for the form field"
+                          "description": "The human-readable path for the form field",
+                          "type": "string"
                         },
-                        "title": {
-                          "type": "string",
-                          "description": "The display title for the form field"
+                        "id": {
+                          "description": "The unique identifier for the form definition field",
+                          "type": "string"
                         },
                         "isNullable": {
-                          "type": "boolean",
-                          "description": "Whether the form field accepts null values"
+                          "description": "Whether the form field accepts null values",
+                          "type": "boolean"
+                        },
+                        "path": {
+                          "description": "The path used to submit values for this field",
+                          "type": "string"
                         },
                         "selectableValues": {
-                          "type": "array",
                           "items": {
-                            "type": "object",
                             "properties": {
                               "label": {
-                                "type": "string",
-                                "description": "The display label for the selectable value"
+                                "description": "The display label for the selectable value",
+                                "type": "string"
                               },
                               "value": {
-                                "type": "string",
-                                "description": "The submitted value for the selectable option"
+                                "description": "The submitted value for the selectable option",
+                                "type": "string"
                               }
                             },
                             "required": [
                               "label",
                               "value"
-                            ]
-                          }
+                            ],
+                            "type": "object"
+                          },
+                          "type": "array"
+                        },
+                        "title": {
+                          "description": "The display title for the form field",
+                          "type": "string"
+                        },
+                        "type": {
+                          "description": "The type of the form definition field",
+                          "type": "string"
                         }
                       },
                       "required": [
@@ -112,30 +77,65 @@
                         "humanReadablePath",
                         "title",
                         "isNullable"
-                      ]
+                      ],
+                      "type": "object"
+                    },
+                    "isRequired": {
+                      "description": "Whether this form field is required",
+                      "type": "boolean"
                     }
                   },
                   "required": [
                     "isRequired",
                     "field"
-                  ]
-                }
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "title": {
+                "type": "string"
               }
             },
             "required": [
               "fields"
-            ]
-          }
+            ],
+            "type": "object"
+          },
+          "type": "array"
         }
       },
       "required": [
         "sections"
-      ]
+      ],
+      "type": "object"
+    },
+    "id": {
+      "description": "The unique identifier for the feedback form definition",
+      "type": "string"
     },
     "interviewId": {
       "type": "string"
+    },
+    "isArchived": {
+      "description": "Whether the feedback form definition is archived",
+      "type": "boolean"
+    },
+    "isDefaultForm": {
+      "description": "Whether this is the organization's default feedback form definition",
+      "type": "boolean"
+    },
+    "organizationId": {
+      "description": "The unique identifier for the organization",
+      "type": "string"
+    },
+    "title": {
+      "description": "The title of the feedback form definition",
+      "type": "string"
     }
   },
+  "title": "feedback_form_definition_list",
+  "type": "object",
   "x-primary-key": [
     "id"
   ]

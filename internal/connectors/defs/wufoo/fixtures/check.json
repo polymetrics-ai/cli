@@ -1,7 +1,0 @@
-{
-  "request": { "method": "GET", "path": "/forms.json" },
-  "response": {
-    "status": 200,
-    "body": { "Forms": [] }
-  }
-}

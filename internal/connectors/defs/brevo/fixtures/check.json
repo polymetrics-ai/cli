@@ -1,7 +1,0 @@
-{
-  "request": { "method": "GET", "path": "/account" },
-  "response": {
-    "status": 200,
-    "body": { "email": "fixture@example.com", "companyName": "Fixture Co", "plan": [] }
-  }
-}

@@ -187,11 +187,6 @@ func paginatedOperationBundle(baseURL string, pagination *PaginationSpec, endpoi
 				MaxBytes: 1 << 20,
 			},
 		}},
-		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{
-			Method:    http.MethodGet,
-			Path:      endpointPath,
-			Operation: &SurfaceOperation{Model: "direct_read", Status: "allowed", Risk: "low", Reason: "fixture"},
-		}}},
 	}
 }
 
@@ -1072,11 +1067,6 @@ func TestOperationDirectReadPOSTReportsAStrategyItCannotUse(t *testing.T) {
 				BodySchema:  json.RawMessage(`{"type":"object","additionalProperties":false,"properties":{"filter":{"type":"object","additionalProperties":false,"properties":{}}}}`),
 			},
 		}},
-		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{
-			Method:    http.MethodPost,
-			Path:      "/v2/calls/extensive",
-			Operation: &SurfaceOperation{Model: "direct_read", Status: "allowed", Risk: "low", Reason: "fixture"},
-		}}},
 	}
 
 	result, err := OperationDirectRead(context.Background(), b, connectors.OperationDirectReadRequest{
@@ -1432,6 +1422,9 @@ func TestDirectReadCannotClaimCompletenessWithoutSendingAPageSize(t *testing.T) 
 func TestDirectReadCursorURLKeepsTheCallerQuery(t *testing.T) {
 	fx, srv := startLinkHeaderFixture(t)
 	b := linkHeaderBundle(srv.URL, false)
+
+	// Retention is explicit under the selected shared source contract.
+	b.HTTP.Pagination.NextURLQuery = &NextURLQuerySpec{Allowed: []string{"state"}, Retain: []string{"state"}}
 
 	first, err := DirectRead(context.Background(), b, connectors.DirectReadRequest{
 		Method:       http.MethodGet,

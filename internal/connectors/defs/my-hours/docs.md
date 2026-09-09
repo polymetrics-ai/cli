@@ -1,53 +1,39 @@
-# Overview
+# My Hours Connector
 
-Reads My Hours clients, projects, team members, tags, and time log activity through the My Hours
-REST API.
+## Overview
+
+Reads My Hours clients, projects, team members, tags, and bounded time-log windows through fixed REST routes.
 
 Readable streams: `clients`, `projects`, `users`, `tags`, `time_logs`.
 
-This connector is read-only; no write actions are declared.
-
-Service API documentation: https://myhours.com/api.
+Service API documentation: https://developers.myhours.com/.
 
 ## Auth setup
 
 Connection fields:
 
-- `base_url` (optional, string).
-- `email` (required, string); Your My Hours username.
-- `logs_batch_size` (optional, string); Pagination size used for retrieving logs in days.
-- `mode` (optional, string).
-- `password` (required, secret, string); The password associated to the username.
-- `start_date` (required, string); Start date for collecting time logs.
+- `email` (required, string); My Hours login email.
+- `end_date` (required, string); UTC date window terminal date, YYYY-MM-DD.
+- `logs_batch_size` (optional, string); Declared time-log window width in days, 1 through 365.
+- `password` (required, secret, string); My Hours login password.
+- `start_date` (required, string); UTC date window start, YYYY-MM-DD.
 
-Secret fields are redacted in logs and write previews: `password`.
+Authentication uses declared mode(s): `declared_password_token`.
 
-Provide the secret fields listed above. Authentication is applied by the connector-specific
-implementation for this service.
+## Execution contract
 
-Requests use the configured `base_url` value after applying defaults.
+Default stream pagination: `none`.
 
-Connection checks use a connector-managed request.
+Connection check: `GET /Clients`
 
 ## Streams notes
 
-Default pagination: single request; no pagination.
-
-Incremental streams use their declared cursor fields and send lower-bound parameters only when a
-lower bound is available.
-
-- `clients`: GET connector-managed request path - records path `data`.
-- `projects`: GET connector-managed request path - records path `data`.
-- `users`: GET connector-managed request path - records path `data`.
-- `tags`: GET connector-managed request path - records path `data`.
-- `time_logs`: GET connector-managed request path - records path `data`; incremental cursor `date`;
-  formatted as `rfc3339`; records at or before the lower bound are filtered client-side.
+- `clients`: `GET /Clients`; records ``
+- `projects`: `GET /Projects/getAll`; records ``
+- `users`: `GET /Users/getAll`; records ``
+- `tags`: `GET /Tags`; records ``
+- `time_logs`: `GET /Reports/activity`; records ``
 
 ## Write actions & risks
 
-This connector is read-only; no reverse-ETL write actions are declared.
-
-## Known limits
-
-- API coverage includes 5 stream-backed endpoint group(s).
-- Client-side incremental filtering is used for: `time_logs`.
+This connector's write surface is declared separately in the rendered execution bundle.

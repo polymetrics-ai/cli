@@ -1,4 +1,0 @@
-{
-  "record": {"id": "calendar_fixture_1", "summaryOverride": "Fixture Calendar"},
-  "expect": {"method": "POST", "path": "/users/me/calendarList", "body": {"id": "calendar_fixture_1", "summaryOverride": "Fixture Calendar"}}
-}

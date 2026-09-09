@@ -1,0 +1,167 @@
+{
+  "schema_version": 4,
+  "connector": "google-pagespeed-insights",
+  "lanes": {
+    "binary_download": "unsupported",
+    "binary_upload": "unsupported",
+    "direct_read": "unsupported",
+    "direct_write": "unsupported",
+    "etl": "implemented",
+    "reverse_etl": "unsupported",
+    "sync_transport": "unsupported"
+  },
+  "provider_evidence": {
+    "documentation": [
+      {
+        "role": "provider_reference",
+        "url": "https://developers.google.com/speed/docs/insights/v5/get-started"
+      }
+    ]
+  },
+  "metadata": {
+    "name": "google-pagespeed-insights",
+    "display_name": "Google PageSpeed Insights",
+    "description": "Reads Lighthouse PageSpeed Insights reports for a bounded Cartesian product of configured HTTPS URLs and mobile or desktop strategies through the fixed PageSpeed Insights v5 API.",
+    "integration_type": "api",
+    "release_stage": "alpha",
+    "capabilities": {
+      "check": true,
+      "read": true,
+      "write": false,
+      "query": false,
+      "cdc": false,
+      "dynamic_schema": false
+    },
+    "risk": {
+      "read": "Each sync sends at most twenty bounded GET requests to the fixed PageSpeed Insights API origin; one report is emitted per configured URL and strategy pair.",
+      "write": "unsupported",
+      "approval": "none; read-only"
+    },
+    "docs_url": "https://developers.google.com/speed/docs/insights/v5/get-started"
+  },
+  "config_schema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Google PageSpeed Insights Connection Specification",
+    "type": "object",
+    "x-reject-unknown-config": true,
+    "required": [
+      "strategies",
+      "urls"
+    ],
+    "properties": {
+      "api_key": {
+        "type": "string",
+        "x-secret": true,
+        "description": "Optional PageSpeed API key sent only as the declared key query parameter."
+      },
+      "strategies": {
+        "type": "string",
+        "description": "Comma-separated, unique PageSpeed strategies: mobile and/or desktop."
+      },
+      "urls": {
+        "type": "string",
+        "description": "Comma-separated, unique HTTPS URLs to analyse. The declared URL and strategy product is capped at twenty requests."
+      }
+    }
+  },
+  "http": {
+    "url": "https://www.googleapis.com/pagespeedonline/v5",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "api_key_query",
+        "param": "key",
+        "value": "{{ secrets.api_key }}",
+        "when": "{{ secrets.api_key }}"
+      },
+      {
+        "mode": "none"
+      }
+    ],
+    "pagination": {
+      "type": "none"
+    },
+    "check": {
+      "method": "GET",
+      "path": "/runPagespeed",
+      "query": {
+        "url": "https://example.com",
+        "strategy": "desktop",
+        "category": "performance"
+      }
+    },
+    "error_map": []
+  },
+  "schemas": {
+    "schemas/pagespeed_reports.json": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "pagespeed_reports",
+      "type": "object",
+      "properties": {
+        "url": { "type": "string" },
+        "strategy": { "type": "string" },
+        "id": { "type": "string" },
+        "kind": { "type": "string" },
+        "requested_url": { "type": "string" },
+        "final_url": { "type": "string" },
+        "lighthouse_version": { "type": "string" },
+        "fetch_time": { "type": "string" },
+        "analysis_utc_timestamp": { "type": "string" },
+        "overall_loading_experience": { "type": "string" },
+        "performance_score": { "type": "number" },
+        "accessibility_score": { "type": "number" },
+        "best_practices_score": { "type": "number" },
+        "seo_score": { "type": "number" },
+        "pwa_score": { "type": "number" }
+      },
+      "x-primary-key": ["url", "strategy"]
+    }
+  },
+  "operations": [
+    {
+      "id": "google-pagespeed-insights.pagespeed-reports",
+      "source": {
+        "provider_reference": "https://developers.google.com/speed/docs/insights/v5/get-started"
+      },
+      "schema_refs": {
+        "record": "schemas/pagespeed_reports.json"
+      },
+      "stream_order": 1,
+      "stream": {
+        "name": "pagespeed_reports",
+        "method": "GET",
+        "path": "/runPagespeed",
+        "records": {
+          "path": ".",
+          "single_object": true
+        },
+        "computed_fields": {
+          "id": "{{ record.id }}",
+          "kind": "{{ record.kind }}",
+          "requested_url": "{{ record.lighthouseResult.requestedUrl }}",
+          "final_url": "{{ record.lighthouseResult.finalUrl }}",
+          "lighthouse_version": "{{ record.lighthouseResult.lighthouseVersion }}",
+          "fetch_time": "{{ record.lighthouseResult.fetchTime }}",
+          "analysis_utc_timestamp": "{{ record.analysisUTCTimestamp }}",
+          "overall_loading_experience": "{{ record.loadingExperience.overall_category }}",
+          "performance_score": "{{ record.lighthouseResult.categories.performance.score }}",
+          "accessibility_score": "{{ record.lighthouseResult.categories.accessibility.score }}",
+          "best_practices_score": "{{ record.lighthouseResult.categories.best-practices.score }}",
+          "seo_score": "{{ record.lighthouseResult.categories.seo.score }}",
+          "pwa_score": "{{ record.lighthouseResult.categories.pwa.score }}"
+        },
+        "schema": "schemas/pagespeed_reports.json",
+        "cartesian_config_fan_out": {
+          "url_config_key": "urls",
+          "strategy_config_key": "strategies",
+          "url_query_param": "url",
+          "strategy_query_param": "strategy",
+          "categories": ["accessibility", "best-practices", "performance", "pwa", "seo"],
+          "category_query_param": "category",
+          "max_combinations": 20,
+          "max_requests": 20
+        }
+      }
+    }
+  ]
+}

@@ -1,8 +1,0 @@
-{
-  "record": { "id": "group_fixture_1" },
-  "expect": {
-    "method": "DELETE",
-    "path": "/groups/group_fixture_1"
-  },
-  "response": { "status": 204, "body": {} }
-}

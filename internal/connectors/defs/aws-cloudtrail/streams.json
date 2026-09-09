@@ -1,73 +1,153 @@
 {
   "base": {
-    "url": "{{ config.base_url }}",
-    "user_agent": "polymetrics-go-cli",
     "auth": [
       {
-        "mode": "none"
+        "access_key_id": "{{ secrets.aws_key_id }}",
+        "aws_region": "us-east-1",
+        "aws_service": "cloudtrail",
+        "mode": "aws_sigv4",
+        "secret_access_key": "{{ secrets.aws_secret_key }}",
+        "session_token": "{{ secrets.aws_session_token }}",
+        "when": "{{ secrets.aws_session_token }}"
+      },
+      {
+        "access_key_id": "{{ secrets.aws_key_id }}",
+        "aws_region": "us-east-1",
+        "aws_service": "cloudtrail",
+        "mode": "aws_sigv4",
+        "secret_access_key": "{{ secrets.aws_secret_key }}"
       }
     ],
-    "pagination": {
-      "type": "none"
-    },
     "check": {
-      "method": "GET",
-      "path": "/__legacy_hook/check"
+      "body": {
+        "MaxResults": 1
+      },
+      "method": "POST",
+      "path": "/"
     },
-    "error_map": []
+    "error_map": [],
+    "headers": {
+      "Content-Type": "application/x-amz-json-1.1",
+      "X-Amz-Target": "com.amazonaws.cloudtrail.v20131101.CloudTrail_20131101.LookupEvents"
+    },
+    "pagination": {
+      "body_cursor_field": "NextToken",
+      "cursor_param": "NextToken",
+      "max_pages": 100,
+      "page_size": 50,
+      "require_continuation_on_cap": true,
+      "token_path": "NextToken",
+      "type": "cursor"
+    },
+    "url": "https://cloudtrail.us-east-1.amazonaws.com",
+    "user_agent": "polymetrics-go-cli"
   },
   "streams": [
     {
+      "body": {
+        "MaxResults": 50,
+        "StartTime": {
+          "omit_when_absent": true,
+          "template": "{{ incremental.lower_bound }}",
+          "type": "integer"
+        }
+      },
+      "incremental": {
+        "cursor_field": "EventTime",
+        "param_format": "unix_seconds",
+        "start_config_key": "start_date"
+      },
+      "method": "POST",
       "name": "management_events",
-      "method": "GET",
-      "path": "/__legacy_hook/management_events",
+      "path": "/",
       "records": {
-        "path": "data"
+        "path": "Events"
       },
-      "schema": "schemas/management_events.json",
-      "incremental": {
-        "cursor_field": "EventTime",
-        "client_filtered": true
-      }
+      "schema": "schemas/management_events.json"
     },
     {
+      "body": {
+        "LookupAttributes": [
+          {
+            "AttributeKey": "ReadOnly",
+            "AttributeValue": "true"
+          }
+        ],
+        "MaxResults": 50,
+        "StartTime": {
+          "omit_when_absent": true,
+          "template": "{{ incremental.lower_bound }}",
+          "type": "integer"
+        }
+      },
+      "incremental": {
+        "cursor_field": "EventTime",
+        "param_format": "unix_seconds",
+        "start_config_key": "start_date"
+      },
+      "method": "POST",
       "name": "read_only_events",
-      "method": "GET",
-      "path": "/__legacy_hook/read_only_events",
+      "path": "/",
       "records": {
-        "path": "data"
+        "path": "Events"
       },
-      "schema": "schemas/read_only_events.json",
-      "incremental": {
-        "cursor_field": "EventTime",
-        "client_filtered": true
-      }
+      "schema": "schemas/read_only_events.json"
     },
     {
+      "body": {
+        "LookupAttributes": [
+          {
+            "AttributeKey": "ReadOnly",
+            "AttributeValue": "false"
+          }
+        ],
+        "MaxResults": 50,
+        "StartTime": {
+          "omit_when_absent": true,
+          "template": "{{ incremental.lower_bound }}",
+          "type": "integer"
+        }
+      },
+      "incremental": {
+        "cursor_field": "EventTime",
+        "param_format": "unix_seconds",
+        "start_config_key": "start_date"
+      },
+      "method": "POST",
       "name": "write_only_events",
-      "method": "GET",
-      "path": "/__legacy_hook/write_only_events",
+      "path": "/",
       "records": {
-        "path": "data"
+        "path": "Events"
       },
-      "schema": "schemas/write_only_events.json",
-      "incremental": {
-        "cursor_field": "EventTime",
-        "client_filtered": true
-      }
+      "schema": "schemas/write_only_events.json"
     },
     {
-      "name": "console_logins",
-      "method": "GET",
-      "path": "/__legacy_hook/console_logins",
-      "records": {
-        "path": "data"
+      "body": {
+        "LookupAttributes": [
+          {
+            "AttributeKey": "EventName",
+            "AttributeValue": "ConsoleLogin"
+          }
+        ],
+        "MaxResults": 50,
+        "StartTime": {
+          "omit_when_absent": true,
+          "template": "{{ incremental.lower_bound }}",
+          "type": "integer"
+        }
       },
-      "schema": "schemas/console_logins.json",
       "incremental": {
         "cursor_field": "EventTime",
-        "client_filtered": true
-      }
+        "param_format": "unix_seconds",
+        "start_config_key": "start_date"
+      },
+      "method": "POST",
+      "name": "console_logins",
+      "path": "/",
+      "records": {
+        "path": "Events"
+      },
+      "schema": "schemas/console_logins.json"
     }
   ]
 }

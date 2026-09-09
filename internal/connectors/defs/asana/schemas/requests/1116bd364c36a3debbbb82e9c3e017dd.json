@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "data": {
+      "additionalProperties": false,
+      "properties": {
+        "user": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "team_gid": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "team_gid",
+    "data"
+  ],
+  "type": "object"
+}

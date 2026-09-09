@@ -1,6 +1,6 @@
 {
   "tagline": "Run Flexmail's declared streams and reverse-ETL actions.",
-  "usage": "pm flexmail \u003ccommand\u003e [flags]",
+  "usage": "pm flexmail <command> [flags]",
   "groups": [
     {
       "id": "read",
@@ -21,7 +21,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "contacts",
-      "source_url": "https://api.flexmail.eu/documentation/openapi.php",
       "examples": [
         "pm flexmail contacts list --json"
       ],
@@ -38,7 +37,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "custom_fields",
-      "source_url": "https://api.flexmail.eu/documentation/openapi.php",
       "examples": [
         "pm flexmail custom fields list --json"
       ],
@@ -55,7 +53,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "interests",
-      "source_url": "https://api.flexmail.eu/documentation/openapi.php",
       "examples": [
         "pm flexmail interests list --json"
       ],
@@ -72,7 +69,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "segments",
-      "source_url": "https://api.flexmail.eu/documentation/openapi.php",
       "examples": [
         "pm flexmail segments list --json"
       ],
@@ -89,7 +85,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "sources",
-      "source_url": "https://api.flexmail.eu/documentation/openapi.php",
       "examples": [
         "pm flexmail sources list --json"
       ],

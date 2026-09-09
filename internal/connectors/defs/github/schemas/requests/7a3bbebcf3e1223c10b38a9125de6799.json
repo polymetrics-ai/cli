@@ -1,0 +1,106 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "bypass_actors": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "actor_id": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "actor_type": {
+            "enum": [
+              "Integration",
+              "OrganizationAdmin",
+              "RepositoryRole",
+              "Team",
+              "DeployKey",
+              "User"
+            ],
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "bypass_mode": {
+            "enum": [
+              "always",
+              "pull_request",
+              "exempt"
+            ],
+            "maxLength": 8192,
+            "type": "string"
+          }
+        },
+        "required": [
+          "actor_type"
+        ],
+        "type": "object"
+      },
+      "maxItems": 256,
+      "type": "array"
+    },
+    "conditions": {
+      "additionalProperties": false,
+      "properties": {
+        "ref_name": {
+          "additionalProperties": false,
+          "properties": {
+            "exclude": {
+              "items": {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "maxItems": 256,
+              "type": "array"
+            },
+            "include": {
+              "items": {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "maxItems": 256,
+              "type": "array"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "enforcement": {
+      "enum": [
+        "disabled",
+        "active",
+        "evaluate"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "name": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "rules": {
+      "items": {},
+      "maxItems": 256,
+      "type": "array"
+    },
+    "target": {
+      "enum": [
+        "branch",
+        "tag",
+        "push"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    }
+  },
+  "required": [
+    "enforcement",
+    "name"
+  ],
+  "type": "object"
+}

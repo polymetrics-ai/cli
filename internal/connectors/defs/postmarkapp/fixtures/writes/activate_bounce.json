@@ -1,9 +1,0 @@
-{
-  "record": {
-    "bounce_id": "bounce_id_fixture"
-  },
-  "expect": {
-    "method": "PUT",
-    "path": "/bounces/bounce_id_fixture/activate"
-  }
-}

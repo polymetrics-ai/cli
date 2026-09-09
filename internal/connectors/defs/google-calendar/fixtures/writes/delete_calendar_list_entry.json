@@ -1,4 +1,0 @@
-{
-  "record": {"calendar_id": "calendar_fixture_1"},
-  "expect": {"method": "DELETE", "path": "/users/me/calendarList/calendar_fixture_1"}
-}

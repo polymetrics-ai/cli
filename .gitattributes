@@ -6,6 +6,6 @@ data/cli-cdc-bidirectional-changefeed-design-r1/report.md -whitespace
 data/cli-cdc-large-transaction-strategy-r1/report.md -whitespace
 
 # This retained provider artifact is content-addressed by the Asana source
-# lock. Preserve its upstream bytes, including whitespace, so source-import
+# lock. Preserve its upstream bytes, including whitespace, so authoring
 # can verify the recorded SHA-256 rather than silently normalizing evidence.
 internal/connectors/defs/asana/sources/artifacts/cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56.artifact -whitespace

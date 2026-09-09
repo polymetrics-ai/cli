@@ -1,0 +1,126 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "advanced_security_enabled_for_new_repositories": {
+      "type": "boolean"
+    },
+    "billing_email": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "blog": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "company": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "default_repository_permission": {
+      "enum": [
+        "read",
+        "write",
+        "admin",
+        "none"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "dependabot_alerts_enabled_for_new_repositories": {
+      "type": "boolean"
+    },
+    "dependabot_security_updates_enabled_for_new_repositories": {
+      "type": "boolean"
+    },
+    "dependency_graph_enabled_for_new_repositories": {
+      "type": "boolean"
+    },
+    "deploy_keys_enabled_for_repositories": {
+      "type": "boolean"
+    },
+    "description": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "email": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "has_organization_projects": {
+      "type": "boolean"
+    },
+    "has_repository_projects": {
+      "type": "boolean"
+    },
+    "location": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "members_allowed_repository_creation_type": {
+      "enum": [
+        "all",
+        "private",
+        "none"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "members_can_create_internal_repositories": {
+      "type": "boolean"
+    },
+    "members_can_create_pages": {
+      "type": "boolean"
+    },
+    "members_can_create_private_pages": {
+      "type": "boolean"
+    },
+    "members_can_create_private_repositories": {
+      "type": "boolean"
+    },
+    "members_can_create_public_pages": {
+      "type": "boolean"
+    },
+    "members_can_create_public_repositories": {
+      "type": "boolean"
+    },
+    "members_can_create_repositories": {
+      "type": "boolean"
+    },
+    "members_can_fork_private_repositories": {
+      "type": "boolean"
+    },
+    "name": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "org": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "secret_scanning_enabled_for_new_repositories": {
+      "type": "boolean"
+    },
+    "secret_scanning_push_protection_custom_link": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "secret_scanning_push_protection_custom_link_enabled": {
+      "type": "boolean"
+    },
+    "secret_scanning_push_protection_enabled_for_new_repositories": {
+      "type": "boolean"
+    },
+    "twitter_username": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "web_commit_signoff_required": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "org"
+  ],
+  "type": "object"
+}

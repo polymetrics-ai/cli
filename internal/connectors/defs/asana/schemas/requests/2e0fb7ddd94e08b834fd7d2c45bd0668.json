@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "data": {
+      "additionalProperties": false,
+      "properties": {
+        "supporting_resource": {
+          "maxLength": 8192,
+          "type": "string"
+        }
+      },
+      "required": [
+        "supporting_resource"
+      ],
+      "type": "object"
+    },
+    "goal_gid": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "opt_pretty": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "data",
+    "goal_gid"
+  ],
+  "type": "object"
+}

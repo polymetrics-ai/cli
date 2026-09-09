@@ -21,13 +21,14 @@ import (
 )
 
 // pmcert:workflow schedule
-func runSchedule(ctx context.Context, cfg config.Config, root string, args []string, stdout io.Writer, jsonOut bool) error {
+func runSchedule(ctx context.Context, cfg config.Config, root string, args []string, stdout io.Writer, jsonOut bool, candidates ...appOpeners) error {
+	openers := selectAppOpeners(candidates...)
 	if len(args) == 0 {
 		return usageErrorf("usage: pm schedule <create|list|inspect|status|install|remove|fire>")
 	}
 	switch args[0] {
 	case "create":
-		return runScheduleCreate(ctx, root, args[1:], stdout, jsonOut)
+		return runScheduleCreate(ctx, root, args[1:], stdout, jsonOut, openers)
 	case "list":
 		return runScheduleList(root, args[1:], stdout, jsonOut)
 	case "inspect", "status":
@@ -37,13 +38,13 @@ func runSchedule(ctx context.Context, cfg config.Config, root string, args []str
 	case "remove":
 		return runScheduleRemove(ctx, cfg, root, args[1:], stdout, jsonOut)
 	case "fire":
-		return runScheduleFire(ctx, cfg, root, args[1:], stdout, jsonOut)
+		return runScheduleFire(ctx, cfg, root, args[1:], stdout, jsonOut, openers)
 	default:
 		return usageErrorf("unknown schedule subcommand %q", args[0])
 	}
 }
 
-func runScheduleCreate(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
+func runScheduleCreate(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool, openers appOpeners) error {
 	flags := parseFlags(args)
 	name := flags.first("name")
 	cron := flags.first("cron")
@@ -56,7 +57,7 @@ func runScheduleCreate(ctx context.Context, root string, args []string, stdout i
 	if _, err := schedule.ParseCron(cron); err != nil {
 		return validationErrorf("invalid --cron: %v", err)
 	}
-	if err := validateStoredScheduledFlow(ctx, root, flow); err != nil {
+	if err := validateStoredScheduledFlow(ctx, root, flow, openers); err != nil {
 		return err
 	}
 	if _, found, err := schedule.FindByFlow(root, flow); err != nil {
@@ -224,8 +225,8 @@ func runScheduleRemove(ctx context.Context, cfg config.Config, root string, args
 	return nil
 }
 
-func runScheduleFire(ctx context.Context, cfg config.Config, root string, args []string, stdout io.Writer, jsonOut bool) error {
-	return withApp(root, func(a *app.App) error {
+func runScheduleFire(ctx context.Context, cfg config.Config, root string, args []string, stdout io.Writer, jsonOut bool, openers appOpeners) error {
+	return withApp(openers, root, func(a *app.App) error {
 		return runScheduleFireWithApp(ctx, cfg, root, a, args, stdout, jsonOut)
 	})
 }
@@ -270,11 +271,12 @@ func runScheduleFireWithApp(ctx context.Context, cfg config.Config, root string,
 	return nil
 }
 
-func validateStoredScheduledFlow(ctx context.Context, root, flowName string) error {
+func validateStoredScheduledFlow(ctx context.Context, root, flowName string, candidates ...appOpeners) error {
+	openers := selectAppOpeners(candidates...)
 	if _, _, err := schedule.FindByFlow(root, flowName); err != nil {
 		return err
 	}
-	return withApp(root, func(a *app.App) error {
+	return withApp(openers, root, func(a *app.App) error {
 		path := filepath.Join(a.ProjectDir(), "flows", flowName+".json")
 		manifest, err := readManifestFile(path)
 		if err != nil {

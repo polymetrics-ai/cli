@@ -44,10 +44,6 @@ type publicCredentialState struct {
 }
 
 func publicCredentialConfiguration(root, name string) (CredentialMeta, bool, error) {
-	if session := activeCertificationEphemeralSession(root); session != nil {
-		credential, found := session.publicCredential(name)
-		return credential, found, nil
-	}
 	if root == "" {
 		root = "."
 	}

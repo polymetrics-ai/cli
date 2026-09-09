@@ -37,7 +37,7 @@
     },
     "mode": {
       "type": "string",
-      "description": "Set to \"fixture\" to emit deterministic canned records with no network access (test/conformance-harness affordance only, never set in production)."
+      "description": "Set to \"fixture\" to emit deterministic canned records with no network access (test/execution-contract-harness affordance only, never set in production)."
     }
   }
 }

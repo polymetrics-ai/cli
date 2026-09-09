@@ -46,7 +46,7 @@ Event imports require the provider's RFC 5545 `iCalUID` in addition to start and
 
 ## Known limits
 
-- No live Google Calendar provider certification was performed; reads and every write request shape are fixture-backed.
+- No live Google Calendar provider validation was performed; reads and every write request shape are fixture-backed.
 - `cdc=false`: watch creation and stopping are supported as explicit write actions, but webhook delivery and changefeed state are outside this connector.
 - The direct free/busy operation is intentionally typed and bounded; it is not a generic Google Calendar HTTP facility.
 - Source audit: [Google Calendar API v3 Discovery](https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest) and [Google Calendar API v3 reference](https://developers.google.com/workspace/calendar/api/v3/reference). The phase research ledger records a primary-provider citation for all 149 declared request-field uses and all 38 operations.

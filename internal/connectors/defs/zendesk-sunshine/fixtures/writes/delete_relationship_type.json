@@ -1,9 +1,0 @@
-{
-  "record": {
-    "key": "owns"
-  },
-  "expect": {
-    "method": "DELETE",
-    "path": "/relationships/types/owns"
-  }
-}

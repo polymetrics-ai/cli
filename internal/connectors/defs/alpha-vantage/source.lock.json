@@ -1,0 +1,265 @@
+{
+  "schema_version": 4,
+  "connector": "alpha-vantage",
+  "lanes": {
+    "binary_download": "unsupported",
+    "binary_upload": "unsupported",
+    "direct_read": "unsupported",
+    "direct_write": "unsupported",
+    "etl": "implemented",
+    "reverse_etl": "unsupported",
+    "sync_transport": "unsupported"
+  },
+  "provider_evidence": {
+    "documentation": [
+      {
+        "role": "provider_reference",
+        "url": "https://www.alphavantage.co/documentation/"
+      }
+    ]
+  },
+  "metadata": {
+    "name": "alpha-vantage",
+    "display_name": "Alpha Vantage",
+    "description": "Reads daily, weekly, monthly, and intraday OHLCV time series plus latest global quotes through fixed Alpha Vantage query operations.",
+    "integration_type": "api",
+    "release_stage": "alpha",
+    "capabilities": {
+      "check": true,
+      "read": true,
+      "write": false,
+      "query": false,
+      "cdc": false,
+      "dynamic_schema": false
+    },
+    "risk": {
+      "read": "Bounded Alpha Vantage query reads use the fixed provider origin and declared API-key query authentication.",
+      "write": "unsupported",
+      "approval": "none; read-only"
+    },
+    "docs_url": "https://www.alphavantage.co/documentation/"
+  },
+  "config_schema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Alpha Vantage Connection Specification",
+    "type": "object",
+    "x-reject-unknown-config": true,
+    "required": ["api_key", "symbol"],
+    "properties": {
+      "api_key": {
+        "type": "string",
+        "x-secret": true,
+        "description": "Alpha Vantage API key."
+      },
+      "symbol": {
+        "type": "string",
+        "description": "Stock symbol with exchange code."
+      },
+      "interval": {
+        "type": "string",
+        "default": "1min",
+        "description": "Intraday interval."
+      },
+      "adjusted": {
+        "type": "string",
+        "default": "false",
+        "description": "Intraday adjusted-series selector."
+      },
+      "outputsize": {
+        "type": "string",
+        "default": "compact",
+        "description": "Time-series response window."
+      }
+    }
+  },
+  "http": {
+    "url": "https://www.alphavantage.co",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "api_key_query",
+        "param": "apikey",
+        "value": "{{ secrets.api_key }}"
+      }
+    ],
+    "pagination": {
+      "type": "none"
+    },
+    "check": {
+      "method": "GET",
+      "path": "/query",
+      "query": {
+        "function": "GLOBAL_QUOTE",
+        "symbol": "{{ config.symbol }}"
+      }
+    },
+    "error_map": []
+  },
+  "schemas": {
+    "schemas/time_series_daily.json": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "time_series_daily",
+      "type": "object",
+      "properties": {
+        "date": {"type": "string"},
+        "symbol": {"type": "string"},
+        "open": {"type": "number"},
+        "high": {"type": "number"},
+        "low": {"type": "number"},
+        "close": {"type": "number"},
+        "volume": {"type": "integer"}
+      },
+      "x-primary-key": ["symbol", "date"],
+      "x-cursor-field": "date"
+    },
+    "schemas/time_series_weekly.json": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "time_series_weekly",
+      "type": "object",
+      "properties": {
+        "date": {"type": "string"},
+        "symbol": {"type": "string"},
+        "open": {"type": "number"},
+        "high": {"type": "number"},
+        "low": {"type": "number"},
+        "close": {"type": "number"},
+        "volume": {"type": "integer"}
+      },
+      "x-primary-key": ["symbol", "date"],
+      "x-cursor-field": "date"
+    },
+    "schemas/time_series_monthly.json": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "time_series_monthly",
+      "type": "object",
+      "properties": {
+        "date": {"type": "string"},
+        "symbol": {"type": "string"},
+        "open": {"type": "number"},
+        "high": {"type": "number"},
+        "low": {"type": "number"},
+        "close": {"type": "number"},
+        "volume": {"type": "integer"}
+      },
+      "x-primary-key": ["symbol", "date"],
+      "x-cursor-field": "date"
+    },
+    "schemas/time_series_intraday.json": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "time_series_intraday",
+      "type": "object",
+      "properties": {
+        "date": {"type": "string"},
+        "symbol": {"type": "string"},
+        "open": {"type": "number"},
+        "high": {"type": "number"},
+        "low": {"type": "number"},
+        "close": {"type": "number"},
+        "volume": {"type": "integer"}
+      },
+      "x-primary-key": ["symbol", "date"],
+      "x-cursor-field": "date"
+    },
+    "schemas/global_quote.json": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "global_quote",
+      "type": "object",
+      "properties": {
+        "symbol": {"type": "string"},
+        "open": {"type": "number"},
+        "high": {"type": "number"},
+        "low": {"type": "number"},
+        "price": {"type": "number"},
+        "volume": {"type": "integer"},
+        "latest_trading_day": {"type": "string"},
+        "previous_close": {"type": "number"},
+        "change": {"type": "number"},
+        "change_percent": {"type": "string"}
+      },
+      "x-primary-key": ["symbol", "latest_trading_day"],
+      "x-cursor-field": "latest_trading_day"
+    }
+  },
+  "operations": [
+    {
+      "id": "alpha-vantage.time-series-daily",
+      "source": {"operation": "TIME_SERIES_DAILY", "method": "GET", "path": "/query", "url": "https://www.alphavantage.co/documentation/"},
+      "schema_refs": {"record": "schemas/time_series_daily.json"},
+      "stream_order": 1,
+      "stream": {
+        "name": "time_series_daily",
+        "method": "GET",
+        "path": "/query",
+        "query": {"function": "TIME_SERIES_DAILY", "symbol": "{{ config.symbol }}", "outputsize": "{{ config.outputsize }}"},
+        "records": {"path": "Time Series (Daily)", "keyed_object": true, "key_field": "date"},
+        "computed_fields": {"symbol": "{{ config.symbol }}", "open": "{{ record.1. open }}", "high": "{{ record.2. high }}", "low": "{{ record.3. low }}", "close": "{{ record.4. close }}", "volume": "{{ record.5. volume }}"},
+        "schema": "schemas/time_series_daily.json",
+        "incremental": {"cursor_field": "date", "client_filtered": true}
+      }
+    },
+    {
+      "id": "alpha-vantage.time-series-weekly",
+      "source": {"operation": "TIME_SERIES_WEEKLY", "method": "GET", "path": "/query", "url": "https://www.alphavantage.co/documentation/"},
+      "schema_refs": {"record": "schemas/time_series_weekly.json"},
+      "stream_order": 2,
+      "stream": {
+        "name": "time_series_weekly",
+        "method": "GET",
+        "path": "/query",
+        "query": {"function": "TIME_SERIES_WEEKLY", "symbol": "{{ config.symbol }}"},
+        "records": {"path": "Weekly Time Series", "keyed_object": true, "key_field": "date"},
+        "computed_fields": {"symbol": "{{ config.symbol }}", "open": "{{ record.1. open }}", "high": "{{ record.2. high }}", "low": "{{ record.3. low }}", "close": "{{ record.4. close }}", "volume": "{{ record.5. volume }}"},
+        "schema": "schemas/time_series_weekly.json",
+        "incremental": {"cursor_field": "date", "client_filtered": true}
+      }
+    },
+    {
+      "id": "alpha-vantage.time-series-monthly",
+      "source": {"operation": "TIME_SERIES_MONTHLY", "method": "GET", "path": "/query", "url": "https://www.alphavantage.co/documentation/"},
+      "schema_refs": {"record": "schemas/time_series_monthly.json"},
+      "stream_order": 3,
+      "stream": {
+        "name": "time_series_monthly",
+        "method": "GET",
+        "path": "/query",
+        "query": {"function": "TIME_SERIES_MONTHLY", "symbol": "{{ config.symbol }}"},
+        "records": {"path": "Monthly Time Series", "keyed_object": true, "key_field": "date"},
+        "computed_fields": {"symbol": "{{ config.symbol }}", "open": "{{ record.1. open }}", "high": "{{ record.2. high }}", "low": "{{ record.3. low }}", "close": "{{ record.4. close }}", "volume": "{{ record.5. volume }}"},
+        "schema": "schemas/time_series_monthly.json",
+        "incremental": {"cursor_field": "date", "client_filtered": true}
+      }
+    },
+    {
+      "id": "alpha-vantage.time-series-intraday",
+      "source": {"operation": "TIME_SERIES_INTRADAY", "method": "GET", "path": "/query", "url": "https://www.alphavantage.co/documentation/"},
+      "schema_refs": {"record": "schemas/time_series_intraday.json"},
+      "stream_order": 4,
+      "stream": {
+        "name": "time_series_intraday",
+        "method": "GET",
+        "path": "/query",
+        "query": {"function": "TIME_SERIES_INTRADAY", "symbol": "{{ config.symbol }}", "interval": "{{ config.interval }}", "adjusted": "{{ config.adjusted }}", "outputsize": "{{ config.outputsize }}"},
+        "records": {"path": "Time Series (1min)", "keyed_object": true, "key_field": "date"},
+        "computed_fields": {"symbol": "{{ config.symbol }}", "open": "{{ record.1. open }}", "high": "{{ record.2. high }}", "low": "{{ record.3. low }}", "close": "{{ record.4. close }}", "volume": "{{ record.5. volume }}"},
+        "schema": "schemas/time_series_intraday.json",
+        "incremental": {"cursor_field": "date", "client_filtered": true}
+      }
+    },
+    {
+      "id": "alpha-vantage.global-quote",
+      "source": {"operation": "GLOBAL_QUOTE", "method": "GET", "path": "/query", "url": "https://www.alphavantage.co/documentation/"},
+      "schema_refs": {"record": "schemas/global_quote.json"},
+      "stream_order": 5,
+      "stream": {
+        "name": "global_quote",
+        "method": "GET",
+        "path": "/query",
+        "query": {"function": "GLOBAL_QUOTE", "symbol": "{{ config.symbol }}"},
+        "records": {"path": "Global Quote", "single_object": true},
+        "computed_fields": {"symbol": "{{ record.01. symbol }}", "open": "{{ record.02. open }}", "high": "{{ record.03. high }}", "low": "{{ record.04. low }}", "price": "{{ record.05. price }}", "volume": "{{ record.06. volume }}", "latest_trading_day": "{{ record.07. latest trading day }}", "previous_close": "{{ record.08. previous close }}", "change": "{{ record.09. change }}", "change_percent": "{{ record.10. change percent }}"},
+        "schema": "schemas/global_quote.json",
+        "incremental": {"cursor_field": "latest_trading_day", "client_filtered": true}
+      }
+    }
+  ]
+}

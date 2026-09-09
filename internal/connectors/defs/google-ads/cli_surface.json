@@ -1,12 +1,6 @@
 {
   "tagline": "Google Ads v22 fixed direct reads and limited guarded reverse/write actions.",
   "usage": "pm google-ads <resource> <operation> [flags]",
-  "source_cli": {
-    "name": "Google Ads API v22 REST discovery",
-    "docs": "https://developers.google.com/google-ads/api/rest/overview",
-    "reference": "https://developers.google.com/google-ads/api/reference/rpc/v22/overview",
-    "source": "https://googleads.googleapis.com/$discovery/rest?version=v22"
-  },
   "commands": [
     {
       "path": "audience-insights list-insights-eligible-dates",
@@ -15,7 +9,6 @@
       "availability": "implemented",
       "operation": "google_ads.audience.insights.list.insights.eligible.dates",
       "output_policy": "json_redacted",
-      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#audienceInsights.listInsightsEligibleDates",
       "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
       "approval": "none",
       "api_surface": [
@@ -43,7 +36,6 @@
       "availability": "implemented",
       "operation": "google_ads.customers.asset.generations.generate.images",
       "output_policy": "json_redacted",
-      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.assetGenerations.generateImages",
       "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
       "approval": "none",
       "api_surface": [
@@ -147,7 +139,6 @@
       "availability": "implemented",
       "operation": "google_ads.customers.asset.generations.generate.text",
       "output_policy": "json_redacted",
-      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.assetGenerations.generateText",
       "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
       "approval": "none",
       "api_surface": [
@@ -258,7 +249,6 @@
       "availability": "implemented",
       "operation": "google_ads.customers.generate.ad.group.themes",
       "output_policy": "json_redacted",
-      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.generateAdGroupThemes",
       "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
       "approval": "none",
       "api_surface": [
@@ -294,7 +284,6 @@
       "availability": "implemented",
       "operation": "google_ads.customers.generate.audience.composition.insights",
       "output_policy": "json_redacted",
-      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.generateAudienceCompositionInsights",
       "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
       "approval": "none",
       "api_surface": [
@@ -373,7 +362,6 @@
       "availability": "implemented",
       "operation": "google_ads.customers.generate.audience.overlap.insights",
       "output_policy": "json_redacted",
-      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.generateAudienceOverlapInsights",
       "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
       "approval": "none",
       "api_surface": [
@@ -447,7 +435,6 @@
       "availability": "implemented",
       "operation": "google_ads.customers.generate.creator.insights",
       "output_policy": "json_redacted",
-      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.generateCreatorInsights",
       "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
       "approval": "none",
       "api_surface": [
@@ -513,7 +500,6 @@
       "availability": "implemented",
       "operation": "google_ads.customers.generate.insights.finder.report",
       "output_policy": "json_redacted",
-      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.generateInsightsFinderReport",
       "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
       "approval": "none",
       "api_surface": [
@@ -561,7 +547,6 @@
       "availability": "implemented",
       "operation": "google_ads.customers.generate.keyword.forecast.metrics",
       "output_policy": "json_redacted",
-      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.generateKeywordForecastMetrics",
       "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
       "approval": "none",
       "api_surface": [
@@ -602,7 +587,6 @@
       "availability": "implemented",
       "operation": "google_ads.customers.generate.keyword.historical.metrics",
       "output_policy": "json_redacted",
-      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.generateKeywordHistoricalMetrics",
       "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
       "approval": "none",
       "api_surface": [
@@ -672,7 +656,6 @@
       "availability": "implemented",
       "operation": "google_ads.customers.generate.keyword.ideas",
       "output_policy": "json_redacted",
-      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.generateKeywordIdeas",
       "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
       "approval": "none",
       "api_surface": [
@@ -789,7 +772,6 @@
       "availability": "implemented",
       "operation": "google_ads.customers.generate.reach.forecast",
       "output_policy": "json_redacted",
-      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.generateReachForecast",
       "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
       "approval": "none",
       "api_surface": [
@@ -879,7 +861,6 @@
       "availability": "implemented",
       "operation": "google_ads.customers.generate.shareable.previews",
       "output_policy": "json_redacted",
-      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.generateShareablePreviews",
       "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
       "approval": "none",
       "api_surface": [
@@ -908,7 +889,6 @@
       "availability": "implemented",
       "operation": "google_ads.customers.generate.suggested.targeting.insights",
       "output_policy": "json_redacted",
-      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.generateSuggestedTargetingInsights",
       "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
       "approval": "none",
       "api_surface": [
@@ -954,7 +934,6 @@
       "availability": "implemented",
       "operation": "google_ads.customers.generate.targeting.suggestion.metrics",
       "output_policy": "json_redacted",
-      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.generateTargetingSuggestionMetrics",
       "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
       "approval": "none",
       "api_surface": [
@@ -995,7 +974,6 @@
       "availability": "implemented",
       "operation": "google_ads.customers.generate.trending.insights",
       "output_policy": "json_redacted",
-      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.generateTrendingInsights",
       "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
       "approval": "none",
       "api_surface": [
@@ -1049,7 +1027,6 @@
       "availability": "implemented",
       "operation": "google_ads.customers.get.identity.verification",
       "output_policy": "json_redacted",
-      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.getIdentityVerification",
       "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
       "approval": "none",
       "api_surface": [
@@ -1069,7 +1046,6 @@
       "availability": "implemented",
       "operation": "google_ads.customers.invoices.list",
       "output_policy": "json_redacted",
-      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.invoices.list",
       "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
       "approval": "none",
       "api_surface": [
@@ -1079,7 +1055,7 @@
         }
       ],
       "examples": [
-        "pm google-ads customers invoices list --billing-setup customers/synthetic-conformance-value/billingSetups/fixture --issue-month JANUARY --issue-year 2026 --json"
+        "pm google-ads customers invoices list --billing-setup customers/synthetic-execution-contract-value/billingSetups/fixture --issue-month JANUARY --issue-year 2026 --json"
       ],
       "flags": []
     },
@@ -1090,7 +1066,6 @@
       "availability": "implemented",
       "operation": "google_ads.customers.payments.accounts.list",
       "output_policy": "json_redacted",
-      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.paymentsAccounts.list",
       "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
       "approval": "none",
       "api_surface": [
@@ -1110,7 +1085,6 @@
       "availability": "implemented",
       "operation": "google_ads.customers.recommendations.generate",
       "output_policy": "json_redacted",
-      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.recommendations.generate",
       "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
       "approval": "none",
       "api_surface": [
@@ -1324,7 +1298,6 @@
       "availability": "implemented",
       "operation": "google_ads.customers.search.audience.insights.attributes",
       "output_policy": "json_redacted",
-      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.searchAudienceInsightsAttributes",
       "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
       "approval": "none",
       "api_surface": [
@@ -1403,7 +1376,6 @@
       "availability": "implemented",
       "operation": "google_ads.customers.suggest.brands",
       "output_policy": "json_redacted",
-      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.suggestBrands",
       "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
       "approval": "none",
       "api_surface": [
@@ -1438,7 +1410,6 @@
       "availability": "implemented",
       "operation": "google_ads.customers.suggest.keyword.themes",
       "output_policy": "json_redacted",
-      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.suggestKeywordThemes",
       "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
       "approval": "none",
       "api_surface": [
@@ -1467,7 +1438,6 @@
       "availability": "implemented",
       "operation": "google_ads.customers.suggest.smart.campaign.ad",
       "output_policy": "json_redacted",
-      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.suggestSmartCampaignAd",
       "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
       "approval": "none",
       "api_surface": [
@@ -1496,7 +1466,6 @@
       "availability": "implemented",
       "operation": "google_ads.customers.suggest.smart.campaign.budget.options",
       "output_policy": "json_redacted",
-      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.suggestSmartCampaignBudgetOptions",
       "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
       "approval": "none",
       "api_surface": [
@@ -1532,7 +1501,6 @@
       "availability": "implemented",
       "operation": "google_ads.customers.suggest.travel.assets",
       "output_policy": "json_redacted",
-      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.suggestTravelAssets",
       "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
       "approval": "none",
       "api_surface": [
@@ -1567,7 +1535,6 @@
       "availability": "implemented",
       "operation": "google_ads.geo.target.constants.suggest",
       "output_policy": "json_redacted",
-      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#geoTargetConstants.suggest",
       "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
       "approval": "none",
       "api_surface": [
@@ -1613,7 +1580,6 @@
       "availability": "implemented",
       "operation": "google_ads.keyword.theme.constants.suggest",
       "output_policy": "json_redacted",
-      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#keywordThemeConstants.suggest",
       "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
       "approval": "none",
       "api_surface": [
@@ -1653,7 +1619,6 @@
       "availability": "implemented",
       "operation": "google_ads.v22.generate.conversion.rates",
       "output_policy": "json_redacted",
-      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#v22.generateConversionRates",
       "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
       "approval": "none",
       "api_surface": [
@@ -1694,7 +1659,6 @@
       "availability": "implemented",
       "operation": "google_ads.v22.list.plannable.locations",
       "output_policy": "json_redacted",
-      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#v22.listPlannableLocations",
       "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
       "approval": "none",
       "api_surface": [
@@ -1722,7 +1686,6 @@
       "availability": "implemented",
       "operation": "google_ads.v22.list.plannable.products",
       "output_policy": "json_redacted",
-      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#v22.listPlannableProducts",
       "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
       "approval": "none",
       "api_surface": [
@@ -1757,7 +1720,6 @@
       "availability": "implemented",
       "operation": "google_ads.v22.list.plannable.user.interests",
       "output_policy": "json_redacted",
-      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#v22.listPlannableUserInterests",
       "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
       "approval": "none",
       "api_surface": [
@@ -1819,7 +1781,6 @@
       "availability": "implemented",
       "operation": "google_ads.v22.list.plannable.user.lists",
       "output_policy": "json_redacted",
-      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#v22.listPlannableUserLists",
       "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
       "approval": "none",
       "api_surface": [

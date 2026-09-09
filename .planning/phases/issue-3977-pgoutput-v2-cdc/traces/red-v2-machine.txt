@@ -1,7 +1,0 @@
-Command:
-
-    go test -count=1 -timeout 20m ./internal/connectors/native/postgres -run '^TestPGOutputV2'
-
-Result: expected compile failure before implementation. The new regressions reference the absent
-`pgoutputV2TransactionMachine`, `newPGOutputV2TransactionMachine`, and source transaction identity
-helpers. This proves the planned reader cannot yet provide private stream staging or receipt ordering.

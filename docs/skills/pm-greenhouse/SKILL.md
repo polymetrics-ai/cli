@@ -447,7 +447,6 @@ Reads and writes documented Greenhouse Harvest REST API resources through the de
 
 - Read Greenhouse Harvest records and safely plan typed Greenhouse mutations.
 - Usage: pm greenhouse <command> [flags]
-- Source CLI: Greenhouse Harvest API (Greenhouse Harvest reference fetched 2026-08-07 (HTTP 200, 1,636,662 bytes))
 - Global flags:
   - --credential (string): Credential name to use for the Greenhouse request.
   - --connection (string): Alias for --credential.

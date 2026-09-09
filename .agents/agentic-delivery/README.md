@@ -63,20 +63,9 @@ and `.opencode/agents/*.md`, are generated activation adapters. `canonical/deliv
 is the sole owner of each registered target's path, render mode, and requiredness. The checked-in
 Claude, Codex, Pi, and OpenCode adapters are complete required full-file projections. Regenerate
 them from the canonical source; never hand-edit or copy GSD/TDD, review, human-gate, or connector
-certification policy into an adapter.
-
-The same canonical contract also owns the versioned, read-only connector-certification Shepherd
-gate. It consumes only generated certification artifacts and emits `PROCEED`, `RETRY`, or `HALT`
-with stable cell/evidence coordinates before protected connector/parent transitions. Structural
-`agentcontractgen check` validates the contract and registered projections; certification is
-evaluated explicitly at a protected transition, so a baseline with zero certified connectors does
-not make a general contract check red.
-
-At each protected transition, run the canonical command rendered in the registered projection with
-one canonical absolute non-symlink repository root:
-`go run ./cmd/agentcontractgen certification-gate --root <repository-root> --connector <connector>
---transition <transition>`. It emits the complete verdict as JSON and exits zero only for
-`PROCEED`; `RETRY` and `HALT` preserve their evidence on stdout while blocking the transition.
+execution policy into an adapter. Connector delivery uses compact source locks, deterministic
+execution JSON projection, and runtime tests; authoring evidence does not gate
+delivery or runtime admission.
 
 Codex loads the project-local `.codex` configuration layer only when the repository is trusted.
 The generated Codex workers therefore fail closed for project-local selection in an untrusted

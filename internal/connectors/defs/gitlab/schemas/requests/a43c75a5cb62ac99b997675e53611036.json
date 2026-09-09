@@ -1,0 +1,163 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "additional_context": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "category": {
+            "enum": [
+              "file",
+              "snippet",
+              "merge_request",
+              "issue",
+              "dependency",
+              "local_git",
+              "terminal",
+              "user_rule",
+              "repository",
+              "directory",
+              "agent_user_environment"
+            ],
+            "maxLength": 8192,
+            "minLength": 1,
+            "type": "string"
+          },
+          "content": {
+            "maxLength": 1000,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "id": {
+            "maxLength": 255,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "metadata": {
+            "additionalProperties": false,
+            "properties": {},
+            "type": [
+              "object",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "category",
+          "id",
+          "content"
+        ],
+        "type": "object"
+      },
+      "maxItems": 256,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "client_subscription_id": {
+      "maxLength": 500,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "content": {
+      "maxLength": 1000,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "current_file": {
+      "additionalProperties": false,
+      "properties": {
+        "content_above_cursor": {
+          "maxLength": 400000,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "content_below_cursor": {
+          "maxLength": 400000,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "file_name": {
+          "maxLength": 1000,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "selected_text": {
+          "maxLength": 400000,
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "project_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "referer_url": {
+      "maxLength": 1000,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "resource_id": {
+      "maxLength": 1048576,
+      "type": [
+        "integer",
+        "null",
+        "string"
+      ]
+    },
+    "resource_type": {
+      "enum": [
+        "issue",
+        "epic",
+        "group",
+        "project",
+        "merge_request",
+        "commit",
+        "build",
+        "work_item"
+      ],
+      "maxLength": 100,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "with_clean_history": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "content"
+  ],
+  "type": "object"
+}

@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "require_approval_for_fork_pr_workflows": {
+      "type": "boolean"
+    },
+    "run_workflows_from_fork_pull_requests": {
+      "type": "boolean"
+    },
+    "send_secrets_and_variables": {
+      "type": "boolean"
+    },
+    "send_write_tokens_to_workflows": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "run_workflows_from_fork_pull_requests"
+  ],
+  "type": "object"
+}

@@ -1,4 +1,0 @@
-{
-  "record": { "type": "text", "label": "Fixture Property" },
-  "expect": { "method": "POST", "path": "/contact_properties" }
-}

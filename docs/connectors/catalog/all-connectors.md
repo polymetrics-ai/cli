@@ -20,7 +20,7 @@
 | `alpha-vantage` | [`icons/alpha-vantage.svg`](../icons/alpha-vantage.svg) | Alpha Vantage | `api` | alpha | check, catalog, read | 5 | 0 | [Documentation](https://www.alphavantage.co/documentation/) | bundle definition |
 | `amazon-ads` | [`icons/amazonads.svg`](../icons/amazonads.svg) | Amazon Ads | `api` | ga | check, catalog, read | 7 | 0 | [Documentation](https://advertising.amazon.com/API/docs/en-us/) | bundle definition |
 | `amazon-seller-partner` | [`icons/amazonsellerpartner.svg`](../icons/amazonsellerpartner.svg) | Amazon Seller Partner | `api` | ga | check, catalog, read, write | 147 | 98 | [Documentation](https://developer-docs.amazon.com/sp-api/) | bundle definition |
-| `amazon-sqs` | [`icons/amazon-sqs.svg`](../icons/amazon-sqs.svg) | Amazon SQS | `queue` | ga | check, catalog, read, write | 1 | 16 | [Documentation](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/Welcome.html) | bundle definition |
+| `amazon-sqs` | [`icons/amazon-sqs.svg`](../icons/amazon-sqs.svg) | Amazon SQS | `queue` | ga | catalog | 0 | 0 | [Documentation](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/Welcome.html) | bundle definition |
 | `amplitude` | [`icons/amplitude.svg`](../icons/amplitude.svg) | Amplitude | `api` | ga | check, catalog, read, write | 10 | 12 | [Documentation](https://www.docs.developers.amplitude.com/analytics/apis/http-v2-api/) | bundle definition |
 | `apify-dataset` | [`icons/apify.svg`](../icons/apify.svg) | Apify Dataset | `api` | alpha | check, catalog, read | 3 | 0 | [Documentation](https://docs.apify.com/api/v2) | bundle definition |
 | `appcues` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Appcues | `api` | ga | check, catalog, read, write | 13 | 35 | [Documentation](https://docs.appcues.com/en_US/api) | bundle definition |
@@ -29,15 +29,15 @@
 | `apple-search-ads` | [`icons/simple-icons/apple.svg`](../icons/simple-icons/apple.svg) | Apple Ads | `api` | ga | check, catalog, read | 4 | 0 | [Documentation](https://developer.apple.com/documentation/apple_search_ads) | bundle definition |
 | `appsflyer` | [`icons/appsflyer.svg`](../icons/appsflyer.svg) | AppsFlyer | `api` | ga | check, catalog, read | 2 | 0 | [Documentation](https://dev.appsflyer.com/hc/reference) | bundle definition |
 | `apptivo` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Apptivo | `api` | ga | check, catalog, read, write | 4 | 1 | [Documentation](https://www.apptivo.com/api-reference/) | bundle definition |
-| `asana` | [`icons/asana.svg`](../icons/asana.svg) | Asana | `api` | ga | check, catalog, read, write | 12 | 94 | [Documentation](https://developers.asana.com/reference/rest-api-reference) | bundle definition |
+| `asana` | [`icons/asana.svg`](../icons/asana.svg) | Asana | `api` | ga | check, catalog, read, write | 64 | 131 | [Documentation](https://developers.asana.com/reference/rest-api-reference) | bundle definition |
 | `ashby` | [`icons/ashby.svg`](../icons/ashby.svg) | Ashby | `api` | alpha | check, catalog, read, write | 71 | 98 | [Documentation](https://developers.ashbyhq.com/) | bundle definition |
 | `assemblyai` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | AssemblyAI | `api` | ga | check, catalog, read, write | 8 | 1 | [Documentation](https://www.assemblyai.com/docs) | bundle definition |
 | `auth0` | [`icons/auth0.svg`](../icons/auth0.svg) | Auth0 | `api` | beta | check, catalog, read, write | 7 | 8 | [Documentation](https://auth0.com/docs/api/management/v2) | bundle definition |
 | `aviationstack` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Aviationstack | `api` | ga | check, catalog, read | 5 | 0 | [Documentation](https://aviationstack.com/documentation) | bundle definition |
 | `avni` | [`icons/avni.svg`](../icons/avni.svg) | Avni | `api` | alpha | check, catalog, read | 7 | 0 | [Documentation](https://avniproject.org/) | bundle definition |
 | `awin-advertiser` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Awin Advertiser | `api` | ga | check, catalog, read, write | 5 | 1 | [Documentation](https://wiki.awin.com/index.php/Advertiser_API) | bundle definition |
-| `aws-cloudtrail` | [`icons/aws-cloudtrail.svg`](../icons/aws-cloudtrail.svg) | AWS CloudTrail | `api` | alpha | check, catalog, read | 4 | 0 | [Documentation](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-user-guide.html) | bundle definition |
-| `babelforce` | [`icons/babelforce.svg`](../icons/babelforce.svg) | Babelforce | `api` | alpha | check, catalog, read | 5 | 0 | [Documentation](https://api.babelforce.com/) | bundle definition |
+| `aws-cloudtrail` | [`icons/aws-cloudtrail.svg`](../icons/aws-cloudtrail.svg) | AWS CloudTrail | `api` | alpha | check, catalog, read | 4 | 0 | [Documentation](https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_LookupEvents.html) | bundle definition |
+| `babelforce` | [`icons/babelforce.svg`](../icons/babelforce.svg) | Babelforce | `api` | alpha | check, catalog, read | 5 | 0 | [Documentation](https://docs.babelforce.com/) | bundle definition |
 | `bahmni` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Bahmni | `api` | alpha | check, catalog, read, write | 12 | 11 | [Documentation](https://rest.openmrs.org/) | bundle definition |
 | `bamboo-hr` | [`icons/bamboohr.svg`](../icons/bamboohr.svg) | BambooHR | `api` | ga | check, catalog, read, write | 84 | 101 | [Documentation](https://documentation.bamboohr.com/reference/getting-started) | bundle definition |
 | `basecamp` | [`icons/simple-icons/basecamp.svg`](../icons/simple-icons/basecamp.svg) | Basecamp | `api` | alpha | check, catalog, read | 3 | 0 | [Documentation](https://github.com/basecamp/bc3-api) | bundle definition |
@@ -59,7 +59,7 @@
 | `brex` | [`icons/simple-icons/brex.svg`](../icons/simple-icons/brex.svg) | Brex | `api` | ga | check, catalog, read, write | 16 | 14 | [Documentation](https://developer.brex.com/openapi/) | bundle definition |
 | `bugsnag` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Bugsnag | `api` | ga | check, catalog, read | 6 | 0 | [Documentation](https://bugsnagapiv2.docs.apiary.io/) | bundle definition |
 | `buildkite` | [`icons/simple-icons/buildkite.svg`](../icons/simple-icons/buildkite.svg) | Buildkite | `api` | ga | check, catalog, read, write | 6 | 17 | [Documentation](https://buildkite.com/docs/apis/rest-api) | bundle definition |
-| `bunny-inc` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Bunny, Inc. | `api` | alpha | check, catalog, read | 5 | 0 | [Documentation](https://docs.bunny.net/reference/bunnynet-api-overview) | bundle definition |
+| `bunny-inc` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Bunny, Inc. | `api` | alpha | check, catalog, read | 5 | 0 | [Documentation](https://docs.bunny.com/) | bundle definition |
 | `buzzsprout` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Buzzsprout | `api` | ga | check, catalog, read, write | 2 | 2 | [Documentation](https://github.com/Buzzsprout/buzzsprout-api) | bundle definition |
 | `cal-com` | [`icons/simple-icons/caldotcom.svg`](../icons/simple-icons/caldotcom.svg) | Cal.com | `api` | ga | check, catalog, read, write | 5 | 13 | [Documentation](https://cal.com/docs/api-reference/introduction) | bundle definition |
 | `calendly` | [`icons/simple-icons/calendly.svg`](../icons/simple-icons/calendly.svg) | Calendly | `api` | ga | check, catalog, read, write | 12 | 8 | [Documentation](https://developer.calendly.com/api-docs) | bundle definition |
@@ -120,7 +120,7 @@
 | `devin-ai` | [`icons/devin-ai.svg`](../icons/devin-ai.svg) | Devin AI | `api` | ga | check, catalog, read, write | 27 | 23 | [Documentation](https://docs.devin.ai/api-reference/overview) | bundle definition |
 | `ding-connect` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Ding Connect | `api` | ga | check, catalog, read, write | 10 | 1 | [Documentation](https://docs.ding.com/) | bundle definition |
 | `discord` | [`icons/simple-icons/discord.svg`](../icons/simple-icons/discord.svg) | Discord | `api` | ga | check, catalog, read | 3 | 0 | [Documentation](https://discord.com/developers/docs/reference) | bundle definition |
-| `dixa` | [`icons/dixa.svg`](../icons/dixa.svg) | Dixa | `api` | alpha | check, catalog, read | 4 | 0 | [Documentation](https://docs.dixa.io/openapi/) | bundle definition |
+| `dixa` | [`icons/dixa.svg`](../icons/dixa.svg) | Dixa | `api` | alpha | check, catalog, read | 4 | 0 | [Documentation](https://docs.dixa.io/) | bundle definition |
 | `dockerhub` | [`icons/dockerhub.svg`](../icons/dockerhub.svg) | Docker Hub | `api` | ga | check, catalog, read | 4 | 0 | [Documentation](https://docs.docker.com/docker-hub/api/latest/) | bundle definition |
 | `docuseal` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | DocuSeal | `api` | ga | check, catalog, read, write | 4 | 6 | [Documentation](https://www.docuseal.co/docs/api) | bundle definition |
 | `dolibarr` | [`icons/simple-icons/dolibarr.svg`](../icons/simple-icons/dolibarr.svg) | Dolibarr | `api` | ga | check, catalog, read, write | 10 | 17 | [Documentation](https://www.dolibarr.org/webservices.html) | bundle definition |
@@ -150,7 +150,7 @@
 | `facebook-pages` | [`icons/facebook.svg`](../icons/facebook.svg) | Facebook Pages | `api` | beta | check, catalog, read | 2 | 0 | [Documentation](https://developers.facebook.com/docs/pages/) | bundle definition |
 | `factorial` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Factorial | `api` | beta | check, catalog, read | 5 | 0 | [Documentation](https://apidoc.factorialhr.com/) | bundle definition |
 | `faker` | [`icons/simple-icons/faker.svg`](../icons/simple-icons/faker.svg) | Sample Data | `api` | beta | check, catalog, read | 0 | 0 | [Documentation](https://faker.readthedocs.io/en/master/) | bundle definition |
-| `fastbill` | [`icons/fastbill.svg`](../icons/fastbill.svg) | FastBill | `api` | alpha | check, catalog, read | 5 | 0 | [Documentation](https://apidocs.fastbill.com/) | bundle definition |
+| `fastbill` | [`icons/fastbill.svg`](../icons/fastbill.svg) | FastBill | `api` | alpha | check, catalog, read | 5 | 0 | [Documentation](https://www.fastbill.com/api/) | bundle definition |
 | `fastly` | [`icons/simple-icons/fastly.svg`](../icons/simple-icons/fastly.svg) | Fastly | `api` | ga | check, catalog, read | 6 | 0 | [Documentation](https://developer.fastly.com/reference/api/) | bundle definition |
 | `feishu` | [`icons/feishu.svg`](../icons/feishu.svg) | Feishu / Lark | `api` | alpha | check, catalog, read | 3 | 0 | [Documentation](https://open.feishu.cn/document/server-docs/docs/bitable-v1/bitable-overview) | bundle definition |
 | `file` | [`icons/pm-file.svg`](../icons/pm-file.svg) | File | `file` |  | check, catalog, read | 1 | 0 | manual intervention needed | bundle definition |
@@ -184,7 +184,7 @@
 | `giphy` | [`icons/simple-icons/giphy.svg`](../icons/simple-icons/giphy.svg) | Giphy | `api` | ga | check, catalog, read | 4 | 0 | [Documentation](https://developers.giphy.com/docs/api/) | bundle definition |
 | `gitbook` | [`icons/simple-icons/gitbook.svg`](../icons/simple-icons/gitbook.svg) | GitBook | `api` | ga | check, catalog, read, write | 185 | 170 | [Documentation](https://gitbook.com/docs/developers/gitbook-api/api-reference) | bundle definition |
 | `github` | [`icons/github.svg`](../icons/github.svg) | GitHub | `api` | ga | check, catalog, read, write | 37 | 606 | [Documentation](https://docs.github.com/en/rest) | bundle definition |
-| `gitlab` | [`icons/gitlab.svg`](../icons/gitlab.svg) | GitLab | `api` | ga | check, catalog, read | 4 | 0 | [Documentation](https://docs.gitlab.com/ee/api/rest/) | bundle definition |
+| `gitlab` | [`icons/gitlab.svg`](../icons/gitlab.svg) | GitLab | `api` | ga | check, catalog, read, write | 5 | 382 | [Documentation](https://docs.gitlab.com/ee/api/rest/) | bundle definition |
 | `glassfrog` | [`icons/glassfrog.svg`](../icons/glassfrog.svg) | GlassFrog | `api` | ga | check, catalog, read | 5 | 0 | [Documentation](https://documenter.getpostman.com/view/1014385/glassfrog-api-v3/2SJViY) | bundle definition |
 | `gmail` | [`icons/simple-icons/gmail.svg`](../icons/simple-icons/gmail.svg) | Gmail | `api` | ga | check, catalog, read, write | 10 | 40 | [Documentation](https://developers.google.com/gmail/api/reference/rest) | bundle definition |
 | `gnews` | [`icons/gnews.svg`](../icons/gnews.svg) | GNews | `api` | ga | check, catalog, read | 2 | 0 | [Documentation](https://gnews.io/docs/) | bundle definition |
@@ -193,9 +193,9 @@
 | `gologin` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | GoLogin | `api` | ga | check, catalog, read | 4 | 0 | [Documentation](https://api.gologin.com/docs) | bundle definition |
 | `gong` | [`icons/gong.svg`](../icons/gong.svg) | Gong | `api` | ga | check, catalog, read, write | 12 | 27 | [Documentation](https://us-66463.app.gong.io/settings/api/documentation) | bundle definition |
 | `google-ads` | [`icons/google-adwords.svg`](../icons/google-adwords.svg) | Google Ads | `api` | ga | check, catalog, read, write | 3 | 104 | [Documentation](https://developers.google.com/google-ads/api/rest/overview) | bundle definition |
-| `google-analytics-data-api` | [`icons/google-analytics.svg`](../icons/google-analytics.svg) | Google Analytics 4 (GA4) | `api` | alpha | check, catalog, read | 5 | 0 | [Documentation](https://developers.google.com/analytics/devguides/reporting/data/v1/changelog) | bundle definition |
+| `google-analytics-data-api` | [`icons/google-analytics.svg`](../icons/google-analytics.svg) | Google Analytics 4 (GA4) | `api` | alpha | check, catalog, read | 5 | 0 | [Documentation](https://developers.google.com/analytics/devguides/reporting/data/v1/rest/v1beta/properties/runReport) | bundle definition |
 | `google-calendar` | [`icons/simple-icons/googlecalendar.svg`](../icons/simple-icons/googlecalendar.svg) | Google Calendar | `api` | alpha | check, catalog, read, write | 11 | 26 | [Documentation](https://developers.google.com/workspace/calendar/api/v3/reference) | bundle definition |
-| `google-classroom` | [`icons/simple-icons/googleclassroom.svg`](../icons/simple-icons/googleclassroom.svg) | Google Classroom | `api` | alpha | check, catalog, read | 5 | 0 | [Documentation](https://developers.google.com/classroom/reference/rest) | bundle definition |
+| `google-classroom` | [`icons/simple-icons/googleclassroom.svg`](../icons/simple-icons/googleclassroom.svg) | Google Classroom | `api` | alpha | check, catalog, read | 5 | 0 | [Documentation](https://developers.google.com/workspace/classroom/reference/rest) | bundle definition |
 | `google-directory` | [`icons/googledirectory.svg`](../icons/googledirectory.svg) | Google Directory | `api` | ga | check, catalog, read | 4 | 0 | [Documentation](https://developers.google.com/admin-sdk/directory/reference/rest) | bundle definition |
 | `google-forms` | [`icons/simple-icons/googleforms.svg`](../icons/simple-icons/googleforms.svg) | Google Forms | `api` | beta | check, catalog, read | 3 | 0 | [Documentation](https://developers.google.com/forms/api/reference/rest) | bundle definition |
 | `google-pagespeed-insights` | [`icons/google-pagespeed-insights.svg`](../icons/google-pagespeed-insights.svg) | Google PageSpeed Insights | `api` | alpha | check, catalog, read | 1 | 0 | [Documentation](https://developers.google.com/speed/docs/insights/v5/get-started) | bundle definition |
@@ -265,7 +265,7 @@
 | `linkedin-pages` | [`icons/linkedin.svg`](../icons/linkedin.svg) | LinkedIn Pages | `api` | ga | check, catalog, read | 4 | 0 | [Documentation](https://learn.microsoft.com/en-us/linkedin/marketing/community-management/organizations/organization-lookup-api) | bundle definition |
 | `linkrunner` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Linkrunner | `api` | ga | check, catalog, read | 2 | 0 | [Documentation](https://docs.linkrunner.io/sdk-less/api-reference) | bundle definition |
 | `lob` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Lob | `api` | ga | check, catalog, read | 5 | 0 | [Documentation](https://docs.lob.com/) | bundle definition |
-| `lokalise` | [`icons/lokalise.svg`](../icons/lokalise.svg) | Lokalise | `api` | alpha | check, catalog, read | 5 | 0 | [Documentation](https://developers.lokalise.com/reference/api-introduction) | bundle definition |
+| `lokalise` | [`icons/lokalise.svg`](../icons/lokalise.svg) | Lokalise | `api` | alpha | check, catalog, read | 5 | 0 | [Documentation](https://developers.lokalise.com/reference/api-overview) | bundle definition |
 | `looker` | [`icons/looker.svg`](../icons/looker.svg) | Looker | `api` | ga | check, catalog, read | 5 | 0 | [Documentation](https://cloud.google.com/looker/docs/reference/looker-api/latest) | bundle definition |
 | `luma` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Luma | `api` | ga | check, catalog, read, write | 25 | 40 | [Documentation](https://docs.luma.com/reference/getting-started-with-your-api) | bundle definition |
 | `mailchimp` | [`icons/mailchimp.svg`](../icons/mailchimp.svg) | Mailchimp | `api` | ga | check, catalog, read, write | 79 | 148 | [Documentation](https://api.mailchimp.com/schema/3.0/Swagger.json) | bundle definition |
@@ -279,7 +279,7 @@
 | `mantle` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Mantle | `api` | ga | check, catalog, read, write | 133 | 148 | [Documentation](https://coreapi.heymantle.dev/) | bundle definition |
 | `marketo` | [`icons/marketo.svg`](../icons/marketo.svg) | Marketo | `api` | ga | check, catalog, read | 3 | 0 | [Documentation](https://developers.marketo.com/rest-api/) | bundle definition |
 | `marketstack` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Marketstack | `api` | ga | check, catalog, read | 5 | 0 | [Documentation](https://marketstack.com/documentation) | bundle definition |
-| `mendeley` | [`icons/simple-icons/mendeley.svg`](../icons/simple-icons/mendeley.svg) | Mendeley | `api` | alpha | check, catalog, read | 4 | 0 | [Documentation](https://dev.mendeley.com/) | bundle definition |
+| `mendeley` | [`icons/simple-icons/mendeley.svg`](../icons/simple-icons/mendeley.svg) | Mendeley | `api` | alpha | check, catalog, read | 4 | 0 | [Documentation](https://dev.mendeley.com/reference) | bundle definition |
 | `mention` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Mention | `api` | ga | check, catalog, read | 9 | 0 | [Documentation](https://dev.mention.com/) | bundle definition |
 | `mercado-ads` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Mercado Ads | `api` | alpha | check, catalog, read | 6 | 0 | [Documentation](https://developers.mercadolibre.com.ar/en_us/advertising) | bundle definition |
 | `merge` | [`icons/merge.svg`](../icons/merge.svg) | Merge | `api` | ga | check, catalog, read | 6 | 0 | [Documentation](https://docs.merge.dev/api-reference/) | bundle definition |
@@ -296,7 +296,7 @@
 | `mode` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Mode | `api` | alpha | check, catalog, read | 5 | 0 | [Documentation](https://mode.com/developer/api-reference/) | bundle definition |
 | `monday` | [`icons/monday.svg`](../icons/monday.svg) | Monday | `api` | ga | check, catalog, read | 5 | 0 | [Documentation](https://developer.monday.com/api-reference/docs) | bundle definition |
 | `mux` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Mux | `api` | ga | check, catalog, read | 4 | 0 | [Documentation](https://docs.mux.com/api-reference) | bundle definition |
-| `my-hours` | [`icons/my-hours.svg`](../icons/my-hours.svg) | My Hours | `api` | alpha | check, catalog, read | 5 | 0 | [Documentation](https://myhours.com/api) | bundle definition |
+| `my-hours` | [`icons/my-hours.svg`](../icons/my-hours.svg) | My Hours | `api` | alpha | check, catalog, read | 5 | 0 | [Documentation](https://developers.myhours.com/) | bundle definition |
 | `mysql` | [`icons/mysql.svg`](../icons/mysql.svg) | MySQL | `database` | ga | check, catalog, read | 0 | 0 | [Documentation](https://dev.mysql.com/doc/refman/8.4/en/) | bundle definition |
 | `n8n` | [`icons/n8n.svg`](../icons/n8n.svg) | n8n | `api` | ga | check, catalog, read, write | 21 | 29 | [Documentation](https://docs.n8n.io/connect/n8n-api/api-reference) | bundle definition |
 | `nasa` | [`icons/nasa.svg`](../icons/nasa.svg) | NASA | `api` | ga | check, catalog, read | 5 | 0 | [Documentation](https://api.nasa.gov/) | bundle definition |
@@ -366,7 +366,7 @@
 | `plaid` | [`icons/plaid.svg`](../icons/plaid.svg) | Plaid | `api` | ga | check, catalog, read | 2 | 0 | [Documentation](https://plaid.com/docs/api/) | bundle definition |
 | `planhat` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Planhat | `api` | ga | check, catalog, read | 3 | 0 | [Documentation](https://docs.planhat.com/) | bundle definition |
 | `plausible` | [`icons/plausible.svg`](../icons/plausible.svg) | Plausible | `api` | ga | check, catalog, read | 4 | 0 | [Documentation](https://plausible.io/docs/stats-api) | bundle definition |
-| `pocket` | [`icons/pocket.svg`](../icons/pocket.svg) | Pocket | `api` | alpha | check, catalog, read | 1 | 0 | [Documentation](manual intervention needed) | bundle definition |
+| `pocket` | [`icons/pocket.svg`](../icons/pocket.svg) | Pocket | `api` | alpha | check, catalog, read | 1 | 0 | [Documentation](https://getpocket.com/developer/docs/v3/retrieve) | bundle definition |
 | `pokeapi` | [`icons/pokeapi.svg`](../icons/pokeapi.svg) | PokeAPI | `api` | ga | check, catalog, read | 97 | 0 | [Documentation](https://pokeapi.co/docs/v2) | bundle definition |
 | `polygon-stock-api` | [`icons/polygon.svg`](../icons/polygon.svg) | Polygon Stock API | `api` | ga | check, catalog, read | 3 | 0 | [Documentation](https://polygon.io/docs/stocks/getting-started) | bundle definition |
 | `poplar` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Poplar | `api` | ga | check, catalog, read | 2 | 0 | [Documentation](https://docs.poplar.studio/) | bundle definition |
@@ -405,10 +405,10 @@
 | `rocket-chat` | [`icons/rocket-chat.svg`](../icons/rocket-chat.svg) | Rocket.Chat | `api` | ga | check, catalog, read | 5 | 0 | [Documentation](https://developer.rocket.chat/apidocs) | bundle definition |
 | `rocketlane` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Rocketlane | `api` | ga | check, catalog, read | 5 | 0 | [Documentation](https://apidocs.rocketlane.com/) | bundle definition |
 | `rollbar` | [`icons/simple-icons/rollbar.svg`](../icons/simple-icons/rollbar.svg) | Rollbar | `api` | ga | check, catalog, read, write | 45 | 29 | [Documentation](https://docs.rollbar.com/reference/getting-started-1) | bundle definition |
-| `rootly` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Rootly | `api` | alpha | check, catalog, read | 3 | 0 | [Documentation](https://rootly.com/api) | bundle definition |
+| `rootly` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Rootly | `api` | alpha | check, catalog, read | 3 | 0 | [Documentation](https://docs.rootly.com/api-reference) | bundle definition |
 | `rss` | [`icons/rss.svg`](../icons/rss.svg) | RSS | `api` | ga | check, catalog, read | 2 | 0 | [Documentation](https://www.rssboard.org/rss-specification) | bundle definition |
 | `ruddr` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Ruddr | `api` | ga | check, catalog, read | 3 | 0 | [Documentation](https://docs.ruddr.io/) | bundle definition |
-| `safetyculture` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | SafetyCulture | `api` | alpha | check, catalog, read | 3 | 0 | [Documentation](https://developer.safetyculture.com/) | bundle definition |
+| `safetyculture` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | SafetyCulture | `api` | alpha | check, catalog, read | 3 | 0 | [Documentation](https://developers.safetyculture.com/) | bundle definition |
 | `sage-hr` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Sage HR | `api` | ga | check, catalog, read, write | 14 | 10 | [Documentation](https://developers.sage.hr/) | bundle definition |
 | `salesflare` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Salesflare | `api` | ga | check, catalog, read, write | 14 | 22 | [Documentation](https://api.salesflare.com/docs) | bundle definition |
 | `salesforce` | [`icons/salesforce.svg`](../icons/salesforce.svg) | Salesforce | `api` | ga | check, catalog, read | 4 | 0 | [Documentation](https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/intro_rest.htm) | bundle definition |

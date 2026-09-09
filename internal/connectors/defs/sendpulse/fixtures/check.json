@@ -1,7 +1,0 @@
-{
-  "request": { "method": "GET", "path": "/addressbooks" },
-  "response": {
-    "status": 200,
-    "body": []
-  }
-}

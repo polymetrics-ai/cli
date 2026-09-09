@@ -1,9 +1,0 @@
-{
-  "record": {
-    "task_handle": "fixture-task-handle"
-  },
-  "expect": {
-    "method": "POST",
-    "path": "SQS.CancelMessageMoveTask"
-  }
-}

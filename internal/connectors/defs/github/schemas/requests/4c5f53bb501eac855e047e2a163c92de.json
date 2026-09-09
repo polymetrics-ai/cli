@@ -1,0 +1,70 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "description": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "maintainers": {
+      "items": {
+        "maxLength": 8192,
+        "type": "string"
+      },
+      "maxItems": 256,
+      "type": "array"
+    },
+    "name": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "notification_setting": {
+      "enum": [
+        "notifications_enabled",
+        "notifications_disabled"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "org": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "parent_team_id": {
+      "type": "integer"
+    },
+    "parent_team_slug": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "permission": {
+      "enum": [
+        "pull",
+        "push"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "privacy": {
+      "enum": [
+        "secret",
+        "closed"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "repo_names": {
+      "items": {
+        "maxLength": 8192,
+        "type": "string"
+      },
+      "maxItems": 256,
+      "type": "array"
+    }
+  },
+  "required": [
+    "name",
+    "org"
+  ],
+  "type": "object"
+}

@@ -1,53 +1,95 @@
-// Package feishu bridges the feishu quarantine bundle to the native connector.
+// Package feishu implements the declared tenant-token authentication extension
+// for the Feishu Bitable execution bundle.
 package feishu
 
 import (
 	"context"
+	"encoding/json"
+	"errors"
 	"fmt"
+	"net/http"
+	"strings"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/connsdk"
 	"polymetrics.ai/internal/connectors/engine"
-	native "polymetrics.ai/internal/connectors/native/feishu"
+	"polymetrics.ai/internal/credential"
 )
 
-func init() {
-	engine.RegisterHooks("feishu", func() engine.Hooks { return New() })
+const tenantAccessTokenPath = "/open-apis/auth/v3/tenant_access_token/internal"
+
+// Hooks owns only the source-declared Feishu tenant token exchange; the shared
+// engine owns Bitable request construction, pagination, and record handling.
+type Hooks struct{}
+
+// New returns a fresh Feishu authentication hook set.
+func New() *Hooks { return &Hooks{} }
+
+func (*Hooks) ConnectorName() string { return "feishu" }
+
+var (
+	_ engine.Hooks                 = (*Hooks)(nil)
+	_ engine.AuthHook              = (*Hooks)(nil)
+	_ engine.DeclaredRouteAuthHook = (*Hooks)(nil)
+)
+
+// Authenticator rejects direct token exchanges because the engine must admit
+// every network-capable authentication request through the declared route.
+func (*Hooks) Authenticator(context.Context, connectors.RuntimeConfig, engine.AuthSpec) (connsdk.Authenticator, error) {
+	return nil, errors.New("feishu tenant authentication requires engine declared-route admission")
 }
 
-// Hooks implements CheckHook and StreamHook by delegating to the native connector.
-type Hooks struct {
-	Connector connectors.Connector
-}
-
-// New returns a hook set backed by the native feishu connector.
-func New() engine.Hooks { return Hooks{Connector: native.New()} }
-
-func (h Hooks) ConnectorName() string { return "feishu" }
-
-var streamAliases = map[string]string{}
-
-func (h Hooks) connector() connectors.Connector {
-	if h.Connector != nil {
-		return h.Connector
+// AuthenticatorWithDeclaredRoute exchanges the configured app credentials for
+// one tenant access token through the fixed provider token route.
+func (*Hooks) AuthenticatorWithDeclaredRoute(ctx context.Context, cfg connectors.RuntimeConfig, spec engine.AuthSpec, requester engine.DeclaredRouteRequester) (connsdk.Authenticator, error) {
+	if err := ctx.Err(); err != nil {
+		return nil, err
 	}
-	return native.New()
-}
+	if spec.Mode != "custom" || spec.Hook != "feishu" {
+		return nil, errors.New("feishu tenant authentication requires the declared feishu custom auth hook")
+	}
+	if requester == nil {
+		return nil, errors.New("feishu tenant authentication requires engine declared-route admission")
+	}
 
-// Check delegates to the native connector's Check implementation.
-func (h Hooks) Check(ctx context.Context, cfg connectors.RuntimeConfig, rt *engine.Runtime) (bool, error) {
-	return true, h.connector().Check(ctx, cfg)
-}
+	appID := strings.TrimSpace(cfg.Secrets["app_id"])
+	if err := credential.RequireAuthenticationValue("Feishu app ID", appID); err != nil {
+		return nil, fmt.Errorf("feishu tenant authentication: %w", err)
+	}
+	appSecret := strings.TrimSpace(cfg.Secrets["app_secret"])
+	if err := credential.RequireAuthenticationValue("Feishu app secret", appSecret); err != nil {
+		return nil, fmt.Errorf("feishu tenant authentication: %w", err)
+	}
 
-// ReadStream delegates to the native connector's Read implementation.
-func (h Hooks) ReadStream(ctx context.Context, stream engine.StreamSpec, req connectors.ReadRequest, rt *engine.Runtime, emit func(connectors.Record) error) (bool, error) {
-	if req.Stream == "" {
-		req.Stream = stream.Name
+	response, err := requester.DoJSON(ctx, engine.DeclaredRouteRequest{
+		Method:       http.MethodPost,
+		DeclaredPath: tenantAccessTokenPath,
+		Path:         tenantAccessTokenPath,
+		Headers: map[string]string{
+			"Accept":       "application/json",
+			"Content-Type": "application/json; charset=utf-8",
+		},
+		Body: map[string]string{
+			"app_id":     appID,
+			"app_secret": appSecret,
+		},
+	})
+	if err != nil {
+		return nil, fmt.Errorf("feishu tenant token exchange: %w", err)
 	}
-	if legacyName, ok := streamAliases[req.Stream]; ok {
-		req.Stream = legacyName
+
+	var payload struct {
+		Code              json.Number `json:"code"`
+		TenantAccessToken string      `json:"tenant_access_token"`
 	}
-	if req.Stream == "" {
-		return true, fmt.Errorf("feishu" + " stream name is required")
+	if err := json.Unmarshal(response.Body, &payload); err != nil {
+		return nil, fmt.Errorf("feishu tenant token response: %w", err)
 	}
-	return true, h.connector().Read(ctx, req, emit)
+	if code := payload.Code.String(); code != "" && code != "0" {
+		return nil, fmt.Errorf("feishu tenant token exchange failed with code %s", code)
+	}
+	if strings.TrimSpace(payload.TenantAccessToken) == "" {
+		return nil, errors.New("feishu tenant token response did not include tenant_access_token")
+	}
+	return connsdk.Bearer(payload.TenantAccessToken), nil
 }

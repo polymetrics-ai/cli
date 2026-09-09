@@ -35,10 +35,6 @@ import (
 	"polymetrics.ai/internal/connectors/engine"
 )
 
-func init() {
-	engine.RegisterHooks("google-search-console", func() engine.Hooks { return New() })
-}
-
 // New returns a fresh google-search-console Hooks value as engine.Hooks.
 func New() engine.Hooks { return &Hooks{} }
 

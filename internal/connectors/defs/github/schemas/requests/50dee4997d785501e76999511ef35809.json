@@ -1,0 +1,65 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "body": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "commit_id": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "in_reply_to": {
+      "type": "integer"
+    },
+    "line": {
+      "type": "integer"
+    },
+    "path": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "position": {
+      "type": "integer"
+    },
+    "pull_number": {
+      "type": "integer"
+    },
+    "side": {
+      "enum": [
+        "LEFT",
+        "RIGHT"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "start_line": {
+      "type": "integer"
+    },
+    "start_side": {
+      "enum": [
+        "LEFT",
+        "RIGHT",
+        "side"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "subject_type": {
+      "enum": [
+        "line",
+        "file"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    }
+  },
+  "required": [
+    "body",
+    "commit_id",
+    "path",
+    "pull_number"
+  ],
+  "type": "object"
+}

@@ -1,32 +1,34 @@
 {
   "tagline": "Inspect, read, and safely plan typed Google Search Console operations.",
   "usage": "pm google-search-console <command> [flags]",
-  "source_cli": {
-    "name": "Google Search Console API",
-    "docs": "https://developers.google.com/webmaster-tools/v1/api_reference_index",
-    "reference": "Official REST discovery documents for Search Console v3 and searchconsole v1",
-    "source": "provider_api"
-  },
   "groups": [
     {
       "id": "sites",
       "title": "Sites",
-      "commands": ["sites"]
+      "commands": [
+        "sites"
+      ]
     },
     {
       "id": "sitemaps",
       "title": "Sitemaps",
-      "commands": ["sitemaps"]
+      "commands": [
+        "sitemaps"
+      ]
     },
     {
       "id": "search-analytics",
       "title": "Search Analytics",
-      "commands": ["search-analytics"]
+      "commands": [
+        "search-analytics"
+      ]
     },
     {
       "id": "direct",
       "title": "Typed Direct Reads",
-      "commands": ["direct"]
+      "commands": [
+        "direct"
+      ]
     }
   ],
   "global_flags": [
@@ -89,9 +91,14 @@
       "availability": "implemented",
       "stream": "sites",
       "api_surface": [
-        { "method": "GET", "path": "/webmasters/v3/sites" }
+        {
+          "method": "GET",
+          "path": "/webmasters/v3/sites"
+        }
       ],
-      "examples": ["pm google-search-console sites list --credential gsc-prod --json --limit 25"]
+      "examples": [
+        "pm google-search-console sites list --credential gsc-prod --json --limit 25"
+      ]
     },
     {
       "path": "sites get",
@@ -100,9 +107,14 @@
       "availability": "implemented",
       "stream": "site_details",
       "api_surface": [
-        { "method": "GET", "path": "/webmasters/v3/sites/{siteUrl}" }
+        {
+          "method": "GET",
+          "path": "/webmasters/v3/sites/{siteUrl}"
+        }
       ],
-      "examples": ["pm google-search-console sites get --credential gsc-prod --config site_url=https://example.com/ --json"]
+      "examples": [
+        "pm google-search-console sites get --credential gsc-prod --config site_url=https://example.com/ --json"
+      ]
     },
     {
       "path": "sitemaps list",
@@ -111,9 +123,14 @@
       "availability": "implemented",
       "stream": "sitemaps",
       "api_surface": [
-        { "method": "GET", "path": "/webmasters/v3/sites/{siteUrl}/sitemaps" }
+        {
+          "method": "GET",
+          "path": "/webmasters/v3/sites/{siteUrl}/sitemaps"
+        }
       ],
-      "examples": ["pm google-search-console sitemaps list --credential gsc-prod --config site_urls=https://example.com/ --json --limit 25"]
+      "examples": [
+        "pm google-search-console sitemaps list --credential gsc-prod --config site_urls=https://example.com/ --json --limit 25"
+      ]
     },
     {
       "path": "sitemaps get",
@@ -122,9 +139,14 @@
       "availability": "implemented",
       "stream": "sitemap_details",
       "api_surface": [
-        { "method": "GET", "path": "/webmasters/v3/sites/{siteUrl}/sitemaps/{feedpath}" }
+        {
+          "method": "GET",
+          "path": "/webmasters/v3/sites/{siteUrl}/sitemaps/{feedpath}"
+        }
       ],
-      "examples": ["pm google-search-console sitemaps get --credential gsc-prod --config site_url=https://example.com/ --config feedpath=https://example.com/sitemap.xml --json"]
+      "examples": [
+        "pm google-search-console sitemaps get --credential gsc-prod --config site_url=https://example.com/ --config feedpath=https://example.com/sitemap.xml --json"
+      ]
     },
     {
       "path": "search-analytics by-date",
@@ -132,7 +154,9 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "search_analytics_by_date",
-      "examples": ["pm google-search-console search-analytics by-date --credential gsc-prod --config site_urls=https://example.com/ --json --limit 25"]
+      "examples": [
+        "pm google-search-console search-analytics by-date --credential gsc-prod --config site_urls=https://example.com/ --json --limit 25"
+      ]
     },
     {
       "path": "search-analytics by-country",
@@ -140,7 +164,9 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "search_analytics_by_country",
-      "examples": ["pm google-search-console search-analytics by-country --credential gsc-prod --config site_urls=https://example.com/ --json --limit 25"]
+      "examples": [
+        "pm google-search-console search-analytics by-country --credential gsc-prod --config site_urls=https://example.com/ --json --limit 25"
+      ]
     },
     {
       "path": "search-analytics by-device",
@@ -148,7 +174,9 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "search_analytics_by_device",
-      "examples": ["pm google-search-console search-analytics by-device --credential gsc-prod --config site_urls=https://example.com/ --json --limit 25"]
+      "examples": [
+        "pm google-search-console search-analytics by-device --credential gsc-prod --config site_urls=https://example.com/ --json --limit 25"
+      ]
     },
     {
       "path": "search-analytics by-page",
@@ -156,7 +184,9 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "search_analytics_by_page",
-      "examples": ["pm google-search-console search-analytics by-page --credential gsc-prod --config site_urls=https://example.com/ --json --limit 25"]
+      "examples": [
+        "pm google-search-console search-analytics by-page --credential gsc-prod --config site_urls=https://example.com/ --json --limit 25"
+      ]
     },
     {
       "path": "search-analytics by-query",
@@ -165,9 +195,14 @@
       "availability": "implemented",
       "stream": "search_analytics_by_query",
       "api_surface": [
-        { "method": "POST", "path": "/webmasters/v3/sites/{siteUrl}/searchAnalytics/query" }
+        {
+          "method": "POST",
+          "path": "/webmasters/v3/sites/{siteUrl}/searchAnalytics/query"
+        }
       ],
-      "examples": ["pm google-search-console search-analytics by-query --credential gsc-prod --config site_urls=https://example.com/ --json --limit 25"]
+      "examples": [
+        "pm google-search-console search-analytics by-query --credential gsc-prod --config site_urls=https://example.com/ --json --limit 25"
+      ]
     },
     {
       "path": "sites add",
@@ -176,12 +211,22 @@
       "availability": "implemented",
       "write": "add_site",
       "flags": [
-        { "name": "site-url", "type": "string", "summary": "Search Console site property URL or sc-domain property.", "maps_to": "record.site_url", "allow_empty": false }
+        {
+          "name": "site-url",
+          "type": "string",
+          "summary": "Search Console site property URL or sc-domain property.",
+          "maps_to": "record.site_url",
+          "allow_empty": false
+        }
       ],
-      "redact_fields": ["site_url"],
+      "redact_fields": [
+        "site_url"
+      ],
       "risk": "medium: adds a site property to the authenticated Search Console account; requires reverse ETL plan and approval",
       "approval": "Use reverse ETL plan -> preview -> approval -> execute. No raw HTTP body is accepted; the record must match writes.json.",
-      "examples": ["pm google-search-console sites add --credential gsc-prod --site-url https://example.com/ --preview --json"]
+      "examples": [
+        "pm google-search-console sites add --credential gsc-prod --site-url https://example.com/ --preview --json"
+      ]
     },
     {
       "path": "sites delete",
@@ -190,12 +235,22 @@
       "availability": "implemented",
       "write": "delete_site",
       "flags": [
-        { "name": "site-url", "type": "string", "summary": "Search Console site property URL or sc-domain property.", "maps_to": "record.site_url", "allow_empty": false }
+        {
+          "name": "site-url",
+          "type": "string",
+          "summary": "Search Console site property URL or sc-domain property.",
+          "maps_to": "record.site_url",
+          "allow_empty": false
+        }
       ],
-      "redact_fields": ["site_url"],
+      "redact_fields": [
+        "site_url"
+      ],
       "risk": "high: removes a site property from the authenticated Search Console account; requires reverse ETL plan, approval, and destructive confirmation",
       "approval": "Use reverse ETL plan -> preview -> approval -> typed destructive confirmation -> execute. Missing provider records are idempotent for HTTP 404.",
-      "examples": ["pm google-search-console sites delete --credential gsc-prod --site-url https://example.com/ --preview --json"]
+      "examples": [
+        "pm google-search-console sites delete --credential gsc-prod --site-url https://example.com/ --preview --json"
+      ]
     },
     {
       "path": "sitemaps submit",
@@ -204,13 +259,30 @@
       "availability": "implemented",
       "write": "submit_sitemap",
       "flags": [
-        { "name": "site-url", "type": "string", "summary": "Search Console site property URL or sc-domain property.", "maps_to": "record.site_url", "allow_empty": false },
-        { "name": "feedpath", "type": "string", "summary": "Sitemap feed URL/path to submit.", "maps_to": "record.feedpath", "allow_empty": false }
+        {
+          "name": "site-url",
+          "type": "string",
+          "summary": "Search Console site property URL or sc-domain property.",
+          "maps_to": "record.site_url",
+          "allow_empty": false
+        },
+        {
+          "name": "feedpath",
+          "type": "string",
+          "summary": "Sitemap feed URL/path to submit.",
+          "maps_to": "record.feedpath",
+          "allow_empty": false
+        }
       ],
-      "redact_fields": ["site_url", "feedpath"],
+      "redact_fields": [
+        "site_url",
+        "feedpath"
+      ],
       "risk": "medium: submits a sitemap URL for a Search Console site property; requires reverse ETL plan and approval",
       "approval": "Use reverse ETL plan -> preview -> approval -> execute. No raw HTTP body is accepted; the record must match writes.json.",
-      "examples": ["pm google-search-console sitemaps submit --credential gsc-prod --site-url https://example.com/ --feedpath https://example.com/sitemap.xml --preview --json"]
+      "examples": [
+        "pm google-search-console sitemaps submit --credential gsc-prod --site-url https://example.com/ --feedpath https://example.com/sitemap.xml --preview --json"
+      ]
     },
     {
       "path": "sitemaps delete",
@@ -219,13 +291,30 @@
       "availability": "implemented",
       "write": "delete_sitemap",
       "flags": [
-        { "name": "site-url", "type": "string", "summary": "Search Console site property URL or sc-domain property.", "maps_to": "record.site_url", "allow_empty": false },
-        { "name": "feedpath", "type": "string", "summary": "Sitemap feed URL/path to delete.", "maps_to": "record.feedpath", "allow_empty": false }
+        {
+          "name": "site-url",
+          "type": "string",
+          "summary": "Search Console site property URL or sc-domain property.",
+          "maps_to": "record.site_url",
+          "allow_empty": false
+        },
+        {
+          "name": "feedpath",
+          "type": "string",
+          "summary": "Sitemap feed URL/path to delete.",
+          "maps_to": "record.feedpath",
+          "allow_empty": false
+        }
       ],
-      "redact_fields": ["site_url", "feedpath"],
+      "redact_fields": [
+        "site_url",
+        "feedpath"
+      ],
       "risk": "high: deletes a sitemap from a Search Console site property; requires reverse ETL plan, approval, and destructive confirmation",
       "approval": "Use reverse ETL plan -> preview -> approval -> typed destructive confirmation -> execute. Missing provider records are idempotent for HTTP 404.",
-      "examples": ["pm google-search-console sitemaps delete --credential gsc-prod --site-url https://example.com/ --feedpath https://example.com/sitemap.xml --preview --json"]
+      "examples": [
+        "pm google-search-console sitemaps delete --credential gsc-prod --site-url https://example.com/ --feedpath https://example.com/sitemap.xml --preview --json"
+      ]
     },
     {
       "path": "direct url-inspection inspect",
@@ -233,19 +322,45 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "google-search-console.urlinspection_index_inspect",
-      "source_url": "https://developers.google.com/webmaster-tools/v1/urlInspection.index/inspect",
       "flags": [
-        { "name": "inspection-url", "type": "string", "summary": "Fully-qualified URL to inspect.", "maps_to": "body.inspectionUrl", "allow_empty": false, "required": true },
-        { "name": "site-url", "type": "string", "summary": "Search Console site property URL or sc-domain property.", "maps_to": "body.siteUrl", "allow_empty": false, "required": true },
-        { "name": "language-code", "type": "string", "summary": "Optional BCP-47 language code for localized inspection messages.", "maps_to": "body.languageCode" }
+        {
+          "name": "inspection-url",
+          "type": "string",
+          "summary": "Fully-qualified URL to inspect.",
+          "maps_to": "body.inspectionUrl",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "site-url",
+          "type": "string",
+          "summary": "Search Console site property URL or sc-domain property.",
+          "maps_to": "body.siteUrl",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "language-code",
+          "type": "string",
+          "summary": "Optional BCP-47 language code for localized inspection messages.",
+          "maps_to": "body.languageCode"
+        }
       ],
       "api_surface": [
-        { "method": "POST", "path": "/v1/urlInspection/index:inspect" }
+        {
+          "method": "POST",
+          "path": "/v1/urlInspection/index:inspect"
+        }
       ],
       "output_policy": "json_redacted",
-      "redact_fields": ["inspectionUrl", "siteUrl"],
+      "redact_fields": [
+        "inspectionUrl",
+        "siteUrl"
+      ],
       "risk": "low: bounded Search Console JSON read; fixed endpoint, closed request body schema, 1 MiB response cap, and redacted URL-shaped fields",
-      "examples": ["pm google-search-console direct url-inspection inspect --credential gsc-prod --inspection-url https://example.com/page --site-url https://example.com/ --json"]
+      "examples": [
+        "pm google-search-console direct url-inspection inspect --credential gsc-prod --inspection-url https://example.com/page --site-url https://example.com/ --json"
+      ]
     },
     {
       "path": "direct mobile-friendly-test run",
@@ -253,18 +368,37 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "google-search-console.mobile_friendly_test_run",
-      "source_url": "https://www.googleapis.com/discovery/v1/apis/searchconsole/v1/rest",
       "flags": [
-        { "name": "url", "type": "string", "summary": "Fully-qualified URL to test.", "maps_to": "body.url", "allow_empty": false, "required": true },
-        { "name": "request-screenshot", "type": "boolean", "summary": "Request a screenshot in the provider response.", "maps_to": "body.requestScreenshot" }
+        {
+          "name": "url",
+          "type": "string",
+          "summary": "Fully-qualified URL to test.",
+          "maps_to": "body.url",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "request-screenshot",
+          "type": "boolean",
+          "summary": "Request a screenshot in the provider response.",
+          "maps_to": "body.requestScreenshot"
+        }
       ],
       "api_surface": [
-        { "method": "POST", "path": "/v1/urlTestingTools/mobileFriendlyTest:run" }
+        {
+          "method": "POST",
+          "path": "/v1/urlTestingTools/mobileFriendlyTest:run"
+        }
       ],
       "output_policy": "json_redacted",
-      "redact_fields": ["url", "screenshot"],
+      "redact_fields": [
+        "url",
+        "screenshot"
+      ],
       "risk": "low: bounded Search Console JSON read; fixed endpoint, closed request body schema, 1 MiB response cap, and redacted URL/screenshot-shaped fields",
-      "examples": ["pm google-search-console direct mobile-friendly-test run --credential gsc-prod --url https://example.com/page --request-screenshot false --json"]
+      "examples": [
+        "pm google-search-console direct mobile-friendly-test run --credential gsc-prod --url https://example.com/page --request-screenshot false --json"
+      ]
     }
   ],
   "help_topics": [

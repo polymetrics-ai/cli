@@ -1,20 +1,56 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "actor_login": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "commit_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "commit_url": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "created_at": {
+      "type": "string"
+    },
+    "event": {
+      "type": "string"
+    },
+    "id": {
+      "type": "integer"
+    },
+    "lock_reason": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "node_id": {
+      "type": "string"
+    },
+    "repository": {
+      "type": "string"
+    },
+    "url": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "id"
+  ],
   "title": "issue_events",
   "type": "object",
-  "x-primary-key": ["id"],
   "x-cursor-field": "created_at",
-  "required": ["id"],
-  "properties": {
-    "repository": { "type": "string" },
-    "id": { "type": "integer" },
-    "node_id": { "type": "string" },
-    "url": { "type": "string" },
-    "actor_login": { "type": ["string", "null"] },
-    "event": { "type": "string" },
-    "commit_id": { "type": ["string", "null"] },
-    "commit_url": { "type": ["string", "null"] },
-    "created_at": { "type": "string" },
-    "lock_reason": { "type": ["string", "null"] }
-  }
+  "x-primary-key": [
+    "id"
+  ]
 }

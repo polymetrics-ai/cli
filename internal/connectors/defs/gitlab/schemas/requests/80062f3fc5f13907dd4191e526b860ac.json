@@ -1,0 +1,97 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "author_email_regex": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "branch_name_regex": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "commit_committer_check": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "commit_committer_name_check": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "commit_message_negative_regex": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "commit_message_regex": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "deny_delete_tag": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "file_name_regex": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "id": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "max_file_size": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "member_check": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "prevent_secrets": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "reject_non_dco_commits": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "reject_unsigned_commits": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "id"
+  ],
+  "type": "object"
+}

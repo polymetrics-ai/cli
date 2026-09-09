@@ -1,8 +1,0 @@
-{
-  "name": "acme-comparison-range-cursor-offset",
-  "display_name": "Acme Comparison Range Cursor Offset",
-  "description": "conformance v2 self-test bundle for generic RFC3339 UTC comparison-prefix formatting fed a non-UTC-offset RFC3339 STRING incremental cursor field (synthetic, not a real API)",
-  "integration_type": "api",
-  "release_stage": "ga",
-  "capabilities": { "check": false, "read": true, "write": false, "query": false, "cdc": false, "dynamic_schema": false }
-}

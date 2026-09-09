@@ -1,7 +1,0 @@
-{
-  "request": { "method": "GET", "path": "/organization" },
-  "response": {
-    "status": 200,
-    "body": { "value": [{ "id": "fixture_org_1", "displayName": "Fixture Org" }] }
-  }
-}

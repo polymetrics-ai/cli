@@ -1,0 +1,272 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "cli_surface.json",
+  "type": "object",
+  "required": ["tagline", "usage", "commands"],
+  "additionalProperties": false,
+  "properties": {
+    "tagline": { "type": "string" },
+    "usage": { "type": "string" },
+    "groups": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "commands"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string" },
+          "title": { "type": "string" },
+          "commands": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    },
+    "global_flags": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "type"],
+        "additionalProperties": false,
+        "properties": {
+          "name": { "type": "string" },
+          "type": {
+            "type": "string",
+            "enum": ["boolean", "string", "integer", "number", "enum", "string_array", "json"]
+          },
+          "summary": { "type": "string" },
+          "values": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "maps_to": { "type": "string" },
+          "format": {
+            "type": "string",
+            "enum": ["date-time"]
+          },
+          "allow_empty": { "type": "boolean" },
+          "minimum": { "type": "number" },
+		  "maximum": { "type": "number" },
+          "required": { "type": "boolean" },
+          "env_only": { "type": "boolean" },
+		  "allow_bare_string": { "type": "boolean" },
+          "max_items": { "type": "integer" },
+          "min_items": { "type": "integer" },
+          "max_bytes": { "type": "integer" }
+        }
+      }
+    },
+    "commands": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "summary", "intent", "availability"],
+        "additionalProperties": false,
+        "properties": {
+          "path": { "type": "string" },
+          "summary": { "type": "string" },
+          "intent": {
+            "type": "string",
+            "enum": [
+              "etl",
+              "reverse_etl",
+              "direct_read",
+              "direct_write",
+              "binary_download",
+              "binary_upload",
+              "text_export",
+              "status_check",
+              "local_workflow",
+              "auth",
+              "config",
+              "raw_api",
+              "docs_only"
+            ]
+          },
+          "availability": {
+            "type": "string",
+            "enum": [
+              "implemented",
+              "deferred",
+              "unsupported_with_provider_evidence",
+              "partial",
+              "planned",
+              "excluded",
+              "unsupported_local",
+              "unsupported_api",
+              "unsafe_or_disallowed",
+              "unknown"
+            ]
+          },
+          "stream": { "type": "string" },
+          "write": { "type": "string" },
+          "operation": { "type": "string" },
+          "flags": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["name", "type"],
+              "additionalProperties": false,
+              "properties": {
+                "name": { "type": "string" },
+                "type": {
+                  "type": "string",
+                  "enum": ["boolean", "string", "integer", "number", "enum", "string_array", "json"]
+                },
+                "summary": { "type": "string" },
+                "values": {
+                  "type": "array",
+                  "items": { "type": "string" }
+                },
+                "maps_to": { "type": "string" },
+                "format": {
+                  "type": "string",
+                  "enum": ["date-time"]
+                },
+                "allow_empty": { "type": "boolean" },
+                "minimum": { "type": "number" },
+				"maximum": { "type": "number" },
+                "required": { "type": "boolean" },
+                "repeatable": { "type": "boolean" },
+                "env_only": { "type": "boolean" },
+				"allow_bare_string": { "type": "boolean" },
+                "max_items": { "type": "integer" },
+                "min_items": { "type": "integer" },
+                "max_bytes": { "type": "integer" }
+              }
+            }
+          },
+          "constraints": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["kind"],
+              "additionalProperties": false,
+              "properties": {
+                "kind": {
+                  "type": "string",
+                  "enum": ["order", "exactly_one"]
+                },
+                "fields": {
+                  "type": "array",
+                  "minItems": 2,
+                  "items": { "type": "string" }
+                },
+                "left": { "type": "string" },
+                "right": { "type": "string" },
+                "op": {
+                  "type": "string",
+                  "enum": ["lt"]
+                },
+                "value_type": {
+                  "type": "string",
+                  "enum": ["date-time"]
+                },
+                "left_fallback": { "type": "string" },
+                "right_fallback": { "type": "string" },
+                "message": { "type": "string" }
+              }
+            }
+          },
+          "examples": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "api_surface": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["method", "path"],
+              "additionalProperties": false,
+              "properties": {
+                "method": { "type": "string" },
+                "path": { "type": "string" }
+              }
+            }
+          },
+          "output_policy": {
+            "type": "string",
+            "enum": ["repository_contents_file_metadata", "repository_contents_directory", "json_redacted", "clinical_json_redacted", "text", "binary_file_bounded", "none", "json", "write_result_redacted", "gong_bounded_input_redacted", "secret_stored", "status"]
+          },
+          "redact_fields": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "risk": { "type": "string" },
+          "approval": { "type": "string" },
+          "foundation_gap": {
+            "type": "object",
+            "required": ["id", "reason", "component", "evidence", "target"],
+            "additionalProperties": false,
+            "properties": {
+              "id": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+              "reason": { "type": "string", "minLength": 1 },
+              "component": {
+                "type": "string",
+                "enum": ["typed_write_action", "typed_record_schema", "typed_request_body", "typed_response_descriptor", "binary_transfer_binding", "runtime_executor"]
+              },
+              "evidence": {
+                "type": "string",
+                "enum": ["write_action_absent", "record_schema_absent", "request_body_schema_absent", "response_descriptor_absent", "binary_transfer_binding_absent", "runtime_executor_absent"]
+              },
+              "target": {
+                "type": "object",
+                "required": ["method", "path"],
+                "additionalProperties": false,
+                "properties": {
+                  "source_id": { "type": "string", "minLength": 1, "maxLength": 256 },
+                  "operation_id": { "type": "string", "maxLength": 512 },
+                  "binding": {
+                    "type": "object",
+                    "required": ["kind", "id"],
+                    "additionalProperties": false,
+                    "properties": {
+                      "kind": { "type": "string", "enum": ["command", "stream", "write", "operation"] },
+                      "id": { "type": "string", "minLength": 1, "maxLength": 512 }
+                    }
+                  },
+                  "destructive_kind": { "type": "string", "enum": ["none", "delete", "destructive"] },
+                  "method": { "type": "string", "minLength": 1 },
+                  "path": { "type": "string", "minLength": 1 }
+                }
+              }
+            }
+          },
+          "unsupported_disposition": {
+            "type": "object",
+            "required": ["reason", "target"],
+            "additionalProperties": false,
+            "properties": {
+              "reason": { "type": "string", "minLength": 1, "maxLength": 512 },
+              "target": {
+                "type": "object",
+                "required": ["source_id", "operation_id", "method", "path"],
+                "additionalProperties": false,
+                "properties": {
+                  "source_id": { "type": "string", "minLength": 1, "maxLength": 256 },
+                  "operation_id": { "type": "string", "maxLength": 512 },
+                  "method": { "type": "string", "enum": ["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "GRAPHQL"] },
+                  "path": { "type": "string", "minLength": 1, "maxLength": 8192 }
+                }
+              }
+            }
+          },
+          "notes": { "type": "string" }
+        }
+      }
+    },
+    "help_topics": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "summary"],
+        "additionalProperties": false,
+        "properties": {
+          "name": { "type": "string" },
+          "summary": { "type": "string" }
+        }
+      }
+    }
+  }
+}

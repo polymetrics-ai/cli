@@ -221,41 +221,41 @@ func (d Definition) clone() Definition {
 // database definition contract.
 func (d Definition) Validate() error {
 	if d.schemaVersion != DatabaseDefinitionSchemaVersion {
-		return errors.New("database definition schema version is not supported")
+		return definitionDiagnosticAt("$.schema_version", "database definition schema version is not supported", errors.New("database definition schema version is not supported"))
 	}
 	if err := d.driver.validate(); err != nil {
-		return err
+		return definitionDiagnosticAt("$.driver", "database driver declaration is invalid", err)
 	}
 	if err := d.catalog.validate(); err != nil {
-		return err
+		return definitionDiagnosticAt("$.catalog", "database catalog qualification policy is invalid", err)
 	}
 	if err := d.identifiers.validate(); err != nil {
-		return err
+		return definitionDiagnosticAt("$.identifiers", "database identifier policy is invalid", err)
 	}
 	if err := d.resources.validate(); err != nil {
-		return err
+		return definitionDiagnosticAt("$.resources", "database resource policy is invalid", err)
 	}
 	if len(d.typeMappings) == 0 {
-		return errors.New("database definition requires explicit type mappings")
+		return definitionDiagnosticAt("$.type_mappings", "database definition requires explicit type mappings", errors.New("database definition requires explicit type mappings"))
 	}
 	seenMappings := make(map[string]struct{}, len(d.typeMappings))
-	for _, mapping := range d.typeMappings {
+	for mappingIndex, mapping := range d.typeMappings {
 		if err := mapping.validate(); err != nil {
-			return err
+			return definitionDiagnosticAt(definitionArrayPath("$.type_mappings", mappingIndex), "database type mapping is invalid", err)
 		}
 		key := mapping.Native.key()
 		if _, exists := seenMappings[key]; exists {
-			return errors.New("database definition contains duplicate native type mappings")
+			return definitionDiagnosticAt(definitionArrayPath("$.type_mappings", mappingIndex), "database definition contains duplicate native type mappings", errors.New("database definition contains duplicate native type mappings"))
 		}
 		seenMappings[key] = struct{}{}
 	}
 	seenModes := make(map[synccontract.Mode]struct{}, len(d.admittedModes))
-	for _, mode := range d.admittedModes {
+	for modeIndex, mode := range d.admittedModes {
 		if err := mode.Validate(); err != nil {
-			return errors.New("database definition declares an unsupported sync mode")
+			return definitionDiagnosticAt(definitionArrayPath("$.admitted_modes", modeIndex), "database definition declares an unsupported sync mode", errors.New("database definition declares an unsupported sync mode"))
 		}
 		if _, exists := seenModes[mode]; exists {
-			return errors.New("database definition declares a duplicate sync mode")
+			return definitionDiagnosticAt(definitionArrayPath("$.admitted_modes", modeIndex), "database definition declares a duplicate sync mode", errors.New("database definition declares a duplicate sync mode"))
 		}
 		seenModes[mode] = struct{}{}
 	}
@@ -295,12 +295,18 @@ func invalidDefinition(reason string, causes ...error) error {
 }
 
 type definitionPathError struct {
-	path   string
-	reason string
-	cause  error
+	path           string
+	reason         string
+	cause          error
+	safeReason     string
+	diagnosticPath string
+	directCause    bool
 }
 
 func (e *definitionPathError) Error() string {
+	if e != nil && e.directCause && e.cause != nil {
+		return e.cause.Error()
+	}
 	if e == nil || e.path == "" {
 		return "database.json is invalid"
 	}
@@ -317,6 +323,24 @@ func (e *definitionPathError) Unwrap() error {
 	return e.cause
 }
 
+// BundleDiagnostic exposes only schema-owned paths and producer-owned reasons.
+// The original error and numeric input remain available through the cause graph.
+func (e *definitionPathError) BundleDiagnostic() (string, string, string) {
+	reason := e.safeReason
+	if reason == "" {
+		reason = e.reason
+	}
+	path := e.path
+	if e.diagnosticPath != "" {
+		path = e.diagnosticPath
+	}
+	return path, "database_definition_invalid", reason
+}
+
+func definitionDiagnosticAt(path, reason string, cause error) error {
+	return &definitionPathError{path: path, safeReason: reason, cause: cause, directCause: true}
+}
+
 func invalidDefinitionAt(path, reason string, cause error) error {
 	pathError := &definitionPathError{path: path, reason: reason, cause: cause}
 	return invalidDefinition(pathError.Error(), pathError)
@@ -327,18 +351,18 @@ func invalidDefinitionAt(path, reason string, cause error) error {
 // projection. It never logs or returns raw manifest values.
 func Load(ctx context.Context, fsys fs.FS) (Definition, error) {
 	if ctx == nil {
-		return Definition{}, invalidDefinition("context is required")
+		return Definition{}, invalidDefinitionAt("$", "context is required", nil)
 	}
 	if err := ctx.Err(); err != nil {
 		return Definition{}, err
 	}
 	schema, err := loadDefinitionSchema()
 	if err != nil {
-		return Definition{}, invalidDefinition("embedded schema is invalid")
+		return Definition{}, invalidDefinitionAt("$", "embedded schema is invalid", err)
 	}
 	raw, err := fs.ReadFile(fsys, "database.json")
 	if err != nil {
-		return Definition{}, invalidDefinition("database.json is unavailable")
+		return Definition{}, invalidDefinitionAt("$", "database.json is unavailable", err)
 	}
 	if err := ctx.Err(); err != nil {
 		return Definition{}, err
@@ -602,10 +626,10 @@ func validateDefinitionJSONIntegerConstraints(number json.Number, schema *defini
 		return nil
 	}
 	if schema.minimum != nil && value.Cmp(schema.minimum) < 0 {
-		return &definitionPathError{path: path, reason: "value " + string(number) + " violates minimum " + schema.minimum.String()}
+		return &definitionPathError{path: path, reason: "value " + string(number) + " violates minimum " + schema.minimum.String(), safeReason: "value violates the declared minimum"}
 	}
 	if schema.maximum != nil && value.Cmp(schema.maximum) > 0 {
-		return &definitionPathError{path: path, reason: "value " + string(number) + " violates maximum " + schema.maximum.String()}
+		return &definitionPathError{path: path, reason: "value " + string(number) + " violates maximum " + schema.maximum.String(), safeReason: "value violates the declared maximum"}
 	}
 	if len(schema.integerEnum) > 0 {
 		for _, allowed := range schema.integerEnum {
@@ -613,7 +637,7 @@ func validateDefinitionJSONIntegerConstraints(number json.Number, schema *defini
 				return nil
 			}
 		}
-		return &definitionPathError{path: path, reason: "value " + string(number) + " violates enum " + definitionSchemaIntegerEnumDescription(schema.integerEnum)}
+		return &definitionPathError{path: path, reason: "value " + string(number) + " violates enum " + definitionSchemaIntegerEnumDescription(schema.integerEnum), safeReason: "value violates the declared enum"}
 	}
 	return nil
 }
@@ -642,7 +666,7 @@ func validateDefinitionJSONObject(decoder *json.Decoder, token json.Token, schem
 		}
 		canonical, property, exact := definitionSchemaProperty(schema, member)
 		if property == nil {
-			return &definitionPathError{path: path, reason: "unknown member is not permitted"}
+			return &definitionPathError{path: path, diagnosticPath: path + "@byte:" + strconv.FormatInt(decoder.InputOffset(), 10), reason: "unknown member is not permitted"}
 		}
 		memberPath := definitionObjectPath(path, canonical)
 		if !exact {
@@ -857,21 +881,21 @@ type logicalTypeDocument struct {
 
 func (d definitionDocument) definition() (Definition, error) {
 	if d.AdmittedModes == nil {
-		return Definition{}, errors.New("admitted modes are required")
+		return Definition{}, definitionDiagnosticAt("$.admitted_modes", "admitted modes are required", errors.New("admitted modes are required"))
 	}
 	connectTimeout, err := durationFromMilliseconds(d.Resources.ConnectTimeoutMS, hardMaximumConnectTimeout)
 	if err != nil {
-		return Definition{}, err
+		return Definition{}, definitionDiagnosticAt("$.resources.connect_timeout_ms", "database timeout is outside the finite resource bound", err)
 	}
 	operationTimeout, err := durationFromMilliseconds(d.Resources.OperationTimeoutMS, hardMaximumOperationTimeout)
 	if err != nil {
-		return Definition{}, err
+		return Definition{}, definitionDiagnosticAt("$.resources.operation_timeout_ms", "database timeout is outside the finite resource bound", err)
 	}
 	mappings := make([]TypeMapping, len(d.TypeMappings))
 	for i, mapping := range d.TypeMappings {
 		logical, err := mapping.Logical.logicalType()
 		if err != nil {
-			return Definition{}, err
+			return Definition{}, definitionDiagnosticAt(definitionObjectPath(definitionArrayPath("$.type_mappings", i), "logical"), "database logical type declaration is invalid", err)
 		}
 		mappings[i] = TypeMapping{
 			Native:  NativeType{Name: mapping.Native.Name, Modifiers: append([]string(nil), mapping.Native.Modifiers...)},

@@ -58,10 +58,6 @@ type managedTargetHistorySourceDefinitionProvider interface {
 func ManagedTargetTransportDefinitionFactory() synctransport.DefinitionFactory {
 	return synctransport.DefinitionFactory{
 		Reference: postgresManagedTargetTransportReference,
-		DestinationEvidence: connectors.ConformanceEvidenceReference{
-			Suite: postgresManagedTargetEvidenceSuite,
-			RunID: postgresManagedTargetEvidenceRun,
-		},
 		BuildDestination: func(connector connectors.Connector) (synctransport.DestinationExecutor, error) {
 			switch typed := connector.(type) {
 			case Connector:

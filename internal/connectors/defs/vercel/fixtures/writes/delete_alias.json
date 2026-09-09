@@ -1,9 +1,0 @@
-{
-  "record": {
-    "uid": "alias_fixture_1"
-  },
-  "expect": {
-    "method": "DELETE",
-    "path": "/v2/aliases/alias_fixture_1"
-  }
-}

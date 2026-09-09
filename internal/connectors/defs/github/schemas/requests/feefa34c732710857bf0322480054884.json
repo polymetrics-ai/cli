@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "github_owned_allowed": {
+      "type": "boolean"
+    },
+    "patterns_allowed": {
+      "items": {
+        "maxLength": 8192,
+        "type": "string"
+      },
+      "maxItems": 256,
+      "type": "array"
+    },
+    "verified_allowed": {
+      "type": "boolean"
+    }
+  },
+  "required": [],
+  "type": "object"
+}

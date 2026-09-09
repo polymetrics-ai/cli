@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "context": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "description": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "sha": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "state": {
+      "enum": [
+        "error",
+        "failure",
+        "pending",
+        "success"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "target_url": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "sha",
+    "state"
+  ],
+  "type": "object"
+}

@@ -1,9 +1,0 @@
-{
-  "record": {
-    "title": "Fixture Folder"
-  },
-  "expect": {
-    "method": "POST",
-    "path": "/v2/folders"
-  }
-}

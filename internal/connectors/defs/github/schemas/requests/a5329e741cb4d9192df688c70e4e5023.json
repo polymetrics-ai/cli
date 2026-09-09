@@ -1,0 +1,201 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "collaborating_teams": {
+      "items": {
+        "maxLength": 8192,
+        "type": "string"
+      },
+      "maxItems": 256,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "collaborating_users": {
+      "items": {
+        "maxLength": 8192,
+        "type": "string"
+      },
+      "maxItems": 256,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "credits": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "login": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "type": {
+            "enum": [
+              "analyst",
+              "finder",
+              "reporter",
+              "coordinator",
+              "remediation_developer",
+              "remediation_reviewer",
+              "remediation_verifier",
+              "tool",
+              "sponsor",
+              "other"
+            ],
+            "maxLength": 8192,
+            "type": "string"
+          }
+        },
+        "required": [
+          "login",
+          "type"
+        ],
+        "type": "object"
+      },
+      "maxItems": 256,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "cve_id": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "cvss_vector_string": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "cwe_ids": {
+      "items": {
+        "maxLength": 8192,
+        "type": "string"
+      },
+      "maxItems": 256,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "description": {
+      "maxLength": 65535,
+      "type": "string"
+    },
+    "ghsa_id": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "severity": {
+      "enum": [
+        "critical",
+        "high",
+        "medium",
+        "low"
+      ],
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "state": {
+      "enum": [
+        "published",
+        "closed",
+        "draft"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "summary": {
+      "maxLength": 1024,
+      "type": "string"
+    },
+    "vulnerabilities": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "package": {
+            "additionalProperties": false,
+            "properties": {
+              "ecosystem": {
+                "enum": [
+                  "rubygems",
+                  "npm",
+                  "pip",
+                  "maven",
+                  "nuget",
+                  "composer",
+                  "go",
+                  "rust",
+                  "erlang",
+                  "actions",
+                  "pub",
+                  "other",
+                  "swift"
+                ],
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "name": {
+                "maxLength": 8192,
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "ecosystem"
+            ],
+            "type": "object"
+          },
+          "patched_versions": {
+            "maxLength": 8192,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "vulnerable_functions": {
+            "items": {
+              "maxLength": 8192,
+              "type": "string"
+            },
+            "maxItems": 256,
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "vulnerable_version_range": {
+            "maxLength": 8192,
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "package"
+        ],
+        "type": "object"
+      },
+      "maxItems": 256,
+      "type": "array"
+    }
+  },
+  "required": [
+    "ghsa_id"
+  ],
+  "type": "object"
+}

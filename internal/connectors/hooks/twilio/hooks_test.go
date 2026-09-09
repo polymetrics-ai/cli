@@ -40,7 +40,7 @@ func baseCfg(extra map[string]string) connectors.RuntimeConfig {
 // --- registration ---------------------------------------------------------
 
 func TestHooksRegisteredUnderTwilio(t *testing.T) {
-	h := engine.HooksFor("twilio")
+	h := ExplicitFactory()
 	if h == nil {
 		t.Fatal(`engine.HooksFor("twilio") = nil, want registered hooks (hooks/twilio's init() must call engine.RegisterHooks)`)
 	}

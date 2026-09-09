@@ -1,86 +1,135 @@
 {
   "base": {
-    "url": "{{ config.base_url }}",
-    "user_agent": "polymetrics-go-cli",
     "auth": [
       {
-        "mode": "none"
+        "mode": "bearer",
+        "token": "{{ secrets.apikey }}"
       }
     ],
-    "pagination": {
-      "type": "none"
-    },
     "check": {
-      "method": "GET",
-      "path": "/__legacy_hook/check"
+      "body": {
+        "query": "query { accounts(first: 1) { nodes { id } } }"
+      },
+      "method": "POST",
+      "path": "/graphql"
     },
-    "error_map": []
+    "error_map": [],
+    "pagination": {
+      "cursor_param": "after",
+      "max_pages": 100,
+      "page_size": 100,
+      "stop_path": "data.pageInfo.hasNextPage",
+      "token_path": "data.pageInfo.endCursor",
+      "type": "cursor"
+    },
+    "url": "https://{{ config.subdomain }}.bunny.com",
+    "user_agent": "polymetrics-go-cli"
   },
   "streams": [
     {
+      "graphql": {
+        "document": "query Accounts($after: String) { accounts(first: 100, after: $after) { nodes { id accountTypeId annualRevenue billingCity billingContactId billingCountry billingDay billingState billingStreet billingZip code createdAt currencyId description employees entityId groupId industryId invoiceTemplateId name netPaymentDays ownerUserId payingStatus phone taxNumber timezone updatedAt website } pageInfo { endCursor hasNextPage } } }",
+        "operation_name": "Accounts",
+        "variables": {
+          "after": "{{ cursor }}"
+        }
+      },
+      "incremental": {
+        "client_filtered": true,
+        "cursor_field": "updatedAt"
+      },
+      "method": "POST",
       "name": "accounts",
-      "method": "GET",
-      "path": "/__legacy_hook/accounts",
+      "path": "/graphql",
+      "projection": "passthrough",
       "records": {
-        "path": "data"
+        "path": "data.accounts.nodes"
       },
-      "schema": "schemas/accounts.json",
-      "incremental": {
-        "cursor_field": "updatedAt",
-        "client_filtered": true
-      }
+      "schema": "schemas/accounts.json"
     },
     {
+      "graphql": {
+        "document": "query Contacts($after: String) { contacts(first: 100, after: $after) { nodes { id accountId code createdAt description email entityId firstName fullName lastName linkedinUrl mailingCity mailingCountry mailingState mailingStreet mailingZip mobile phone portalAccess salutation title updatedAt } pageInfo { endCursor hasNextPage } } }",
+        "operation_name": "Contacts",
+        "variables": {
+          "after": "{{ cursor }}"
+        }
+      },
+      "incremental": {
+        "client_filtered": true,
+        "cursor_field": "updatedAt"
+      },
+      "method": "POST",
       "name": "contacts",
-      "method": "GET",
-      "path": "/__legacy_hook/contacts",
+      "path": "/graphql",
+      "projection": "passthrough",
       "records": {
-        "path": "data"
+        "path": "data.contacts.nodes"
       },
-      "schema": "schemas/contacts.json",
-      "incremental": {
-        "cursor_field": "updatedAt",
-        "client_filtered": true
-      }
+      "schema": "schemas/contacts.json"
     },
     {
+      "graphql": {
+        "document": "query Invoices($after: String) { invoices(first: 100, after: $after) { nodes { id accountId amount amountDue amountPaid createdAt credits currencyId description dueAt netPaymentDays number paidAt payableId poNumber portalUrl quoteId smallUnitAmountDue subtotal taxAmount updatedAt url uuid } pageInfo { endCursor hasNextPage } } }",
+        "operation_name": "Invoices",
+        "variables": {
+          "after": "{{ cursor }}"
+        }
+      },
+      "incremental": {
+        "client_filtered": true,
+        "cursor_field": "updatedAt"
+      },
+      "method": "POST",
       "name": "invoices",
-      "method": "GET",
-      "path": "/__legacy_hook/invoices",
+      "path": "/graphql",
+      "projection": "passthrough",
       "records": {
-        "path": "data"
+        "path": "data.invoices.nodes"
       },
-      "schema": "schemas/invoices.json",
-      "incremental": {
-        "cursor_field": "updatedAt",
-        "client_filtered": true
-      }
+      "schema": "schemas/invoices.json"
     },
     {
+      "graphql": {
+        "document": "query Payments($after: String) { payments(first: 100, after: $after) { nodes { id accountId amount amountUnapplied baseCurrencyCash baseCurrencyId createdAt currencyId description isLegacy memo receivedAt updatedAt } pageInfo { endCursor hasNextPage } } }",
+        "operation_name": "Payments",
+        "variables": {
+          "after": "{{ cursor }}"
+        }
+      },
+      "incremental": {
+        "client_filtered": true,
+        "cursor_field": "updatedAt"
+      },
+      "method": "POST",
       "name": "payments",
-      "method": "GET",
-      "path": "/__legacy_hook/payments",
+      "path": "/graphql",
+      "projection": "passthrough",
       "records": {
-        "path": "data"
+        "path": "data.payments.nodes"
       },
-      "schema": "schemas/payments.json",
-      "incremental": {
-        "cursor_field": "updatedAt",
-        "client_filtered": true
-      }
+      "schema": "schemas/payments.json"
     },
     {
-      "name": "subscriptions",
-      "method": "GET",
-      "path": "/__legacy_hook/subscriptions",
-      "records": {
-        "path": "data"
+      "graphql": {
+        "document": "query Subscriptions($after: String) { subscriptions(first: 100, after: $after) { nodes { id accountId cancelationDate createdAt currencyId endDate name period priceListId rampIntervalMonths startDate trialEndDate trialPeriod trialStartDate updatedAt } pageInfo { endCursor hasNextPage } } }",
+        "operation_name": "Subscriptions",
+        "variables": {
+          "after": "{{ cursor }}"
+        }
       },
-      "schema": "schemas/subscriptions.json",
       "incremental": {
-        "cursor_field": "updatedAt",
-        "client_filtered": true
-      }
+        "client_filtered": true,
+        "cursor_field": "updatedAt"
+      },
+      "method": "POST",
+      "name": "subscriptions",
+      "path": "/graphql",
+      "projection": "passthrough",
+      "records": {
+        "path": "data.subscriptions.nodes"
+      },
+      "schema": "schemas/subscriptions.json"
     }
   ]
 }

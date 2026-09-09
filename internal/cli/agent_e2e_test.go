@@ -64,7 +64,7 @@ func TestRLMAgent_FakeRunner_EndToEnd(t *testing.T) {
 	}
 }
 
-// TestRLMAgent_FakeRunner_MatchesDeterministic proves materialization conformance
+// TestRLMAgent_FakeRunner_MatchesDeterministic proves materialization determinism
 // (D1/D2): the agent path and the deterministic path produce identical
 // per-record scores, ids, and ordering — differing only in _rlm_mode.
 func TestRLMAgent_FakeRunner_MatchesDeterministic(t *testing.T) {

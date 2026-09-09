@@ -1,29 +1,21 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Lokalise Connection Specification",
-  "type": "object",
+  "properties": {
+    "api_key": {
+      "description": "Lokalise read-access API token.",
+      "type": "string",
+      "x-secret": true
+    },
+    "project_id": {
+      "description": "Lokalise project identifier.",
+      "type": "string"
+    }
+  },
   "required": [
     "api_key",
     "project_id"
   ],
-  "properties": {
-    "api_key": {
-      "type": "string",
-      "x-secret": true,
-      "description": "Lokalise API Key with read-access. Available at Profile settings > API tokens. See <a href=\"https://docs.lokalise.com/en/articles/1929556-api-tokens\">here</a>."
-    },
-    "project_id": {
-      "type": "string",
-      "description": "Lokalise project ID. Available at Project Settings > General."
-    },
-    "base_url": {
-      "type": "string",
-      "default": "https://example.invalid",
-      "description": "Placeholder base URL used only to construct the engine runtime before the Tier-2 hook delegates to the legacy connector."
-    },
-    "mode": {
-      "type": "string",
-      "description": "Set to fixture for credential-free legacy fixture tests."
-    }
-  }
+  "title": "Lokalise Connection Specification",
+  "type": "object",
+  "x-reject-unknown-config": true
 }

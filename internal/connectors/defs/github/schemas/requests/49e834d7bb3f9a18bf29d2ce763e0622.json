@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "author_id": {
+      "type": "integer"
+    },
+    "email": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "name": {
+      "maxLength": 8192,
+      "type": "string"
+    }
+  },
+  "required": [
+    "author_id"
+  ],
+  "type": "object"
+}

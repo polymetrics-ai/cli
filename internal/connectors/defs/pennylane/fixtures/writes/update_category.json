@@ -1,7 +1,0 @@
-{
-  "record": { "id": 5, "label": "Updated Fixture Category" },
-  "expect": {
-    "method": "PUT",
-    "path": "/categories/5"
-  }
-}

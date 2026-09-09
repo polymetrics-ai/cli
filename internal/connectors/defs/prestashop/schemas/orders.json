@@ -1,37 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "orders",
-  "type": "object",
   "properties": {
-    "id": {
-      "type": "integer"
-    },
-    "id_customer": {
-      "type": "integer"
-    },
-    "id_address_delivery": {
-      "type": "integer"
-    },
-    "id_address_invoice": {
-      "type": "integer"
-    },
     "current_state": {
       "type": "integer"
-    },
-    "reference": {
-      "type": "string"
-    },
-    "payment": {
-      "type": "string"
-    },
-    "total_paid": {
-      "type": "string"
-    },
-    "total_paid_real": {
-      "type": "string"
-    },
-    "valid": {
-      "type": "boolean"
     },
     "date_add": {
       "type": [
@@ -54,10 +25,39 @@
         "array",
         "null"
       ]
+    },
+    "id": {
+      "type": "integer"
+    },
+    "id_address_delivery": {
+      "type": "integer"
+    },
+    "id_address_invoice": {
+      "type": "integer"
+    },
+    "id_customer": {
+      "type": "integer"
+    },
+    "payment": {
+      "type": "string"
+    },
+    "reference": {
+      "type": "string"
+    },
+    "total_paid": {
+      "type": "string"
+    },
+    "total_paid_real": {
+      "type": "string"
+    },
+    "valid": {
+      "type": "boolean"
     }
   },
+  "title": "orders",
+  "type": "object",
+  "x-cursor-field": "date_upd",
   "x-primary-key": [
     "id"
-  ],
-  "x-cursor-field": "date_upd"
+  ]
 }

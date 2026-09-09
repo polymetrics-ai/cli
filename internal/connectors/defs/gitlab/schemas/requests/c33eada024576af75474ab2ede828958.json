@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "confidential": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "epic_iid": {
+      "type": "integer"
+    },
+    "id": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "title": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "epic_iid",
+    "id",
+    "title"
+  ],
+  "type": "object"
+}

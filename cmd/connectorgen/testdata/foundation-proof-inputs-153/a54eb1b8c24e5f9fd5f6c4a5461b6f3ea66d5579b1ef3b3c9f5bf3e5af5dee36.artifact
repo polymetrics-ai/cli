@@ -1,0 +1,148 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Polymetrics database connector definition",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "driver",
+    "catalog",
+    "identifiers",
+    "resources",
+    "type_mappings",
+    "admitted_modes"
+  ],
+  "properties": {
+    "schema_version": { "type": "integer", "enum": [1] },
+    "driver": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "protocol", "api_version"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "protocol": { "type": "string", "minLength": 1 },
+        "api_version": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "catalog": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["qualification_order"],
+      "properties": {
+        "qualification_order": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 3,
+          "items": { "type": "string", "enum": ["catalog", "schema", "relation"] }
+        }
+      }
+    },
+    "identifiers": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["quote_style", "case_fold", "max_bytes"],
+      "properties": {
+        "quote_style": { "type": "string", "enum": ["double_quote", "backtick", "bracket"] },
+        "case_fold": { "type": "string", "enum": ["lower", "upper", "preserve"] },
+        "max_bytes": { "type": "integer", "minimum": 1, "maximum": 256 }
+      }
+    },
+    "resources": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["read_page", "write_batch", "pool", "connect_timeout_ms", "operation_timeout_ms", "max_parameters"],
+      "properties": {
+        "read_page": { "$ref": "#/definitions/limit" },
+        "write_batch": { "$ref": "#/definitions/limit" },
+        "pool": { "$ref": "#/definitions/limit" },
+        "connect_timeout_ms": { "type": "integer", "minimum": 1 },
+        "operation_timeout_ms": { "type": "integer", "minimum": 1 },
+        "max_parameters": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "type_mappings": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["native", "logical"],
+        "properties": {
+          "native": { "$ref": "#/definitions/native_type" },
+          "logical": { "$ref": "#/definitions/logical_type" }
+        }
+      }
+    },
+    "admitted_modes": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "full_overwrite",
+          "full_append",
+          "incremental_append",
+          "incremental_upsert",
+          "incremental_dedupe",
+          "incremental_dedupe_history",
+          "change_capture"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "limit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["default", "maximum"],
+      "properties": {
+        "default": { "type": "integer", "minimum": 1 },
+        "maximum": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "native_type": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "modifiers": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+      }
+    },
+    "logical_type": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind"],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "signed_integer",
+            "unsigned_integer",
+            "decimal",
+            "float",
+            "boolean",
+            "string",
+            "binary",
+            "date",
+            "time",
+            "timestamp",
+            "uuid",
+            "json",
+            "array",
+            "opaque_native"
+          ]
+        },
+        "bits": { "type": "integer", "minimum": 8 },
+        "precision": { "type": "integer", "minimum": 0 },
+        "scale": { "type": "integer", "minimum": 0 },
+        "max_length": { "type": "integer", "minimum": 0 },
+        "collation": { "type": "string" },
+        "with_timezone": { "type": "boolean" },
+        "element": { "$ref": "#/definitions/logical_type" },
+        "opaque_engine": { "type": "string" },
+        "opaque_name": { "type": "string" },
+        "opaque_options": { "type": "array", "items": { "type": "string" } }
+      }
+    }
+  }
+}

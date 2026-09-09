@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "body": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "confidential": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "id": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "note_id": {
+      "type": "integer"
+    },
+    "noteable_id": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "id",
+    "note_id",
+    "noteable_id"
+  ],
+  "type": "object"
+}

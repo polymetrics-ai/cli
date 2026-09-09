@@ -1,0 +1,82 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "allocation_gid": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "data": {
+      "additionalProperties": false,
+      "properties": {
+        "assignee": {
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "effort": {
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "enum": [
+                "hours",
+                "percent"
+              ],
+              "maxLength": 8192,
+              "type": "string"
+            },
+            "value": {
+              "type": "number"
+            }
+          },
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "end_date": {
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "parent": {
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "start_date": {
+          "maxLength": 8192,
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "opt_fields": {
+      "items": {
+        "enum": [
+          "assignee",
+          "assignee.name",
+          "created_by",
+          "created_by.name",
+          "effort",
+          "effort.type",
+          "effort.value",
+          "end_date",
+          "parent",
+          "parent.name",
+          "resource_subtype",
+          "start_date"
+        ],
+        "maxLength": 8192,
+        "type": "string"
+      },
+      "maxItems": 256,
+      "type": "array"
+    },
+    "opt_pretty": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "allocation_gid",
+    "data"
+  ],
+  "type": "object"
+}

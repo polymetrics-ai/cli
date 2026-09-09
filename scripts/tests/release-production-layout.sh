@@ -9,7 +9,12 @@ trap 'rm -rf "$tmp"' EXIT
 
 version=0.0.0-production-layout
 mkdir -p "$tmp/binaries/darwin_arm64"
-printf 'installed-pm\n' > "$tmp/binaries/darwin_arm64/pm"
+# A valid archive larger than the former installed-binary ceiling must pass.
+python3 - "$tmp/binaries/darwin_arm64/pm" <<'PYFIX'
+import sys
+with open(sys.argv[1], "wb") as f:
+    f.truncate(160 * 1024 * 1024 + 1)
+PYFIX
 chmod 0755 "$tmp/binaries/darwin_arm64/pm"
 
 SOURCE_DATE_EPOCH=1 "$assembler" \
@@ -31,10 +36,22 @@ output=$("$verifier" "$tmp/dist" --targets darwin/arm64)
 if [[ "$output" != *"release-size-report kind=archive subject=$archive"* ]] ||
   [[ "$output" != *"release-size-report kind=installed_binary subject=$archive!pm"* ]] ||
   [[ "$output" != *"verified 1 release assets in $tmp/dist"* ]]; then
-  printf 'production archive verifier did not validate the assembled target and its size budget\n' >&2
+  printf 'production archive verifier did not validate the assembled target and its informational sizes\n' >&2
   printf '%s\n' "$output" >&2
   exit 1
 fi
+
+cp "$tmp/dist/checksums.txt" "$tmp/checksums.original"
+printf '%064d  %s\n' 0 "$(basename "$archive")" > "$tmp/dist/checksums.txt"
+if rejected=$("$verifier" "$tmp/dist" --targets darwin/arm64 2>&1); then
+  printf 'release verifier accepted an incorrect checksum\n' >&2
+  exit 1
+fi
+if [[ "$rejected" != *'did NOT match'* ]]; then
+  printf 'unexpected checksum refusal: %s\n' "$rejected" >&2
+  exit 1
+fi
+cp "$tmp/checksums.original" "$tmp/dist/checksums.txt"
 
 write_impostor_archive() {
   local impostor=$1 digest

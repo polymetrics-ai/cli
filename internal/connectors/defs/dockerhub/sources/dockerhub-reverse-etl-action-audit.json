@@ -1,0 +1,234 @@
+{
+  "schema_version": 1,
+  "connector": "dockerhub",
+  "purpose": "Source-backed direct-write and reverse-ETL mapping candidates only; this is not a runtime action inventory.",
+  "source_lock": "sources/dockerhub-operation-source-lock.json",
+  "source_lane_matrix": "sources/dockerhub-source-lane-matrix.json",
+  "summary": {
+    "source_mutation_operations": 27,
+    "source_delete_operations": 6,
+    "mapped_direct_write_cells": 27,
+    "mapped_reverse_etl_cells": 27,
+    "declared_write_actions": 0,
+    "declared_destination_bindings": 0,
+    "executable_reverse_etl_actions": 0
+  },
+  "write_operations": [
+    {
+      "source_id": "dockerhub.rest.PostUsersLogin",
+      "method": "POST",
+      "path": "/v2/users/login",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "source_location": "paths[\"/v2/users/login\"].post",
+      "lanes": ["direct_write", "reverse_etl"]
+    },
+    {
+      "source_id": "dockerhub.rest.PostUsers2FALogin",
+      "method": "POST",
+      "path": "/v2/users/2fa-login",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "source_location": "paths[\"/v2/users/2fa-login\"].post",
+      "lanes": ["direct_write", "reverse_etl"]
+    },
+    {
+      "source_id": "dockerhub.rest.AuthCreateAccessToken",
+      "method": "POST",
+      "path": "/v2/auth/token",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "source_location": "paths[\"/v2/auth/token\"].post",
+      "lanes": ["direct_write", "reverse_etl"]
+    },
+    {
+      "source_id": "dockerhub.rest.post_/v2/access-tokens",
+      "method": "POST",
+      "path": "/v2/access-tokens",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "source_location": "paths[\"/v2/access-tokens\"].post",
+      "lanes": ["direct_write", "reverse_etl"]
+    },
+    {
+      "source_id": "dockerhub.rest.patch_/v2/access-tokens/{uuid}",
+      "method": "PATCH",
+      "path": "/v2/access-tokens/{uuid}",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "source_location": "paths[\"/v2/access-tokens/{uuid}\"].patch",
+      "lanes": ["direct_write", "reverse_etl"]
+    },
+    {
+      "source_id": "dockerhub.rest.delete_/v2/access-tokens/{uuid}",
+      "method": "DELETE",
+      "path": "/v2/access-tokens/{uuid}",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "source_location": "paths[\"/v2/access-tokens/{uuid}\"].delete",
+      "lanes": ["direct_write", "reverse_etl"]
+    },
+    {
+      "source_id": "dockerhub.rest.put_/v2/orgs/{name}/settings",
+      "method": "PUT",
+      "path": "/v2/orgs/{name}/settings",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "source_location": "paths[\"/v2/orgs/{name}/settings\"].put",
+      "lanes": ["direct_write", "reverse_etl"]
+    },
+    {
+      "source_id": "dockerhub.rest.post_/v2/orgs/{name}/access-tokens",
+      "method": "POST",
+      "path": "/v2/orgs/{name}/access-tokens",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "source_location": "paths[\"/v2/orgs/{name}/access-tokens\"].post",
+      "lanes": ["direct_write", "reverse_etl"]
+    },
+    {
+      "source_id": "dockerhub.rest.patch_/v2/orgs/{org_name}/access-tokens/{access_token_id}",
+      "method": "PATCH",
+      "path": "/v2/orgs/{org_name}/access-tokens/{access_token_id}",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "source_location": "paths[\"/v2/orgs/{org_name}/access-tokens/{access_token_id}\"].patch",
+      "lanes": ["direct_write", "reverse_etl"]
+    },
+    {
+      "source_id": "dockerhub.rest.delete_/v2/orgs/{org_name}/access-tokens/{access_token_id}",
+      "method": "DELETE",
+      "path": "/v2/orgs/{org_name}/access-tokens/{access_token_id}",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "source_location": "paths[\"/v2/orgs/{org_name}/access-tokens/{access_token_id}\"].delete",
+      "lanes": ["direct_write", "reverse_etl"]
+    },
+    {
+      "source_id": "dockerhub.rest.UpdateRepositoryImmutableTags",
+      "method": "PATCH",
+      "path": "/v2/namespaces/{namespace}/repositories/{repository}/immutabletags",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "source_location": "paths[\"/v2/namespaces/{namespace}/repositories/{repository}/immutabletags\"].patch",
+      "lanes": ["direct_write", "reverse_etl"]
+    },
+    {
+      "source_id": "dockerhub.rest.VerifyRepositoryImmutableTags",
+      "method": "POST",
+      "path": "/v2/namespaces/{namespace}/repositories/{repository}/immutabletags/verify",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "source_location": "paths[\"/v2/namespaces/{namespace}/repositories/{repository}/immutabletags/verify\"].post",
+      "lanes": ["direct_write", "reverse_etl"]
+    },
+    {
+      "source_id": "dockerhub.rest.CreateRepositoryGroup",
+      "method": "POST",
+      "path": "/v2/repositories/{namespace}/{repository}/groups",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "source_location": "paths[\"/v2/repositories/{namespace}/{repository}/groups\"].post",
+      "lanes": ["direct_write", "reverse_etl"]
+    },
+    {
+      "source_id": "dockerhub.rest.CreateRepository",
+      "method": "POST",
+      "path": "/v2/namespaces/{namespace}/repositories",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "source_location": "paths[\"/v2/namespaces/{namespace}/repositories\"].post",
+      "lanes": ["direct_write", "reverse_etl"]
+    },
+    {
+      "source_id": "dockerhub.rest.put_/v2/orgs/{org_name}/members/{username}",
+      "method": "PUT",
+      "path": "/v2/orgs/{org_name}/members/{username}",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "source_location": "paths[\"/v2/orgs/{org_name}/members/{username}\"].put",
+      "lanes": ["direct_write", "reverse_etl"]
+    },
+    {
+      "source_id": "dockerhub.rest.delete_/v2/orgs/{org_name}/members/{username}",
+      "method": "DELETE",
+      "path": "/v2/orgs/{org_name}/members/{username}",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "source_location": "paths[\"/v2/orgs/{org_name}/members/{username}\"].delete",
+      "lanes": ["direct_write", "reverse_etl"]
+    },
+    {
+      "source_id": "dockerhub.rest.post_/v2/orgs/{org_name}/groups",
+      "method": "POST",
+      "path": "/v2/orgs/{org_name}/groups",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "source_location": "paths[\"/v2/orgs/{org_name}/groups\"].post",
+      "lanes": ["direct_write", "reverse_etl"]
+    },
+    {
+      "source_id": "dockerhub.rest.put_/v2/orgs/{org_name}/groups/{group_name}",
+      "method": "PUT",
+      "path": "/v2/orgs/{org_name}/groups/{group_name}",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "source_location": "paths[\"/v2/orgs/{org_name}/groups/{group_name}\"].put",
+      "lanes": ["direct_write", "reverse_etl"]
+    },
+    {
+      "source_id": "dockerhub.rest.patch_/v2/orgs/{org_name}/groups/{group_name}",
+      "method": "PATCH",
+      "path": "/v2/orgs/{org_name}/groups/{group_name}",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "source_location": "paths[\"/v2/orgs/{org_name}/groups/{group_name}\"].patch",
+      "lanes": ["direct_write", "reverse_etl"]
+    },
+    {
+      "source_id": "dockerhub.rest.delete_/v2/orgs/{org_name}/groups/{group_name}",
+      "method": "DELETE",
+      "path": "/v2/orgs/{org_name}/groups/{group_name}",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "source_location": "paths[\"/v2/orgs/{org_name}/groups/{group_name}\"].delete",
+      "lanes": ["direct_write", "reverse_etl"]
+    },
+    {
+      "source_id": "dockerhub.rest.post_/v2/orgs/{org_name}/groups/{group_name}/members",
+      "method": "POST",
+      "path": "/v2/orgs/{org_name}/groups/{group_name}/members",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "source_location": "paths[\"/v2/orgs/{org_name}/groups/{group_name}/members\"].post",
+      "lanes": ["direct_write", "reverse_etl"]
+    },
+    {
+      "source_id": "dockerhub.rest.delete_/v2/orgs/{org_name}/groups/{group_name}/members/{username}",
+      "method": "DELETE",
+      "path": "/v2/orgs/{org_name}/groups/{group_name}/members/{username}",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "source_location": "paths[\"/v2/orgs/{org_name}/groups/{group_name}/members/{username}\"].delete",
+      "lanes": ["direct_write", "reverse_etl"]
+    },
+    {
+      "source_id": "dockerhub.rest.delete_/v2/invites/{id}",
+      "method": "DELETE",
+      "path": "/v2/invites/{id}",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "source_location": "paths[\"/v2/invites/{id}\"].delete",
+      "lanes": ["direct_write", "reverse_etl"]
+    },
+    {
+      "source_id": "dockerhub.rest.patch_/v2/invites/{id}/resend",
+      "method": "PATCH",
+      "path": "/v2/invites/{id}/resend",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "source_location": "paths[\"/v2/invites/{id}/resend\"].patch",
+      "lanes": ["direct_write", "reverse_etl"]
+    },
+    {
+      "source_id": "dockerhub.rest.post_/v2/invites/bulk",
+      "method": "POST",
+      "path": "/v2/invites/bulk",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "source_location": "paths[\"/v2/invites/bulk\"].post",
+      "lanes": ["direct_write", "reverse_etl"]
+    },
+    {
+      "source_id": "dockerhub.rest.post_/v2/scim/2.0/Users",
+      "method": "POST",
+      "path": "/v2/scim/2.0/Users",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "source_location": "paths[\"/v2/scim/2.0/Users\"].post",
+      "lanes": ["direct_write", "reverse_etl"]
+    },
+    {
+      "source_id": "dockerhub.rest.put_/v2/scim/2.0/Users/{id}",
+      "method": "PUT",
+      "path": "/v2/scim/2.0/Users/{id}",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "source_location": "paths[\"/v2/scim/2.0/Users/{id}\"].put",
+      "lanes": ["direct_write", "reverse_etl"]
+    }
+  ]
+}

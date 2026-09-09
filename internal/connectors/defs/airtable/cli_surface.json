@@ -7,8 +7,7 @@
       "summary": "Declared direct read: GET /scim/v2/Groups.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.list-scim-groups-1 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -21,8 +20,7 @@
       "summary": "Declared direct write: POST /scim/v2/Groups.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.create-scim-group-2 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -31,8 +29,7 @@
       "summary": "Declared direct write: DELETE /scim/v2/Groups/{groupId}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.delete-scim-group-3 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -41,8 +38,7 @@
       "summary": "Declared direct read: GET /scim/v2/Groups/{groupId}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.get-scim-group-4 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -55,8 +51,7 @@
       "summary": "Declared direct write: PATCH /scim/v2/Groups/{groupId}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.patch-scim-group-5 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -65,8 +60,7 @@
       "summary": "Declared direct write: PUT /scim/v2/Groups/{groupId}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.put-scim-group-6 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -75,8 +69,7 @@
       "summary": "Declared direct read: GET /scim/v2/Users.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.list-scim-users-7 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -89,8 +82,7 @@
       "summary": "Declared direct write: POST /scim/v2/Users.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.create-scim-user-8 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -99,8 +91,7 @@
       "summary": "Declared direct write: DELETE /scim/v2/Users/{userId}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.delete-scim-user-9 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -109,8 +100,7 @@
       "summary": "Declared direct read: GET /scim/v2/Users/{userId}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.get-scim-user-10 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -123,8 +113,7 @@
       "summary": "Declared direct write: PATCH /scim/v2/Users/{userId}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.patch-scim-user-11 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -133,8 +122,7 @@
       "summary": "Declared direct write: PUT /scim/v2/Users/{userId}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.put-scim-user-12 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -143,8 +131,7 @@
       "summary": "Declared direct write: POST /v0/{baseId}/{recordId}/{attachmentFieldIdOrName}/uploadAttachment.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.upload-attachment-13 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -153,8 +140,7 @@
       "summary": "Declared direct write: DELETE /v0/{baseId}/{tableIdOrName}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.delete-multiple-records-14 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "bulk multi-record DELETE via records[] query params; delete_record's single-record DELETE already covers deletion, one request per record",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -163,16 +149,14 @@
       "summary": "Declared etl: GET /v0/{baseId}/{tableIdOrName}.",
       "intent": "etl",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.list-records-15 has no declaration-owned executable etl route."
+      "notes": "Unavailable: no ETL executor is declared for this provider operation."
     },
     {
       "path": "operations patch-v0-base-id-table-id-or-name",
       "summary": "Declared direct write: PATCH /v0/{baseId}/{tableIdOrName}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.update-multiple-records-16 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "bulk multi-record PATCH (up to 10 records/request); the single-record create_record/update_record write actions already cover create and update, one request per record, matching the engine's one-request-per-record write semantics (conventions.md §3)",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -181,8 +165,7 @@
       "summary": "Declared direct write: POST /v0/{baseId}/{tableIdOrName}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.create-records-17 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Declared provider mutation: POST /v0/{baseId}/{tableIdOrName}.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -191,8 +174,7 @@
       "summary": "Declared direct write: PUT /v0/{baseId}/{tableIdOrName}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.update-multiple-records-put-18 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "bulk destructive multi-record PUT clears every unincluded cell value across up to 10 records in one call; update_record's PATCH already covers the non-destructive per-record update case",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -201,8 +183,7 @@
       "summary": "Declared direct write: DELETE /v0/{baseId}/{tableIdOrName}/{recordId}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.delete-record-19 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Declared provider mutation: DELETE /v0/{baseId}/{tableIdOrName}/{recordId}.",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -211,8 +192,7 @@
       "summary": "Declared direct read: GET /v0/{baseId}/{tableIdOrName}/{recordId}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.get-record-20 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -225,8 +205,7 @@
       "summary": "Declared direct write: PATCH /v0/{baseId}/{tableIdOrName}/{recordId}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.update-record-21 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Declared provider mutation: PATCH /v0/{baseId}/{tableIdOrName}/{recordId}.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -235,8 +214,7 @@
       "summary": "Declared direct write: PUT /v0/{baseId}/{tableIdOrName}/{recordId}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.update-record-put-22 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "destructive update clears every unincluded cell value on the record; update_record's PATCH already covers the non-destructive case",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -245,16 +223,14 @@
       "summary": "Declared etl: GET /v0/{baseId}/{tableIdOrName}/{recordId}/comments.",
       "intent": "etl",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.list-comments-23 has no declaration-owned executable etl route."
+      "notes": "Unavailable: no ETL executor is declared for this provider operation."
     },
     {
       "path": "operations post-v0-base-id-table-id-or-name-record-id-comments",
       "summary": "Declared direct write: POST /v0/{baseId}/{tableIdOrName}/{recordId}/comments.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.create-comment-24 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Declared provider mutation: POST /v0/{baseId}/{tableIdOrName}/{recordId}/comments.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -263,8 +239,7 @@
       "summary": "Declared direct write: DELETE /v0/{baseId}/{tableIdOrName}/{recordId}/comments/{rowCommentId}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.delete-comment-25 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -273,8 +248,7 @@
       "summary": "Declared direct write: PATCH /v0/{baseId}/{tableIdOrName}/{recordId}/comments/{rowCommentId}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.update-comment-26 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -283,8 +257,7 @@
       "summary": "Declared direct write: PATCH /v0/{baseId}/{tableIdOrName}/{recordId}/dateDependencyMetadata.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.update-date-dependency-metadata-27 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -293,8 +266,7 @@
       "summary": "Declared direct write: POST /v0/{baseId}/{tableIdOrName}/sync/{apiEndpointSyncId}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.post-sync-api-endpoint-28 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -303,8 +275,7 @@
       "summary": "Declared direct write: POST /v0/{enterpriseAccountId}/{dataTableId}/deleteRecords.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.hyperdb-delete-records-by-primary-keys-29 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -313,8 +284,7 @@
       "summary": "Declared direct write: POST /v0/{enterpriseAccountId}/{dataTableId}/getRecords.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.hyperdb-table-read-records-30 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -323,8 +293,7 @@
       "summary": "Declared direct write: PUT /v0/{enterpriseAccountId}/{dataTableId}/upsertRecords.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.hyperdb-upsert-records-by-primary-keys-31 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -333,16 +302,14 @@
       "summary": "Declared etl: GET /v0/bases/{baseId}/webhooks.",
       "intent": "etl",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.list-webhooks-32 has no declaration-owned executable etl route."
+      "notes": "Unavailable: no ETL executor is declared for this provider operation."
     },
     {
       "path": "operations post-v0-bases-base-id-webhooks",
       "summary": "Declared direct write: POST /v0/bases/{baseId}/webhooks.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.create-a-webhook-33 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Declared provider mutation: POST /v0/bases/{baseId}/webhooks.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -351,8 +318,7 @@
       "summary": "Declared direct write: DELETE /v0/bases/{baseId}/webhooks/{webhookId}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.delete-a-webhook-34 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Declared provider mutation: DELETE /v0/bases/{baseId}/webhooks/{webhookId}.",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -361,8 +327,7 @@
       "summary": "Declared direct write: POST /v0/bases/{baseId}/webhooks/{webhookId}/enableNotifications.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.enable-disable-webhook-notifications-35 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "toggles delivery-retry notification state on an existing webhook; a minor operational knob, not core reverse-ETL surface",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -371,8 +336,7 @@
       "summary": "Declared direct read: GET /v0/bases/{baseId}/webhooks/{webhookId}/payloads.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.list-webhook-payloads-36 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -385,8 +349,7 @@
       "summary": "Declared direct write: POST /v0/bases/{baseId}/webhooks/{webhookId}/refresh.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.refresh-a-webhook-37 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "extends a webhook's expiration window; an operational keep-alive action, not reverse-ETL record data",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -395,16 +358,14 @@
       "summary": "Declared etl: GET /v0/meta/bases.",
       "intent": "etl",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.list-bases-38 has no declaration-owned executable etl route."
+      "notes": "Unavailable: no ETL executor is declared for this provider operation."
     },
     {
       "path": "operations post-v0-meta-bases",
       "summary": "Declared direct write: POST /v0/meta/bases.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.create-base-39 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "creating a base requires a workspaceId and the schema.bases:write scope; this connector's spec.json is scoped to an already-existing base_id/table_id, with no workspace config surface to hang a create_base write action off of",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -413,8 +374,7 @@
       "summary": "Declared direct write: DELETE /v0/meta/bases/{baseId}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.delete-base-40 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -423,8 +383,7 @@
       "summary": "Declared direct read: GET /v0/meta/bases/{baseId}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.get-base-collaborators-41 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -437,8 +396,7 @@
       "summary": "Declared direct read: GET /v0/meta/bases/{baseId}/blockInstallations.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.list-block-installations-42 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -451,8 +409,7 @@
       "summary": "Declared direct write: DELETE /v0/meta/bases/{baseId}/blockInstallations/{blockInstallationId}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.delete-block-installation-43 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -461,8 +418,7 @@
       "summary": "Declared direct write: PATCH /v0/meta/bases/{baseId}/blockInstallations/{blockInstallationId}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.manage-block-installation-44 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -471,8 +427,7 @@
       "summary": "Declared direct write: POST /v0/meta/bases/{baseId}/collaborators.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.add-base-collaborator-45 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -481,8 +436,7 @@
       "summary": "Declared direct write: DELETE /v0/meta/bases/{baseId}/collaborators/{userOrGroupId}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.delete-base-collaborator-46 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -491,8 +445,7 @@
       "summary": "Declared direct write: PATCH /v0/meta/bases/{baseId}/collaborators/{userOrGroupId}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.update-collaborator-base-permission-47 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -501,8 +454,7 @@
       "summary": "Declared direct read: GET /v0/meta/bases/{baseId}/interfaces/{pageBundleId}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.get-interface-48 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -515,8 +467,7 @@
       "summary": "Declared direct write: POST /v0/meta/bases/{baseId}/interfaces/{pageBundleId}/collaborators.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.add-interface-collaborator-49 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -525,8 +476,7 @@
       "summary": "Declared direct write: DELETE /v0/meta/bases/{baseId}/interfaces/{pageBundleId}/collaborators/{userOrGroupId}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.delete-interface-collaborator-50 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -535,8 +485,7 @@
       "summary": "Declared direct write: PATCH /v0/meta/bases/{baseId}/interfaces/{pageBundleId}/collaborators/{userOrGroupId}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.update-interface-collaborator-51 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -545,8 +494,7 @@
       "summary": "Declared direct write: DELETE /v0/meta/bases/{baseId}/interfaces/{pageBundleId}/invites/{inviteId}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.delete-interface-invite-52 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -555,8 +503,7 @@
       "summary": "Declared direct write: DELETE /v0/meta/bases/{baseId}/invites/{inviteId}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.delete-base-invite-53 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -565,8 +512,7 @@
       "summary": "Declared direct read: GET /v0/meta/bases/{baseId}/shares.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.list-shares-54 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -579,8 +525,7 @@
       "summary": "Declared direct write: DELETE /v0/meta/bases/{baseId}/shares/{shareId}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.delete-share-55 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -589,8 +534,7 @@
       "summary": "Declared direct write: PATCH /v0/meta/bases/{baseId}/shares/{shareId}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.manage-share-56 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -599,16 +543,14 @@
       "summary": "Declared etl: GET /v0/meta/bases/{baseId}/tables.",
       "intent": "etl",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.get-base-schema-57 has no declaration-owned executable etl route."
+      "notes": "Unavailable: no ETL executor is declared for this provider operation."
     },
     {
       "path": "operations post-v0-meta-bases-base-id-tables",
       "summary": "Declared direct write: POST /v0/meta/bases/{baseId}/tables.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.create-table-58 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Declared provider mutation: POST /v0/meta/bases/{baseId}/tables.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -617,8 +559,7 @@
       "summary": "Declared direct write: POST /v0/meta/bases/{baseId}/tables/{tableId}/fields.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.create-field-59 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Declared provider mutation: POST /v0/meta/bases/{baseId}/tables/{tableId}/fields.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -627,8 +568,7 @@
       "summary": "Declared direct write: PATCH /v0/meta/bases/{baseId}/tables/{tableId}/fields/{columnId}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.update-field-60 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Declared provider mutation: PATCH /v0/meta/bases/{baseId}/tables/{tableId}/fields/{columnId}.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -637,8 +577,7 @@
       "summary": "Declared direct write: PATCH /v0/meta/bases/{baseId}/tables/{tableIdOrName}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.update-table-61 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Declared provider mutation: PATCH /v0/meta/bases/{baseId}/tables/{tableIdOrName}.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -647,8 +586,7 @@
       "summary": "Declared direct read: GET /v0/meta/bases/{baseId}/views.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.list-views-62 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -661,8 +599,7 @@
       "summary": "Declared direct write: DELETE /v0/meta/bases/{baseId}/views/{viewId}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.delete-view-63 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -671,8 +608,7 @@
       "summary": "Declared direct read: GET /v0/meta/bases/{baseId}/views/{viewId}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.get-view-metadata-64 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -685,8 +621,7 @@
       "summary": "Declared direct read: GET /v0/meta/enterpriseAccounts/{enterpriseAccountId}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.get-enterprise-65 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -699,8 +634,7 @@
       "summary": "Declared direct read: GET /v0/meta/enterpriseAccounts/{enterpriseAccountId}/auditLogEvents.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.audit-log-events-66 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -713,8 +647,7 @@
       "summary": "Declared direct read: GET /v0/meta/enterpriseAccounts/{enterpriseAccountId}/auditLogs.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.list-audit-log-requests-67 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -727,8 +660,7 @@
       "summary": "Declared direct write: POST /v0/meta/enterpriseAccounts/{enterpriseAccountId}/auditLogs.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.create-audit-log-request-68 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -737,8 +669,7 @@
       "summary": "Declared direct read: GET /v0/meta/enterpriseAccounts/{enterpriseAccountId}/auditLogs/{enterpriseAuditLogTaskId}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.get-audit-log-request-69 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -751,8 +682,7 @@
       "summary": "Declared direct read: GET /v0/meta/enterpriseAccounts/{enterpriseAccountId}/changeEvents.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.change-events-70 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -765,8 +695,7 @@
       "summary": "Declared direct write: POST /v0/meta/enterpriseAccounts/{enterpriseAccountId}/descendants.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.create-descendant-enterprise-71 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -775,8 +704,7 @@
       "summary": "Declared direct read: GET /v0/meta/enterpriseAccounts/{enterpriseAccountId}/exports.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.list-ediscovery-export-72 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -789,8 +717,7 @@
       "summary": "Declared direct write: POST /v0/meta/enterpriseAccounts/{enterpriseAccountId}/exports.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.create-ediscovery-export-73 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -799,8 +726,7 @@
       "summary": "Declared direct read: GET /v0/meta/enterpriseAccounts/{enterpriseAccountId}/exports/{enterpriseTaskId}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.get-ediscovery-export-74 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -813,8 +739,7 @@
       "summary": "Declared direct write: POST /v0/meta/enterpriseAccounts/{enterpriseAccountId}/moveGroups.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.move-user-groups-75 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -823,8 +748,7 @@
       "summary": "Declared direct write: POST /v0/meta/enterpriseAccounts/{enterpriseAccountId}/moveWorkspaces.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.move-workspaces-76 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -833,8 +757,7 @@
       "summary": "Declared direct read: GET /v0/meta/enterpriseAccounts/{enterpriseAccountId}/packages.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.list-enterprise-packages-77 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -847,8 +770,7 @@
       "summary": "Declared direct write: POST /v0/meta/enterpriseAccounts/{enterpriseAccountId}/packages/{packageId}/install.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.create-base-from-package-enterprise-78 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -857,8 +779,7 @@
       "summary": "Declared direct read: GET /v0/meta/enterpriseAccounts/{enterpriseAccountId}/personalAccessTokens.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.list-enterprise-personal-access-tokens-79 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -871,8 +792,7 @@
       "summary": "Declared direct write: POST /v0/meta/enterpriseAccounts/{enterpriseAccountId}/personalAccessTokens/revoke.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.revoke-enterprise-personal-access-tokens-80 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -881,8 +801,7 @@
       "summary": "Declared direct write: DELETE /v0/meta/enterpriseAccounts/{enterpriseAccountId}/users.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.delete-users-by-email-81 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -891,8 +810,7 @@
       "summary": "Declared direct read: GET /v0/meta/enterpriseAccounts/{enterpriseAccountId}/users.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.get-users-by-id-or-email-82 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -905,8 +823,7 @@
       "summary": "Declared direct write: PATCH /v0/meta/enterpriseAccounts/{enterpriseAccountId}/users.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.manage-user-batched-83 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -915,8 +832,7 @@
       "summary": "Declared direct write: DELETE /v0/meta/enterpriseAccounts/{enterpriseAccountId}/users/{userId}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.delete-user-by-id-84 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -925,8 +841,7 @@
       "summary": "Declared direct read: GET /v0/meta/enterpriseAccounts/{enterpriseAccountId}/users/{userId}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.get-user-by-id-85 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -939,8 +854,7 @@
       "summary": "Declared direct write: PATCH /v0/meta/enterpriseAccounts/{enterpriseAccountId}/users/{userId}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.manage-user-86 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -949,8 +863,7 @@
       "summary": "Declared direct write: POST /v0/meta/enterpriseAccounts/{enterpriseAccountId}/users/{userId}/logout.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.logout-user-87 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -959,8 +872,7 @@
       "summary": "Declared direct write: POST /v0/meta/enterpriseAccounts/{enterpriseAccountId}/users/{userId}/remove.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.remove-user-from-enterprise-88 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -969,8 +881,7 @@
       "summary": "Declared direct write: POST /v0/meta/enterpriseAccounts/{enterpriseAccountId}/users/claim.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.manage-user-membership-89 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -979,8 +890,7 @@
       "summary": "Declared direct write: POST /v0/meta/enterpriseAccounts/{enterpriseAccountId}/users/grantAdminAccess.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.grant-admin-access-90 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -989,8 +899,7 @@
       "summary": "Declared direct write: POST /v0/meta/enterpriseAccounts/{enterpriseAccountId}/users/revokeAdminAccess.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.revoke-admin-access-91 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -999,8 +908,7 @@
       "summary": "Declared direct write: POST /v0/meta/enterpriseAccounts/{enterpriseAccountId}/workspaceAiAllowlist.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.update-workspace-ai-allowlist-92 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1009,8 +917,7 @@
       "summary": "Declared direct read: GET /v0/meta/groups/{groupId}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.get-user-group-93 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1023,8 +930,7 @@
       "summary": "Declared direct read: GET /v0/meta/whoami.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.get-user-id-scopes-94 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1037,8 +943,7 @@
       "summary": "Declared direct write: POST /v0/meta/workspaces.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.create-workspace-95 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1047,8 +952,7 @@
       "summary": "Declared direct write: DELETE /v0/meta/workspaces/{workspaceId}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.delete-workspace-96 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -1057,8 +961,7 @@
       "summary": "Declared direct read: GET /v0/meta/workspaces/{workspaceId}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.get-workspace-collaborators-97 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1071,8 +974,7 @@
       "summary": "Declared direct write: POST /v0/meta/workspaces/{workspaceId}/collaborators.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.add-workspace-collaborator-98 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1081,8 +983,7 @@
       "summary": "Declared direct write: DELETE /v0/meta/workspaces/{workspaceId}/collaborators/{userOrGroupId}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.delete-workspace-collaborator-99 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -1091,8 +992,7 @@
       "summary": "Declared direct write: PATCH /v0/meta/workspaces/{workspaceId}/collaborators/{userOrGroupId}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.update-workspace-collaborator-100 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1101,8 +1001,7 @@
       "summary": "Declared direct write: DELETE /v0/meta/workspaces/{workspaceId}/invites/{inviteId}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.delete-workspace-invite-101 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -1111,8 +1010,7 @@
       "summary": "Declared direct write: POST /v0/meta/workspaces/{workspaceId}/moveBase.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.move-base-102 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1121,8 +1019,7 @@
       "summary": "Declared direct write: POST /v0/meta/workspaces/{workspaceId}/updateRestrictions.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.update-workspace-restrictions-103 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1131,8 +1028,7 @@
       "summary": "Declared direct write: PATCH /v0/{baseId}/{tableIdOrName}/{recordId}/comments/{commentId}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.local-api-surface.patch-v0-baseid-tableidorname-recordid-comments-commentid-104 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Declared provider mutation: PATCH /v0/{baseId}/{tableIdOrName}/{recordId}/comments/{commentId}.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1141,8 +1037,7 @@
       "summary": "Declared direct write: DELETE /v0/{baseId}/{tableIdOrName}/{recordId}/comments/{commentId}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.local-api-surface.delete-v0-baseid-tableidorname-recordid-comments-commentid-105 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Declared provider mutation: DELETE /v0/{baseId}/{tableIdOrName}/{recordId}/comments/{commentId}.",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     }

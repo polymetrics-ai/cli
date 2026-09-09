@@ -1,24 +1,24 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "teachers",
-  "type": "object",
   "properties": {
     "courseId": {
-      "type": "string"
-    },
-    "userId": {
-      "type": "string"
-    },
-    "fullName": {
       "type": "string"
     },
     "emailAddress": {
       "type": "string"
     },
+    "fullName": {
+      "type": "string"
+    },
     "photoUrl": {
+      "type": "string"
+    },
+    "userId": {
       "type": "string"
     }
   },
+  "title": "teachers",
+  "type": "object",
   "x-primary-key": [
     "courseId",
     "userId"

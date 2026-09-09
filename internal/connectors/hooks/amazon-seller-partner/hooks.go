@@ -32,10 +32,6 @@ import (
 // lwa_token_url; used only if that config key somehow resolves empty.
 const defaultLWATokenURL = "https://api.amazon.com/auth/o2/token"
 
-func init() {
-	engine.RegisterHooks("amazon-seller-partner", func() engine.Hooks { return New() })
-}
-
 // Hooks is the amazon-seller-partner bundle's stateless Tier-2 hook set.
 type Hooks struct {
 	// Client overrides the HTTP client used for the LWA token exchange. Left

@@ -202,9 +202,6 @@ func TestGitHubAppAuthRateAdmissionRequireSharedRefusesBeforeTokenSend(t *testin
 	http.DefaultTransport = recordingTransport
 	t.Cleanup(func() { http.DefaultTransport = previousDefaultTransport })
 
-	engine.ConfigureSharedRateLimitRegistry(coordination.NewSharedRateLimitRegistry(nil))
-	t.Cleanup(func() { engine.ConfigureSharedRateLimitRegistry(nil) })
-
 	_, err := engine.NewRuntime(context.Background(), requireSharedGitHubAppBundle(t), githubAppAuthAdmissionConfig(t), githubhooks.New())
 	if got := recordingTransport.sends.Load(); got != 0 {
 		t.Fatalf("physical GitHub App token sends = %d, want 0 before shared admission refusal (NewRuntime error = %v)", got, err)
@@ -227,12 +224,12 @@ func TestGitHubAppAuthRateAdmissionUnreachableSharedRefusesBeforeTokenSend(t *te
 
 	shared := coordination.OpenSharedRateLimitRegistry("127.0.0.1:1")
 	t.Cleanup(func() { _ = shared.Close() })
-	engine.ConfigureSharedRateLimitRegistry(shared)
-	t.Cleanup(func() { engine.ConfigureSharedRateLimitRegistry(nil) })
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
-	_, err := engine.NewRuntime(ctx, requireSharedGitHubAppBundle(t), githubAppAuthAdmissionConfig(t), githubhooks.New())
+	cfg := githubAppAuthAdmissionConfig(t)
+	cfg.SharedRateLimits = shared
+	_, err := engine.NewRuntime(ctx, requireSharedGitHubAppBundle(t), cfg, githubhooks.New())
 	if got := recordingTransport.sends.Load(); got != 0 {
 		t.Fatalf("physical GitHub App token sends = %d, want 0 before unreachable shared admission refusal (NewRuntime error = %v)", got, err)
 	}
@@ -1057,8 +1054,6 @@ func TestGitHubWriteHookAllPhysicalRESTSendsUseDeclaredRouteRequester(t *testing
 
 func TestGitHubWriteHookCreateLabelRequireSharedRefusesBeforeTransport(t *testing.T) {
 	srv, reqs := newWriteCaptureServer(t, nil)
-	engine.ConfigureSharedRateLimitRegistry(nil)
-	t.Cleanup(func() { engine.ConfigureSharedRateLimitRegistry(nil) })
 
 	h := githubhooks.New()
 	rt, err := engine.NewRuntime(context.Background(), githubWriteHookRateLimitBundle(t, srv.URL, true), githubWriteHookRateLimitConfig(t, srv.URL), h)

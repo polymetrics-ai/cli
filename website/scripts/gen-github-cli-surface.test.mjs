@@ -4,99 +4,60 @@ import { test } from 'node:test';
 import { currentSurfaceTable } from './gen-github-cli-surface.mjs';
 
 const sourceLock = {
-  counts: {
-    rest: 2,
-    graphql_query: 1,
-    graphql_mutation: 2,
-    total: 5,
+  schema_version: 4,
+  connector: 'github',
+  lanes: {
+    direct_read: 'implemented',
+    direct_write: 'implemented',
+    binary_download: 'implemented',
+    binary_upload: 'unsupported',
+    etl: 'implemented',
+    reverse_etl: 'implemented',
+    sync_transport: 'implemented',
   },
+  operations: [{ id: 'one' }, { id: 'two' }],
 };
 
-const ledger = {
-  counts: sourceLock.counts,
-  progress: {
-    inventory: { classified: 5, total: 5, percent: 100 },
-    implementation: { implemented: 3, total: 5, percent: 60 },
-    live_proof: { proven: 1, total: 5, percent: 20 },
-  },
-};
-
-const argumentsFor = (endpoints) => ({
+const argumentsFor = (lock = sourceLock) => ({
   commands: [
-    { availability: 'implemented', intent: 'direct_read' },
+    {
+      availability: 'implemented',
+      intent: 'direct_read',
+      operation: 'one',
+      api_surface: [{ method: 'GET', path: '/user' }],
+    },
     { availability: 'unsafe_or_disallowed', intent: 'direct_write' },
   ],
-  endpoints,
-  streams: [],
+  streams: [{ name: 'user' }],
   writes: [],
-  sourceLock,
-  ledger,
+  sourceLock: lock,
 });
 
-test('current GitHub surface keeps fixed GraphQL transport out of REST counts', () => {
-  const table = currentSurfaceTable(argumentsFor([
-    { method: 'GET', path: '/user', covered_by: { stream: 'user' } },
-    { method: 'DELETE', path: '/user/resource' },
-    {
-      method: 'POST',
-      path: '/graphql',
-      covered_by: { operations: ['github.graphql.query.viewer', 'github.graphql.mutation.create-one', 'github.graphql.mutation.delete-one'] },
-    },
-    { method: 'GRAPHQL', path: 'query { viewer { login } }', covered_by: { direct_read: 'viewer' } },
-  ]));
-
-  assert.match(table, /\| Pinned REST operations \| 2 \|/u);
-  assert.match(table, /\| Pinned GraphQL Query roots \| 1 \|/u);
-  assert.match(table, /\| Pinned GraphQL Mutation roots \| 2 \|/u);
-  assert.match(table, /\| Pinned source operations \| 5 \|/u);
-  assert.match(table, /\| Source inventory classification \| 5\/5 \(100%\) \|/u);
-  assert.match(table, /\| Executable implementation \| 3\/5 \(60%\) \|/u);
-  assert.match(table, /\| Current-head live proof \| 1\/5 \(20%\) \|/u);
-  assert.match(table, /\| Tracked REST endpoints \| 2 \|/u);
-  assert.match(table, /\| Covered REST endpoints \| 1 \|/u);
-  assert.match(table, /\| Blocked REST endpoints \| 1 \|/u);
-  assert.match(table, /\| Fixed GraphQL root-operation bindings \| 3 \|/u);
-  assert.match(table, /\| Supplemental fixed GraphQL bindings \| 0 \|/u);
-  assert.match(table, /\| Legacy GraphQL compatibility bindings \| 1 \|/u);
+test('current GitHub surface reports only schema-4 authoring and rendered execution facts', () => {
+  const table = currentSurfaceTable(argumentsFor());
+  assert.match(table, /\| Rendered command entries \| 2 \|/u);
+  assert.match(table, /\| Rendered read streams \| 1 \|/u);
+  assert.match(table, /\| Authored canonical operations \| 2 \|/u);
+  assert.match(table, /\| Operation-bound commands \| 1 \|/u);
+  assert.match(table, /\| Endpoint-bound commands \| 1 \|/u);
+  assert.match(table, /\| Binary upload lane \| unsupported \|/u);
+  assert.doesNotMatch(table, /certif|conformance|ledger|compatibility/iu);
 });
 
-test('current GitHub surface accounts for supplemental fixed GraphQL bindings separately', () => {
-  const table = currentSurfaceTable(argumentsFor([
-    { method: 'GET', path: '/user', covered_by: { stream: 'user' } },
-    { method: 'DELETE', path: '/user/resource' },
-    {
-      method: 'POST',
-      path: '/graphql',
-      covered_by: {
-        operations: [
-          'github.repo.list',
-          'github.graphql.query.viewer',
-          'github.graphql.mutation.create-one',
-          'github.graphql.mutation.delete-one',
-        ],
-      },
-    },
-  ]));
-
-  assert.match(table, /\| Fixed GraphQL root-operation bindings \| 3 \|/u);
-  assert.match(table, /\| Supplemental fixed GraphQL bindings \| 1 \|/u);
-});
-
-test('current GitHub surface rejects a missing or incomplete fixed GraphQL transport', () => {
+test('current GitHub surface rejects incomplete lane declarations', () => {
+  const lock = structuredClone(sourceLock);
+  delete lock.lanes.sync_transport;
   assert.throws(
-    () => currentSurfaceTable(argumentsFor([
-      { method: 'GET', path: '/user', covered_by: { stream: 'user' } },
-      { method: 'DELETE', path: '/user/resource' },
-    ])),
-    /fixed GraphQL transport count = 0/u,
+    () => currentSurfaceTable(argumentsFor(lock)),
+    /must declare exactly seven lanes/u,
   );
+});
 
+test('current GitHub surface rejects the wrong source-lock version', () => {
+  const lock = structuredClone(sourceLock);
+  lock.schema_version = 3;
   assert.throws(
-    () => currentSurfaceTable(argumentsFor([
-      { method: 'GET', path: '/user', covered_by: { stream: 'user' } },
-      { method: 'DELETE', path: '/user/resource' },
-      { method: 'POST', path: '/graphql', covered_by: { operations: ['github.graphql.query.viewer'] } },
-    ])),
-    /root-operation bindings = 1/u,
+    () => currentSurfaceTable(argumentsFor(lock)),
+    /must be schema 4/u,
   );
 });

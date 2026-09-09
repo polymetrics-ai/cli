@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "namespace_path": {
+      "maxLength": 255,
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "namespace_path"
+  ],
+  "type": "object"
+}

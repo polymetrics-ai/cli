@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "model_name": {
+      "maxLength": 8192,
+      "minLength": 1,
+      "type": "string"
+    },
+    "record_identifier": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "model_name",
+    "record_identifier"
+  ],
+  "type": "object"
+}

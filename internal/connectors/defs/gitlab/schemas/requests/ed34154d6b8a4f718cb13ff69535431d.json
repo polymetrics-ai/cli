@@ -1,0 +1,108 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "access_level": {
+      "enum": [
+        "not_protected",
+        "ref_protected"
+      ],
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "description": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "group_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "locked": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "maintenance_note": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "maximum_timeout": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "paused": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "project_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "run_untagged": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "runner_type": {
+      "enum": [
+        "instance_type",
+        "group_type",
+        "project_type"
+      ],
+      "maxLength": 8192,
+      "minLength": 1,
+      "type": "string"
+    },
+    "tag_list": {
+      "items": {
+        "maxLength": 8192,
+        "type": "string"
+      },
+      "maxItems": 256,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "token_expires_at": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "token_rotation_deadline": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "group_id",
+    "project_id",
+    "runner_type"
+  ],
+  "type": "object"
+}

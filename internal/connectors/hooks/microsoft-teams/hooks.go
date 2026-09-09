@@ -39,10 +39,6 @@ var graphStreamPaths = map[string]string{
 	"team_device_usage_report": "/reports/getTeamsDeviceUsageUserDetail",
 }
 
-func init() {
-	engine.RegisterHooks("microsoft-teams", func() engine.Hooks { return Hooks{} })
-}
-
 // Hooks is the microsoft-teams bundle's Tier-2 hook set: StreamHook only. It
 // has no state of its own; every method is a pure function of its
 // arguments.

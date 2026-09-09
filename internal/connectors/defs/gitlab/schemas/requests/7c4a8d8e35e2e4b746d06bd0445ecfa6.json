@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "assignee_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "board_id": {
+      "type": "integer"
+    },
+    "id": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "iteration_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "label_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "milestone_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "board_id",
+    "id"
+  ],
+  "type": "object"
+}

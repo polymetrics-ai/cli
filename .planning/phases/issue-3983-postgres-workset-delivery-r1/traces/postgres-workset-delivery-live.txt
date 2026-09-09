@@ -1,5 +1,0 @@
-$ POLYMETRICS_DATABASE_INTEGRATION=1 POLYMETRICS_CONTAINER_RUNTIME=docker POLYMETRICS_CONTAINER_ENDPOINT=unix:///Users/karthiksivadas/.colima/default/docker.sock go test -tags=databaseintegration -count=1 -timeout 20m -v ./internal/connectors/native/postgres
-=== RUN   TestPostgresManagedTargetWorksetDeliveryLive
---- PASS: TestPostgresManagedTargetWorksetDeliveryLive (6.14s)
-PASS
-ok  \tpolymetrics.ai/internal/connectors/native/postgres

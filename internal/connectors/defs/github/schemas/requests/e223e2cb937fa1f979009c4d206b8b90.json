@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "body": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "org": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "project_number": {
+      "type": "integer"
+    },
+    "title": {
+      "maxLength": 8192,
+      "type": "string"
+    }
+  },
+  "required": [
+    "org",
+    "project_number",
+    "title"
+  ],
+  "type": "object"
+}

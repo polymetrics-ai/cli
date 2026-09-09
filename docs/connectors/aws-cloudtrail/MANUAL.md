@@ -10,7 +10,7 @@ SYNOPSIS
   pm credentials add <name> --connector aws-cloudtrail [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads AWS CloudTrail management events (last 90 days) via the LookupEvents API using AWS Signature V4 authentication. Read-only.
+  Reads CloudTrail management events through fixed, declaration-bound LookupEvents requests signed with AWS Signature Version 4.
 
 ICON
   id: aws-cloudtrail
@@ -23,15 +23,39 @@ CAPABILITIES
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  start_date
+  aws_key_id (secret) (required)
+  aws_secret_key (secret) (required)
+  aws_session_token (secret)
+
+ETL STREAMS
+  management_events:
+    primary key: EventId
+    cursor: EventTime
+    fields: AccessKeyId(string), CloudTrailEvent(string), EventId(string), EventName(string), EventSource(string), EventTime(integer), ReadOnly(string), Resources(array), Username(string)
+  read_only_events:
+    primary key: EventId
+    cursor: EventTime
+    fields: AccessKeyId(string), CloudTrailEvent(string), EventId(string), EventName(string), EventSource(string), EventTime(integer), ReadOnly(string), Resources(array), Username(string)
+  write_only_events:
+    primary key: EventId
+    cursor: EventTime
+    fields: AccessKeyId(string), CloudTrailEvent(string), EventId(string), EventName(string), EventSource(string), EventTime(integer), ReadOnly(string), Resources(array), Username(string)
+  console_logins:
+    primary key: EventId
+    cursor: EventTime
+    fields: AccessKeyId(string), CloudTrailEvent(string), EventId(string), EventName(string), EventSource(string), EventTime(integer), ReadOnly(string), Resources(array), Username(string)
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: Bounded CloudTrail LookupEvents requests are signed by the declaration-bound generic SigV4 authenticator against the fixed CloudTrail us-east-1 origin.
+  write risk: unsupported
+  approval: none; read-only
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

@@ -107,7 +107,7 @@ func doAuthenticatedRequest(t *testing.T, auth interface {
 // --- registration -------------------------------------------------------
 
 func TestHooksRegisteredUnderGmail(t *testing.T) {
-	h := engine.HooksFor("gmail")
+	h := ExplicitFactory()
 	if h == nil {
 		t.Fatal("engine.HooksFor(\"gmail\") = nil, want registered hooks (hooks/gmail's init() must call engine.RegisterHooks)")
 	}

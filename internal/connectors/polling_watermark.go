@@ -2,6 +2,7 @@ package connectors
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"strings"
 
@@ -292,102 +293,102 @@ func (d PollingWatermarkDescriptor) Validate() error {
 	switch d.Status {
 	case PollingWatermarkStatusImplemented:
 		if strings.TrimSpace(d.Reason) != "" {
-			return fmt.Errorf("implemented polling watermark cannot declare a reason")
+			return declarationDiagnosticFailure("/reason", "polling_reason_forbidden", "implemented polling watermark cannot declare a reason", fmt.Errorf("implemented polling watermark cannot declare a reason"))
 		}
 		if err := d.Source.validate(); err != nil {
-			return err
+			return declarationDiagnosticWithin("/source", err)
 		}
-		return d.Target.validate(d.Source.Modes)
+		return declarationDiagnosticWithin("/target", d.Target.validate(d.Source.Modes))
 	case PollingWatermarkStatusPlanned, PollingWatermarkStatusUnsupported:
 		if strings.TrimSpace(d.Reason) == "" {
-			return fmt.Errorf("non-implemented polling watermark requires a reason")
+			return declarationDiagnosticFailure("/reason", "polling_reason_required", "non-implemented polling watermark requires a reason", fmt.Errorf("non-implemented polling watermark requires a reason"))
 		}
 		return nil
 	default:
-		return fmt.Errorf("unsupported polling watermark status %q", d.Status)
+		return declarationDiagnosticFailure("/status", "polling_status_invalid", "polling watermark status is not supported", fmt.Errorf("unsupported polling watermark status %q", d.Status))
 	}
 }
 
 func (d PollingWatermarkSourceDescriptor) validate() error {
 	if err := validatePollingExecutor(d.Executor); err != nil {
-		return fmt.Errorf("source polling executor: %w", err)
+		return declarationDiagnosticWithin("/executor", fmt.Errorf("source polling executor: %w", err))
 	}
 	if d.Object.Kind != PollingCatalogObjectRelation {
-		return fmt.Errorf("unsupported polling catalog object kind %q", d.Object.Kind)
+		return declarationDiagnosticFailure("/object/kind", "polling_object_invalid", "polling catalog object kind is not supported", fmt.Errorf("unsupported polling catalog object kind %q", d.Object.Kind))
 	}
 	if d.Read.Kind != PollingReadProtocolKeyset {
-		return fmt.Errorf("polling read protocol must be keyset")
+		return declarationDiagnosticFailure("/read/kind", "polling_read_kind_invalid", "polling read protocol must be keyset", fmt.Errorf("polling read protocol must be keyset"))
 	}
 	if d.Read.MaxPageSize <= 0 || d.Read.MaxPages <= 0 || d.Read.MaxRequests <= 0 || d.Read.MaxPageSize > 100000 || d.Read.MaxPages > 10000 || d.Read.MaxRequests > 100000 {
-		return fmt.Errorf("polling read requires bounded positive page and request limits")
+		return declarationDiagnosticFailure("/read", "polling_read_bounds_invalid", "polling read requires bounded positive page and request limits", fmt.Errorf("polling read requires bounded positive page and request limits"))
 	}
 	if !d.Read.StableTraversal {
-		return fmt.Errorf("page checkpoints require stable keyset traversal")
+		return declarationDiagnosticFailure("/read/stable_traversal", "polling_traversal_unstable", "page checkpoints require stable keyset traversal", fmt.Errorf("page checkpoints require stable keyset traversal"))
 	}
 	if d.Read.Predicate != PollingKeysetPredicateLexicographic {
-		return fmt.Errorf("polling keyset predicate must use the closed lexicographic tuple dialect")
+		return declarationDiagnosticFailure("/read/predicate", "polling_predicate_invalid", "polling keyset predicate must use the closed lexicographic tuple dialect", fmt.Errorf("polling keyset predicate must use the closed lexicographic tuple dialect"))
 	}
 	if d.Snapshot.Kind != PollingSnapshotBarrierTransaction && d.Snapshot.Kind != PollingSnapshotBarrierNone {
-		return fmt.Errorf("unsupported polling snapshot barrier %q", d.Snapshot.Kind)
+		return declarationDiagnosticFailure("/snapshot/kind", "polling_snapshot_invalid", "polling snapshot barrier is not supported", fmt.Errorf("unsupported polling snapshot barrier %q", d.Snapshot.Kind))
 	}
 	if err := d.Cursor.validate(); err != nil {
-		return err
+		return declarationDiagnosticWithin("/cursor", err)
 	}
 	if err := d.Ordering.validate(); err != nil {
-		return err
+		return declarationDiagnosticWithin("/ordering", err)
 	}
 	if d.Mutation.Mutable && (!d.Mutation.CommitOrdered || !d.Mutation.BoundedOverlap) {
-		return fmt.Errorf("mutable source requires bounded overlap and commit ordering")
+		return declarationDiagnosticFailure("/mutation", "polling_mutation_unbounded", "mutable source requires bounded overlap and commit ordering", fmt.Errorf("mutable source requires bounded overlap and commit ordering"))
 	}
 	if !validPollingIdentity(d.Identity.Engine) || !validPollingIdentity(d.Identity.AccountScope) || !validPollingIdentity(d.Identity.ObjectScope) {
-		return fmt.Errorf("polling source identity requires concrete engine, account_scope, and object_scope")
+		return declarationDiagnosticFailure("/identity", "polling_identity_invalid", "polling source identity requires concrete engine, account_scope, and object_scope", fmt.Errorf("polling source identity requires concrete engine, account_scope, and object_scope"))
 	}
 	if d.Schema != PollingSchemaCompatibilityExactFingerprint {
-		return fmt.Errorf("polling schema compatibility must be exact_fingerprint")
+		return declarationDiagnosticFailure("/schema_compatibility", "polling_schema_invalid", "polling schema compatibility must be exact_fingerprint", fmt.Errorf("polling schema compatibility must be exact_fingerprint"))
 	}
 	if err := d.validateDeletes(); err != nil {
 		return err
 	}
 	if err := validatePollingModes(d.Modes); err != nil {
-		return err
+		return declarationDiagnosticWithin("/modes", err)
 	}
 	return nil
 }
 
 func (c PollingCursor) validate() error {
 	if c.AllowsNull {
-		return fmt.Errorf("polling watermark cursor cannot allow null")
+		return declarationDiagnosticFailure("/allows_null", "polling_cursor_nullable", "polling watermark cursor cannot allow null", fmt.Errorf("polling watermark cursor cannot allow null"))
 	}
 	if c.Codec == PollingCursorCodecFloat64 {
-		return fmt.Errorf("polling watermark cursor codec must preserve values losslessly")
+		return declarationDiagnosticFailure("/codec", "polling_cursor_lossy", "polling watermark cursor codec must preserve values losslessly", fmt.Errorf("polling watermark cursor codec must preserve values losslessly"))
 	}
 	switch c.Type {
 	case PollingCursorTypeTimestamp:
 		if c.Codec != PollingCursorCodecRFC3339Nano || c.Precision != "nanosecond" {
-			return fmt.Errorf("timestamp polling cursor requires rfc3339_nano nanosecond precision")
+			return declarationDiagnosticFailure("", "polling_timestamp_codec_invalid", "timestamp polling cursor requires rfc3339_nano nanosecond precision", fmt.Errorf("timestamp polling cursor requires rfc3339_nano nanosecond precision"))
 		}
 	case PollingCursorTypeInteger:
 		if c.Codec != PollingCursorCodecDecimal || c.Precision != "exact" {
-			return fmt.Errorf("integer polling cursor requires exact decimal encoding")
+			return declarationDiagnosticFailure("", "polling_integer_codec_invalid", "integer polling cursor requires exact decimal encoding", fmt.Errorf("integer polling cursor requires exact decimal encoding"))
 		}
 	default:
-		return fmt.Errorf("unsupported polling cursor type %q", c.Type)
+		return declarationDiagnosticFailure("/type", "polling_cursor_type_invalid", "polling cursor type is not supported", fmt.Errorf("unsupported polling cursor type %q", c.Type))
 	}
 	return nil
 }
 
 func (o PollingOrderingTuple) validate() error {
 	if !validPollingName(o.Watermark.CatalogField) || !validPollingName(o.TieBreaker.CatalogField) {
-		return fmt.Errorf("polling ordering fields must name discovered catalog columns")
+		return declarationDiagnosticFailure("", "polling_ordering_field_invalid", "polling ordering fields must name discovered catalog columns", fmt.Errorf("polling ordering fields must name discovered catalog columns"))
 	}
 	if o.Watermark.CatalogField == o.TieBreaker.CatalogField {
-		return fmt.Errorf("polling ordering watermark and tie_breaker must differ")
+		return declarationDiagnosticFailure("", "polling_ordering_duplicate", "polling ordering watermark and tie_breaker must differ", fmt.Errorf("polling ordering watermark and tie_breaker must differ"))
 	}
 	if !o.Watermark.Ascending || !o.TieBreaker.Ascending {
-		return fmt.Errorf("polling ordering tuple must be ascending")
+		return declarationDiagnosticFailure("", "polling_ordering_direction_invalid", "polling ordering tuple must be ascending", fmt.Errorf("polling ordering tuple must be ascending"))
 	}
 	if !o.TieBreaker.Unique {
-		return fmt.Errorf("polling ordering tie_breaker must be unique")
+		return declarationDiagnosticFailure("/tie_breaker/unique", "polling_ordering_nonunique", "polling ordering tie_breaker must be unique", fmt.Errorf("polling ordering tie_breaker must be unique"))
 	}
 	return nil
 }
@@ -396,91 +397,91 @@ func (d PollingWatermarkSourceDescriptor) validateDeletes() error {
 	switch d.DeleteVisibility {
 	case PollingDeleteVisibilityHardDeleteInvisible:
 		if d.SoftDeleteField != "" || d.SoftDeleteAdvancesCursor {
-			return fmt.Errorf("hard-delete-invisible polling cannot declare a soft delete mapping")
+			return declarationDiagnosticFailure("/soft_delete_field", "polling_delete_mapping_conflict", "hard-delete-invisible polling cannot declare a soft delete mapping", fmt.Errorf("hard-delete-invisible polling cannot declare a soft delete mapping"))
 		}
 	case PollingDeleteVisibilityTombstone:
 		if !validPollingName(d.SoftDeleteField) || !d.SoftDeleteAdvancesCursor {
-			return fmt.Errorf("polling watermark cannot advertise tombstones without a cursor-advancing soft delete")
+			return declarationDiagnosticFailure("/delete_visibility", "polling_delete_visibility_invalid", "polling watermark cannot advertise tombstones without a cursor-advancing soft delete", fmt.Errorf("polling watermark cannot advertise tombstones without a cursor-advancing soft delete"))
 		}
 	default:
-		return fmt.Errorf("unsupported polling delete visibility %q", d.DeleteVisibility)
+		return declarationDiagnosticFailure("/delete_visibility", "polling_delete_visibility_invalid", "polling delete visibility is not supported", fmt.Errorf("unsupported polling delete visibility %q", d.DeleteVisibility))
 	}
 	return nil
 }
 
 func (d PollingApplyDescriptor) validate(sourceModes []synccontract.Mode) error {
 	if err := validatePollingExecutor(d.Executor); err != nil {
-		return fmt.Errorf("target polling executor: %w", err)
+		return declarationDiagnosticWithin("/executor", fmt.Errorf("target polling executor: %w", err))
 	}
 	if d.MaxBatchRecords <= 0 || d.MaxBatchRecords > 100000 {
-		return fmt.Errorf("target polling apply requires a bounded positive batch size")
+		return declarationDiagnosticFailure("/max_batch_records", "polling_apply_records_invalid", "target polling apply requires a bounded positive batch size", fmt.Errorf("target polling apply requires a bounded positive batch size"))
 	}
 	if d.MaxBatchBytes <= 0 || d.MaxBatchBytes > 1<<30 {
-		return fmt.Errorf("target polling apply requires a bounded positive byte limit")
+		return declarationDiagnosticFailure("/max_batch_bytes", "polling_apply_bytes_invalid", "target polling apply requires a bounded positive byte limit", fmt.Errorf("target polling apply requires a bounded positive byte limit"))
 	}
 	if d.Staging != PollingStagingReplaceSupported && d.Staging != PollingStagingReplaceUnsupported {
-		return fmt.Errorf("unsupported polling staging capability %q", d.Staging)
+		return declarationDiagnosticFailure("/staging", "polling_staging_invalid", "polling staging capability is not supported", fmt.Errorf("unsupported polling staging capability %q", d.Staging))
 	}
 	if len(d.StableKeyMapping) == 0 {
-		return fmt.Errorf("target polling apply requires stable key mapping")
+		return declarationDiagnosticFailure("/stable_key_mapping", "polling_key_mapping_required", "target polling apply requires stable key mapping", fmt.Errorf("target polling apply requires stable key mapping"))
 	}
-	for _, key := range d.StableKeyMapping {
+	for index, key := range d.StableKeyMapping {
 		if !validPollingName(key) {
-			return fmt.Errorf("target polling stable key mapping is invalid")
+			return declarationDiagnosticFailure(fmt.Sprintf("/stable_key_mapping/%d", index), "polling_key_mapping_invalid", "target polling stable key mapping is invalid", fmt.Errorf("target polling stable key mapping is invalid"))
 		}
 	}
 	if d.Transaction != PollingTransactionRequired && d.Transaction != PollingTransactionNone {
-		return fmt.Errorf("unsupported polling transaction policy %q", d.Transaction)
+		return declarationDiagnosticFailure("/transaction", "polling_transaction_invalid", "polling transaction policy is not supported", fmt.Errorf("unsupported polling transaction policy %q", d.Transaction))
 	}
 	if d.PartialResult != PollingPartialResultRollback && d.PartialResult != PollingPartialResultUnknown {
-		return fmt.Errorf("unsupported polling partial-result policy %q", d.PartialResult)
+		return declarationDiagnosticFailure("/partial_result", "polling_partial_result_invalid", "polling partial-result policy is not supported", fmt.Errorf("unsupported polling partial-result policy %q", d.PartialResult))
 	}
 	if d.ValidityWindow != PollingValidityWindowSupported && d.ValidityWindow != PollingValidityWindowUnsupported {
-		return fmt.Errorf("unsupported polling validity-window capability %q", d.ValidityWindow)
+		return declarationDiagnosticFailure("/validity_window", "polling_validity_invalid", "polling validity-window capability is not supported", fmt.Errorf("unsupported polling validity-window capability %q", d.ValidityWindow))
 	}
 	if len(d.Strategies) == 0 {
-		return fmt.Errorf("target polling apply requires at least one closed strategy")
+		return declarationDiagnosticFailure("/strategies", "polling_strategy_required", "target polling apply requires at least one closed strategy", fmt.Errorf("target polling apply requires at least one closed strategy"))
 	}
 	seen := make(map[PollingApplyStrategy]struct{}, len(d.Strategies))
-	for _, strategy := range d.Strategies {
+	for index, strategy := range d.Strategies {
 		if !validPollingApplyStrategy(strategy) {
-			return fmt.Errorf("unsupported polling apply strategy %q", strategy)
+			return declarationDiagnosticFailure(fmt.Sprintf("/strategies/%d", index), "polling_strategy_invalid", "polling apply strategy is not supported", fmt.Errorf("unsupported polling apply strategy %q", strategy))
 		}
 		if _, duplicate := seen[strategy]; duplicate {
-			return fmt.Errorf("target polling apply declares duplicate strategy %q", strategy)
+			return declarationDiagnosticFailure(fmt.Sprintf("/strategies/%d", index), "polling_strategy_duplicate", "target polling apply declares duplicate strategy", fmt.Errorf("target polling apply declares duplicate strategy %q", strategy))
 		}
 		seen[strategy] = struct{}{}
 	}
 	if containsPollingMode(sourceModes, synccontract.ModeIncrementalDedupeHistory) && (d.Transaction != PollingTransactionRequired || !d.RetrySafeCloseAndInsert || d.ValidityWindow != PollingValidityWindowSupported || !containsPollingApplyStrategy(d.Strategies, PollingApplyStrategyDedupeHistory)) {
-		return fmt.Errorf("history mode requires transaction and retry-safe close-and-insert")
+		return declarationDiagnosticFailure("", "polling_history_contract_invalid", "history mode requires transaction and retry-safe close-and-insert", fmt.Errorf("history mode requires transaction and retry-safe close-and-insert"))
 	}
 	return nil
 }
 
 func validatePollingExecutor(reference TransportExecutorReference) error {
 	if err := reference.Validate(); err != nil {
-		return err
+		return declarationDiagnosticFailure("", "polling_executor_invalid", "polling executor reference is invalid", err)
 	}
 	if reference.Family != TransportExecutorFamilyNativeDatabase {
-		return fmt.Errorf("polling executor must use native_database family")
+		return declarationDiagnosticFailure("/family", "polling_executor_family_invalid", "polling executor must use native_database family", fmt.Errorf("polling executor must use native_database family"))
 	}
 	return nil
 }
 
 func validatePollingModes(modes []synccontract.Mode) error {
 	if len(modes) == 0 {
-		return fmt.Errorf("polling watermark requires at least one canonical sync mode")
+		return declarationDiagnosticFailure("", "polling_modes_required", "polling watermark requires at least one canonical sync mode", fmt.Errorf("polling watermark requires at least one canonical sync mode"))
 	}
 	seen := make(map[synccontract.Mode]struct{}, len(modes))
-	for _, mode := range modes {
+	for index, mode := range modes {
 		if err := mode.Validate(); err != nil {
-			return err
+			return declarationDiagnosticFailure(fmt.Sprintf("/%d", index), "polling_mode_invalid", "polling mode is not canonical", err)
 		}
 		if mode == synccontract.ModeChangeCapture {
-			return fmt.Errorf("polling watermark cannot declare change_capture mode")
+			return declarationDiagnosticFailure(fmt.Sprintf("/%d", index), "polling_mode_change_capture", "polling watermark cannot declare change_capture mode", fmt.Errorf("polling watermark cannot declare change_capture mode"))
 		}
 		if _, duplicate := seen[mode]; duplicate {
-			return fmt.Errorf("polling watermark declares duplicate sync mode %q", mode)
+			return declarationDiagnosticFailure(fmt.Sprintf("/%d", index), "polling_mode_duplicate", "polling watermark declares duplicate sync mode", fmt.Errorf("polling watermark declares duplicate sync mode %q", mode))
 		}
 		seen[mode] = struct{}{}
 	}
@@ -538,4 +539,30 @@ func validPollingIdentity(value string) bool {
 		return false
 	}
 	return true
+}
+
+// declarationDiagnosticError carries safe producer metadata to the bundle loader
+// without importing engine or changing direct descriptor validation text.
+type declarationDiagnosticError struct {
+	field, code, reason string
+	cause               error
+}
+
+func (e *declarationDiagnosticError) Error() string { return e.cause.Error() }
+func (e *declarationDiagnosticError) Unwrap() error { return e.cause }
+func (e *declarationDiagnosticError) BundleDiagnostic() (string, string, string) {
+	return e.field, e.code, e.reason
+}
+func declarationDiagnosticFailure(field, code, reason string, cause error) error {
+	return &declarationDiagnosticError{field, code, reason, cause}
+}
+func declarationDiagnosticWithin(prefix string, cause error) error {
+	var located interface {
+		BundleDiagnostic() (string, string, string)
+	}
+	if !errors.As(cause, &located) {
+		return cause
+	}
+	field, code, reason := located.BundleDiagnostic()
+	return declarationDiagnosticFailure(prefix+field, code, reason, cause)
 }

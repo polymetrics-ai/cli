@@ -2,7 +2,6 @@ package cli_test
 
 import (
 	"bytes"
-	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -86,26 +85,19 @@ func TestDynamicConnectorHelpAndBareNamespace(t *testing.T) {
 	}
 }
 
-func TestSourceBoundOriginRejectsBeforeAppOrCredential(t *testing.T) {
+func TestConfigurableAsanaOriginRequiresProjectBeforeCredential171(t *testing.T) {
 	root := filepath.Join(t.TempDir(), "uninitialized-project")
+	var requests atomic.Int64
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		requests.Add(1)
+		w.WriteHeader(http.StatusInternalServerError)
+	}))
+	defer server.Close()
 	var stdout, stderr bytes.Buffer
-	code := cli.Run([]string{
-		"--root", root,
-		"asana", "custom-fields", "list",
-		"--credential", "unresolved-credential",
-		"--config", "base_url=https://invalid.example",
-	}, &stdout, &stderr)
-	if code == 0 {
-		t.Fatalf("Run(source-bound invalid origin) succeeded; stdout=%s stderr=%s", stdout.String(), stderr.String())
-	}
+	code := cli.Run([]string{"--root", root, "asana", "custom-fields", "list", "--credential", "unresolved-credential", "--config", "base_url=" + server.URL}, &stdout, &stderr)
 	output := stdout.String() + stderr.String()
-	if !strings.Contains(output, `source-bound provider operation "custom_fields" rejects configured base_url override`) {
-		t.Fatalf("invalid source origin did not reach source-bound preflight:\n%s", output)
-	}
-	for _, forbidden := range []string{"missing project", "missing --credential"} {
-		if strings.Contains(output, forbidden) {
-			t.Fatalf("invalid source origin reached App or credential handling (%q):\n%s", forbidden, output)
-		}
+	if code == 0 || !strings.Contains(output, "open project at "+filepath.Join(root, ".polymetrics")) || strings.Contains(output, "read encrypted credential") || strings.Contains(output, "source-bound provider operation") || requests.Load() != 0 {
+		t.Fatalf("configurable get_custom_fields_for_workspace did not stop at project boundary: code=%d requests=%d output=%s", code, requests.Load(), output)
 	}
 }
 
@@ -188,42 +180,45 @@ func TestSentrySeerModelsHelpAndBareNamespaces(t *testing.T) {
 	}
 }
 
-func TestSourceBoundOriginRejectsPersistedCredentialConfigBeforeVault(t *testing.T) {
+func TestConfigurableAsanaOriginRequiresVaultBeforeProvider171(t *testing.T) {
 	root := t.TempDir()
 	if err := app.InitProject(root); err != nil {
-		t.Fatalf("InitProject: %v", err)
+		t.Fatal(err)
 	}
 	project, err := app.Open(root)
 	if err != nil {
-		t.Fatalf("Open: %v", err)
+		t.Fatal(err)
 	}
-	credential, err := project.AddCredential(context.Background(), app.AddCredentialRequest{
-		Name:      "asana-persisted-origin",
-		Connector: "asana",
-		Config:    map[string]string{"base_url": "https://invalid.example"},
-	})
+	var requests atomic.Int64
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		requests.Add(1)
+		if r.Method != "GET" || r.URL.Path != "/workspaces/workspace-171/custom_fields" {
+			t.Errorf("unexpected fixture request %s %s", r.Method, r.URL.Path)
+			w.WriteHeader(404)
+			return
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"data":[{"gid":"field-171","name":"Fixture field"}]}`))
+	}))
+	defer server.Close()
+	credential, err := project.AddCredential(t.Context(), app.AddCredentialRequest{Name: "asana-local-171", Connector: "asana", Secrets: map[string]string{"access_token": "synthetic-local-token"}, Config: map[string]string{"base_url": server.URL, "workspace_id": "workspace-171"}})
 	if err != nil {
-		t.Fatalf("AddCredential: %v", err)
+		t.Fatal(err)
+	}
+	args := []string{"--root", root, "asana", "custom-fields", "list", "--credential", credential.Name, "--json"}
+	var stdout, stderr bytes.Buffer
+	if code := cli.Run(args, &stdout, &stderr); code != 0 || requests.Load() != 1 || !strings.Contains(stdout.String(), "field-171") {
+		t.Fatalf("healthy configured operation failed: requests=%d stdout=%s stderr=%s", requests.Load(), stdout.String(), stderr.String())
 	}
 	if err := os.Remove(filepath.Join(root, ".polymetrics", "vault", credential.ID+".enc")); err != nil {
-		t.Fatalf("remove temporary encrypted credential: %v", err)
+		t.Fatal(err)
 	}
-
-	var stdout, stderr bytes.Buffer
-	code := cli.Run([]string{
-		"--root", root,
-		"asana", "custom-fields", "list",
-		"--credential", credential.Name,
-	}, &stdout, &stderr)
-	if code == 0 {
-		t.Fatalf("Run(persisted source-bound invalid origin) succeeded; stdout=%s stderr=%s", stdout.String(), stderr.String())
-	}
+	stdout.Reset()
+	stderr.Reset()
+	code := cli.Run(args, &stdout, &stderr)
 	output := stdout.String() + stderr.String()
-	if !strings.Contains(output, `source-bound provider operation "custom_fields" rejects configured base_url override`) {
-		t.Fatalf("persisted invalid source origin did not reach early preflight:\n%s", output)
-	}
-	if strings.Contains(output, "read encrypted credential") {
-		t.Fatalf("persisted invalid source origin reached vault access:\n%s", output)
+	if code == 0 || !strings.Contains(output, "read encrypted credential") || strings.Contains(output, "source-bound provider operation") || requests.Load() != 1 {
+		t.Fatalf("missing vault did not refuse before provider I/O: requests=%d output=%s", requests.Load(), output)
 	}
 }
 
@@ -247,6 +242,21 @@ func TestSourceBoundReadHelpUsesClosedPagingFlags(t *testing.T) {
 		if strings.Contains(commandFlags, rawPagingFlag) {
 			t.Fatalf("source-bound direct-read command flags expose raw provider paging %q:\n%s", strings.TrimSpace(rawPagingFlag), help)
 		}
+	}
+}
+
+func TestSourceBoundStreamDirectReadHelpUsesStreamLimitWithoutPageFlags(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{"asana", "tasks", "list", "--help"}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("Run(source-bound stream help) code = %d stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+	help := stdout.String()
+	if strings.Contains(help, "PAGE FLAGS") || strings.Contains(help, "--page-cursor") {
+		t.Fatalf("stream-backed direct-read help exposes unsupported direct-read navigation:\n%s", help)
+	}
+	if !strings.Contains(help, "--limit") {
+		t.Fatalf("stream-backed direct-read help omitted its bounded stream limit:\n%s", help)
 	}
 }
 
@@ -655,7 +665,7 @@ func TestBareCommandJSONShowsManualForAgents(t *testing.T) {
 	}
 }
 
-func TestConnectorsManualDocumentsConnectorArchitectureAndGithubExamples(t *testing.T) {
+func TestConnectorsManualDocumentsExecutionBundlesAndGithubExamples(t *testing.T) {
 	var stdout, stderr bytes.Buffer
 	code := cli.Run([]string{"connectors"}, &stdout, &stderr)
 	if code != 0 {
@@ -663,16 +673,13 @@ func TestConnectorsManualDocumentsConnectorArchitectureAndGithubExamples(t *test
 	}
 	out := stdout.String()
 	for _, want := range []string{
-		"declarative JSON bundles",
+		"schema-4 source.lock.json",
+		"execution JSON bundles",
 		"write=true/false",
 		"REVERSE ETL WRITE ACTIONS",
-		"DECLARATION-BOUND STRUCTURED WRITE INPUTS",
+		"SCHEMA-BOUND STRUCTURED WRITE INPUTS",
 		"There is no raw\n  --body flag",
 		"pm connectors catalog --capability write --json",
-		"pm connectors certify <connector> [--full | --direct-read-only | --write-only] [--resume] [--external-proof] [--full-parity] [--from-env field=ENV | --value-stdin field] [--json]",
-		"legacy_unverified",
-		"provider-artifact",
-		"provenance evidence",
 		"GITHUB AUTHENTICATION",
 		"public",
 		"token",
@@ -699,7 +706,7 @@ func TestConnectorInspectHumanShowsManualNotRawJSON(t *testing.T) {
 	if strings.HasPrefix(strings.TrimSpace(out), "{") {
 		t.Fatalf("human connector inspect returned raw JSON:\n%s", out)
 	}
-	for _, want := range []string{"NAME", "SYNOPSIS", "AUTHENTICATION", "ETL STREAMS", "REVERSE ETL ACTIONS", "AGENT WORKFLOW", "CERTIFICATION", "COMMUNITY BUILD, UNCERTIFIED"} {
+	for _, want := range []string{"NAME", "SYNOPSIS", "AUTHENTICATION", "ETL STREAMS", "REVERSE ETL ACTIONS", "AGENT WORKFLOW"} {
 		if !strings.Contains(out, want) {
 			t.Fatalf("human connector manual missing %q:\n%s", want, out)
 		}
@@ -720,6 +727,82 @@ func TestDocsGenerateAndValidateConnectorDocs(t *testing.T) {
 	code = cli.Run([]string{"docs", "validate", "--connectors-dir", connectorsDir}, &stdout, &stderr)
 	if code != 0 {
 		t.Fatalf("docs validate code = %d stderr = %s stdout = %s", code, stderr.String(), stdout.String())
+	}
+}
+
+func TestDocsConnectorGenerateAndValidateSelectedOnly(t *testing.T) {
+	dir := t.TempDir()
+	connectorsDir := filepath.Join(dir, "connectors")
+	const selected = "asana"
+
+	sentinels := map[string]string{
+		filepath.Join(connectorsDir, "github", "MANUAL.md"):            "unselected manual sentinel\n",
+		filepath.Join(connectorsDir, "github", "SKILL.md"):             "unselected skill sentinel\n",
+		filepath.Join(connectorsDir, "icons", "github.svg"):            "unselected icon sentinel\n",
+		filepath.Join(connectorsDir, "README.md"):                      "shared README sentinel\n",
+		filepath.Join(connectorsDir, "catalog", "all-connectors.json"): "shared catalog JSON sentinel\n",
+		filepath.Join(connectorsDir, "catalog", "all-connectors.md"):   "shared catalog markdown sentinel\n",
+	}
+	for path, content := range sentinels {
+		if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
+			t.Fatalf("create sentinel parent %s: %v", path, err)
+		}
+		if err := os.WriteFile(path, []byte(content), 0o644); err != nil {
+			t.Fatalf("write sentinel %s: %v", path, err)
+		}
+	}
+
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{"docs", "connector", "generate", "--connector", selected, "--connectors-dir", connectorsDir}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("selected docs generate code = %d stderr = %s", code, stderr.String())
+	}
+	for path, want := range map[string]string{
+		filepath.Join(connectorsDir, selected, "MANUAL.md"): "# pm connectors inspect asana",
+		filepath.Join(connectorsDir, selected, "SKILL.md"):  "name: pm-asana",
+		filepath.Join(connectorsDir, "icons", "asana.svg"):  "<svg",
+	} {
+		content, err := os.ReadFile(path)
+		if err != nil {
+			t.Fatalf("read selected output %s: %v", path, err)
+		}
+		if !strings.Contains(string(content), want) {
+			t.Fatalf("selected output %s missing %q", path, want)
+		}
+	}
+	for path, want := range sentinels {
+		got, err := os.ReadFile(path)
+		if err != nil {
+			t.Fatalf("read untouched output %s: %v", path, err)
+		}
+		if string(got) != want {
+			t.Fatalf("untouched output %s = %q, want %q", path, got, want)
+		}
+	}
+
+	stdout.Reset()
+	stderr.Reset()
+	code = cli.Run([]string{"docs", "connector", "validate", "--connector=" + selected, "--connectors-dir=" + connectorsDir}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("selected docs validate code = %d stderr = %s stdout = %s", code, stderr.String(), stdout.String())
+	}
+
+	selectedSkillPath := filepath.Join(connectorsDir, selected, "SKILL.md")
+	selectedSkill, err := os.ReadFile(selectedSkillPath)
+	if err != nil {
+		t.Fatalf("read selected skill before staleness check: %v", err)
+	}
+	if err := os.WriteFile(selectedSkillPath, append(selectedSkill, []byte("\nstale selected skill\n")...), 0o644); err != nil {
+		t.Fatalf("write stale selected skill: %v", err)
+	}
+	stdout.Reset()
+	stderr.Reset()
+	code = cli.Run([]string{"docs", "connector", "validate", "--connector", selected, "--connectors-dir", connectorsDir}, &stdout, &stderr)
+	if code != 1 {
+		t.Fatalf("stale selected docs validate code = %d, want 1; stderr = %s", code, stderr.String())
+	}
+	if got := stderr.String(); !strings.Contains(got, "pm docs connector generate --connector asana") || strings.Contains(got, "run pm docs generate") {
+		t.Fatalf("selected validation regeneration guidance = %q, want scoped command only", got)
 	}
 }
 
@@ -781,23 +864,10 @@ func TestETLHelpListsAllSyncModes(t *testing.T) {
 	if code != 0 {
 		t.Fatalf("Run(help etl) code = %d stderr = %s", code, stderr.String())
 	}
-	out := stdout.String()
-	for _, want := range []string{
-		"full_refresh_append",
-		"full_refresh_overwrite",
-		"full_refresh_overwrite_deduped",
-		"Compatibility name for typed full_overwrite admission",
-		"incremental_append",
-		"incremental_append_deduped",
-		"Compatibility name for typed incremental_dedupe admission",
-		"incremental_dedupe",
-		"incremental_dedupe_history",
-		"retains deduplicated source versions with _valid_from, _valid_to, and _is_current fields",
-	} {
-		if !strings.Contains(out, want) {
-			t.Fatalf("etl help missing %q:\n%s", want, out)
-		}
+	if !etlHelpContract171(stdout.String()) {
+		t.Fatalf("etl help lost mode or compatibility/refusal contract: %s", stdout.String())
 	}
+
 }
 
 func TestETLRejectsLegacyPrefixedConnectorCommands(t *testing.T) {

@@ -10,7 +10,7 @@ SYNOPSIS
   pm credentials add <name> --connector alpha-vantage [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads Alpha Vantage daily, weekly, monthly, and intraday OHLCV time series plus the latest global quote for a configured stock symbol.
+  Reads daily, weekly, monthly, and intraday OHLCV time series plus latest global quotes through fixed Alpha Vantage query operations.
 
 ICON
   id: alpha-vantage
@@ -23,15 +23,44 @@ CAPABILITIES
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  adjusted
+  interval
+  outputsize
+  symbol (required)
+  api_key (secret) (required)
+
+ETL STREAMS
+  time_series_daily:
+    primary key: symbol, date
+    cursor: date
+    fields: close(number), date(string), high(number), low(number), open(number), symbol(string), volume(integer)
+  time_series_weekly:
+    primary key: symbol, date
+    cursor: date
+    fields: close(number), date(string), high(number), low(number), open(number), symbol(string), volume(integer)
+  time_series_monthly:
+    primary key: symbol, date
+    cursor: date
+    fields: close(number), date(string), high(number), low(number), open(number), symbol(string), volume(integer)
+  time_series_intraday:
+    primary key: symbol, date
+    cursor: date
+    fields: close(number), date(string), high(number), low(number), open(number), symbol(string), volume(integer)
+  global_quote:
+    primary key: symbol, latest_trading_day
+    cursor: latest_trading_day
+    fields: change(number), change_percent(string), high(number), latest_trading_day(string), low(number), open(number), previous_close(number), price(number), symbol(string), volume(integer)
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: Bounded Alpha Vantage query reads use the fixed provider origin and declared API-key query authentication.
+  write risk: unsupported
+  approval: none; read-only
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

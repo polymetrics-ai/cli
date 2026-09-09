@@ -35,7 +35,7 @@
     },
     "mode": {
       "type": "string",
-      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+      "description": "Runtime mode: live (default) or fixture for credential-free fixture tests."
     }
   }
 }

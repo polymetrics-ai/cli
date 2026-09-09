@@ -453,7 +453,7 @@ func executeApprovedWrite(ctx context.Context, b Bundle, action WriteAction, req
 				return result, &Error{Connector: b.Name, Action: step.action.Name, Page: -1, RecordIndex: recordIndex, Err: errors.New("prepared request no longer matches its approved execution plan")}
 			}
 			idempotencyKey := writeIdempotencyKey(b.Name, step.action, previewDigest, req.DeliveryOccurrence, requestIndex)
-			response, err := executeWriteRecordWithResponse(ctx, b, step.action, pinned, recordIndex, cfg, rt, idempotencyKey)
+			response, err := executeWriteRecordWithResponse(ctx, b, step.action, pinned, recordIndex, cfg, rt, idempotencyKey, req.DisableRetries)
 			responses[stepIndex] = response
 			requestIndex++
 			var responseErr error
@@ -463,6 +463,9 @@ func executeApprovedWrite(ctx context.Context, b Bundle, action WriteAction, req
 				responseErr = providerResponseErr
 				if responseErr == nil && err == nil {
 					responseErr = validateWriteActionSuccessStatus(step.action, response.Status)
+				}
+				if responseErr == nil && err == nil {
+					responseErr = validateWriteActionResponseSchema(step.action, response)
 				}
 			}
 			if responseErr != nil {
@@ -478,6 +481,12 @@ func executeApprovedWrite(ctx context.Context, b Bundle, action WriteAction, req
 				result.RecordsFailed = len(records) - result.RecordsWritten - result.RecordsUnchanged
 				class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
 				return result, &Error{Connector: b.Name, Action: step.action.Name, Page: -1, RecordIndex: recordIndex, Class: class, Hint: hint, Err: redactWriteActionError(err, step.action, pinned)}
+			}
+			if step.action.DeclaredBatch != nil {
+				if err := validateDeclaredBatchResponse(step.action, pinned, response); err != nil {
+					result.RecordsFailed = len(records) - result.RecordsWritten - result.RecordsUnchanged
+					return result, &Error{Connector: b.Name, Action: step.action.Name, Page: -1, RecordIndex: recordIndex, Err: redactWriteActionError(err, step.action, pinned)}
+				}
 			}
 			if responseValidator != nil {
 				if err := responseValidator.ValidatePreparedWriteResponse(step.action, pinned, response); err != nil {
@@ -507,6 +516,34 @@ func validateWriteActionSuccessStatus(action WriteAction, status int) error {
 		}
 	}
 	return fmt.Errorf("provider response status %d is not declared successful for write action %q", status, action.Name)
+}
+
+// validateWriteActionResponseSchema applies the declaration-owned response
+// schema only after transport and exact-status success. It deliberately does
+// not reinterpret error responses as successes, and it refuses a status-only
+// JSON claim when the provider omitted or contradicted the declared media.
+func validateWriteActionResponseSchema(action WriteAction, response *connsdk.Response) error {
+	if len(action.ResponseSchema) == 0 {
+		return nil
+	}
+	if response == nil {
+		return fmt.Errorf("write action %q response_schema received no provider response", action.Name)
+	}
+	if !writeProviderResponseDeclaresJSON(response.Header) {
+		return fmt.Errorf("write action %q response_schema requires application/json response", action.Name)
+	}
+	schema, err := CompileSchema(action.ResponseSchema)
+	if err != nil {
+		return fmt.Errorf("write action %q response_schema: %w", action.Name, err)
+	}
+	decoded, err := decodeDirectReadBody(response.Body, connsdk.DefaultMaxResponseBody)
+	if err != nil {
+		return fmt.Errorf("write action %q response_schema: provider response is not valid JSON", action.Name)
+	}
+	if err := schema.Validate(decoded); err != nil {
+		return fmt.Errorf("write action %q response_schema: %w", action.Name, err)
+	}
+	return nil
 }
 
 func preparedRequestMatchesExecution(current, approved PreparedRequest) bool {
@@ -582,7 +619,7 @@ func executeWriteRecord(ctx context.Context, b Bundle, action WriteAction, rec c
 // executeWriteRecordWithResponse is the private result-preserving form used
 // by the named-action executor. The exported connector surface remains the
 // closed WriteAction contract; no caller can provide a route, verb, or body.
-func executeWriteRecordWithResponse(ctx context.Context, b Bundle, action WriteAction, rec connectors.Record, recordIndex int, cfg connectors.RuntimeConfig, rt *Runtime, idempotencyKey string) (*connsdk.Response, error) {
+func executeWriteRecordWithResponse(ctx context.Context, b Bundle, action WriteAction, rec connectors.Record, recordIndex int, cfg connectors.RuntimeConfig, rt *Runtime, idempotencyKey string, disableRetries ...bool) (*connsdk.Response, error) {
 	vars := Vars{Config: cfg.Config, Secrets: cfg.Secrets, Record: map[string]any(rec)}
 
 	path, err := InterpolatePath(action.Path, vars)
@@ -608,13 +645,19 @@ func executeWriteRecordWithResponse(ctx context.Context, b Bundle, action WriteA
 	if err != nil {
 		return nil, err
 	}
-	requester, err := writeRequester(requesterForAction, action, idempotencyKey)
+	requester, err := writeRequester(requesterForAction, action, idempotencyKey, len(disableRetries) != 0 && disableRetries[0])
 	if err != nil {
 		return nil, err
 	}
 	requester.BaseURL = baseURL
 
 	switch bodyTypeOf(action) {
+	case "declared_batch":
+		payload, _, err := buildDeclaredBatchPayload(b, action, rec, cfg)
+		if err != nil {
+			return nil, err
+		}
+		return requester.DoLimited(ctx, method, path, query, payload, connsdk.DefaultMaxResponseBody)
 	case "form":
 		form := buildForm(rec, action.PathFields)
 		return requester.DoFormLimited(ctx, method, path, query, form, connsdk.DefaultMaxResponseBody)
@@ -791,7 +834,7 @@ func writeProviderHeaders(headers map[string][]string) map[string]connectors.Wri
 
 // writeRequester clones the shared requester and permits mutation replay only
 // when the action carries provider-scoped idempotency evidence.
-func writeRequester(base *connsdk.Requester, action WriteAction, idempotencyKey string) (*connsdk.Requester, error) {
+func writeRequester(base *connsdk.Requester, action WriteAction, idempotencyKey string, disableRetries bool) (*connsdk.Requester, error) {
 	if base == nil {
 		return nil, fmt.Errorf("engine: write action %q: requester is nil", action.Name)
 	}
@@ -803,6 +846,9 @@ func writeRequester(base *connsdk.Requester, action WriteAction, idempotencyKey 
 			continue
 		}
 		requester.DefaultHeaders[name] = value
+	}
+	if disableRetries {
+		requester.DisableRetries = true
 	}
 	if header == "" {
 		if action.Kind != "delete" || action.Delete == nil || !action.Delete.Idempotent {
@@ -1331,7 +1377,7 @@ func buildMultipartPayload(action WriteAction, rec connectors.Record, recordInde
 	if action.Multipart == nil {
 		return connsdk.MultipartForm{}, fmt.Errorf("engine: write action %q: multipart spec is required", action.Name)
 	}
-	form := connsdk.MultipartForm{Fields: map[string]string{}, MaxBytes: action.Multipart.MaxBytes}
+	form := connsdk.MultipartForm{Fields: map[string]string{}, MaxBytes: action.Multipart.MaxBytes, MaxMetadataBytes: action.Multipart.MaxMetadataBytes}
 	var total int64
 	for _, part := range action.Multipart.Parts {
 		value, err := resolveRecordPathValue(map[string]any(rec), strings.Split(part.Field, "."))
@@ -1368,7 +1414,8 @@ func buildMultipartPayload(action WriteAction, rec connectors.Record, recordInde
 				return connsdk.MultipartForm{}, fmt.Errorf("engine: write action %q: multipart payload too large: %d bytes exceeds limit %d", action.Name, total, action.Multipart.MaxBytes)
 			}
 			form.Files = append(form.Files, connsdk.MultipartFile{
-				FieldName: part.Name,
+				FieldName:        part.Name,
+				FilenameEncoding: part.FilenameEncoding,
 				// Root and RelPath, not an absolute path: every later Stat and
 				// Open re-checks containment instead of trusting this one.
 				Root:              root,
@@ -1392,7 +1439,7 @@ func buildMultipartPayload(action WriteAction, rec connectors.Record, recordInde
 // confinement, part declarations, and aggregate limits with execution; it
 // never reads an undeclared record field or returns payload bytes.
 //
-// Fixture conformance uses this before issuing its synthetic approval grant.
+// Fixture tests use this before issuing their synthetic approval grant.
 // Production callers retain the App-owned plan identity flow, which records
 // the same opaque SHA-256 values with its persisted plan.
 func ApprovedMultipartPayloadSHA256ForWrite(ctx context.Context, b Bundle, req connectors.WriteRequest, records []connectors.Record, h Hooks) (map[string]string, error) {

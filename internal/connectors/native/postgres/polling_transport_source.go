@@ -22,9 +22,7 @@ import (
 )
 
 const (
-	postgresPollingTransportID      = "postgres_polling_watermark"
-	postgresPollingConformanceSuite = "postgres_polling_watermark"
-	postgresPollingConformanceRunID = "shared_source_v1"
+	postgresPollingTransportID = "postgres_polling_watermark"
 	// postgresPollingProtocolVersion is shared-engine-owned so PostgreSQL's
 	// pre-I/O admission cannot reject a checkpoint the shared executor emits.
 	postgresPollingProtocolVersion = engine.PollingSourceProtocolVersion
@@ -66,10 +64,6 @@ func NewPollingTransportSource(connector Connector) *PollingTransportSource {
 func PollingTransportDefinitionFactory() synctransport.DefinitionFactory {
 	return synctransport.DefinitionFactory{
 		Reference: postgresPollingTransportReference,
-		SourceEvidence: connectors.ConformanceEvidenceReference{
-			Suite: postgresPollingConformanceSuite,
-			RunID: postgresPollingConformanceRunID,
-		},
 		BuildSource: func(connector connectors.Connector) (synctransport.SourceExecutor, error) {
 			switch typed := connector.(type) {
 			case Connector:
@@ -332,10 +326,6 @@ func (postgresPollingPreflightApply) PollingApplyExecutorReference() connectors.
 	return postgresManagedTargetTransportReference
 }
 
-func (postgresPollingPreflightApply) PollingApplyConformanceEvidence() engine.PollingWatermarkConformanceEvidence {
-	return engine.RequiredPollingWatermarkConformanceEvidence()
-}
-
 type postgresPollingReadPlan struct {
 	relation      database.Relation
 	columns       []database.Column
@@ -506,9 +496,6 @@ type postgresPollingSourceRunner struct {
 func (r *postgresPollingSourceRunner) PollingSourceExecutorReference() connectors.TransportExecutorReference {
 	return r.reference
 }
-func (*postgresPollingSourceRunner) PollingSourceConformanceEvidence() engine.PollingWatermarkConformanceEvidence {
-	return engine.RequiredPollingWatermarkConformanceEvidence()
-}
 func (r *postgresPollingSourceRunner) PollingSourceDatabaseDefinition() database.Definition {
 	if r == nil {
 		return database.Definition{}
@@ -564,9 +551,6 @@ type postgresFixturePollingRunner struct {
 
 func (r *postgresFixturePollingRunner) PollingSourceExecutorReference() connectors.TransportExecutorReference {
 	return r.reference
-}
-func (*postgresFixturePollingRunner) PollingSourceConformanceEvidence() engine.PollingWatermarkConformanceEvidence {
-	return engine.RequiredPollingWatermarkConformanceEvidence()
 }
 func (r *postgresFixturePollingRunner) PollingSourceDatabaseDefinition() database.Definition {
 	if r == nil {

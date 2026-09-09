@@ -1,60 +1,32 @@
-# ADR 0001 — Connectors as data (JSON defs bundles + declarative engine)
+# ADR 0001 — Connectors as immutable authoring data and rendered execution data
 
-- Status: Accepted (2026-07-02)
-- Deciders: user (approved plan `~/.claude/plans/please-check-all-the-serialized-storm.md`)
-- Context docs: `docs/architecture/connector-architecture-v2-design.md` (full design),
-  `docs/architecture/connector-certification-design.md`,
-  `docs/connector-canon/INDEX.md`
-
-> **Historical decision record:** this ADR preserves the accepted architectural direction. Its
-> 2026-07 inventory and rollout measurements are not current capability or certification claims;
-> use the connector canon for those.
-
-## Context
-
-The `pm` CLI carries ~556 hand-written Go connector packages (~309k lines) whose manifests,
-schemas, and write actions live in Go structs (`internal/connectors/manifest.go`, per-connector
-`streams.go`). The catalog derives from Airbyte residue (`catalog_data.json`, `source-`/
-`destination-` slugs via `slug.go`), only 2 connectors implement reverse-ETL writes, and
-conformance runs against synthetic fixture records that bypass real request/pagination/cursor
-logic.
+- Status: Superseded by the vNext connector data model (2026-09-01)
+- Current architecture: [`docs/connector-canon/SOURCE-LOCK-VNEXT.md`](../connector-canon/SOURCE-LOCK-VNEXT.md)
 
 ## Decision
 
-1. **Connector definitions become split JSON bundles** under `internal/connectors/defs/<name>/`
-   (`metadata.json`, `spec.json` with `x-secret`, `streams.json`, `writes.json`,
-   `api_surface.json`, `schemas/*.json` with `x-primary-key`/`x-cursor-field`, `fixtures/`,
-   `docs.md`), embedded via a single `go:embed`, executed by a well-tested declarative engine
-   (`internal/connectors/engine/`) built on the existing `connsdk` toolkit.
-2. **Three strict tiers**: declarative-only (target ≥90%), bundle + named hooks (≤300 lines Go),
-   full native with mandated component split (~10 connectors) — escape hatches are additive,
-   never replacements; conformance rejects Go where JSON suffices.
-3. **Sync modes are derived, never declared** (from `x-primary-key` / `incremental` presence).
-4. **Unified bare names, clean break** (no slug aliases) and **the catalog is a view over loaded
-   definitions** — executed at convergence (wave6), not incrementally.
-5. **Minimal internal draft-07 validator and tiny interpolator** — no new Go module dependencies;
-   only the keywords/filters the bundles actually use.
-6. **Migration is staged**: wave0 builds engine+harness alongside legacy with three golden
-   parity-tested migrations (stripe, searxng, postgres); registry flip and deletion happen only
-   at wave6 behind a human gate.
+Connector authors record provider facts in an immutable schema-4
+`source.lock.json`. The connector generator validates that lock, resolves shared
+schema references into one canonical per-operation descriptor, and renders the
+deterministic execution JSON consumed by the runtime.
 
-## Alternatives considered
+The source lock and its evidence remain outside execution. Runtime discovery,
+planning, approval, authentication, encoding, transport, DuckDB materialization,
+and sync execution load only the rendered bundle. A missing or malformed
+execution file fails closed; there is no alternate reader or secondary route.
 
-- Keep Go connectors, generate manifests to JSON: rejected — doesn't close the capability gap or
-  enable ~105-agent parallel authoring; drift remains possible.
-- One `manifest.json` per connector: rejected — poor diff hygiene and agent readability
-  (design §A decision).
-- Adopt an existing JSON-Schema library / template engine: rejected — dependency-free rule; the
-  needed subset is small and a full engine invites bundle complexity beyond the three-tier policy.
-- Big-bang rewrite with immediate registry flip: rejected — parity risk across 556 connectors;
-  staged waves with parity gates chosen instead.
+Every connector declares exactly seven lanes: direct read, direct write, binary
+download, binary upload, ETL, reverse ETL, and sync transport. Unsupported lanes
+are explicit empty arrays. One source operation may populate more than one lane
+when the provider operation genuinely serves those execution semantics.
 
 ## Consequences
 
-- (+) A connector like aircall drops from ~723 lines of Go to zero; agents author/diff JSON.
-- (+) Conformance v2 exercises the real engine against recorded pages; certification becomes
-  possible per credential.
-- (−) The engine is a single point of failure → mitigated by ≥85% coverage gate, golden parity
-  tests, and the `ENGINE_GAP` blocker protocol (≥3 same-type gaps → engine extension wave).
-- (−) Two representations coexist until wave6 → mitigated by test-only construction of engine
-  connectors and a byte-identical `registryset` invariant during waves 0–5.
+- Provider evidence is reviewable without becoming runtime state.
+- Rendering is reproducible and drift is checked byte-for-byte.
+- Runtime-invalid bindings fail before provider I/O.
+- Diagnostic reports are advisory and cannot suppress a documented command.
+- Connector authors follow one workflow from source facts to executable proof.
+
+The authoritative schema, renderer, error rules, proof matrix, and author
+procedure live in the current architecture document linked above.

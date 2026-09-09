@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "purl_types": {
+      "items": {},
+      "maxItems": 256,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "sbom_digest": {
+      "maxLength": 8192,
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "purl_types",
+    "sbom_digest"
+  ],
+  "type": "object"
+}

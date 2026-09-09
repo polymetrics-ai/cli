@@ -3,20 +3,38 @@
     "url": "{{ config.base_url }}",
     "user_agent": "polymetrics-go-cli",
     "auth": [
-      { "mode": "bearer", "token": "{{ secrets.access_token }}" }
+      {
+        "mode": "bearer",
+        "token": "{{ secrets.access_token }}"
+      }
     ],
-    "check": { "method": "GET", "path": "/webmasters/v3/sites" },
+    "check": {
+      "method": "GET",
+      "path": "/webmasters/v3/sites"
+    },
     "error_map": [
-      { "status": 401, "hint": "google-search-console access_token is missing, expired, or invalid; re-run pm credentials add google-search-console" },
-      { "status": 403, "hint": "google-search-console account lacks access for this site property/request" },
-      { "status": 429, "class": "rate_limited", "hint": "google-search-console rate limit exceeded; the connector will retry with backoff" }
+      {
+        "status": 401,
+        "hint": "google-search-console access_token is missing, expired, or invalid; re-run pm credentials add google-search-console"
+      },
+      {
+        "status": 403,
+        "hint": "google-search-console account lacks access for this site property/request"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "google-search-console rate limit exceeded; the connector will retry with backoff"
+      }
     ]
   },
   "streams": [
     {
       "name": "sites",
       "path": "/webmasters/v3/sites",
-      "records": { "path": "siteEntry" },
+      "records": {
+        "path": "siteEntry"
+      },
       "computed_fields": {
         "site_url": "{{ record.siteUrl }}",
         "permission_level": "{{ record.permissionLevel }}"
@@ -26,8 +44,13 @@
     {
       "name": "site_details",
       "path": "/webmasters/v3/sites/{{ config.site_url }}",
-      "records": { "path": ".", "single_object": true },
-      "pagination": { "type": "none" },
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
       "computed_fields": {
         "site_url": "{{ record.siteUrl }}",
         "permission_level": "{{ record.permissionLevel }}"
@@ -37,10 +60,16 @@
     {
       "name": "sitemaps",
       "path": "/webmasters/v3/sites/{{ fanout.id }}/sitemaps",
-      "records": { "path": "sitemap" },
+      "records": {
+        "path": "sitemap"
+      },
       "fan_out": {
-        "ids_from": { "config_key": "site_urls" },
-        "into": { "path_var": "site_url" },
+        "ids_from": {
+          "config_key": "site_urls"
+        },
+        "into": {
+          "path_var": "site_url"
+        },
         "stamp_field": "site_url"
       },
       "computed_fields": {
@@ -58,8 +87,13 @@
     {
       "name": "sitemap_details",
       "path": "/webmasters/v3/sites/{{ config.site_url }}/sitemaps/{{ config.feedpath }}",
-      "records": { "path": ".", "single_object": true },
-      "pagination": { "type": "none" },
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
       "computed_fields": {
         "site_url": "{{ config.site_url }}",
         "path": "{{ record.path }}",
@@ -77,14 +111,16 @@
       "name": "search_analytics_by_date",
       "path": "/webmasters/v3/sites/{{ fanout.id }}/searchAnalytics/query",
       "method": "POST",
-      "records": { "path": "rows" },
-      "fan_out": {
-        "ids_from": { "config_key": "site_urls" },
-        "into": { "path_var": "site_url" }
+      "records": {
+        "path": "rows"
       },
-      "conformance": {
-        "skip_dynamic": true,
-        "reason": "StreamHook-dispatched (POST body carries startDate/endDate/dimensions/rowLimit/startRow -- StreamSpec.Body is unwired by the declarative read path, engine/read.go always sends a nil body); hook-covered by internal/connectors/hooks/google-search-console/hooks_test.go and represented by this typed ETL command surface; conformance's declarative fixture replay cannot exercise a StreamHook-only POST-body read"
+      "fan_out": {
+        "ids_from": {
+          "config_key": "site_urls"
+        },
+        "into": {
+          "path_var": "site_url"
+        }
       },
       "schema": "schemas/search_analytics_by_date.json"
     },
@@ -92,14 +128,16 @@
       "name": "search_analytics_by_country",
       "path": "/webmasters/v3/sites/{{ fanout.id }}/searchAnalytics/query",
       "method": "POST",
-      "records": { "path": "rows" },
-      "fan_out": {
-        "ids_from": { "config_key": "site_urls" },
-        "into": { "path_var": "site_url" }
+      "records": {
+        "path": "rows"
       },
-      "conformance": {
-        "skip_dynamic": true,
-        "reason": "StreamHook-dispatched (POST body carries startDate/endDate/dimensions/rowLimit/startRow -- StreamSpec.Body is unwired by the declarative read path, engine/read.go always sends a nil body); hook-covered by internal/connectors/hooks/google-search-console/hooks_test.go and represented by this typed ETL command surface; conformance's declarative fixture replay cannot exercise a StreamHook-only POST-body read"
+      "fan_out": {
+        "ids_from": {
+          "config_key": "site_urls"
+        },
+        "into": {
+          "path_var": "site_url"
+        }
       },
       "schema": "schemas/search_analytics_by_country.json"
     },
@@ -107,14 +145,16 @@
       "name": "search_analytics_by_device",
       "path": "/webmasters/v3/sites/{{ fanout.id }}/searchAnalytics/query",
       "method": "POST",
-      "records": { "path": "rows" },
-      "fan_out": {
-        "ids_from": { "config_key": "site_urls" },
-        "into": { "path_var": "site_url" }
+      "records": {
+        "path": "rows"
       },
-      "conformance": {
-        "skip_dynamic": true,
-        "reason": "StreamHook-dispatched (POST body carries startDate/endDate/dimensions/rowLimit/startRow -- StreamSpec.Body is unwired by the declarative read path, engine/read.go always sends a nil body); hook-covered by internal/connectors/hooks/google-search-console/hooks_test.go and represented by this typed ETL command surface; conformance's declarative fixture replay cannot exercise a StreamHook-only POST-body read"
+      "fan_out": {
+        "ids_from": {
+          "config_key": "site_urls"
+        },
+        "into": {
+          "path_var": "site_url"
+        }
       },
       "schema": "schemas/search_analytics_by_device.json"
     },
@@ -122,14 +162,16 @@
       "name": "search_analytics_by_page",
       "path": "/webmasters/v3/sites/{{ fanout.id }}/searchAnalytics/query",
       "method": "POST",
-      "records": { "path": "rows" },
-      "fan_out": {
-        "ids_from": { "config_key": "site_urls" },
-        "into": { "path_var": "site_url" }
+      "records": {
+        "path": "rows"
       },
-      "conformance": {
-        "skip_dynamic": true,
-        "reason": "StreamHook-dispatched (POST body carries startDate/endDate/dimensions/rowLimit/startRow -- StreamSpec.Body is unwired by the declarative read path, engine/read.go always sends a nil body); hook-covered by internal/connectors/hooks/google-search-console/hooks_test.go and represented by this typed ETL command surface; conformance's declarative fixture replay cannot exercise a StreamHook-only POST-body read"
+      "fan_out": {
+        "ids_from": {
+          "config_key": "site_urls"
+        },
+        "into": {
+          "path_var": "site_url"
+        }
       },
       "schema": "schemas/search_analytics_by_page.json"
     },
@@ -137,14 +179,16 @@
       "name": "search_analytics_by_query",
       "path": "/webmasters/v3/sites/{{ fanout.id }}/searchAnalytics/query",
       "method": "POST",
-      "records": { "path": "rows" },
-      "fan_out": {
-        "ids_from": { "config_key": "site_urls" },
-        "into": { "path_var": "site_url" }
+      "records": {
+        "path": "rows"
       },
-      "conformance": {
-        "skip_dynamic": true,
-        "reason": "StreamHook-dispatched (POST body carries startDate/endDate/dimensions/rowLimit/startRow -- StreamSpec.Body is unwired by the declarative read path, engine/read.go always sends a nil body); hook-covered by internal/connectors/hooks/google-search-console/hooks_test.go and represented by this typed ETL command surface; conformance's declarative fixture replay cannot exercise a StreamHook-only POST-body read"
+      "fan_out": {
+        "ids_from": {
+          "config_key": "site_urls"
+        },
+        "into": {
+          "path_var": "site_url"
+        }
       },
       "schema": "schemas/search_analytics_by_query.json"
     }

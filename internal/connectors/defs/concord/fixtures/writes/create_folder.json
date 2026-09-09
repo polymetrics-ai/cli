@@ -1,7 +1,0 @@
-{
-  "record": { "name": "Fixture Folder", "parentId": 0 },
-  "expect": {
-    "method": "POST",
-    "path": "/organizations/synthetic-conformance-value/folders"
-  }
-}

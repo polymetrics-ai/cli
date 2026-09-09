@@ -1,0 +1,11 @@
+# Explicit cached test image policy199
+
+Task delivery: Refs #4344, parent https://github.com/polymetrics-ai/cli/issues/4325 and https://github.com/polymetrics-ai/cli/pull/4294 (API base main). Working fm/cli-top100-declaration-batch-r1-cp17-26; merge target R1, no main merge. Firstmate199 resolves shared-db-cache-197 and authorizes this test-support unit.
+
+Discuss/decision: existing Start always pulls despite verified cached image; add explicit ImagePolicy cache-only, with empty/default pull retained. Integration opts in via POLYMETRICS_DATABASE_IMAGE_POLICY. Reject other policy strings before effects. Keep target, capacity, pinned reference, immutable ID/tagging, owned cleanup and readiness contract. No production API or CLI flag changes. Test harness README only; help/site not applicable.
+
+TDD plan: add representational config field first without behavior (needed to compile test configuration, not RED itself). Exercise actual Start with existing scriptedRunner: cached success zero pull, exact immutable start, absent/invalid cache refusal, wrong tagged identity refusal, tag replacement after selected-ID inspection, rejected daemon before mutation, default pull continuity, owned cleanup after readiness failure. RED must fail intended runtime assertions. Implement policy and GREEN full dbtest plus race. Then existing full physical PostgreSQL test with count1/cache-only and unchanged oracle assertions, original capture/source/image/cleanup evidence.
+
+Only dbtest harness/tests/README, minimal tagged PostgreSQL harness configuration/logging and this phase are writable. Pre-edit mutable files preserved privately at cache-199/pre-edit-inputs.json for196 architect source reconciliation; new HEAD differs by committed194 correction only. No authoring/runtime contract design edits.
+
+GSD: scripts/gsd sources and prompt discuss-phase, plan-phase --tdd, execute-phase, verify-work resolved in cache-199. Inline execution follows canonical single shared-writer contract; no GSD role spawning. Existing loaded how-to, testing, error-handling, safety, security, context, concurrency, database, documentation skills and runtime integration reference apply. Independent shared correction review will be Firstmate-bound, not self-dispatched.

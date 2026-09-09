@@ -139,7 +139,7 @@ func TestGitHubDeclaredParityVerdicts(t *testing.T) {
 }
 
 // TestGitHubDeclaredParityProviderContracts protects the provider shapes that
-// live certification exposed while promoting issue #4015 commands. Provider
+// fake-server execution exposed while promoting issue #4015 commands. Provider
 // identifiers remain strings across plan persistence (JSON numbers lose exact
 // integer spelling), variable writes accept only the declared body fields, and
 // release downloads request bytes rather than GitHub's JSON asset metadata.

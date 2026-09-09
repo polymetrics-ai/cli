@@ -1,8 +1,0 @@
-{
-  "record": { "id": 2001 },
-  "expect": {
-    "method": "POST",
-    "path": "/api/v1/headless/collection/2001/restore"
-  },
-  "response": { "status": 200, "body": true }
-}

@@ -1,4 +1,0 @@
-{
-  "record": { "question_id": 1, "survey_id": 1, "text": "Updated Fixture Question" },
-  "expect": { "method": "PUT", "path": "/questions/1" }
-}

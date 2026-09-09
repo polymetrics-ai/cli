@@ -24,7 +24,7 @@ var (
 
 // DatabaseWriteCapabilities reports PostgreSQL's transactional full-overwrite
 // guarantee. The public connector capability remains false until #3978
-// certification; this private driver capability is consumed only by the shared
+// runtime proof; this private driver capability is consumed only by the shared
 // write-session executor.
 func (*DatabaseDriver) DatabaseWriteCapabilities() database.DatabaseWriteCapabilities {
 	return database.DatabaseWriteCapabilities{AtomicFullOverwrite: true}

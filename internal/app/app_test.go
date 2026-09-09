@@ -453,3 +453,27 @@ func findCapturedBitbucketRequest(requests []capturedBitbucketRequest, method, p
 	}
 	return capturedBitbucketRequest{}, false
 }
+
+func TestDefaultRegistryContainsOnlyBuiltins(t *testing.T) {
+	registry := connectors.NewRegistry()
+	if _, ok := registry.Get("github"); ok {
+		t.Fatal("NewRegistry loaded a process-selected production connector")
+	}
+	if _, ok := registry.Get("sample"); !ok {
+		t.Fatal("NewRegistry omitted builtin sample connector")
+	}
+}
+
+func TestOpenConstructsTheExplicitProductionRegistry(t *testing.T) {
+	root := t.TempDir()
+	if err := app.InitProject(root); err != nil {
+		t.Fatal(err)
+	}
+	instance, err := app.Open(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, ok := instance.Registry().Get("github"); !ok {
+		t.Fatal("Open omitted the explicit production github connector")
+	}
+}

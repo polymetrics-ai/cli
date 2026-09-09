@@ -25,69 +25,95 @@ const (
 // REST-like operation blocks have parameters; GraphQL variables remain the
 // existing fixed-document contract and cannot gain a header escape hatch.
 func validateOperationHeaderParameters(op OperationSpec) error {
+	block, _ := operationExecutionBlock(op)
 	if op.REST != nil {
-		for _, parameter := range op.REST.PaginationParameters {
+		for parameterIndex, parameter := range op.REST.PaginationParameters {
 			if parameter.Repeatable {
-				return fmt.Errorf("pagination parameter %q cannot be repeatable", parameter.Name)
+				return diagnosticAt(fmt.Sprintf("/rest/pagination_parameters/%d/repeatable", parameterIndex), "pagination_repeatable_forbidden", "pagination parameter cannot be repeatable", fmt.Errorf("pagination parameter %q cannot be repeatable", parameter.Name))
 			}
 		}
 	}
 	seen := make(map[string]struct{})
-	for _, parameter := range operationParameters(op) {
+	queryKeys := make([]string, 0)
+	hasProviderQueryAlias := false
+	for parameterIndex, parameter := range operationParameters(op) {
+		fieldPath := fmt.Sprintf("/%s/parameters/%d", block, parameterIndex)
 		location := strings.ToLower(strings.TrimSpace(parameter.In))
 		if err := validateOperationParameterCLIName(parameter, location); err != nil {
-			return err
+			return diagnosticAt(fieldPath+"/cli_name", "parameter_cli_name_invalid", "cli_name must be an exact lowercase hyphenated path flag name", err)
 		}
 		if err := validateOperationParameterNumericBounds(parameter); err != nil {
-			return err
+			return diagnosticWithin(fieldPath, err)
 		}
 		switch location {
-		case "path", "query":
+		case "path":
 			if err := safety.ValidateIdentifier(parameter.Name, "operation "+location+" parameter"); err != nil {
-				return err
+				return diagnosticAt(fieldPath+"/name", "parameter_name_invalid", "parameter name is not supported by its location", err)
 			}
 			if parameter.MaxBytes < 0 || parameter.MaxBytes > maxOperationParameterMaxBytes {
-				return fmt.Errorf("%s parameter %q max_bytes must be omitted or between 1 and %d", location, parameter.Name, maxOperationParameterMaxBytes)
+				return diagnosticAt(fieldPath+"/max_bytes", "parameter_bound_invalid", "parameter max_bytes must be omitted or between 1 and 65536", fmt.Errorf("%s parameter %q max_bytes must be omitted or between 1 and %d", location, parameter.Name, maxOperationParameterMaxBytes))
+			}
+		case "query":
+			if err := safety.ValidateIdentifier(parameter.Name, "operation "+location+" parameter"); err != nil {
+				// The provider-key alias is narrowly available to typed REST
+				// direct reads only. Other execution lanes retain their existing
+				// identifier contract unchanged.
+				if op.Kind != "rest_read" {
+					return diagnosticAt(fieldPath+"/name", "parameter_name_invalid", "parameter name is not supported by its location", err)
+				}
+				if _, ok := ProviderQueryParameterCLIName(parameter.Name); !ok {
+					return diagnosticAt(fieldPath+"/name", "parameter_name_invalid", "parameter name is not supported by its location", err)
+				}
+				hasProviderQueryAlias = true
+			}
+			queryKeys = append(queryKeys, parameter.Name)
+			if parameter.MaxBytes < 0 || parameter.MaxBytes > maxOperationParameterMaxBytes {
+				return diagnosticAt(fieldPath+"/max_bytes", "parameter_bound_invalid", "parameter max_bytes must be omitted or between 1 and 65536", fmt.Errorf("%s parameter %q max_bytes must be omitted or between 1 and %d", location, parameter.Name, maxOperationParameterMaxBytes))
 			}
 		case "header":
 		default:
-			return fmt.Errorf("parameter %q has unsupported location %q", parameter.Name, parameter.In)
+			return diagnosticAt(fieldPath+"/in", "parameter_location_invalid", "parameter location must be path, query or header", fmt.Errorf("parameter %q has unsupported location %q", parameter.Name, parameter.In))
 		}
 		if parameter.Repeatable && parameter.In != "header" {
-			return fmt.Errorf("parameter %q repeatable is supported only for request headers", parameter.Name)
+			return diagnosticAt(fieldPath+"/repeatable", "parameter_repeatable_invalid", "repeatable is supported only for request headers", fmt.Errorf("parameter %q repeatable is supported only for request headers", parameter.Name))
 		}
 		if parameter.In != "header" {
 			continue
 		}
 		name := strings.TrimSpace(parameter.Name)
 		if name == "" || name != parameter.Name || !httpHeaderNamePattern.MatchString(name) {
-			return fmt.Errorf("header parameter name %q is not a valid HTTP field name", parameter.Name)
+			return diagnosticAt(fieldPath+"/name", "parameter_header_name_invalid", "request header name must be a valid HTTP field name", fmt.Errorf("header parameter name %q is not a valid HTTP field name", parameter.Name))
 		}
 		canonical, err := connectors.CanonicalOperationHeaderName(name)
 		if err != nil {
-			return fmt.Errorf("header parameter name %q is not a valid HTTP field name", parameter.Name)
+			return diagnosticAt(fieldPath+"/name", "parameter_header_name_invalid", "request header name must be a valid HTTP field name", fmt.Errorf("header parameter name %q is not a valid HTTP field name", parameter.Name))
 		}
 		if connectors.IsProtectedOperationHeaderName(canonical) {
-			return fmt.Errorf("header parameter %q is protected and runtime-owned", parameter.Name)
+			return diagnosticAt(fieldPath+"/name", "parameter_header_protected", "request header is protected and runtime-owned", fmt.Errorf("header parameter %q is protected and runtime-owned", parameter.Name))
 		}
 		if _, duplicate := seen[canonical]; duplicate {
-			return fmt.Errorf("header parameter %q duplicates another header ignoring case", parameter.Name)
+			return diagnosticAt(fieldPath+"/name", "parameter_header_duplicate", "request header must be unique ignoring case", fmt.Errorf("header parameter %q duplicates another header ignoring case", parameter.Name))
 		}
 		seen[canonical] = struct{}{}
 		if parameter.Type != "" && parameter.Type != "string" {
-			return fmt.Errorf("header parameter %q type must be string", parameter.Name)
+			return diagnosticAt(fieldPath+"/type", "parameter_header_type", "request header type must be string", fmt.Errorf("header parameter %q type must be string", parameter.Name))
 		}
 		if len(parameter.Schema) == 0 {
-			return fmt.Errorf("header parameter %q requires a bounded string schema", parameter.Name)
+			return diagnosticAt(fieldPath+"/schema", "parameter_header_schema_required", "request header requires a bounded string schema", fmt.Errorf("header parameter %q requires a bounded string schema", parameter.Name))
 		}
 		if parameter.MaxBytes <= 0 || parameter.MaxBytes > maxOperationHeaderBytes {
-			return fmt.Errorf("header parameter %q max_bytes must be between 1 and %d", parameter.Name, maxOperationHeaderBytes)
+			return diagnosticAt(fieldPath+"/max_bytes", "parameter_header_bound", "request header max_bytes must be between 1 and 16384", fmt.Errorf("header parameter %q max_bytes must be between 1 and %d", parameter.Name, maxOperationHeaderBytes))
 		}
 		if !operationHeaderSchemaIsString(parameter.Schema) {
-			return fmt.Errorf("header parameter %q schema type must be string", parameter.Name)
+			return diagnosticAt(fieldPath+"/schema/type", "parameter_header_schema_type", "request header schema type must be string", fmt.Errorf("header parameter %q schema type must be string", parameter.Name))
 		}
 		if _, err := CompileSchema(parameter.Schema); err != nil {
-			return fmt.Errorf("header parameter %q schema: %w", parameter.Name, err)
+			return diagnosticWithin(fieldPath+"/schema", fmt.Errorf("header parameter %q schema: %w", parameter.Name, err))
+		}
+	}
+	if hasProviderQueryAlias {
+		if err := ValidateProviderQueryParameterCLINames(queryKeys); err != nil {
+			return diagnosticAt("/"+block+"/parameters", "parameter_alias_conflict", "provider query aliases must be valid and unambiguous", err)
 		}
 	}
 	return nil
@@ -111,31 +137,33 @@ func validateOperationParameterCLIName(parameter OperationParameter, location st
 }
 
 func validateOperationResponseContract(op OperationSpec) error {
+	block, _ := operationExecutionBlock(op)
 	response := operationResponseSpec(op)
 	if response == nil {
 		return nil
 	}
-	for _, declared := range response.SuccessStatuses {
+	for statusIndex, declared := range response.SuccessStatuses {
 		if _, err := parseOperationSuccessStatus(declared); err != nil {
-			return fmt.Errorf("response success status %q: %w", declared, err)
+			return diagnosticAt(fmt.Sprintf("/%s/response/success_statuses/%d", block, statusIndex), "response_status_invalid", "response success status must be a supported status or range", fmt.Errorf("response success status %q: %w", declared, err))
 		}
 	}
 	seen := make(map[string]struct{}, len(response.Headers))
-	for _, header := range response.Headers {
+	for headerIndex, header := range response.Headers {
+		fieldPath := fmt.Sprintf("/%s/response/headers/%d", block, headerIndex)
 		name := strings.TrimSpace(header.Name)
 		if name == "" || name != header.Name || !httpHeaderNamePattern.MatchString(name) {
-			return fmt.Errorf("response header name %q is not a valid HTTP field name", header.Name)
+			return diagnosticAt(fieldPath+"/name", "response_header_name_invalid", "response header name must be a valid HTTP field name", fmt.Errorf("response header name %q is not a valid HTTP field name", header.Name))
 		}
 		canonical, err := connectors.CanonicalOperationHeaderName(name)
 		if err != nil {
-			return fmt.Errorf("response header name %q is not a valid HTTP field name", header.Name)
+			return diagnosticAt(fieldPath+"/name", "response_header_name_invalid", "response header name must be a valid HTTP field name", fmt.Errorf("response header name %q is not a valid HTTP field name", header.Name))
 		}
 		if _, duplicate := seen[canonical]; duplicate {
-			return fmt.Errorf("response header %q duplicates another header ignoring case", header.Name)
+			return diagnosticAt(fieldPath+"/name", "response_header_duplicate", "response header must be unique ignoring case", fmt.Errorf("response header %q duplicates another header ignoring case", header.Name))
 		}
 		seen[canonical] = struct{}{}
 		if header.MaxBytes <= 0 || header.MaxBytes > maxOperationHeaderBytes {
-			return fmt.Errorf("response header %q max_bytes must be between 1 and %d", header.Name, maxOperationHeaderBytes)
+			return diagnosticAt(fieldPath+"/max_bytes", "response_header_bound", "response header max_bytes must be between 1 and 16384", fmt.Errorf("response header %q max_bytes must be between 1 and %d", header.Name, maxOperationHeaderBytes))
 		}
 	}
 	return nil
@@ -405,8 +433,9 @@ func validateOperationRuntimeHeaderIsolation(base HTTPBase, operations []Operati
 	if len(runtimeHeaders) == 0 {
 		return nil
 	}
-	for _, operation := range operations {
-		for _, parameter := range operationParameters(operation) {
+	for operationIndex, operation := range operations {
+		block, _ := operationExecutionBlock(operation)
+		for parameterIndex, parameter := range operationParameters(operation) {
 			if parameter.In != "header" {
 				continue
 			}
@@ -415,7 +444,7 @@ func validateOperationRuntimeHeaderIsolation(base HTTPBase, operations []Operati
 				continue
 			}
 			if _, protected := runtimeHeaders[canonical]; protected {
-				return fmt.Errorf("operation %q header parameter %q is protected and runtime-owned", operation.ID, parameter.Name)
+				return diagnosticAt(fmt.Sprintf("/operations/%d/%s/parameters/%d/name", operationIndex, block, parameterIndex), "parameter_header_protected", "request header is protected and runtime-owned", fmt.Errorf("operation %q header parameter %q is protected and runtime-owned", operation.ID, parameter.Name))
 			}
 		}
 	}

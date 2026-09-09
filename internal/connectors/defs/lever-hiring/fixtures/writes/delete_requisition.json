@@ -1,9 +1,0 @@
-{
-  "record": {
-    "requisition": "requisition_fixture_1"
-  },
-  "expect": {
-    "method": "DELETE",
-    "path": "/requisitions/requisition_fixture_1"
-  }
-}

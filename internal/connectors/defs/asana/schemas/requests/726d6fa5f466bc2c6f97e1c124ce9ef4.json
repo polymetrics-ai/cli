@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "data": {
+      "additionalProperties": false,
+      "properties": {
+        "currency_code": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "current_number_value": {
+          "type": "number"
+        },
+        "initial_number_value": {
+          "type": "number"
+        },
+        "is_custom_weight": {
+          "type": "boolean"
+        },
+        "precision": {
+          "type": "integer"
+        },
+        "progress_source": {
+          "type": "string"
+        },
+        "target_number_value": {
+          "type": "number"
+        },
+        "unit": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "goal_gid": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "goal_gid",
+    "data"
+  ],
+  "type": "object"
+}

@@ -1,0 +1,75 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "assignees": {
+      "items": {
+        "maxLength": 8192,
+        "type": "string"
+      },
+      "maxItems": 256,
+      "type": "array"
+    },
+    "base": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "body": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "draft": {
+      "type": "boolean"
+    },
+    "head": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "head_repo": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "issue": {
+      "type": "integer"
+    },
+    "labels": {
+      "items": {
+        "maxLength": 8192,
+        "type": "string"
+      },
+      "maxItems": 256,
+      "type": "array"
+    },
+    "maintainer_can_modify": {
+      "type": "boolean"
+    },
+    "milestone": {
+      "type": "integer"
+    },
+    "reviewers": {
+      "items": {
+        "maxLength": 8192,
+        "type": "string"
+      },
+      "maxItems": 256,
+      "type": "array"
+    },
+    "team_reviewers": {
+      "items": {
+        "maxLength": 8192,
+        "type": "string"
+      },
+      "maxItems": 256,
+      "type": "array"
+    },
+    "title": {
+      "maxLength": 8192,
+      "type": "string"
+    }
+  },
+  "required": [
+    "base",
+    "head"
+  ],
+  "type": "object"
+}

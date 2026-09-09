@@ -1,7 +1,0 @@
-{
-  "record": { "delegateEmail": "fixture-delegate-1@example.com" },
-  "expect": {
-    "method": "DELETE",
-    "path": "/users/synthetic-conformance-value/settings/delegates/fixture-delegate-1@example.com"
-  }
-}

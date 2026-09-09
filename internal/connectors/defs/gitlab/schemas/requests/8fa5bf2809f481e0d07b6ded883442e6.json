@@ -1,0 +1,79 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "description": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "environment_scope": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "id": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "key": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "masked": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "masked_and_hidden": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "protected": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "raw": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "value": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "variable_type": {
+      "enum": [
+        "env_var",
+        "file"
+      ],
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "id",
+    "key",
+    "value"
+  ],
+  "type": "object"
+}

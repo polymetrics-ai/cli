@@ -10,7 +10,7 @@ SYNOPSIS
   pm credentials add <name> --connector yahoo-finance-price [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads public Yahoo Finance chart prices and flattens them into OHLCV records. Read-only.
+  Reads public Yahoo Finance chart prices as declaration-bound OHLCV records. Read-only.
 
 ICON
   id: yahoo-finance-price
@@ -27,12 +27,23 @@ AUTHENTICATION
   No secret authentication is required for this connector.
 
 CONFIGURATION
-  No connector-specific config fields.
+  interval
+  range
+  symbol
+
+ETL STREAMS
+  prices:
+    primary key: symbol, timestamp
+    cursor: timestamp
+    fields: adjclose(number), close(number), currency(string), high(number), low(number), open(number), symbol(string), timestamp(number), volume(number)
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Yahoo Finance chart API reads through a fixed declared route
+  write risk: unsupported
+  approval: none; read-only
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

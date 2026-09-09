@@ -1,6 +1,6 @@
 {
   "tagline": "Run Docker Hub's declared streams and reverse-ETL actions.",
-  "usage": "pm dockerhub \u003ccommand\u003e [flags]",
+  "usage": "pm dockerhub <command> [flags]",
   "groups": [
     {
       "id": "read",
@@ -20,7 +20,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "repositories",
-      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
       "examples": [
         "pm dockerhub repositories list --json"
       ],
@@ -37,7 +36,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "repository_detail",
-      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
       "examples": [
         "pm dockerhub repository detail list --json"
       ],
@@ -54,7 +52,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "tag_detail",
-      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
       "examples": [
         "pm dockerhub tag detail list --json"
       ],
@@ -71,7 +68,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "tags",
-      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
       "examples": [
         "pm dockerhub tags list --json"
       ],

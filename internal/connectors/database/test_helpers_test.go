@@ -186,8 +186,7 @@ func (d admittedDriver) DatabaseNativeAdmissions() []database.DatabaseNativeAdmi
 }
 
 type nativeAdmission struct {
-	native   synccontract.NativeSyncExecutorDescriptor
-	evidence synccontract.ConformanceEvidence
+	native synccontract.NativeSyncExecutorDescriptor
 }
 
 func nativeContract(protocol, command, executorID string) synccontract.NativeCommandContract {
@@ -197,7 +196,6 @@ func nativeContract(protocol, command, executorID string) synccontract.NativeCom
 		Command:         command,
 		Executor:        synccontract.ExecutorReference{Kind: "native", ID: executorID},
 		Modes:           []synccontract.Mode{synccontract.ModeFullAppend},
-		Conformance:     synccontract.RequiredConformanceEvidence(),
 	}
 }
 
@@ -209,7 +207,6 @@ func nativeAdmissionFor(contract synccontract.NativeCommandContract) nativeAdmis
 			Executor: contract.Executor,
 			Modes:    append([]synccontract.Mode(nil), contract.Modes...),
 		},
-		evidence: contract.Conformance,
 	}
 }
 
@@ -233,10 +230,6 @@ func testOutboundNativeAdmission(t *testing.T, contract synccontract.NativeComma
 
 func (d nativeAdmission) NativeSyncExecutorDescriptor() synccontract.NativeSyncExecutorDescriptor {
 	return d.native
-}
-
-func (d nativeAdmission) NativeSyncConformanceEvidence() synccontract.ConformanceEvidence {
-	return d.evidence
 }
 
 func cloneDatabaseNativeAdmissions(admissions []database.DatabaseNativeAdmission) []database.DatabaseNativeAdmission {

@@ -1,39 +1,21 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "candidate_list_notes",
-  "type": "object",
   "properties": {
-    "id": {
-      "type": "string",
-      "description": "The unique identifier for the note"
-    },
-    "createdAt": {
-      "type": "string",
-      "description": "The timestamp when the note was created"
-    },
-    "isPrivate": {
-      "type": "boolean",
-      "description": "Whether the note is private"
-    },
-    "content": {
-      "type": "string"
-    },
     "author": {
-      "type": "object",
       "properties": {
-        "id": {
-          "type": "string",
-          "description": "The unique identifier for the user"
+        "email": {
+          "type": "string"
         },
         "firstName": {
-          "type": "string",
-          "description": "The user's first name"
+          "description": "The user's first name",
+          "type": "string"
+        },
+        "id": {
+          "description": "The unique identifier for the user",
+          "type": "string"
         },
         "lastName": {
-          "type": "string",
-          "description": "The user's last name"
-        },
-        "email": {
+          "description": "The user's last name",
           "type": "string"
         }
       },
@@ -41,9 +23,27 @@
         "id",
         "firstName",
         "lastName"
-      ]
+      ],
+      "type": "object"
+    },
+    "content": {
+      "type": "string"
+    },
+    "createdAt": {
+      "description": "The timestamp when the note was created",
+      "type": "string"
+    },
+    "id": {
+      "description": "The unique identifier for the note",
+      "type": "string"
+    },
+    "isPrivate": {
+      "description": "Whether the note is private",
+      "type": "boolean"
     }
   },
+  "title": "candidate_list_notes",
+  "type": "object",
   "x-primary-key": [
     "id"
   ]

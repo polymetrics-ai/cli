@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "package_name": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "package_type": {
+      "enum": [
+        "npm",
+        "maven",
+        "rubygems",
+        "docker",
+        "nuget",
+        "container"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "package_version_id": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "package_name",
+    "package_type",
+    "package_version_id"
+  ],
+  "type": "object"
+}

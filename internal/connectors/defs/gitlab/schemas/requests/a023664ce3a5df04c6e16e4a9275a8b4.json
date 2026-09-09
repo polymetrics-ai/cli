@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "state": {
+      "enum": [
+        "awaiting",
+        "active"
+      ],
+      "maxLength": 8192,
+      "minLength": 1,
+      "type": "string"
+    },
+    "user_id": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "id",
+    "state",
+    "user_id"
+  ],
+  "type": "object"
+}

@@ -1,38 +1,36 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "My Hours Connection Specification",
-  "type": "object",
+  "properties": {
+    "email": {
+      "description": "My Hours login email.",
+      "type": "string"
+    },
+    "end_date": {
+      "description": "UTC date window terminal date, YYYY-MM-DD.",
+      "type": "string"
+    },
+    "logs_batch_size": {
+      "default": "30",
+      "description": "Declared time-log window width in days, 1 through 365.",
+      "type": "string"
+    },
+    "password": {
+      "description": "My Hours login password.",
+      "type": "string",
+      "x-secret": true
+    },
+    "start_date": {
+      "description": "UTC date window start, YYYY-MM-DD.",
+      "type": "string"
+    }
+  },
   "required": [
     "email",
     "password",
-    "start_date"
+    "start_date",
+    "end_date"
   ],
-  "properties": {
-    "email": {
-      "type": "string",
-      "description": "Your My Hours username"
-    },
-    "logs_batch_size": {
-      "type": "string",
-      "description": "Pagination size used for retrieving logs in days"
-    },
-    "password": {
-      "type": "string",
-      "x-secret": true,
-      "description": "The password associated to the username"
-    },
-    "start_date": {
-      "type": "string",
-      "description": "Start date for collecting time logs"
-    },
-    "base_url": {
-      "type": "string",
-      "default": "https://example.invalid",
-      "description": "Placeholder base URL used only to construct the engine runtime before the Tier-2 hook delegates to the legacy connector."
-    },
-    "mode": {
-      "type": "string",
-      "description": "Set to fixture for credential-free legacy fixture tests."
-    }
-  }
+  "title": "My Hours Connection Specification",
+  "type": "object",
+  "x-reject-unknown-config": true
 }

@@ -1,31 +1,14 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "tasks",
-  "type": "object",
   "properties": {
-    "TaskId": {
-      "type": "string"
-    },
-    "ContactId": {
-      "type": "string"
-    },
-    "Name": {
-      "type": "string"
-    },
-    "Description": {
-      "type": "string"
-    },
-    "DueDate": {
-      "type": "string"
-    },
     "AssignedTo": {
       "type": "string"
     },
     "CalendarId": {
       "type": "string"
     },
-    "IsCompleted": {
-      "type": "boolean"
+    "ContactId": {
+      "type": "string"
     },
     "DateCreated": {
       "type": [
@@ -37,10 +20,27 @@
         "array",
         "null"
       ]
+    },
+    "Description": {
+      "type": "string"
+    },
+    "DueDate": {
+      "type": "string"
+    },
+    "IsCompleted": {
+      "type": "boolean"
+    },
+    "Name": {
+      "type": "string"
+    },
+    "TaskId": {
+      "type": "string"
     }
   },
+  "title": "tasks",
+  "type": "object",
+  "x-cursor-field": "DateCreated",
   "x-primary-key": [
     "TaskId"
-  ],
-  "x-cursor-field": "DateCreated"
+  ]
 }

@@ -1,52 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "events",
-  "type": "object",
   "properties": {
-    "EventId": {
-      "type": "string"
-    },
-    "Name": {
-      "type": "string"
-    },
-    "Description": {
-      "type": "string"
-    },
-    "Location": {
-      "type": "string"
-    },
-    "StartDate": {
-      "type": [
-        "string",
-        "number",
-        "integer",
-        "boolean",
-        "object",
-        "array",
-        "null"
-      ]
-    },
-    "EndDate": {
-      "type": [
-        "string",
-        "number",
-        "integer",
-        "boolean",
-        "object",
-        "array",
-        "null"
-      ]
-    },
-    "IsAllDay": {
-      "type": "boolean"
-    },
-    "IsRecurring": {
-      "type": "boolean"
-    },
     "ContactIds": {
-      "type": "array"
-    },
-    "UserIds": {
       "type": "array"
     },
     "DateCreated": {
@@ -70,10 +25,55 @@
         "array",
         "null"
       ]
+    },
+    "Description": {
+      "type": "string"
+    },
+    "EndDate": {
+      "type": [
+        "string",
+        "number",
+        "integer",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "EventId": {
+      "type": "string"
+    },
+    "IsAllDay": {
+      "type": "boolean"
+    },
+    "IsRecurring": {
+      "type": "boolean"
+    },
+    "Location": {
+      "type": "string"
+    },
+    "Name": {
+      "type": "string"
+    },
+    "StartDate": {
+      "type": [
+        "string",
+        "number",
+        "integer",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "UserIds": {
+      "type": "array"
     }
   },
+  "title": "events",
+  "type": "object",
+  "x-cursor-field": "DateUpdated",
   "x-primary-key": [
     "EventId"
-  ],
-  "x-cursor-field": "DateUpdated"
+  ]
 }

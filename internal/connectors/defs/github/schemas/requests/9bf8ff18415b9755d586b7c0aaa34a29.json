@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "artifact_id": {
+      "type": "number"
+    },
+    "artifact_url": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "environment": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "oidc_token": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "pages_build_version": {
+      "maxLength": 8192,
+      "type": "string"
+    }
+  },
+  "required": [
+    "oidc_token",
+    "pages_build_version"
+  ],
+  "type": "object"
+}

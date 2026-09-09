@@ -1,8 +1,0 @@
-{
-  "record": { "documentId": "doc_fixture_1", "tags": ["contract"] },
-  "expect": {
-    "method": "DELETE",
-    "path": "/v1/document/deleteTags",
-    "body": { "documentId": "doc_fixture_1", "tags": ["contract"] }
-  }
-}

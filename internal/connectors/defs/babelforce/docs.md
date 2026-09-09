@@ -1,65 +1,43 @@
-# Overview
+# Babelforce Connector
 
-Reads Babelforce call reporting, recordings, numbers, and users through the Babelforce v2 REST API.
+## Overview
+
+Reads Babelforce call reporting, recordings, numbers, and users through fixed Babelforce v2 REST routes.
 
 Readable streams: `calls`, `calls_extended`, `recordings`, `numbers`, `users`.
 
-This connector is read-only; no write actions are declared.
-
-Service API documentation: https://api.babelforce.com/.
+Service API documentation: https://docs.babelforce.com/.
 
 ## Auth setup
 
 Connection fields:
 
-- `access_key_id` (required, secret, string); The Babelforce access key ID.
-- `access_token` (required, secret, string); The Babelforce access token.
-- `base_url` (optional, string).
-- `date_created_from` (optional, string); Timestamp in Unix the replication from Babelforce API will
-  start from. For example 1651363200 which corresponds to 2022-05-01 00:00:00.
-- `date_created_to` (optional, string); Timestamp in Unix the replication from Babelforce will be up
-  to. For example 1651363200 which corresponds to 2022-05-01 00:00:00.
-- `mode` (optional, string).
-- `region` (required, string); Babelforce region.
+- `access_key_id` (optional, secret, string); Babelforce access key ID.
+- `access_token` (optional, secret, string); Babelforce access token.
+- `region` (optional, string); Declared Babelforce regional provider host.
 
-Secret fields are redacted in logs and write previews: `access_key_id`, `access_token`.
+Authentication uses declared mode(s): `none`.
 
-Provide the secret fields listed above. Authentication is applied by the connector-specific
-implementation for this service.
+## Execution contract
 
-Requests use the configured `base_url` value after applying defaults.
+Default stream pagination: `page_number`.
 
-Connection checks use a connector-managed request.
+Connection check: `GET /calls/reporting/simple`
+Check query: `max`=`1`.
 
 ## Streams notes
 
-Default pagination: single request; no pagination.
-
-Incremental streams use their declared cursor fields and send lower-bound parameters only when a
-lower bound is available.
-
-- `calls`: GET connector-managed request path - records path `data`; incremental cursor
-  `dateCreated`; formatted as `rfc3339`; records at or before the lower bound are filtered
-  client-side.
-- `calls_extended`: GET connector-managed request path - records path `data`; incremental cursor
-  `dateCreated`; formatted as `rfc3339`; records at or before the lower bound are filtered
-  client-side.
-- `recordings`: GET connector-managed request path - records path `data`; incremental cursor
-  `dateCreated`; formatted as `rfc3339`; records at or before the lower bound are filtered
-  client-side.
-- `numbers`: GET connector-managed request path - records path `data`; incremental cursor
-  `dateCreated`; formatted as `rfc3339`; records at or before the lower bound are filtered
-  client-side.
-- `users`: GET connector-managed request path - records path `data`; incremental cursor
-  `dateCreated`; formatted as `rfc3339`; records at or before the lower bound are filtered
-  client-side.
+- `calls`: `GET /calls/reporting/simple`; records `items`
+  - Incremental cursor: `dateCreated`.
+- `calls_extended`: `GET /calls/reporting/extended`; records `items`
+  - Incremental cursor: `dateCreated`.
+- `recordings`: `GET /recordings`; records `items`
+  - Incremental cursor: `dateCreated`.
+- `numbers`: `GET /numbers`; records `items`
+  - Incremental cursor: `dateCreated`.
+- `users`: `GET /users`; records `items`
+  - Incremental cursor: `dateCreated`.
 
 ## Write actions & risks
 
-This connector is read-only; no reverse-ETL write actions are declared.
-
-## Known limits
-
-- API coverage includes 5 stream-backed endpoint group(s).
-- Client-side incremental filtering is used for: `calls`, `calls_extended`, `recordings`, `numbers`,
-  `users`.
+This connector's write surface is declared separately in the rendered execution bundle.

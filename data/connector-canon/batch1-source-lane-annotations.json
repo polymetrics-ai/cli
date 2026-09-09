@@ -1,0 +1,309 @@
+{
+  "schema_version": 1,
+  "annotations": [
+    {
+      "key": {
+        "connector": "vercel",
+        "inventory": "primary",
+        "id": "vercel.rest.readSessionFile"
+      },
+      "semantics": "read",
+      "citation": {
+        "document_id": "vercel:primary",
+        "pointer": "/rest/operations/299/source_operation/summary",
+        "value_sha256": "9445e1d930264460cf49d30b0e4378c24ff81e22e168fd12d5f50dea441ae31e"
+      },
+      "clause": "Read a file",
+      "foundation_gap": "",
+      "atlas_id": "",
+      "decision_refs": [],
+      "intended_bindings": [],
+      "materialized_bindings": []
+    },
+    {
+      "key": {
+        "connector": "vercel",
+        "inventory": "primary",
+        "id": "vercel.rest.createWebhook"
+      },
+      "semantics": "mutation",
+      "citation": {
+        "document_id": "vercel:primary",
+        "pointer": "/rest/operations/381/source_operation/summary",
+        "value_sha256": "de9630dadd47a37e30684147218c08bddde88fe71a287c7f9f16e00c0aae690f"
+      },
+      "clause": "Creates a webhook",
+      "foundation_gap": "cli-webhook-event-surface-foundation-r1",
+      "atlas_id": "transport.sync-contract.v1",
+      "decision_refs": [
+        "cli-batch1-vercel-inbound-sync-decision-r1",
+        "cli-plan-webhook-receiver-foundation-r1-decision-webhook-exposure-product-boundary"
+      ],
+      "intended_bindings": [],
+      "materialized_bindings": []
+    },
+    {
+      "key": {
+        "connector": "notion",
+        "inventory": "primary",
+        "id": "notion.rest.post-database-query"
+      },
+      "semantics": "read",
+      "citation": {
+        "document_id": "notion:primary",
+        "pointer": "/rest/operations/18/source_operation/summary",
+        "value_sha256": "fdca906a2187603b762c7b0c6c20578017613b0fe949fe33ede456cba1dd25fb"
+      },
+      "clause": "Query a data source",
+      "foundation_gap": "",
+      "atlas_id": "",
+      "decision_refs": [],
+      "intended_bindings": [],
+      "materialized_bindings": []
+    },
+    {
+      "key": {
+        "connector": "notion",
+        "inventory": "primary",
+        "id": "notion.rest.list-data-source-templates"
+      },
+      "semantics": "",
+      "citation": {
+        "document_id": "notion:primary",
+        "pointer": "/rest/operations/20/source_operation/summary",
+        "value_sha256": "24def794a4bb5323e2cc33f1cbc1c46b6853ed347012ef1f63c54ccf34227a6a"
+      },
+      "clause": "List templates in a data source",
+      "foundation_gap": "",
+      "atlas_id": "",
+      "decision_refs": [],
+      "intended_bindings": [],
+      "materialized_bindings": [],
+      "response_interpretations": [
+        {
+          "kind": "collection",
+          "response_schema": {
+            "document_id": "notion:primary",
+            "pointer": "/rest/operations/20/source_operation/responses/200/content/application~1json/schema",
+            "value_sha256": "d0bb6e883cbb6b3319c80548204e679444c5760ba168d367b5f96cc5b32a9e6b"
+          },
+          "records_pointer": "/templates",
+          "citation": {
+            "document_id": "notion:primary",
+            "pointer": "/rest/operations/20/source_operation/summary",
+            "value_sha256": "24def794a4bb5323e2cc33f1cbc1c46b6853ed347012ef1f63c54ccf34227a6a"
+          },
+          "clause": "List templates in a data source"
+        }
+      ]
+    },
+    {
+      "key": {
+        "connector": "jira",
+        "inventory": "primary",
+        "id": "jira.rest.getForgeAppPropertyKeys"
+      },
+      "semantics": "",
+      "citation": {
+        "document_id": "jira:primary",
+        "pointer": "/rest/operations/612/source_operation/summary",
+        "value_sha256": "de3860330e8bd22a4adb0f29ceee030864da6fa602eae9c7114c3c23b58a90b1"
+      },
+      "clause": "Get app property keys (Forge)",
+      "foundation_gap": "",
+      "atlas_id": "",
+      "decision_refs": [],
+      "intended_bindings": [],
+      "materialized_bindings": [],
+      "response_interpretations": [
+        {
+          "kind": "collection",
+          "response_schema": {
+            "document_id": "jira:primary",
+            "pointer": "/rest/operations/612/source_operation/responses/200/content/application~1json/schema",
+            "value_sha256": "bc67b792846dc2f7af0c72295878bcf3d11b1666b3169afe83cb921aafa878e5"
+          },
+          "records_pointer": "/keys",
+          "citation": {
+            "document_id": "jira:primary",
+            "pointer": "/rest/operations/612/source_operation/description",
+            "value_sha256": "92963f25f0b163b977128bb756c7a53f7a7ebcff841065389a0f9738ce3fbb18"
+          },
+          "clause": "Returns all property keys for the Forge app."
+        }
+      ]
+    },
+    {
+      "key": {
+        "connector": "gitlab",
+        "inventory": "primary",
+        "id": "deleteApiV4AdminCiVariablesKey"
+      },
+      "semantics": "mutation",
+      "citation": {
+        "document_id": "gitlab:primary",
+        "pointer": "/rest/operations/1/source_operation/summary",
+        "value_sha256": "c16b8703412baf358a107e90d487e9b3cd51bbd691dcb8eb1e6bfded40de5d24"
+      },
+      "clause": "Delete instance variable",
+      "foundation_gap": "",
+      "atlas_id": "",
+      "decision_refs": [
+        "g3-delete-retry-decision-267"
+      ],
+      "intended_bindings": [
+        {
+          "kind": "write",
+          "connector": "gitlab",
+          "id": "source_write_44454c455445202f61646d696e2f63692f7661726961626c65732f7b6b65797d",
+          "lane": "direct_write",
+          "artifact": "internal/connectors/defs/gitlab/writes.json",
+          "pointer": "/actions/0",
+          "artifact_sha256": "23822f05248ec403b8ddfc29b6c86c852b08289712edea15db763fdc68d78fc4",
+          "canonical_id": "write:source_write_44454c455445202f61646d696e2f63692f7661726961626c65732f7b6b65797d",
+          "canonical_pointer": "/operations/588/write",
+          "generation": "sha256:630b07d5ff5c8a396f3e2ffba9872299446541ed21b1f87e0dd9b4cb63d93fbc",
+          "schema_role": "request",
+          "field_mappings": [
+            {
+              "source": {
+                "document_id": "gitlab:primary",
+                "pointer": "/rest/operations/1/source_operation/parameters/0",
+                "value_sha256": "56ade03346cc88d9d757e89e0e382c300f84eeb299f15655490453fddea77e41"
+              },
+              "target": {
+                "kind": "schema",
+                "pointer": "/properties/key"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "write",
+          "connector": "gitlab",
+          "id": "source_write_44454c455445202f61646d696e2f63692f7661726961626c65732f7b6b65797d",
+          "lane": "reverse_etl",
+          "artifact": "internal/connectors/defs/gitlab/writes.json",
+          "pointer": "/actions/0",
+          "artifact_sha256": "23822f05248ec403b8ddfc29b6c86c852b08289712edea15db763fdc68d78fc4",
+          "canonical_id": "write:source_write_44454c455445202f61646d696e2f63692f7661726961626c65732f7b6b65797d",
+          "canonical_pointer": "/operations/588/write",
+          "generation": "sha256:630b07d5ff5c8a396f3e2ffba9872299446541ed21b1f87e0dd9b4cb63d93fbc",
+          "schema_role": "request",
+          "field_mappings": [
+            {
+              "source": {
+                "document_id": "gitlab:primary",
+                "pointer": "/rest/operations/1/source_operation/parameters/0",
+                "value_sha256": "56ade03346cc88d9d757e89e0e382c300f84eeb299f15655490453fddea77e41"
+              },
+              "target": {
+                "kind": "schema",
+                "pointer": "/properties/key"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "write",
+          "connector": "gitlab",
+          "id": "source_write_44454c455445202f61646d696e2f63692f7661726961626c65732f7b6b65797d",
+          "lane": "direct_write",
+          "artifact": "internal/connectors/defs/gitlab/writes.json",
+          "pointer": "/actions/0",
+          "artifact_sha256": "23822f05248ec403b8ddfc29b6c86c852b08289712edea15db763fdc68d78fc4",
+          "canonical_id": "write:source_write_44454c455445202f61646d696e2f63692f7661726961626c65732f7b6b65797d",
+          "canonical_pointer": "/operations/588/write",
+          "generation": "sha256:630b07d5ff5c8a396f3e2ffba9872299446541ed21b1f87e0dd9b4cb63d93fbc",
+          "schema_role": "response",
+          "source_schema": {
+            "document_id": "gitlab:primary",
+            "pointer": "/rest/operations/1/source_operation/responses/200/content/application~1json/schema",
+            "value_sha256": "4ca8689e2d4790a63aac2d2f9bb6d76c67f96b60631bed24e4f37f330b0915c5"
+          },
+          "field_mappings": [
+            {
+              "source": {
+                "document_id": "gitlab:primary",
+                "pointer": "/rest/operations/1/source_operation/responses/200/content/application~1json/schema",
+                "value_sha256": "4ca8689e2d4790a63aac2d2f9bb6d76c67f96b60631bed24e4f37f330b0915c5"
+              },
+              "target": {
+                "kind": "schema",
+                "pointer": ""
+              }
+            }
+          ]
+        },
+        {
+          "kind": "write",
+          "connector": "gitlab",
+          "id": "source_write_44454c455445202f61646d696e2f63692f7661726961626c65732f7b6b65797d",
+          "lane": "reverse_etl",
+          "artifact": "internal/connectors/defs/gitlab/writes.json",
+          "pointer": "/actions/0",
+          "artifact_sha256": "23822f05248ec403b8ddfc29b6c86c852b08289712edea15db763fdc68d78fc4",
+          "canonical_id": "write:source_write_44454c455445202f61646d696e2f63692f7661726961626c65732f7b6b65797d",
+          "canonical_pointer": "/operations/588/write",
+          "generation": "sha256:630b07d5ff5c8a396f3e2ffba9872299446541ed21b1f87e0dd9b4cb63d93fbc",
+          "schema_role": "response",
+          "source_schema": {
+            "document_id": "gitlab:primary",
+            "pointer": "/rest/operations/1/source_operation/responses/200/content/application~1json/schema",
+            "value_sha256": "4ca8689e2d4790a63aac2d2f9bb6d76c67f96b60631bed24e4f37f330b0915c5"
+          },
+          "field_mappings": [
+            {
+              "source": {
+                "document_id": "gitlab:primary",
+                "pointer": "/rest/operations/1/source_operation/responses/200/content/application~1json/schema",
+                "value_sha256": "4ca8689e2d4790a63aac2d2f9bb6d76c67f96b60631bed24e4f37f330b0915c5"
+              },
+              "target": {
+                "kind": "schema",
+                "pointer": ""
+              }
+            }
+          ]
+        }
+      ],
+      "materialized_bindings": []
+    },
+    {
+      "key": {
+        "connector": "circleci",
+        "inventory": "primary",
+        "id": "circleci.rest.getOrgSummaryData"
+      },
+      "semantics": "",
+      "citation": {
+        "document_id": "circleci:primary",
+        "pointer": "/rest/operations/2/source_operation/summary",
+        "value_sha256": "2229623788608fb988baab690ac0d0971968307d69a297d190044684b835e18e"
+      },
+      "clause": "Get summary metrics with trends for the entire org, and for each project.",
+      "foundation_gap": "",
+      "atlas_id": "",
+      "decision_refs": [],
+      "intended_bindings": [],
+      "materialized_bindings": [],
+      "response_interpretations": [
+        {
+          "kind": "collection",
+          "response_schema": {
+            "document_id": "circleci:primary",
+            "pointer": "/rest/operations/2/source_operation/responses/200/content/application~1json/schema",
+            "value_sha256": "bebfac3af76e397550408de4732d94ad8e4ca0c2a1fd05f4cc154c0782c24001"
+          },
+          "records_pointer": "/org_project_data",
+          "citation": {
+            "document_id": "circleci:primary",
+            "pointer": "/rest/operations/2/source_operation/summary",
+            "value_sha256": "2229623788608fb988baab690ac0d0971968307d69a297d190044684b835e18e"
+          },
+          "clause": "Get summary metrics with trends for the entire org, and for each project."
+        }
+      ]
+    }
+  ]
+}

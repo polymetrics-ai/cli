@@ -125,7 +125,7 @@ KEYS
 SECURITY
   Configuration is an allowlist. pm does not ingest arbitrary POLYMETRICS_* or
   PM_* variables. User-named credential env vars supplied to --from-env and
-  connector certification credsfile entries are credential data, not app config.
+  connector credential imports are credential data, not app config.
   Do not store secret values in config.yaml or examples. LLM API keys such as
   PM_LLM_API_KEY and provider-specific keys remain environment-only secret
   inputs and are not documented with values.

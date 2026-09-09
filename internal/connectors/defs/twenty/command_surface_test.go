@@ -24,14 +24,7 @@ func TestAllProviderOperationsHaveExecutableCommands(t *testing.T) {
 	if err != nil {
 		t.Fatalf("load %s bundle: %v", twentyBundleName, err)
 	}
-	if bundle.Surface == nil {
-		t.Fatal("api_surface.json did not load")
-	}
-	if got := len(bundle.Surface.Endpoints); got != 168 {
-		t.Fatalf("Twenty API-surface rows = %d, want 168", got)
-	}
-
-	connector := engine.New(bundle, engine.HooksFor(bundle.Name))
+	connector := engine.New(bundle, nil)
 	surface := connector.CommandSurface()
 	if surface == nil {
 		t.Fatal("Twenty has no cli_surface.json")
@@ -72,7 +65,7 @@ func TestOperationReadAndStructuredWriteSafetyContracts(t *testing.T) {
 	if err != nil {
 		t.Fatalf("load %s bundle: %v", twentyBundleName, err)
 	}
-	connector := engine.New(bundle, engine.HooksFor(bundle.Name))
+	connector := engine.New(bundle, nil)
 
 	t.Run("happy direct read has an exact provider route", func(t *testing.T) {
 		if err := connector.PreflightOperationDirectRead("twenty.calendar-events.get", "GET", "/rest/calendarEvents/{id}", 1<<20, "json_redacted"); err != nil {
@@ -205,7 +198,7 @@ func TestEveryTypedWriteHasEligibilityDisposition(t *testing.T) {
 		t.Fatalf("decode write eligibility ledger: %v", err)
 	}
 
-	connector := engine.New(bundle, engine.HooksFor(bundle.Name))
+	connector := engine.New(bundle, nil)
 	commandsByWrite := make(map[string]struct {
 		Intent       string
 		Availability string

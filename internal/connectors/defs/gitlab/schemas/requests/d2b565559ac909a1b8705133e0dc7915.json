@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "name": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "pipeline_id": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "id",
+    "name",
+    "pipeline_id"
+  ],
+  "type": "object"
+}

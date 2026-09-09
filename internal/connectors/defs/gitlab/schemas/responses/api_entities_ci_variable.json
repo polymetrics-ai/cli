@@ -1,0 +1,37 @@
+{
+  "properties": {
+    "description": {
+      "example": "This variable is being used for ...",
+      "type": "string"
+    },
+    "environment_scope": {
+      "example": "*",
+      "type": "string"
+    },
+    "hidden": {
+      "type": "boolean"
+    },
+    "key": {
+      "example": "TEST_VARIABLE_1",
+      "type": "string"
+    },
+    "masked": {
+      "type": "boolean"
+    },
+    "protected": {
+      "type": "boolean"
+    },
+    "raw": {
+      "type": "boolean"
+    },
+    "value": {
+      "example": "TEST_1",
+      "type": "string"
+    },
+    "variable_type": {
+      "example": "env_var",
+      "type": "string"
+    }
+  },
+  "type": "object"
+}

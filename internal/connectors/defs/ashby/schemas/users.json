@@ -1,80 +1,38 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "users",
-  "type": "object",
   "properties": {
-    "id": {
-      "type": "string",
-      "description": "The unique identifier for the user"
-    },
-    "firstName": {
-      "type": "string",
-      "description": "The user's first name"
-    },
-    "lastName": {
-      "type": "string",
-      "description": "The user's last name"
-    },
-    "email": {
-      "type": "string",
-      "format": "email"
-    },
-    "globalRole": {
-      "type": "string",
-      "description": "The user's global role in the organization",
-      "enum": [
-        "Organization Admin",
-        "Elevated Access",
-        "Limited Access",
-        "External Recruiter"
-      ]
-    },
-    "isEnabled": {
-      "type": "boolean",
-      "description": "Whether the user is enabled (not deactivated)"
-    },
-    "updatedAt": {
-      "type": "string",
-      "description": "The timestamp when the user was last updated (ISO 8601 format)"
-    },
-    "managerId": {
-      "type": "string",
-      "description": "The unique identifier for the user's manager"
-    },
     "customFields": {
-      "type": "array",
       "description": "Custom fields associated with the user (only included when requested)",
       "items": {
-        "type": "object",
         "properties": {
           "id": {
-            "type": "string",
-            "description": "The unique identifier for the custom field definition"
+            "description": "The unique identifier for the custom field definition",
+            "type": "string"
           },
           "isPrivate": {
-            "type": "boolean",
-            "description": "Whether the custom field is private"
+            "description": "Whether the custom field is private",
+            "type": "boolean"
           },
           "title": {
-            "type": "string",
-            "description": "The title of the custom field"
+            "description": "The title of the custom field",
+            "type": "string"
           },
           "value": {
-            "type": "object",
             "properties": {
-              "value": {
-                "type": "number",
-                "description": "The currency amount"
-              },
               "currencyCode": {
-                "type": "string",
-                "description": "The currency code"
+                "description": "The currency code",
+                "type": "string"
+              },
+              "value": {
+                "description": "The currency amount",
+                "type": "number"
               }
             },
             "required": [
               "value",
               "currencyCode"
-            ]
+            ],
+            "type": "object"
           },
           "valueLabel": {
             "type": "string"
@@ -85,10 +43,52 @@
           "isPrivate",
           "title",
           "value"
-        ]
-      }
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "email": {
+      "format": "email",
+      "type": "string"
+    },
+    "firstName": {
+      "description": "The user's first name",
+      "type": "string"
+    },
+    "globalRole": {
+      "description": "The user's global role in the organization",
+      "enum": [
+        "Organization Admin",
+        "Elevated Access",
+        "Limited Access",
+        "External Recruiter"
+      ],
+      "type": "string"
+    },
+    "id": {
+      "description": "The unique identifier for the user",
+      "type": "string"
+    },
+    "isEnabled": {
+      "description": "Whether the user is enabled (not deactivated)",
+      "type": "boolean"
+    },
+    "lastName": {
+      "description": "The user's last name",
+      "type": "string"
+    },
+    "managerId": {
+      "description": "The unique identifier for the user's manager",
+      "type": "string"
+    },
+    "updatedAt": {
+      "description": "The timestamp when the user was last updated (ISO 8601 format)",
+      "type": "string"
     }
   },
+  "title": "users",
+  "type": "object",
   "x-primary-key": [
     "id"
   ]

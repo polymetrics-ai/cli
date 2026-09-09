@@ -185,7 +185,7 @@ func adRecord(item map[string]any) connectors.Record {
 }
 
 // readFixture emits deterministic records without any network access so the
-// conformance harness can exercise bing-ads credential-free (mirrors legacy
+// fixture tests can exercise bing-ads credential-free (mirrors legacy
 // bing_ads.go:177-193).
 func (c Connector) readFixture(ctx context.Context, stream string, req connectors.ReadRequest, emit func(connectors.Record) error) error {
 	items, err := fixtureRecords(stream)

@@ -1,7 +1,0 @@
-{
-  "schema_version": 2, "scope": "capability", "status": "passed", "credential_scope": "observed_operations",
-  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.", "credential_scope_proof": "protocol_exchanges",
-  "connector": "github", "function_kind": "command:create_label", "provider": "github", "executed_at": "2026-08-18T04:20:00Z", "run_id": "github-mutation-slice4-label-create-20260818",
-  "proof": {"redaction_strategy": "repository_salted_hmac_sha256_v1", "pm_binary_sha256": "96afbf0fecf0a72d3a9d55b40ee4365f799840825d02d18f64e3ce294642e424", "pm_command_fingerprint": "{{pmcertfp:v1:50c859c905074030ade6cc73f57ec1b6874049b52720bfea44fde444bbcadb89}}", "credential_fingerprints": ["{{pmcertfp:v1:21d04f26d53d68e161baac1dd4420e902dfdb21e90b32633d493810ddba91e3e}}"],
-    "http_exchanges": [{"operation": "create_label_independent_cleanup_readback", "request": {"method": "GET", "target": "{{pmcertfp:v1:bea18f0094ef173122ce9d84a029a7b946207374874757c1e5a284ccf12f6f2c}}", "query": [], "headers": [], "body": {"encoding": "none", "value": null, "original_bytes": 0, "truncated": false}}, "response": {"status": 404, "headers": [], "body": {"encoding": "none", "value": null, "original_bytes": 0, "truncated": false}}}], "database_exchanges": []}
-}

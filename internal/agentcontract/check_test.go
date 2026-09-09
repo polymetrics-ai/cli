@@ -3,7 +3,6 @@ package agentcontract
 import (
 	"bytes"
 	"context"
-	"encoding/json"
 	"os"
 	"path/filepath"
 	"slices"
@@ -47,73 +46,6 @@ func TestCheckProjectionRejectsDivergence(t *testing.T) {
 
 	if err := CheckProjection(want, got); err == nil {
 		t.Fatal("CheckProjection accepted a diverged projection")
-	}
-}
-
-func TestCertificationFlowKindCatalogSyncAndCheck(t *testing.T) {
-	repository := repositoryRoot(t)
-	contract := loadRepositoryContract(t, repository)
-	root := t.TempDir()
-	statusPath := filepath.Join(repository, filepath.FromSlash(contract.CertificationGate.Inputs.Status))
-	status, err := os.ReadFile(statusPath)
-	if err != nil {
-		t.Fatal(err)
-	}
-	fixtureStatusPath := filepath.Join(root, filepath.FromSlash(contract.CertificationGate.Inputs.Status))
-	if err := os.MkdirAll(filepath.Dir(fixtureStatusPath), 0o755); err != nil {
-		t.Fatal(err)
-	}
-	if err := os.WriteFile(fixtureStatusPath, status, 0o644); err != nil {
-		t.Fatal(err)
-	}
-	var scope struct {
-		Connectors []struct {
-			Connector string `json:"connector"`
-		} `json:"connectors"`
-	}
-	if err := json.Unmarshal(status, &scope); err != nil {
-		t.Fatal(err)
-	}
-	for _, item := range scope.Connectors {
-		relative := filepath.Join(filepath.FromSlash(contract.CertificationGate.Inputs.CertificationShards), item.Connector, "certification-matrix.json")
-		shard, err := os.ReadFile(filepath.Join(repository, relative))
-		if err != nil {
-			t.Fatal(err)
-		}
-		fixtureShardPath := filepath.Join(root, relative)
-		if err := os.MkdirAll(filepath.Dir(fixtureShardPath), 0o755); err != nil {
-			t.Fatal(err)
-		}
-		if err := os.WriteFile(fixtureShardPath, shard, 0o644); err != nil {
-			t.Fatal(err)
-		}
-	}
-
-	updated, err := SyncCertificationFlowKindCatalog(root, contract)
-	if err != nil {
-		t.Fatalf("SyncCertificationFlowKindCatalog: %v", err)
-	}
-	if updated != 1 {
-		t.Fatalf("SyncCertificationFlowKindCatalog updated %d files, want 1", updated)
-	}
-	if err := CheckCertificationFlowKindCatalog(root, contract); err != nil {
-		t.Fatalf("CheckCertificationFlowKindCatalog: %v", err)
-	}
-
-	catalogPath := filepath.Join(root, filepath.FromSlash(certificationFlowKindCatalogPath))
-	catalog, err := os.ReadFile(catalogPath)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if err := os.WriteFile(catalogPath, append(catalog, '\n'), 0o644); err != nil {
-		t.Fatal(err)
-	}
-	if err := CheckCertificationFlowKindCatalog(root, contract); err == nil {
-		t.Fatal("CheckCertificationFlowKindCatalog accepted a drifted generated catalog")
-	}
-	updated, err = SyncCertificationFlowKindCatalog(root, contract)
-	if err != nil || updated != 1 {
-		t.Fatalf("SyncCertificationFlowKindCatalog repairs drift: updated=%d err=%v", updated, err)
 	}
 }
 
@@ -470,30 +402,6 @@ func TestCheckProjectionsRejectsClaudeAgentInventoryDrift(t *testing.T) {
 			content:   []byte(strings.Replace(string(projection), "name: pm-delivery-worker", "name: unexpected-worker", 1)),
 			wantError: "unexpected definitions",
 		},
-		{
-			name:      "duplicate canonical name in nested project scope",
-			path:      "website/.claude/agents/pm-delivery-worker.md",
-			content:   projection,
-			wantError: "duplicate claude project agent name",
-		},
-		{
-			name:      "unexpected definition in nested project scope",
-			path:      "website/.claude/agents/unexpected-worker.md",
-			content:   []byte(strings.Replace(string(projection), "name: pm-delivery-worker", "name: unexpected-worker", 1)),
-			wantError: "unexpected definitions",
-		},
-		{
-			name:      "duplicate canonical name below uppercase git-like directory",
-			path:      ".GIT/.claude/agents/pm-delivery-worker.md",
-			content:   projection,
-			wantError: "duplicate claude project agent name",
-		},
-		{
-			name:      "unexpected definition below mixed-case git-like directory",
-			path:      ".Git/.claude/agents/unexpected-worker.md",
-			content:   []byte(strings.Replace(string(projection), "name: pm-delivery-worker", "name: unexpected-worker", 1)),
-			wantError: "unexpected definitions",
-		},
 	}
 
 	for _, test := range tests {
@@ -514,6 +422,28 @@ func TestCheckProjectionsRejectsClaudeAgentInventoryDrift(t *testing.T) {
 				t.Fatalf("CheckProjections error = %v, want substring %q", err, test.wantError)
 			}
 		})
+	}
+}
+
+func TestCheckProjectionsIgnoresNestedCacheClaudeAgents(t *testing.T) {
+	contract := loadRepositoryContract(t, repositoryRoot(t))
+	root := t.TempDir()
+	if _, err := SyncProjections(root, contract); err != nil {
+		t.Fatalf("SyncProjections creates required Claude projections: %v", err)
+	}
+	projection, err := RenderProjection(contract, contract.Projections[0])
+	if err != nil {
+		t.Fatal(err)
+	}
+	cacheAgent := filepath.Join(root, ".cache", "preserved-baseline", ".claude", "agents", "pm-delivery-worker.md")
+	if err := os.MkdirAll(filepath.Dir(cacheAgent), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(cacheAgent, projection, 0o644); err != nil {
+		t.Fatal(err)
+	}
+	if err := CheckProjections(root, contract); err != nil {
+		t.Fatalf("CheckProjections inventoried nested cache agent definitions: %v", err)
 	}
 }
 
@@ -540,29 +470,6 @@ func TestCheckProjectionsSkipsRootGitMetadata(t *testing.T) {
 
 	if err := CheckProjections(root, contract); err != nil {
 		t.Fatalf("CheckProjections inventoried root Git metadata: %v", err)
-	}
-}
-
-func TestCheckProjectionsRejectsNestedClaudeAgentScopeSymlink(t *testing.T) {
-	contract := loadRepositoryContract(t, repositoryRoot(t))
-	root := t.TempDir()
-	if _, err := SyncProjections(root, contract); err != nil {
-		t.Fatalf("SyncProjections creates required Claude projections: %v", err)
-	}
-	outside := t.TempDir()
-	if err := os.MkdirAll(filepath.Join(outside, "agents"), 0o755); err != nil {
-		t.Fatal(err)
-	}
-	if err := os.MkdirAll(filepath.Join(root, "website"), 0o755); err != nil {
-		t.Fatal(err)
-	}
-	if err := os.Symlink(outside, filepath.Join(root, "website", ".claude")); err != nil {
-		t.Skipf("cannot create nested Claude scope symlink: %v", err)
-	}
-
-	err := CheckProjections(root, contract)
-	if err == nil || !strings.Contains(err.Error(), "inventory contains symlink website/.claude") {
-		t.Fatalf("CheckProjections error = %v, want nested Claude scope symlink rejection", err)
 	}
 }
 

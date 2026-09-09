@@ -1,20 +1,71 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "created_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "description": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "full_name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "full_path": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "id": {
+      "type": "integer"
+    },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "parent_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "path": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "visibility": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "web_url": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "id"
+  ],
   "title": "groups",
   "type": "object",
-  "x-primary-key": ["id"],
   "x-cursor-field": "created_at",
-  "required": ["id"],
-  "properties": {
-    "id": { "type": "integer" },
-    "name": { "type": ["string", "null"] },
-    "path": { "type": ["string", "null"] },
-    "full_path": { "type": ["string", "null"] },
-    "full_name": { "type": ["string", "null"] },
-    "description": { "type": ["string", "null"] },
-    "visibility": { "type": ["string", "null"] },
-    "web_url": { "type": ["string", "null"] },
-    "created_at": { "type": ["string", "null"] },
-    "parent_id": { "type": ["integer", "null"] }
-  }
+  "x-primary-key": [
+    "id"
+  ]
 }

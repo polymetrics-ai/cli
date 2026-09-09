@@ -1,25 +1,86 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "author_login": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "closed_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "created_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "cve_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "ghsa_id": {
+      "type": "string"
+    },
+    "html_url": {
+      "type": "string"
+    },
+    "published_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "publisher_login": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "repository": {
+      "type": "string"
+    },
+    "severity": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "state": {
+      "type": "string"
+    },
+    "summary": {
+      "type": "string"
+    },
+    "updated_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "url": {
+      "type": "string"
+    },
+    "withdrawn_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "ghsa_id"
+  ],
   "title": "security_advisories",
   "type": "object",
-  "x-primary-key": ["ghsa_id"],
   "x-cursor-field": "updated_at",
-  "required": ["ghsa_id"],
-  "properties": {
-    "repository": { "type": "string" },
-    "ghsa_id": { "type": "string" },
-    "cve_id": { "type": ["string", "null"] },
-    "url": { "type": "string" },
-    "html_url": { "type": "string" },
-    "summary": { "type": "string" },
-    "severity": { "type": ["string", "null"] },
-    "state": { "type": "string" },
-    "author_login": { "type": ["string", "null"] },
-    "publisher_login": { "type": ["string", "null"] },
-    "created_at": { "type": ["string", "null"] },
-    "updated_at": { "type": ["string", "null"] },
-    "published_at": { "type": ["string", "null"] },
-    "closed_at": { "type": ["string", "null"] },
-    "withdrawn_at": { "type": ["string", "null"] }
-  }
+  "x-primary-key": [
+    "ghsa_id"
+  ]
 }

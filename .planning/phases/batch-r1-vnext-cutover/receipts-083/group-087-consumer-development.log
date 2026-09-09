@@ -1,0 +1,12 @@
+--- FAIL: TestCP11AllocationConsumersPreserveCompoundAndState (6.75s)
+    --- FAIL: TestCP11AllocationConsumersPreserveCompoundAndState/restore-Recover (0.66s)
+        vnext_publication_allocation_consumer_test.go:162: refuse prune generation "g-a994bba02326ebf391486f727ebe90db006214a84638242af250368c31138698" without validated publication ownership: generation artifact metadata.json differs from integrity
+    --- FAIL: TestCP11AllocationConsumersPreserveCompoundAndState/restore-Open (0.66s)
+        vnext_publication_allocation_consumer_test.go:162: refuse prune generation "g-a994bba02326ebf391486f727ebe90db006214a84638242af250368c31138698" without validated publication ownership: generation artifact metadata.json differs from integrity
+    --- FAIL: TestCP11AllocationConsumersPreserveCompoundAndState/restore-Prune (0.67s)
+        vnext_publication_allocation_consumer_test.go:162: refuse prune generation "g-a994bba02326ebf391486f727ebe90db006214a84638242af250368c31138698" without validated publication ownership: generation artifact metadata.json differs from integrity
+    --- FAIL: TestCP11AllocationConsumersPreserveCompoundAndState/restore-Publish (0.72s)
+        vnext_publication_allocation_consumer_test.go:162: refuse prune generation "g-a994bba02326ebf391486f727ebe90db006214a84638242af250368c31138698" without validated publication ownership: generation artifact metadata.json differs from integrity
+FAIL
+FAIL	polymetrics.ai/cmd/connectorgen	7.713s
+FAIL

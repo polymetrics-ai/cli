@@ -34,10 +34,6 @@ import (
 
 const loginPath = "authentication"
 
-func init() {
-	engine.RegisterHooks("hoorayhr", func() engine.Hooks { return New() })
-}
-
 // Hooks implements engine.AuthHook for the hoorayhr bundle. Its only state is
 // a test-injection HTTP client override (mirrors hooks/keka's Hooks shape);
 // every method is otherwise a pure function of its arguments.

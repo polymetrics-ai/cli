@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "number": {
+      "type": "integer"
+    },
+    "owner": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "project_number": {
+      "type": "integer"
+    },
+    "repo": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "type": {
+      "enum": [
+        "Issue",
+        "PullRequest"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "username": {
+      "maxLength": 8192,
+      "type": "string"
+    }
+  },
+  "required": [
+    "number",
+    "owner",
+    "project_number",
+    "repo",
+    "type",
+    "username"
+  ],
+  "type": "object"
+}

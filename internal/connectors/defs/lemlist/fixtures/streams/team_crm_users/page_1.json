@@ -1,9 +1,0 @@
-{
-  "request": { "method": "GET", "path": "/team/crmUsers" },
-  "response": {
-    "status": 200,
-    "body": [
-      { "userId": "usr_fixture_1", "crm": "hubspot" }
-    ]
-  }
-}

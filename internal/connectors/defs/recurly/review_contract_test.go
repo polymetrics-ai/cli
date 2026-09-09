@@ -300,7 +300,7 @@ func TestReviewDeleteRetryEvidenceIsOperationScoped(t *testing.T) {
 			Schema           map[string]any `json:"schema"`
 		} `json:"mutation_query_controls"`
 	}
-	readReviewJSON(t, filepath.Join("..", "..", "..", "..", ".planning", "phases", "recurly-parity-resume-r1", "RECURLY-WRITE-RETRY-RESEARCH.json"), &evidence)
+	readReviewJSON(t, filepath.Join("testdata", "historical-210", "RECURLY-WRITE-RETRY-RESEARCH.json"), &evidence)
 	if evidence.OpenAPISHA256 != "b98a3f85d0a1190c2c8e11f57fa5ec13b841665e658596dcb5d7f3ddce70baca" {
 		t.Errorf("retry evidence OAS digest = %q", evidence.OpenAPISHA256)
 	}
@@ -400,7 +400,7 @@ func TestReviewStreamContractsAreProviderShaped(t *testing.T) {
 			}
 		}
 
-		fixturePath := filepath.Join("fixtures", "streams", stream.Name, "page_1.json")
+		fixturePath := filepath.Join("testdata", "historical-210", "fixtures", "streams", stream.Name, "page_1.json")
 		var fixture struct {
 			Response struct {
 				Body any `json:"body"`
@@ -429,7 +429,7 @@ func TestReviewStreamContractsAreProviderShaped(t *testing.T) {
 		t.Errorf("list_entitlements computed_fields = %#v", entitlements.ComputedFields)
 	}
 
-	if _, err := os.Stat(filepath.Join("fixtures", "streams", "list_sites", "page_2.json")); err != nil {
+	if _, err := os.Stat(filepath.Join("testdata", "historical-210", "fixtures", "streams", "list_sites", "page_2.json")); err != nil {
 		t.Errorf("list_sites second page fixture: %v", err)
 	}
 	var sitePage struct {
@@ -440,7 +440,7 @@ func TestReviewStreamContractsAreProviderShaped(t *testing.T) {
 			} `json:"body"`
 		} `json:"response"`
 	}
-	readReviewJSON(t, filepath.Join("fixtures", "streams", "list_sites", "page_1.json"), &sitePage)
+	readReviewJSON(t, filepath.Join("testdata", "historical-210", "fixtures", "streams", "list_sites", "page_1.json"), &sitePage)
 	if len(sitePage.Response.Headers["Link"]) == 0 {
 		t.Error("list_sites first page has no Link response header")
 	}
@@ -540,7 +540,7 @@ func assertReviewWriteFixtureQuery(t *testing.T, name string, want map[string]st
 			Query map[string]string `json:"query"`
 		} `json:"expect"`
 	}
-	readReviewJSON(t, filepath.Join("fixtures", "writes", name+".json"), &fixture)
+	readReviewJSON(t, filepath.Join("testdata", "historical-210", "fixtures", "writes", name+".json"), &fixture)
 	if !reflect.DeepEqual(fixture.Expect.Query, want) {
 		t.Errorf("write fixture %q query = %#v, want %#v", name, fixture.Expect.Query, want)
 	}

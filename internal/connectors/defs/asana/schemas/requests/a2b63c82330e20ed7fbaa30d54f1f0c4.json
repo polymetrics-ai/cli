@@ -1,0 +1,86 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "data": {
+      "additionalProperties": false,
+      "properties": {
+        "filters": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "action": {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "fields": {
+                "items": {
+                  "maxLength": 8192,
+                  "type": "string"
+                },
+                "maxItems": 256,
+                "type": "array"
+              },
+              "resource_subtype": {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "resource_type": {
+                "maxLength": 8192,
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "maxItems": 256,
+          "type": "array"
+        },
+        "resource": {
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "target": {
+          "maxLength": 8192,
+          "type": "string"
+        }
+      },
+      "required": [
+        "resource",
+        "target"
+      ],
+      "type": "object"
+    },
+    "opt_fields": {
+      "items": {
+        "enum": [
+          "active",
+          "created_at",
+          "delivery_retry_count",
+          "failure_deletion_timestamp",
+          "filters",
+          "filters.action",
+          "filters.fields",
+          "filters.resource_subtype",
+          "last_failure_at",
+          "last_failure_content",
+          "last_success_at",
+          "next_attempt_after",
+          "resource",
+          "resource.name",
+          "target"
+        ],
+        "maxLength": 8192,
+        "type": "string"
+      },
+      "maxItems": 256,
+      "type": "array"
+    },
+    "opt_pretty": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "data"
+  ],
+  "type": "object"
+}

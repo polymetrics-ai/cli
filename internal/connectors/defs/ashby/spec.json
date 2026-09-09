@@ -1,34 +1,16 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Ashby Connection Specification",
-  "type": "object",
+  "properties": {
+    "api_key": {
+      "description": "Ashby API key. Provide from an environment variable or stdin; never inline in prompts or docs.",
+      "type": "string",
+      "x-secret": true
+    }
+  },
   "required": [
     "api_key"
   ],
-  "properties": {
-    "api_key": {
-      "type": "string",
-      "x-secret": true,
-      "description": "Ashby API key. Provide from an environment variable or stdin; never inline in prompts or docs."
-    },
-    "base_url": {
-      "type": "string",
-      "default": "https://api.ashbyhq.com",
-      "description": "Ashby API base URL; override only for local tests."
-    },
-    "page_size": {
-      "type": "string",
-      "default": "100",
-      "description": "Per-page body limit for Ashby list endpoints; bounded to 1..100 by the native connector."
-    },
-    "max_pages": {
-      "type": "string",
-      "default": "0",
-      "description": "Maximum pages to read per stream. Defaults to 0 for an exhaustive read; 0, all, and unlimited are equivalent."
-    },
-    "mode": {
-      "type": "string",
-      "description": "Set to fixture for credential-free native tests."
-    }
-  }
+  "title": "Ashby Connection Specification",
+  "type": "object",
+  "x-reject-unknown-config": true
 }

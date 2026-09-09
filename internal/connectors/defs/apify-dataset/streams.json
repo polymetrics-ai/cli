@@ -1,56 +1,67 @@
 {
   "base": {
-    "url": "{{ config.base_url }}",
-    "user_agent": "polymetrics-go-cli",
     "auth": [
       {
-        "mode": "none"
+        "mode": "bearer",
+        "token": "{{ secrets.token }}"
       }
     ],
-    "pagination": {
-      "type": "none"
-    },
     "check": {
       "method": "GET",
-      "path": "/__legacy_hook/check"
+      "path": "/datasets",
+      "query": {
+        "limit": "1"
+      }
     },
-    "error_map": []
+    "error_map": [],
+    "pagination": {
+      "limit_param": "limit",
+      "max_pages": 100,
+      "offset_param": "offset",
+      "page_size": 1000,
+      "type": "offset_limit"
+    },
+    "url": "https://api.apify.com/v2",
+    "user_agent": "polymetrics-go-cli"
   },
   "streams": [
     {
-      "name": "item_collection",
       "method": "GET",
-      "path": "/__legacy_hook/item_collection",
+      "name": "item_collection",
+      "path": "/datasets/{{ config.dataset_id }}/items",
+      "projection": "passthrough",
       "records": {
-        "path": "data"
+        "path": ".",
+        "wrap_field": "data"
       },
       "schema": "schemas/item_collection.json"
     },
     {
-      "name": "dataset_collection",
-      "method": "GET",
-      "path": "/__legacy_hook/dataset_collection",
-      "records": {
-        "path": "data"
-      },
-      "schema": "schemas/dataset_collection.json",
       "incremental": {
-        "cursor_field": "createdAt",
-        "client_filtered": true
-      }
+        "client_filtered": true,
+        "cursor_field": "createdAt"
+      },
+      "method": "GET",
+      "name": "dataset_collection",
+      "path": "/datasets",
+      "records": {
+        "path": "data.items"
+      },
+      "schema": "schemas/dataset_collection.json"
     },
     {
-      "name": "dataset",
-      "method": "GET",
-      "path": "/__legacy_hook/dataset",
-      "records": {
-        "path": "data"
-      },
-      "schema": "schemas/dataset.json",
       "incremental": {
-        "cursor_field": "modifiedAt",
-        "client_filtered": true
-      }
+        "client_filtered": true,
+        "cursor_field": "modifiedAt"
+      },
+      "method": "GET",
+      "name": "dataset",
+      "path": "/datasets/{{ config.dataset_id }}",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "schema": "schemas/dataset.json"
     }
   ]
 }

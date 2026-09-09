@@ -68,6 +68,11 @@ func (a *App) guardBatchableAction(connectorName, actionName, sourceTable string
 			Risk:        strings.TrimSpace(action.Risk),
 		}
 	}
+	if preflight, ok := connector.(connectors.SavedWriteActionPreflighter); ok {
+		if err := preflight.PreflightSavedWriteAction(actionName); err != nil {
+			return fmt.Errorf("saved write preflight: %w", err)
+		}
+	}
 	return nil
 }
 

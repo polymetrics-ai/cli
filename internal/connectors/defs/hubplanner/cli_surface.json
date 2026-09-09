@@ -1,12 +1,6 @@
 {
   "tagline": "Inspect, sync, directly read, and safely plan typed Hubplanner operations.",
   "usage": "pm hubplanner <command> [flags]",
-  "source_cli": {
-    "name": "Hubplanner API",
-    "docs": "https://github.com/hubplanner/API",
-    "reference": "Provider-owned Sections/*.md endpoint reference",
-    "source": "provider_api"
-  },
   "groups": [
     {
       "id": "billing-rates",
@@ -314,7 +308,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "resources",
-      "source_url": "https://github.com/hubplanner/API/blob/master/Sections/resource.md",
       "api_surface": [
         {
           "method": "GET",
@@ -331,7 +324,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "projects",
-      "source_url": "https://github.com/hubplanner/API/blob/master/Sections/project.md",
       "api_surface": [
         {
           "method": "GET",
@@ -348,7 +340,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "clients",
-      "source_url": "https://github.com/hubplanner/API/blob/master/Sections/clients.md",
       "api_surface": [
         {
           "method": "GET",
@@ -365,7 +356,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "events",
-      "source_url": "https://github.com/hubplanner/API/blob/master/Sections/events.md",
       "api_surface": [
         {
           "method": "GET",
@@ -382,7 +372,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "holidays",
-      "source_url": "https://github.com/hubplanner/API/blob/master/Sections/holidays.md",
       "api_surface": [
         {
           "method": "GET",
@@ -399,7 +388,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "bookings",
-      "source_url": "https://github.com/hubplanner/API/blob/master/Sections/bookings.md",
       "api_surface": [
         {
           "method": "GET",
@@ -416,7 +404,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "billing_rates",
-      "source_url": "https://github.com/hubplanner/API/blob/master/Sections/billingrate.md",
       "api_surface": [
         {
           "method": "GET",
@@ -433,7 +420,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "booking_categories",
-      "source_url": "https://github.com/hubplanner/API/blob/master/Sections/booking-categories.md",
       "api_surface": [
         {
           "method": "GET",
@@ -450,7 +436,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "resource_custom_field_templates",
-      "source_url": "https://github.com/hubplanner/API/blob/master/Sections/custom-fields.md",
       "api_surface": [
         {
           "method": "GET",
@@ -467,7 +452,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "project_custom_field_templates",
-      "source_url": "https://github.com/hubplanner/API/blob/master/Sections/custom-fields.md",
       "api_surface": [
         {
           "method": "GET",
@@ -484,7 +468,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "project_groups",
-      "source_url": "https://github.com/hubplanner/API/blob/master/Sections/groups.md",
       "api_surface": [
         {
           "method": "GET",
@@ -501,7 +484,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "resource_groups",
-      "source_url": "https://github.com/hubplanner/API/blob/master/Sections/groups.md",
       "api_surface": [
         {
           "method": "GET",
@@ -518,7 +500,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "cost_categories",
-      "source_url": "https://github.com/hubplanner/API/blob/master/Sections/project-cost-categories.md",
       "api_surface": [
         {
           "method": "GET",
@@ -535,7 +516,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "project_managers",
-      "source_url": "https://github.com/hubplanner/API/blob/master/Sections/project-manager.md",
       "api_surface": [
         {
           "method": "GET",
@@ -552,7 +532,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "project_tags",
-      "source_url": "https://github.com/hubplanner/API/blob/master/Sections/project-tag.md",
       "api_surface": [
         {
           "method": "GET",
@@ -569,7 +548,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "resource_tags",
-      "source_url": "https://github.com/hubplanner/API/blob/master/Sections/resource-tag.md",
       "api_surface": [
         {
           "method": "GET",
@@ -586,7 +564,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "time_entries",
-      "source_url": "https://github.com/hubplanner/API/blob/master/Sections/timesheets.md",
       "api_surface": [
         {
           "method": "GET",
@@ -603,7 +580,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "unassigned_work",
-      "source_url": "https://github.com/hubplanner/API/blob/master/Sections/unassigned-work.md",
       "api_surface": [
         {
           "method": "GET",
@@ -620,7 +596,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "vacations",
-      "source_url": "https://github.com/hubplanner/API/blob/master/Sections/vacation.md",
       "api_surface": [
         {
           "method": "GET",
@@ -637,7 +612,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "webhook_subscriptions",
-      "source_url": "https://github.com/hubplanner/API/blob/master/Sections/webhooks.md",
       "api_surface": [
         {
           "method": "GET",
@@ -654,7 +628,6 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "hubplanner.billing_rates_get",
-      "source_url": "https://github.com/hubplanner/API/blob/master/Sections/billingrate.md",
       "flags": [],
       "api_surface": [
         {
@@ -673,7 +646,6 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "hubplanner.booking_categories_get",
-      "source_url": "https://github.com/hubplanner/API/blob/master/Sections/booking-categories.md",
       "flags": [],
       "api_surface": [
         {
@@ -692,7 +664,6 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "hubplanner.bookings_get",
-      "source_url": "https://github.com/hubplanner/API/blob/master/Sections/bookings.md",
       "flags": [],
       "api_surface": [
         {
@@ -711,7 +682,6 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "hubplanner.clients_get",
-      "source_url": "https://github.com/hubplanner/API/blob/master/Sections/clients.md",
       "flags": [],
       "api_surface": [
         {
@@ -730,7 +700,6 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "hubplanner.events_get",
-      "source_url": "https://github.com/hubplanner/API/blob/master/Sections/events.md",
       "flags": [],
       "api_surface": [
         {
@@ -749,7 +718,6 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "hubplanner.project_groups_get",
-      "source_url": "https://github.com/hubplanner/API/blob/master/Sections/groups.md",
       "flags": [],
       "api_surface": [
         {
@@ -768,7 +736,6 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "hubplanner.holidays_get",
-      "source_url": "https://github.com/hubplanner/API/blob/master/Sections/holidays.md",
       "flags": [],
       "api_surface": [
         {
@@ -787,7 +754,6 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "hubplanner.milestones_get",
-      "source_url": "https://github.com/hubplanner/API/blob/master/Sections/milestones.md",
       "flags": [],
       "api_surface": [
         {
@@ -806,7 +772,6 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "hubplanner.cost_categories_get",
-      "source_url": "https://github.com/hubplanner/API/blob/master/Sections/project-cost-categories.md",
       "flags": [],
       "api_surface": [
         {
@@ -825,7 +790,6 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "hubplanner.projects_get",
-      "source_url": "https://github.com/hubplanner/API/blob/master/Sections/project.md",
       "flags": [],
       "api_surface": [
         {
@@ -844,7 +808,6 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "hubplanner.resources_get",
-      "source_url": "https://github.com/hubplanner/API/blob/master/Sections/resource.md",
       "flags": [],
       "api_surface": [
         {
@@ -863,7 +826,6 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "hubplanner.time_entries_get",
-      "source_url": "https://github.com/hubplanner/API/blob/master/Sections/timesheets.md",
       "flags": [],
       "api_surface": [
         {
@@ -882,7 +844,6 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "hubplanner.unassigned_work_get",
-      "source_url": "https://github.com/hubplanner/API/blob/master/Sections/unassigned-work.md",
       "flags": [],
       "api_surface": [
         {
@@ -901,7 +862,6 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "hubplanner.vacations_get",
-      "source_url": "https://github.com/hubplanner/API/blob/master/Sections/vacation.md",
       "flags": [],
       "api_surface": [
         {
@@ -920,7 +880,6 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "hubplanner.resource_custom_field_template_search",
-      "source_url": "https://github.com/hubplanner/API/blob/master/Sections/custom-fields.md",
       "flags": [
         {
           "name": "type",
@@ -970,7 +929,6 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "hubplanner.project_custom_field_template_search",
-      "source_url": "https://github.com/hubplanner/API/blob/master/Sections/custom-fields.md",
       "flags": [
         {
           "name": "type",
@@ -3714,7 +3672,6 @@
       "summary": "Webhook event delivery surface `project.update` is documented but blocked.",
       "intent": "docs_only",
       "availability": "planned",
-      "source_url": "https://github.com/hubplanner/API/blob/master/Sections/webhooks.md",
       "notes": "Hubplanner sends this provider callback to an external service; the current connector contract cannot receive it as CDC without the shared CDC/changefeed runtime."
     },
     {
@@ -3722,7 +3679,6 @@
       "summary": "Webhook event delivery surface `resource.update` is documented but blocked.",
       "intent": "docs_only",
       "availability": "planned",
-      "source_url": "https://github.com/hubplanner/API/blob/master/Sections/webhooks.md",
       "notes": "Hubplanner sends this provider callback to an external service; the current connector contract cannot receive it as CDC without the shared CDC/changefeed runtime."
     },
     {
@@ -3730,7 +3686,6 @@
       "summary": "Webhook event delivery surface `booking.create` is documented but blocked.",
       "intent": "docs_only",
       "availability": "planned",
-      "source_url": "https://github.com/hubplanner/API/blob/master/Sections/webhooks.md",
       "notes": "Hubplanner sends this provider callback to an external service; the current connector contract cannot receive it as CDC without the shared CDC/changefeed runtime."
     },
     {
@@ -3738,7 +3693,6 @@
       "summary": "Webhook event delivery surface `timeEntry.create` is documented but blocked.",
       "intent": "docs_only",
       "availability": "planned",
-      "source_url": "https://github.com/hubplanner/API/blob/master/Sections/webhooks.md",
       "notes": "Hubplanner sends this provider callback to an external service; the current connector contract cannot receive it as CDC without the shared CDC/changefeed runtime."
     },
     {
@@ -3746,7 +3700,6 @@
       "summary": "Webhook event delivery surface `timeEntry.update` is documented but blocked.",
       "intent": "docs_only",
       "availability": "planned",
-      "source_url": "https://github.com/hubplanner/API/blob/master/Sections/webhooks.md",
       "notes": "Hubplanner sends this provider callback to an external service; the current connector contract cannot receive it as CDC without the shared CDC/changefeed runtime."
     },
     {
@@ -3754,7 +3707,6 @@
       "summary": "Webhook event delivery surface `timeEntry.create.update` is documented but blocked.",
       "intent": "docs_only",
       "availability": "planned",
-      "source_url": "https://github.com/hubplanner/API/blob/master/Sections/webhooks.md",
       "notes": "Hubplanner sends this provider callback to an external service; the current connector contract cannot receive it as CDC without the shared CDC/changefeed runtime."
     },
     {
@@ -3762,7 +3714,6 @@
       "summary": "Webhook event delivery surface `timeEntry.delete` is documented but blocked.",
       "intent": "docs_only",
       "availability": "planned",
-      "source_url": "https://github.com/hubplanner/API/blob/master/Sections/webhooks.md",
       "notes": "Hubplanner sends this provider callback to an external service; the current connector contract cannot receive it as CDC without the shared CDC/changefeed runtime."
     },
     {
@@ -3770,7 +3721,6 @@
       "summary": "Webhook event delivery surface `booking.update` is documented but blocked.",
       "intent": "docs_only",
       "availability": "planned",
-      "source_url": "https://github.com/hubplanner/API/blob/master/Sections/webhooks.md",
       "notes": "Hubplanner sends this provider callback to an external service; the current connector contract cannot receive it as CDC without the shared CDC/changefeed runtime."
     },
     {
@@ -3778,7 +3728,6 @@
       "summary": "Webhook event delivery surface `booking.delete` is documented but blocked.",
       "intent": "docs_only",
       "availability": "planned",
-      "source_url": "https://github.com/hubplanner/API/blob/master/Sections/webhooks.md",
       "notes": "Hubplanner sends this provider callback to an external service; the current connector contract cannot receive it as CDC without the shared CDC/changefeed runtime."
     },
     {
@@ -3786,7 +3735,6 @@
       "summary": "Webhook event delivery surface `booking.delete.multiple` is documented but blocked.",
       "intent": "docs_only",
       "availability": "planned",
-      "source_url": "https://github.com/hubplanner/API/blob/master/Sections/webhooks.md",
       "notes": "Hubplanner sends this provider callback to an external service; the current connector contract cannot receive it as CDC without the shared CDC/changefeed runtime."
     }
   ],

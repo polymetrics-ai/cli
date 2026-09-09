@@ -1,78 +1,141 @@
 {
   "base": {
-    "url": "{{ config.base_url }}",
-    "user_agent": "polymetrics-go-cli",
     "auth": [
       {
-        "mode": "none"
+        "client_id": "{{ secrets.client_id }}",
+        "client_secret": "{{ secrets.client_secret }}",
+        "mode": "oauth2_refresh_token",
+        "refresh_token": "{{ secrets.client_refresh_token }}",
+        "token_url": "https://oauth2.googleapis.com/token"
       }
     ],
-    "pagination": {
-      "type": "none"
-    },
     "check": {
       "method": "GET",
-      "path": "/__legacy_hook/check"
+      "path": "/v1/courses",
+      "query": {
+        "pageSize": "1"
+      }
     },
-    "error_map": []
+    "error_map": [],
+    "pagination": {
+      "cursor_param": "pageToken",
+      "max_pages": 100,
+      "page_size": 100,
+      "size_param": "pageSize",
+      "token_path": "nextPageToken",
+      "type": "cursor"
+    },
+    "url": "https://classroom.googleapis.com",
+    "user_agent": "polymetrics-go-cli"
   },
   "streams": [
     {
-      "name": "courses",
       "method": "GET",
-      "path": "/__legacy_hook/courses",
+      "name": "courses",
+      "path": "/v1/courses",
+      "projection": "passthrough",
       "records": {
-        "path": "data"
+        "path": "courses"
       },
-      "schema": "schemas/courses.json",
-      "incremental": {
-        "cursor_field": "updateTime",
-        "client_filtered": true
-      }
+      "schema": "schemas/courses.json"
     },
     {
-      "name": "teachers",
+      "computed_fields": {
+        "emailAddress": "{{ record.profile.emailAddress }}",
+        "fullName": "{{ record.profile.name.fullName }}",
+        "photoUrl": "{{ record.profile.photoUrl }}"
+      },
+      "fan_out": {
+        "ids_from": {
+          "request": {
+            "id_field": "id",
+            "path": "/v1/courses",
+            "records_path": "courses"
+          }
+        },
+        "into": {
+          "path_var": "course_id"
+        },
+        "stamp_field": "courseId"
+      },
       "method": "GET",
-      "path": "/__legacy_hook/teachers",
+      "name": "teachers",
+      "path": "/v1/courses/{{ fanout.id }}/teachers",
       "records": {
-        "path": "data"
+        "path": "teachers"
       },
       "schema": "schemas/teachers.json"
     },
     {
-      "name": "students",
+      "computed_fields": {
+        "emailAddress": "{{ record.profile.emailAddress }}",
+        "fullName": "{{ record.profile.name.fullName }}",
+        "photoUrl": "{{ record.profile.photoUrl }}"
+      },
+      "fan_out": {
+        "ids_from": {
+          "request": {
+            "id_field": "id",
+            "path": "/v1/courses",
+            "records_path": "courses"
+          }
+        },
+        "into": {
+          "path_var": "course_id"
+        },
+        "stamp_field": "courseId"
+      },
       "method": "GET",
-      "path": "/__legacy_hook/students",
+      "name": "students",
+      "path": "/v1/courses/{{ fanout.id }}/students",
       "records": {
-        "path": "data"
+        "path": "students"
       },
       "schema": "schemas/students.json"
     },
     {
-      "name": "course_work",
-      "method": "GET",
-      "path": "/__legacy_hook/course_work",
-      "records": {
-        "path": "data"
+      "fan_out": {
+        "ids_from": {
+          "request": {
+            "id_field": "id",
+            "path": "/v1/courses",
+            "records_path": "courses"
+          }
+        },
+        "into": {
+          "path_var": "course_id"
+        },
+        "stamp_field": "courseId"
       },
-      "schema": "schemas/course_work.json",
-      "incremental": {
-        "cursor_field": "updateTime",
-        "client_filtered": true
-      }
+      "method": "GET",
+      "name": "course_work",
+      "path": "/v1/courses/{{ fanout.id }}/courseWork",
+      "records": {
+        "path": "courseWork"
+      },
+      "schema": "schemas/course_work.json"
     },
     {
-      "name": "announcements",
-      "method": "GET",
-      "path": "/__legacy_hook/announcements",
-      "records": {
-        "path": "data"
+      "fan_out": {
+        "ids_from": {
+          "request": {
+            "id_field": "id",
+            "path": "/v1/courses",
+            "records_path": "courses"
+          }
+        },
+        "into": {
+          "path_var": "course_id"
+        },
+        "stamp_field": "courseId"
       },
-      "schema": "schemas/announcements.json",
-      "incremental": {
-        "cursor_field": "updateTime",
-        "client_filtered": true
-      }
+      "method": "GET",
+      "name": "announcements",
+      "path": "/v1/courses/{{ fanout.id }}/announcements",
+      "records": {
+        "path": "announcements"
+      },
+      "schema": "schemas/announcements.json"
     }
   ]
 }

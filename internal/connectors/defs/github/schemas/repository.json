@@ -1,33 +1,11 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "repository",
-  "type": "object",
-  "x-primary-key": [
-    "node_id"
-  ],
-  "x-cursor-field": "updated_at",
-  "required": [
-    "node_id"
-  ],
   "properties": {
-    "repository": {
-      "type": "string",
-      "description": "Legacy's config-derived per-record marker field (\"owner/repo\"), restored via computed_fields' now-available config.* reference (ENGINE_GAP G0, RESOLVED)."
-    },
-    "id": {
-      "type": "integer"
-    },
-    "node_id": {
+    "created_at": {
       "type": "string"
     },
-    "name": {
+    "default_branch": {
       "type": "string"
-    },
-    "full_name": {
-      "type": "string"
-    },
-    "private": {
-      "type": "boolean"
     },
     "description": {
       "type": [
@@ -35,11 +13,17 @@
         "null"
       ]
     },
+    "forks_count": {
+      "type": "integer"
+    },
+    "full_name": {
+      "type": "string"
+    },
     "html_url": {
       "type": "string"
     },
-    "default_branch": {
-      "type": "string"
+    "id": {
+      "type": "integer"
     },
     "language": {
       "type": [
@@ -47,29 +31,45 @@
         "null"
       ]
     },
-    "stargazers_count": {
-      "type": "integer"
+    "name": {
+      "type": "string"
     },
-    "watchers_count": {
-      "type": "integer"
-    },
-    "forks_count": {
-      "type": "integer"
+    "node_id": {
+      "type": "string"
     },
     "open_issues_count": {
       "type": "integer"
     },
-    "created_at": {
-      "type": "string"
-    },
-    "updated_at": {
-      "type": "string"
+    "private": {
+      "type": "boolean"
     },
     "pushed_at": {
       "type": [
         "string",
         "null"
       ]
+    },
+    "repository": {
+      "description": "Repository marker derived from the configured owner and repository.",
+      "type": "string"
+    },
+    "stargazers_count": {
+      "type": "integer"
+    },
+    "updated_at": {
+      "type": "string"
+    },
+    "watchers_count": {
+      "type": "integer"
     }
-  }
+  },
+  "required": [
+    "node_id"
+  ],
+  "title": "repository",
+  "type": "object",
+  "x-cursor-field": "updated_at",
+  "x-primary-key": [
+    "node_id"
+  ]
 }

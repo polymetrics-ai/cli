@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "body": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "comment_id": {
+      "type": "integer"
+    },
+    "pull_number": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "body",
+    "comment_id",
+    "pull_number"
+  ],
+  "type": "object"
+}

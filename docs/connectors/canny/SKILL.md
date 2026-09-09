@@ -7,7 +7,7 @@ description: Canny connector knowledge and safe action guide.
 
 ## Purpose
 
-Reads Canny boards, posts, comments, categories, and companies through the Canny REST API.
+Reads Canny boards, posts, comments, categories, and companies through fixed Canny REST form requests.
 
 ## Icon
 
@@ -24,17 +24,44 @@ Reads Canny boards, posts, comments, categories, and companies through the Canny
 
 ## Authentication
 
-- No secret authentication is required for this connector.
+- Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 ## Configuration
 
-- No connector-specific config fields.
+- api_key (secret) (required)
+
+## ETL Streams
+
+- boards:
+  - primary key: id
+  - cursor: created
+  - fields: created(string), id(string)
+- posts:
+  - primary key: id
+  - cursor: created
+  - fields: created(string), id(string)
+- comments:
+  - primary key: id
+  - cursor: created
+  - fields: created(string), id(string)
+- categories:
+  - primary key: id
+  - cursor: created
+  - fields: created(string), id(string)
+- companies:
+  - primary key: id
+  - cursor: created
+  - fields: created(string), id(string)
+
+## Sync Modes
+
+- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
 
 ## Security
 
-- read risk: connector-specific
-- write risk: connector-specific
-- approval: external mutations require preview and approval
+- read risk: Bounded Canny list requests carry the declared API key only in typed form bodies.
+- write risk: unsupported
+- approval: none; read-only
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 ## Commands

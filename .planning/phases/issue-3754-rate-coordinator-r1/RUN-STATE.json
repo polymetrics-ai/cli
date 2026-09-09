@@ -1,7 +1,0 @@
-{
-  "issue": 3754,
-  "state": "correction_5_reviewed_ready_for_direct_pr",
-  "manual_gsd_fallback": "GSD phase 3754 is not registered in ROADMAP.md; prompts are executed inline under the canonical single-worker restriction.",
-  "base": "integration/4015-mvp-flat-r1",
-  "next": "commit, push only fm/cli-4049-writehook-declared-route-r1, open a direct PR against integration/4015-mvp-flat-r1, verify its API-reported base, then await green CI and automatic review"
-}

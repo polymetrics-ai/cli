@@ -29,10 +29,6 @@ import (
 	"polymetrics.ai/internal/connectors/engine"
 )
 
-func init() {
-	engine.RegisterHooks("gmail", func() engine.Hooks { return New() })
-}
-
 // Hooks is the gmail hook set. It implements engine.AuthHook only.
 type Hooks struct {
 	// Now is injectable for tests; nil uses time.Now (mirrors legacy

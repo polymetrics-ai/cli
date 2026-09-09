@@ -195,6 +195,7 @@ jobs:
             --targets linux/amd64,linux/arm64
 
       - name: Verify assembled Linux release assets
+        # Artifact integrity remains mandatory; reported distribution sizes are informational.
         run: ./scripts/verify-release-assets.sh dist --targets linux/amd64,linux/arm64
 
       - name: Set up QEMU for Linux package tests

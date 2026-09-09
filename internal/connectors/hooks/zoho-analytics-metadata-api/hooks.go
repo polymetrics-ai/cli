@@ -32,10 +32,6 @@ import (
 	"polymetrics.ai/internal/connectors/engine"
 )
 
-func init() {
-	engine.RegisterHooks("zoho-analytics-metadata-api", func() engine.Hooks { return New() })
-}
-
 // Hooks is the zoho-analytics-metadata-api hook set. It implements
 // engine.AuthHook only.
 type Hooks struct {

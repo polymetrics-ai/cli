@@ -1,0 +1,250 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "allow_auto_merge": {
+      "type": "boolean"
+    },
+    "allow_forking": {
+      "type": "boolean"
+    },
+    "allow_merge_commit": {
+      "type": "boolean"
+    },
+    "allow_rebase_merge": {
+      "type": "boolean"
+    },
+    "allow_squash_merge": {
+      "type": "boolean"
+    },
+    "allow_update_branch": {
+      "type": "boolean"
+    },
+    "archived": {
+      "type": "boolean"
+    },
+    "default_branch": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "delete_branch_on_merge": {
+      "type": "boolean"
+    },
+    "description": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "has_issues": {
+      "type": "boolean"
+    },
+    "has_projects": {
+      "type": "boolean"
+    },
+    "has_pull_requests": {
+      "type": "boolean"
+    },
+    "has_wiki": {
+      "type": "boolean"
+    },
+    "homepage": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "is_template": {
+      "type": "boolean"
+    },
+    "merge_commit_message": {
+      "enum": [
+        "PR_BODY",
+        "PR_TITLE",
+        "BLANK"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "merge_commit_title": {
+      "enum": [
+        "PR_TITLE",
+        "MERGE_MESSAGE"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "name": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "private": {
+      "type": "boolean"
+    },
+    "pull_request_creation_policy": {
+      "enum": [
+        "all",
+        "collaborators_only"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "security_and_analysis": {
+      "additionalProperties": false,
+      "properties": {
+        "advanced_security": {
+          "additionalProperties": false,
+          "properties": {
+            "status": {
+              "maxLength": 8192,
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "code_security": {
+          "additionalProperties": false,
+          "properties": {
+            "status": {
+              "maxLength": 8192,
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "secret_scanning": {
+          "additionalProperties": false,
+          "properties": {
+            "status": {
+              "maxLength": 8192,
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "secret_scanning_ai_detection": {
+          "additionalProperties": false,
+          "properties": {
+            "status": {
+              "maxLength": 8192,
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "secret_scanning_delegated_alert_dismissal": {
+          "additionalProperties": false,
+          "properties": {
+            "status": {
+              "maxLength": 8192,
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "secret_scanning_delegated_bypass": {
+          "additionalProperties": false,
+          "properties": {
+            "status": {
+              "maxLength": 8192,
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "secret_scanning_delegated_bypass_options": {
+          "additionalProperties": false,
+          "properties": {
+            "reviewers": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "mode": {
+                    "enum": [
+                      "ALWAYS",
+                      "EXEMPT"
+                    ],
+                    "maxLength": 8192,
+                    "type": "string"
+                  },
+                  "reviewer_id": {
+                    "type": "integer"
+                  },
+                  "reviewer_type": {
+                    "enum": [
+                      "TEAM",
+                      "ROLE"
+                    ],
+                    "maxLength": 8192,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "reviewer_id",
+                  "reviewer_type"
+                ],
+                "type": "object"
+              },
+              "maxItems": 256,
+              "type": "array"
+            }
+          },
+          "type": "object"
+        },
+        "secret_scanning_non_provider_patterns": {
+          "additionalProperties": false,
+          "properties": {
+            "status": {
+              "maxLength": 8192,
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "secret_scanning_push_protection": {
+          "additionalProperties": false,
+          "properties": {
+            "status": {
+              "maxLength": 8192,
+              "type": "string"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "squash_merge_commit_message": {
+      "enum": [
+        "PR_BODY",
+        "COMMIT_MESSAGES",
+        "BLANK"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "squash_merge_commit_title": {
+      "enum": [
+        "PR_TITLE",
+        "COMMIT_OR_PR_TITLE"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "use_squash_pr_title_as_default": {
+      "type": "boolean"
+    },
+    "visibility": {
+      "enum": [
+        "public",
+        "private"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "web_commit_signoff_required": {
+      "type": "boolean"
+    }
+  },
+  "required": [],
+  "type": "object"
+}

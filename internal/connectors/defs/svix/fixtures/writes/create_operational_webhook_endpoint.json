@@ -1,7 +1,0 @@
-{
-  "record": { "url": "https://example.com/ops-webhook" },
-  "expect": {
-    "method": "POST",
-    "path": "/operational-webhook/endpoint"
-  }
-}

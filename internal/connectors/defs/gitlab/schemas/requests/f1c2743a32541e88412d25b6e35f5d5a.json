@@ -1,0 +1,4654 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "abuse_notification_email": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "active_context_pause_indexing": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "admin_mode": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "admin_notification_email": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "after_sign_out_path": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "after_sign_up_text": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "ai_action_api_rate_limit": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "ai_audit_events_streaming_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "akismet_api_key": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "akismet_enabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "allow_account_deletion": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "allow_all_integrations": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "allow_application_default_credentials_for_offline_transfer": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "allow_bypass_placeholder_confirmation": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "allow_contribution_mapping_to_admins": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "allow_deploy_tokens_and_keys_with_external_authn": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "allow_group_owners_to_manage_ldap": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "allow_local_requests_from_hooks_and_services": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "allow_local_requests_from_system_hooks": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "allow_local_requests_from_web_hooks_and_services": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "allow_possible_spam": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "allow_project_creation_for_guest_and_below": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "allow_runner_registration_token": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "allow_s3_compatible_storage_for_offline_transfer": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "allow_top_level_group_owners_to_create_service_accounts": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "allowed_integrations": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "anonymous_searches_allowed": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "archive_builds_in_human_readable": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "asciidoc_max_includes": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "asset_proxy_allowlist": {
+      "items": {
+        "maxLength": 8192,
+        "type": "string"
+      },
+      "maxItems": 256,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "asset_proxy_enabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "asset_proxy_secret_key": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "asset_proxy_url": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "asset_proxy_whitelist": {
+      "items": {
+        "maxLength": 8192,
+        "type": "string"
+      },
+      "maxItems": 256,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "authn_data_retention_cleanup_enabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "authorized_keys_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "auto_accept_awarded_achievements": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "auto_ban_user_on_excessive_projects_download": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "auto_devops_domain": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "auto_devops_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "auto_duo_code_review_enabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "autocomplete_users_limit": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "autocomplete_users_unauthenticated_limit": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "automatic_purchased_storage_allocation": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "background_operations_max_jobs": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "built_in_project_templates_enabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "bulk_import_concurrent_pipeline_batch_limit": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "bulk_import_enabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "bulk_import_max_download_file": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "bulk_import_max_download_file_size": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "can_create_group": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "can_create_organization": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "check_namespace_plan": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "ci_cd_catalog_projects_allowlist": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "ci_cd_catalog_projects_allowlist_raw": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "ci_delete_pipelines_in_seconds_limit_human_readable": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "ci_job_live_trace_enabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "ci_job_telemetry_sampling_rate": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "ci_lint_limit_per_user": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "ci_max_caches_per_job": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "ci_max_includes": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "ci_max_total_yaml_size_bytes": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "ci_partitions_in_seconds_limit": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "ci_partitions_in_seconds_limit_human_readable": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "ci_telemetry_otel_endpoint": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "code_suggestions_api_rate_limit": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "commit_email_hostname": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "concurrent_bitbucket_import_jobs_limit": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "concurrent_bitbucket_server_import_jobs_limit": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "concurrent_github_import_jobs_limit": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "concurrent_relation_batch_export_limit": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "concurrent_relation_export_limit": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "container_expiration_policies_enable_historic_entries": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "container_registry_cleanup_tags_service_max_list_size": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "container_registry_delete_tags_service_timeout": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "container_registry_expiration_policies_caching": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "container_registry_expiration_policies_worker_capacity": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "container_registry_token_expire_delay": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "create_organization_api_limit": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "cube_api_base_url": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "cube_api_key": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "custom_http_clone_url_root": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "deactivate_dormant_users": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "deactivate_dormant_users_period": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "deactivation_email_additional_text": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "decompress_archive_file_timeout": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "default_artifacts_expire_in": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "default_branch_name": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "default_branch_protection": {
+      "enum": [
+        0,
+        3,
+        1,
+        2,
+        4
+      ],
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "default_branch_protection_defaults": {
+      "additionalProperties": false,
+      "properties": {
+        "allow_force_push": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "allowed_to_merge": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "access_level": {
+                "enum": [
+                  30,
+                  40,
+                  60,
+                  0
+                ],
+                "type": "integer"
+              }
+            },
+            "required": [
+              "access_level"
+            ],
+            "type": "object"
+          },
+          "maxItems": 256,
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "allowed_to_push": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "access_level": {
+                "enum": [
+                  30,
+                  40,
+                  60,
+                  0
+                ],
+                "type": "integer"
+              }
+            },
+            "required": [
+              "access_level"
+            ],
+            "type": "object"
+          },
+          "maxItems": 256,
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "code_owner_approval_required": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "developer_can_initial_push": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        }
+      },
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "default_ci_config_path": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "default_dark_syntax_highlighting_theme": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "default_group_visibility": {
+      "enum": [
+        "private",
+        "internal",
+        "public"
+      ],
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "default_preferred_language": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "default_project_creation": {
+      "enum": [
+        0,
+        3,
+        4,
+        1,
+        2
+      ],
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "default_project_deletion_protection": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "default_project_visibility": {
+      "enum": [
+        "private",
+        "internal",
+        "public"
+      ],
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "default_projects_limit": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "default_search_scope": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "default_snippet_visibility": {
+      "enum": [
+        "private",
+        "internal",
+        "public"
+      ],
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "default_syntax_highlighting_theme": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "delay_user_account_self_deletion": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "delete_inactive_projects": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "delete_unconfirmed_users": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "deletion_adjourned_period": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "deny_all_requests_except_allowed": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "dependency_firewall_policies_per_configuration_limit": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "dependency_management_settings": {
+      "additionalProperties": false,
+      "properties": {
+        "security_update_scheduler_max_concurrency": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        }
+      },
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "dependency_scanning_sbom_scan_api_download_limit": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "dependency_scanning_sbom_scan_api_upload_limit": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "description_and_note_max_size": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "diagramsnet_enabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "diagramsnet_url": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "diff_max_commits": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "diff_max_files": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "diff_max_lines": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "diff_max_patch_bytes": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "diff_max_versions": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "disable_admin_oauth_scopes": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "disable_feed_token": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "disable_invite_members": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "disable_overriding_approvers_per_merge_request": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "disable_password_authentication_for_users_with_sso_identities": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "disable_personal_access_tokens": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "disabled_direct_code_suggestions": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "disabled_oauth_sign_in_sources": {
+      "items": {
+        "maxLength": 8192,
+        "type": "string"
+      },
+      "maxItems": 256,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "display_gitlab_credits_user_data": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "dns_rebinding_protection_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "domain_allowlist": {
+      "items": {
+        "maxLength": 8192,
+        "type": "string"
+      },
+      "maxItems": 256,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "domain_allowlist_raw": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "domain_denylist": {
+      "items": {
+        "maxLength": 8192,
+        "type": "string"
+      },
+      "maxItems": 256,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "domain_denylist_enabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "domain_denylist_raw": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "downstream_pipeline_trigger_limit_per_project_user_sha": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "dsa_key_restriction": {
+      "enum": [
+        0,
+        1024,
+        2048,
+        3072,
+        -1
+      ],
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "duo_agent_platform_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "duo_availability": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "duo_chat_expiration_column": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "duo_chat_expiration_days": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "duo_cli_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "duo_custom_agents_availability": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "duo_custom_agents_enabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "duo_custom_flows_availability": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "duo_custom_flows_enabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "duo_external_agents_availability": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "duo_external_agents_enabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "duo_features_enabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "duo_foundational_flows_availability": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "duo_foundational_flows_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "duo_namespace_access_rules": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "features": {
+            "items": {
+              "maxLength": 8192,
+              "type": "string"
+            },
+            "maxItems": 256,
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "through_namespace": {
+            "additionalProperties": false,
+            "properties": {
+              "full_path": {
+                "maxLength": 8192,
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "id": {
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "name": {
+                "maxLength": 8192,
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "id"
+            ],
+            "type": [
+              "object",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "features"
+        ],
+        "type": "object"
+      },
+      "maxItems": 256,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "duo_remote_flows_availability": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "duo_remote_flows_enabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "duo_template_project_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "duo_workflow_oauth_application_id": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "duo_workflows_default_image_registry": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "dynamic_client_registration_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "ecdsa_key_restriction": {
+      "enum": [
+        0,
+        256,
+        384,
+        521,
+        -1
+      ],
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "ecdsa_sk_key_restriction": {
+      "enum": [
+        0,
+        256,
+        -1
+      ],
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "ed25519_key_restriction": {
+      "enum": [
+        0,
+        256,
+        -1
+      ],
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "ed25519_sk_key_restriction": {
+      "enum": [
+        0,
+        256,
+        -1
+      ],
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "eks_access_key_id": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "eks_account_id": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "eks_integration_enabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "eks_secret_access_key": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "elastic_migration_worker_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "elasticsearch_advanced_search_pause_indexing": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "elasticsearch_analyzers_kuromoji_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "elasticsearch_analyzers_kuromoji_search": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "elasticsearch_analyzers_smartcn_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "elasticsearch_analyzers_smartcn_search": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "elasticsearch_aws": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "elasticsearch_aws_access_key": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "elasticsearch_aws_region": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "elasticsearch_aws_role_arn": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "elasticsearch_aws_secret_access_key": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "elasticsearch_client_adapter": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "elasticsearch_client_request_timeout": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "elasticsearch_code_scope": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "elasticsearch_indexed_field_length_limit": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "elasticsearch_indexed_file_size_limit_kb": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "elasticsearch_indexing": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "elasticsearch_indexing_timeout_minutes": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "elasticsearch_limit_indexing": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "elasticsearch_max_bulk_concurrency": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "elasticsearch_max_bulk_size_mb": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "elasticsearch_max_code_indexing_concurrency": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "elasticsearch_namespace_ids": {
+      "items": {
+        "type": "integer"
+      },
+      "maxItems": 256,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "elasticsearch_password": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "elasticsearch_pause_indexing": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "elasticsearch_project_ids": {
+      "items": {
+        "type": "integer"
+      },
+      "maxItems": 256,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "elasticsearch_replicas": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "elasticsearch_requeue_workers": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "elasticsearch_retry_on_failure": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "elasticsearch_search": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "elasticsearch_shards": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "elasticsearch_url": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "elasticsearch_username": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "elasticsearch_worker_number_of_shards": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "email_additional_text": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "email_author_in_body": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "email_confirmation_setting": {
+      "enum": [
+        "off",
+        "soft",
+        "hard"
+      ],
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "email_otp_enabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "email_restrictions": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "email_restrictions_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "enable_artifact_external_redirect_warning_page": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "enable_language_server_restrictions": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "enable_member_promotion_management": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "enabled_expanded_logging": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "enabled_git_access_protocol": {
+      "enum": [
+        "ssh",
+        "http",
+        "all"
+      ],
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "enforce_ci_inbound_job_token_scope_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "enforce_email_subaddress_restrictions": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "enforce_granular_tokens": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "enforce_namespace_storage_limit": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "enforce_pipl_compliance": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "enforce_terms": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "error_tracking_api_url": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "error_tracking_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "external_auth_client_cert": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "external_auth_client_key": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "external_auth_client_key_pass": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "external_authorization_service_default_label": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "external_authorization_service_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "external_authorization_service_timeout": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "external_authorization_service_url": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "external_pipeline_validation_service_timeout": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "external_pipeline_validation_service_token": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "external_pipeline_validation_service_url": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "failed_login_attempts_unlock_period_in_minutes": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "fetch_observability_alerts_from_cloud": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "file_template_project_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "first_day_of_week": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "floc_enabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "force_pages_access_control": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "foundational_agents_default_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "foundational_agents_statuses": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "geo_node_allowed_ips": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "geo_status_timeout": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "git_push_pipeline_limit": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "git_rate_limit_users_alertlist": {
+      "items": {
+        "type": "integer"
+      },
+      "maxItems": 256,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "git_rate_limit_users_allowlist": {
+      "items": {
+        "maxLength": 8192,
+        "type": "string"
+      },
+      "maxItems": 256,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "git_two_factor_session_expiry": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "gitaly_timeout_default": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "gitaly_timeout_fast": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "gitaly_timeout_medium": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "gitlab_dedicated_instance": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "gitlab_environment_toolkit_instance": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "gitlab_product_usage_data_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "gitlab_shell_operation_limit": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "gitpod_enabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "gitpod_url": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "global_search_block_anonymous_searches_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "global_search_code_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "global_search_commits_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "global_search_limited_indexing_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "global_search_merge_requests_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "global_search_snippet_titles_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "global_search_users_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "global_search_wiki_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "global_search_work_items_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "globally_allowed_ips": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "grafana_enabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "grafana_url": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "granular_tokens_enforced_after": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "gravatar_enabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "group_api_limit": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "group_archive_unarchive_api_limit": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "group_create_limit": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "group_download_export_limit": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "group_export_limit": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "group_import_limit": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "group_invited_groups_api_limit": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "group_owners_can_manage_default_branch_protection": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "group_projects_api_limit": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "group_runner_token_expiration_interval": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "group_secrets_limit": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "group_shared_groups_api_limit": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "groups_api_limit": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "hashed_storage_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "helm_max_packages_count": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "help_page_documentation_base_url": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "help_page_hide_commercial_content": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "help_page_support_url": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "help_page_text": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "hide_third_party_offers": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "home_page_url": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "housekeeping_enabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "housekeeping_full_repack_period": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "housekeeping_gc_period": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "housekeeping_incremental_repack_period": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "housekeeping_optimize_repository_period": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "html_emails_enabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "iframe_rendering_allowlist": {
+      "items": {
+        "maxLength": 8192,
+        "type": "string"
+      },
+      "maxItems": 256,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "iframe_rendering_allowlist_raw": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "iframe_rendering_enabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "import_jobs_concurrency_limit": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "import_sources": {
+      "items": {
+        "maxLength": 8192,
+        "type": "string"
+      },
+      "maxItems": 256,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "inactive_projects_delete_after_months": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "inactive_projects_min_size_mb": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "inactive_projects_send_warning_email_after_months": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "inactive_resource_access_tokens_delete_after_days": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "include_optional_metrics_in_service_ping": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "instance_level_ai_beta_features_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "instance_token_prefix": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "invisible_captcha_enabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "invitation_flow_enforcement": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "issues_create_limit": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "jira_connect_additional_audience_url": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "jira_connect_application_key": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "jira_connect_proxy_url": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "jira_connect_public_key_storage_enabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "jira_forge_app_id": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "keep_latest_artifact": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "kroki_diagram_proxy_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "kroki_enabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "kroki_formats": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "kroki_url": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "local_markdown_version": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "lock_built_in_project_templates_enabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "lock_duo_custom_agents_enabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "lock_duo_custom_flows_enabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "lock_duo_external_agents_enabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "lock_duo_features_enabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "lock_duo_remote_flows_enabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "lock_memberships_to_ldap": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "lock_memberships_to_saml": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "lock_model_prompt_cache_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "lock_require_sha_for_merge": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "lock_resource_access_token_notify_inherited": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "logging_field_dual_emit_target": {
+      "enum": [
+        1
+      ],
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "logging_field_schema_version": {
+      "enum": [
+        0,
+        1
+      ],
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "login_recaptcha_protection_enabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "mailgun_events_enabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "mailgun_signing_key": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "maintenance_mode": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "maintenance_mode_message": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "make_profile_private": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "math_rendering_limits_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "maven_package_requests_forwarding": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "max_artifacts_content_include_size": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "max_artifacts_size": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "max_attachment_size": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "max_decompressed_archive_size": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "max_export_size": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "max_github_response_json_value_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "max_github_response_size_limit": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "max_http_decompressed_size": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "max_http_response_csv_structural_chars": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "max_http_response_json_depth": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "max_http_response_json_structural_chars": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "max_http_response_size_limit": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "max_http_response_xml_structural_chars": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "max_import_remote_file_size": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "max_import_size": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "max_login_attempts": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "max_number_of_repository_downloads": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "max_number_of_repository_downloads_within_time_period": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "max_pages_custom_domains_per_project": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "max_pages_size": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "max_personal_access_token_lifetime": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "max_ssh_key_lifetime": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "max_terraform_state_size_bytes": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "max_yaml_depth": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "max_yaml_size_bytes": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "mcp_server_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "members_delete_limit": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "metrics_method_call_threshold": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "minimum_language_server_version": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "minimum_password_length": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "mirror_available": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "mirror_capacity_threshold": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "mirror_max_capacity": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "mirror_max_delay": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "model_prompt_cache_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "namespace_aggregation_schedule_lease_duration_in_seconds": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "notes_create_limit": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "notes_create_limit_allowlist_raw": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "notify_on_unknown_sign_in": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "npm_package_requests_forwarding": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "nuget_skip_metadata_url_validation": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "oauth_access_token_expires_in": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "observability_backend_ssl_verification_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "offline_transfer_exports_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "offline_transfer_imports_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "organization_cluster_agent_authorization_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "outbound_local_requests_allowlist_raw": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "outbound_local_requests_whitelist": {
+      "items": {
+        "maxLength": 8192,
+        "type": "string"
+      },
+      "maxItems": 256,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "package_metadata_purl_types": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "package_registry_allow_anyone_to_pull_option": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "package_registry_cleanup_policies_worker_capacity": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "pages_domain_verification_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "pages_extra_deployments_default_expiry_seconds": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "pages_unique_domain_default_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "password_authentication_enabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "password_authentication_enabled_for_git": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "password_authentication_enabled_for_web": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "password_lowercase_required": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "password_number_required": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "password_symbol_required": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "password_uppercase_required": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "performance_bar_allowed_group_id": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "performance_bar_allowed_group_path": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "performance_bar_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "personal_access_token_prefix": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "pipeline_execution_policies_per_configuration_limit": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "pipeline_limit_per_project_user_sha": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "pipeline_limit_per_user": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "plantuml_diagram_proxy_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "plantuml_enabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "plantuml_url": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "policy_store_experiment_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "polling_interval_multiplier": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "prevent_merge_requests_author_approval": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "prevent_merge_requests_committers_approval": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "product_analytics_configurator_connection_string": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "product_analytics_data_collector_host": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "product_analytics_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "project_api_limit": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "project_create_limit": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "project_download_export_limit": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "project_export_enabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "project_export_limit": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "project_import_limit": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "project_invited_groups_api_limit": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "project_jobs_api_rate_limit": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "project_members_api_limit": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "project_repositories_blobs_batch_limit": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "project_runner_token_expiration_interval": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "project_secrets_limit": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "projects_api_limit": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "projects_api_rate_limit_unauthenticated": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "prometheus_metrics_enabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "protected_ci_variables": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "protected_paths_for_get_request_raw": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "protected_paths_raw": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "push_event_activities_limit": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "push_event_hooks_limit": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "pypi_package_requests_forwarding": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "rate_limiting_response_text": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "raw_blob_request_limit": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "raw_blob_request_limit_unauthenticated": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "recaptcha_enabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "recaptcha_private_key": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "recaptcha_site_key": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "receive_max_input_size": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "receptive_cluster_agents_enabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "reindexing_minimum_index_size": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "reindexing_minimum_relative_bloat_size": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "relation_export_batch_size": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "remember_me_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "repository_checks_enabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "repository_size_limit": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "repository_storages_weighted": {
+      "additionalProperties": true,
+      "maxProperties": 256,
+      "type": [
+        "null",
+        "object"
+      ]
+    },
+    "require_admin_approval_after_user_signup": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "require_admin_two_factor_authentication": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "require_email_verification_on_account_locked": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "require_personal_access_token_expiry": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "require_sha_for_merge": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "require_two_factor_authentication": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "resource_access_token_notify_inherited": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "resource_usage_limits": {
+      "additionalProperties": false,
+      "properties": {},
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "restricted_visibility_levels": {
+      "items": {
+        "maxLength": 8192,
+        "type": "string"
+      },
+      "maxItems": 256,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "root_moved_permanently_redirection": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "rsa_key_restriction": {
+      "enum": [
+        0,
+        1024,
+        2048,
+        3072,
+        4096,
+        -1
+      ],
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "rubygems_package_requests_forwarding": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "runner_jobs_endpoints_api_limit": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "runner_jobs_patch_trace_api_limit": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "runner_jobs_request_api_limit": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "runner_token_expiration_interval": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "scan_execution_policies_action_limit": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "scan_execution_policies_per_configuration_limit": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "scan_execution_policies_schedule_limit": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "search_max_docs_denominator": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "search_max_shard_size_gb": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "search_min_docs_before_rollover": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "search_rate_limit": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "search_rate_limit_allowlist_raw": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "search_rate_limit_unauthenticated": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "secret_detection_revocation_token_types_url": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "secret_detection_service_auth_token": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "secret_detection_service_url": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "secret_detection_token_revocation_enabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "secret_detection_token_revocation_token": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "secret_detection_token_revocation_url": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "secret_push_protection_available": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "security_approval_policies_limit": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "security_mr_report_cache_lifetime_minutes": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "security_policy_global_group_approvers_enabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "security_scan_stale_after_days": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "security_txt_content": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "sentry_clientside_dsn": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "sentry_clientside_traces_sample_rate": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "sentry_dsn": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "sentry_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "sentry_environment": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "service_access_tokens_expiration_enforced": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "session_expire_delay": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "session_expire_from_init": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "shared_runners_enabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "shared_runners_minutes": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "shared_runners_text": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "show_migrate_from_jenkins_banner": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "sidekiq_job_limiter_compression_threshold_bytes": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "sidekiq_job_limiter_limit_bytes": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "sidekiq_job_limiter_mode": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "sidekiq_timezone_override": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "sign_in_restrictions": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "signin_enabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "signup_enabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "silent_admin_exports_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "silent_mode_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "slack_app_enabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "slack_app_id": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "slack_app_secret": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "slack_app_signing_secret": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "slack_app_verification_token": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "snippet_size_limit": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "snowplow_app_id": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "snowplow_collector_hostname": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "snowplow_cookie_domain": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "snowplow_database_collector_hostname": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "snowplow_enabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "sourcegraph_enabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "sourcegraph_public_only": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "sourcegraph_url": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "spam_check_api_key": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "spam_check_endpoint_enabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "spam_check_endpoint_url": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "static_objects_external_storage_auth_token": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "static_objects_external_storage_url": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "terminal_max_session_time": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "terms": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "terraform_state_encryption_enabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "throttle_authenticated_api_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "throttle_authenticated_api_period_in_seconds": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "throttle_authenticated_api_requests_per_period": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "throttle_authenticated_deprecated_api_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "throttle_authenticated_deprecated_api_period_in_seconds": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "throttle_authenticated_deprecated_api_requests_per_period": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "throttle_authenticated_files_api_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "throttle_authenticated_files_api_period_in_seconds": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "throttle_authenticated_files_api_requests_per_period": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "throttle_authenticated_git_http_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "throttle_authenticated_git_http_period_in_seconds": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "throttle_authenticated_git_http_requests_per_period": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "throttle_authenticated_git_lfs_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "throttle_authenticated_git_lfs_period_in_seconds": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "throttle_authenticated_git_lfs_requests_per_period": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "throttle_authenticated_packages_api_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "throttle_authenticated_packages_api_period_in_seconds": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "throttle_authenticated_packages_api_requests_per_period": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "throttle_authenticated_web_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "throttle_authenticated_web_period_in_seconds": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "throttle_authenticated_web_requests_per_period": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "throttle_incident_management_notification_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "throttle_incident_management_notification_per_period": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "throttle_incident_management_notification_period_in_seconds": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "throttle_protected_paths_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "throttle_protected_paths_period_in_seconds": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "throttle_protected_paths_requests_per_period": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "throttle_unauthenticated_api_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "throttle_unauthenticated_api_period_in_seconds": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "throttle_unauthenticated_api_requests_per_period": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "throttle_unauthenticated_deprecated_api_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "throttle_unauthenticated_deprecated_api_period_in_seconds": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "throttle_unauthenticated_deprecated_api_requests_per_period": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "throttle_unauthenticated_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "throttle_unauthenticated_files_api_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "throttle_unauthenticated_files_api_period_in_seconds": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "throttle_unauthenticated_files_api_requests_per_period": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "throttle_unauthenticated_git_http_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "throttle_unauthenticated_git_http_period_in_seconds": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "throttle_unauthenticated_git_http_requests_per_period": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "throttle_unauthenticated_packages_api_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "throttle_unauthenticated_packages_api_period_in_seconds": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "throttle_unauthenticated_packages_api_requests_per_period": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "throttle_unauthenticated_period_in_seconds": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "throttle_unauthenticated_requests_per_period": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "throttle_unauthenticated_web_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "throttle_unauthenticated_web_period_in_seconds": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "throttle_unauthenticated_web_requests_per_period": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "time_tracking_limit_to_hours": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "tool_approval_for_session_availability": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "tool_approval_for_session_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "top_level_group_creation_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "two_factor_grace_period": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "unconfirmed_users_delete_after_days": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "unique_ips_limit_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "unique_ips_limit_per_user": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "unique_ips_limit_time_window": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "update_runner_versions_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "updating_name_disabled_for_users": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "usage_ping_enabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "usage_ping_features_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "usage_ping_generation_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "use_clickhouse_for_analytics": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "use_nats_for_audit_streaming": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "user_contributed_projects_api_limit": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "user_deactivation_emails_enabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "user_default_external": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "user_default_internal_regex": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "user_defaults_to_private_profile": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "user_oauth_applications": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "user_projects_api_limit": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "user_show_add_ssh_key_message": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "user_starred_projects_api_limit": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "users_api_limit_followers": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "users_api_limit_following": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "users_api_limit_gpg_key": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "users_api_limit_gpg_keys": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "users_api_limit_ssh_key": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "users_api_limit_ssh_keys": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "users_api_limit_status": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "users_get_by_id_limit": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "users_get_by_id_limit_allowlist_raw": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "vac_project_ids_raw": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "valid_runner_registrars": {
+      "items": {
+        "maxLength": 8192,
+        "type": "string"
+      },
+      "maxItems": 256,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "version_check_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "virtual_registries_endpoints_api_limit": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "vscode_extension_marketplace": {
+      "additionalProperties": false,
+      "properties": {
+        "custom_values": {
+          "additionalProperties": false,
+          "properties": {},
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "enabled": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "preset": {
+          "maxLength": 8192,
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "vscode_extension_marketplace_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "vscode_extension_marketplace_extension_host_domain": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "vscode_extension_marketplace_single_origin_fallback_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "vulnerability_management_policies_per_configuration_limit": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "web_hook_event_resend_limit": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "web_hook_test_limit": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "whats_new_variant": {
+      "enum": [
+        "all_tiers",
+        "current_tier",
+        "disabled"
+      ],
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "wiki_asciidoc_allow_uri_includes": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "wiki_page_max_content_bytes": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "zoekt_auto_index_root_namespace": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "zoekt_cache_response": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "zoekt_cpu_to_tasks_ratio": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "zoekt_default_number_of_replicas": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "zoekt_force_reindexing_percentage": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "zoekt_indexed_file_size_limit": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "zoekt_indexing_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "zoekt_indexing_parallelism": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "zoekt_indexing_paused": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "zoekt_indexing_timeout": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "zoekt_lost_node_threshold": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "zoekt_max_projects_for_legacy_search": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "zoekt_max_restarts_15m": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "zoekt_maximum_files": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "zoekt_rollout_batch_size": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "zoekt_rollout_retry_interval": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "zoekt_search_enabled": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "zoekt_trigram_max": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [],
+  "type": "object"
+}

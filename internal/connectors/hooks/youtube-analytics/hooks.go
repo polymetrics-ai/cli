@@ -33,10 +33,6 @@ import (
 	"polymetrics.ai/internal/connectors/engine"
 )
 
-func init() {
-	engine.RegisterHooks("youtube-analytics", func() engine.Hooks { return New() })
-}
-
 // Hooks is the youtube-analytics hook set. It implements engine.AuthHook only.
 type Hooks struct {
 	// Now is injectable for tests; nil uses time.Now (mirrors legacy

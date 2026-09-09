@@ -1,32 +1,32 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "interview_stage_info",
-  "type": "object",
   "properties": {
     "id": {
-      "type": "string",
-      "description": "The unique identifier for the interview stage"
-    },
-    "title": {
-      "type": "string",
-      "description": "The title of the interview stage"
-    },
-    "type": {
-      "type": "string",
-      "description": "The type of the interview stage (e.g. Active, Archived, Hired, PreInterviewScreen, Offer, Lead)"
+      "description": "The unique identifier for the interview stage",
+      "type": "string"
     },
     "interviewPlanId": {
-      "type": "string",
-      "description": "The id of the interview plan this stage belongs to"
-    },
-    "orderInInterviewPlan": {
-      "type": "integer",
-      "description": "The order of this stage within its interview plan (zero-indexed)"
+      "description": "The id of the interview plan this stage belongs to",
+      "type": "string"
     },
     "interviewStageGroupId": {
       "type": "string"
+    },
+    "orderInInterviewPlan": {
+      "description": "The order of this stage within its interview plan (zero-indexed)",
+      "type": "integer"
+    },
+    "title": {
+      "description": "The title of the interview stage",
+      "type": "string"
+    },
+    "type": {
+      "description": "The type of the interview stage (e.g. Active, Archived, Hired, PreInterviewScreen, Offer, Lead)",
+      "type": "string"
     }
   },
+  "title": "interview_stage_info",
+  "type": "object",
   "x-primary-key": [
     "id"
   ]

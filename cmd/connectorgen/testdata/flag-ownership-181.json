@@ -1,0 +1,1609 @@
+[
+  {
+    "connector": "github",
+    "source_id": "write:create_webhook",
+    "operation_index": 1469,
+    "command_index": 0,
+    "old_name": "config",
+    "new_name": "provider-config",
+    "maps_to": "record.config",
+    "command": {
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/hooks"
+        }
+      ],
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
+      "availability": "implemented",
+      "flags": [
+        {
+          "maps_to": "record.active",
+          "name": "active",
+          "type": "boolean"
+        },
+        {
+          "maps_to": "record.config",
+          "max_bytes": 1048576,
+          "name": "config",
+          "type": "json"
+        },
+        {
+          "maps_to": "record.events",
+          "max_bytes": 1048576,
+          "name": "events",
+          "type": "json"
+        },
+        {
+          "maps_to": "record.name",
+          "max_bytes": 32768,
+          "name": "name",
+          "type": "string"
+        }
+      ],
+      "intent": "reverse_etl",
+      "path": "api repos create-webhook",
+      "risk": "registers an outbound webhook that will receive repository event payloads",
+      "summary": "POST /repos/{owner}/{repo}/hooks",
+      "write": "create_webhook"
+    }
+  },
+  {
+    "connector": "github",
+    "source_id": "write:update_webhook",
+    "operation_index": 1781,
+    "command_index": 0,
+    "old_name": "config",
+    "new_name": "provider-config",
+    "maps_to": "record.config",
+    "command": {
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/repos/{owner}/{repo}/hooks/{hook_id}"
+        }
+      ],
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
+      "availability": "implemented",
+      "flags": [
+        {
+          "maps_to": "record.active",
+          "name": "active",
+          "type": "boolean"
+        },
+        {
+          "maps_to": "record.add_events",
+          "max_bytes": 1048576,
+          "name": "add-events",
+          "type": "json"
+        },
+        {
+          "maps_to": "record.config",
+          "max_bytes": 1048576,
+          "name": "config",
+          "type": "json"
+        },
+        {
+          "maps_to": "record.events",
+          "max_bytes": 1048576,
+          "name": "events",
+          "type": "json"
+        },
+        {
+          "maps_to": "record.hook_id",
+          "name": "hook-id",
+          "required": true,
+          "type": "integer"
+        },
+        {
+          "maps_to": "record.remove_events",
+          "max_bytes": 1048576,
+          "name": "remove-events",
+          "type": "json"
+        }
+      ],
+      "intent": "reverse_etl",
+      "path": "api repos update-webhook",
+      "risk": "changes an existing webhook's target URL, secret, or event subscriptions",
+      "summary": "PATCH /repos/{owner}/{repo}/hooks/{hook_id}",
+      "write": "update_webhook"
+    }
+  },
+  {
+    "connector": "github",
+    "source_id": "write:interaction_limits3",
+    "operation_index": 1551,
+    "command_index": 0,
+    "old_name": "limit",
+    "new_name": "provider-limit",
+    "maps_to": "record.limit",
+    "command": {
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/interaction-limits"
+        }
+      ],
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
+      "availability": "implemented",
+      "flags": [
+        {
+          "maps_to": "record.expiry",
+          "name": "expiry",
+          "type": "enum",
+          "values": [
+            "one_day",
+            "three_days",
+            "one_week",
+            "one_month",
+            "six_months"
+          ]
+        },
+        {
+          "maps_to": "record.limit",
+          "name": "limit",
+          "required": true,
+          "type": "enum",
+          "values": [
+            "existing_users",
+            "contributors_only",
+            "collaborators_only"
+          ]
+        }
+      ],
+      "intent": "reverse_etl",
+      "path": "interaction-limits set",
+      "risk": "high",
+      "summary": "PUT /repos/{owner}/{repo}/interaction-limits",
+      "write": "interaction_limits3"
+    }
+  },
+  {
+    "connector": "github",
+    "source_id": "write:interactions_set_restrictions_for_authenticated_user",
+    "operation_index": 1556,
+    "command_index": 0,
+    "old_name": "limit",
+    "new_name": "provider-limit",
+    "maps_to": "record.limit",
+    "command": {
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/user/interaction-limits"
+        }
+      ],
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
+      "availability": "implemented",
+      "flags": [
+        {
+          "maps_to": "record.expiry",
+          "name": "expiry",
+          "summary": "Sets expiry.",
+          "type": "enum",
+          "values": [
+            "one_day",
+            "three_days",
+            "one_week",
+            "one_month",
+            "six_months"
+          ]
+        },
+        {
+          "maps_to": "record.limit",
+          "name": "limit",
+          "required": true,
+          "summary": "Sets limit.",
+          "type": "enum",
+          "values": [
+            "existing_users",
+            "contributors_only",
+            "collaborators_only"
+          ]
+        }
+      ],
+      "intent": "reverse_etl",
+      "path": "interactions set-restrictions-for-authenticated-user",
+      "risk": "Mutates existing provider-side state: Set interaction restrictions for your public repositories.",
+      "summary": "Set interaction restrictions for your public repositories",
+      "write": "interactions_set_restrictions_for_authenticated_user"
+    }
+  },
+  {
+    "connector": "github",
+    "source_id": "write:interactions_set_restrictions_for_org",
+    "operation_index": 1557,
+    "command_index": 0,
+    "old_name": "limit",
+    "new_name": "provider-limit",
+    "maps_to": "record.limit",
+    "command": {
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/orgs/{org}/interaction-limits"
+        }
+      ],
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
+      "availability": "implemented",
+      "flags": [
+        {
+          "maps_to": "record.expiry",
+          "name": "expiry",
+          "summary": "Sets expiry.",
+          "type": "enum",
+          "values": [
+            "one_day",
+            "three_days",
+            "one_week",
+            "one_month",
+            "six_months"
+          ]
+        },
+        {
+          "maps_to": "record.limit",
+          "name": "limit",
+          "required": true,
+          "summary": "Sets limit.",
+          "type": "enum",
+          "values": [
+            "existing_users",
+            "contributors_only",
+            "collaborators_only"
+          ]
+        },
+        {
+          "maps_to": "record.org",
+          "max_bytes": 32768,
+          "name": "org",
+          "required": true,
+          "summary": "The organization name.",
+          "type": "string"
+        }
+      ],
+      "intent": "reverse_etl",
+      "path": "interactions set-restrictions-for-org",
+      "risk": "Mutates existing provider-side state: Set interaction restrictions for an organization.",
+      "summary": "Set interaction restrictions for an organization",
+      "write": "interactions_set_restrictions_for_org"
+    }
+  },
+  {
+    "connector": "github",
+    "source_id": "write:orgs_create_webhook",
+    "operation_index": 1616,
+    "command_index": 0,
+    "old_name": "config",
+    "new_name": "provider-config",
+    "maps_to": "record.config",
+    "command": {
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/orgs/{org}/hooks"
+        }
+      ],
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
+      "availability": "implemented",
+      "flags": [
+        {
+          "maps_to": "record.active",
+          "name": "active",
+          "summary": "Sets active.",
+          "type": "boolean"
+        },
+        {
+          "maps_to": "record.config",
+          "max_bytes": 1048576,
+          "name": "config",
+          "required": true,
+          "type": "json"
+        },
+        {
+          "maps_to": "record.events",
+          "max_bytes": 1048576,
+          "name": "events",
+          "summary": "Sets events.",
+          "type": "json"
+        },
+        {
+          "maps_to": "record.name",
+          "max_bytes": 32768,
+          "name": "name",
+          "required": true,
+          "summary": "Sets name.",
+          "type": "string"
+        },
+        {
+          "maps_to": "record.org",
+          "max_bytes": 32768,
+          "name": "org",
+          "required": true,
+          "summary": "The organization name.",
+          "type": "string"
+        }
+      ],
+      "intent": "reverse_etl",
+      "path": "orgs create-webhook",
+      "risk": "Creates provider-side state: Create an organization webhook.",
+      "summary": "Create an organization webhook",
+      "write": "orgs_create_webhook"
+    }
+  },
+  {
+    "connector": "github",
+    "source_id": "write:orgs_update_webhook",
+    "operation_index": 1661,
+    "command_index": 0,
+    "old_name": "config",
+    "new_name": "provider-config",
+    "maps_to": "record.config",
+    "command": {
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/orgs/{org}/hooks/{hook_id}"
+        }
+      ],
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
+      "availability": "implemented",
+      "flags": [
+        {
+          "maps_to": "record.active",
+          "name": "active",
+          "summary": "Sets active.",
+          "type": "boolean"
+        },
+        {
+          "maps_to": "record.config",
+          "max_bytes": 1048576,
+          "name": "config",
+          "type": "json"
+        },
+        {
+          "maps_to": "record.events",
+          "max_bytes": 1048576,
+          "name": "events",
+          "summary": "Sets events.",
+          "type": "json"
+        },
+        {
+          "maps_to": "record.hook_id",
+          "name": "hook-id",
+          "required": true,
+          "summary": "The unique identifier of the hook.",
+          "type": "integer"
+        },
+        {
+          "maps_to": "record.name",
+          "max_bytes": 32768,
+          "name": "name",
+          "summary": "Sets name.",
+          "type": "string"
+        },
+        {
+          "maps_to": "record.org",
+          "max_bytes": 32768,
+          "name": "org",
+          "required": true,
+          "summary": "The organization name.",
+          "type": "string"
+        }
+      ],
+      "intent": "reverse_etl",
+      "path": "orgs update-webhook",
+      "risk": "Mutates existing provider-side state: Update an organization webhook.",
+      "summary": "Update an organization webhook",
+      "write": "orgs_update_webhook"
+    }
+  },
+  {
+    "connector": "gitlab",
+    "source_id": "operation:source_read_474554202f6170706c69636174696f6e2f706c616e5f6c696d697473",
+    "operation_index": 25,
+    "command_index": 0,
+    "old_name": "plan-name",
+    "new_name": "provider-plan-name",
+    "maps_to": "query.plan_name",
+    "command": {
+      "api_surface": [
+        {
+          "method": "get",
+          "path": "/application/plan_limits"
+        }
+      ],
+      "approval": "none",
+      "availability": "implemented",
+      "flags": [
+        {
+          "maps_to": "query.plan_name",
+          "name": "plan-name",
+          "type": "enum",
+          "values": [
+            "default",
+            "free",
+            "bronze",
+            "silver",
+            "premium",
+            "gold",
+            "ultimate",
+            "ultimate_trial",
+            "ultimate_trial_paid_customer",
+            "premium_trial",
+            "opensource"
+          ]
+        }
+      ],
+      "intent": "direct_read",
+      "operation": "source_read_474554202f6170706c69636174696f6e2f706c616e5f6c696d697473",
+      "output_policy": "json_redacted",
+      "path": "api op-474554202f6170692f76342f6170706c69636174696f6e2f706c616e5f6c696d697473",
+      "risk": "low",
+      "summary": "GET /application/plan_limits"
+    }
+  },
+  {
+    "connector": "gitlab",
+    "source_id": "write:source_write_505554202f7061636b616765732f636f6e616e2f76312f66696c65732f7b7061636b6167655f6e616d657d2f7b7061636b6167655f76657273696f6e7d2f7b7061636b6167655f757365726e616d657d2f7b7061636b6167655f6368616e6e656c7d2f7b7265636970655f7265766973696f6e7d2f6578706f72742f7b66696c655f6e616d657d2f617574686f72697a65",
+    "operation_index": 939,
+    "command_index": 0,
+    "old_name": "file-name",
+    "new_name": "provider-file-name",
+    "maps_to": "record.file_name",
+    "command": {
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/packages/conan/v1/files/{package_name}/{package_version}/{package_username}/{package_channel}/{recipe_revision}/export/{file_name}/authorize"
+        }
+      ],
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "availability": "implemented",
+      "flags": [
+        {
+          "maps_to": "record.file_name",
+          "name": "file-name",
+          "required": true,
+          "type": "enum",
+          "values": [
+            "conanfile.py",
+            "conanmanifest.txt",
+            "conan_sources.tgz",
+            "conan_export.tgz",
+            "conaninfo.txt",
+            "conan_package.tgz"
+          ]
+        },
+        {
+          "maps_to": "record.package_channel",
+          "max_bytes": 32768,
+          "name": "package-channel",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "maps_to": "record.package_name",
+          "max_bytes": 32768,
+          "name": "package-name",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "maps_to": "record.package_username",
+          "max_bytes": 32768,
+          "name": "package-username",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "maps_to": "record.package_version",
+          "max_bytes": 32768,
+          "name": "package-version",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "maps_to": "record.recipe_revision",
+          "max_bytes": 32768,
+          "name": "recipe-revision",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "intent": "reverse_etl",
+      "path": "api op-505554202f6170692f76342f7061636b616765732f636f6e616e2f76312f66696c65732f7b7061636b6167655f6e616d657d2f7b7061636b6167655f76657273696f6e7d2f7b7061636b6167655f757365726e616d657d2f7b7061636b6167655f6368616e6e656c7d2f7b7265636970655f7265766973696f6e7d2f6578706f72742f7b66696c655f6e616d657d2f617574686f72697a65",
+      "risk": "Provider mutation; requires reverse ETL plan, preview, explicit approval, execute, and typed confirmation",
+      "summary": "PUT /packages/conan/v1/files/{package_name}/{package_version}/{package_username}/{package_channel}/{recipe_revision}/export/{file_name}/authorize",
+      "write": "source_write_505554202f7061636b616765732f636f6e616e2f76312f66696c65732f7b7061636b6167655f6e616d657d2f7b7061636b6167655f76657273696f6e7d2f7b7061636b6167655f757365726e616d657d2f7b7061636b6167655f6368616e6e656c7d2f7b7265636970655f7265766973696f6e7d2f6578706f72742f7b66696c655f6e616d657d2f617574686f72697a65"
+    }
+  },
+  {
+    "connector": "gitlab",
+    "source_id": "write:source_write_505554202f7061636b616765732f636f6e616e2f76312f66696c65732f7b7061636b6167655f6e616d657d2f7b7061636b6167655f76657273696f6e7d2f7b7061636b6167655f757365726e616d657d2f7b7061636b6167655f6368616e6e656c7d2f7b7265636970655f7265766973696f6e7d2f7061636b6167652f7b636f6e616e5f7061636b6167655f7265666572656e63657d2f7b7061636b6167655f7265766973696f6e7d2f7b66696c655f6e616d657d2f617574686f72697a65",
+    "operation_index": 940,
+    "command_index": 0,
+    "old_name": "file-name",
+    "new_name": "provider-file-name",
+    "maps_to": "record.file_name",
+    "command": {
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/packages/conan/v1/files/{package_name}/{package_version}/{package_username}/{package_channel}/{recipe_revision}/package/{conan_package_reference}/{package_revision}/{file_name}/authorize"
+        }
+      ],
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "availability": "implemented",
+      "flags": [
+        {
+          "maps_to": "record.conan_package_reference",
+          "max_bytes": 32768,
+          "name": "conan-package-reference",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "maps_to": "record.file_name",
+          "name": "file-name",
+          "required": true,
+          "type": "enum",
+          "values": [
+            "conanfile.py",
+            "conanmanifest.txt",
+            "conan_sources.tgz",
+            "conan_export.tgz",
+            "conaninfo.txt",
+            "conan_package.tgz"
+          ]
+        },
+        {
+          "maps_to": "record.package_channel",
+          "max_bytes": 32768,
+          "name": "package-channel",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "maps_to": "record.package_name",
+          "max_bytes": 32768,
+          "name": "package-name",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "maps_to": "record.package_revision",
+          "max_bytes": 32768,
+          "name": "package-revision",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "maps_to": "record.package_username",
+          "max_bytes": 32768,
+          "name": "package-username",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "maps_to": "record.package_version",
+          "max_bytes": 32768,
+          "name": "package-version",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "maps_to": "record.recipe_revision",
+          "max_bytes": 32768,
+          "name": "recipe-revision",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "intent": "reverse_etl",
+      "path": "api op-505554202f6170692f76342f7061636b616765732f636f6e616e2f76312f66696c65732f7b7061636b6167655f6e616d657d2f7b7061636b6167655f76657273696f6e7d2f7b7061636b6167655f757365726e616d657d2f7b7061636b6167655f6368616e6e656c7d2f7b7265636970655f7265766973696f6e7d2f7061636b6167652f7b636f6e616e5f7061636b6167655f7265666572656e63657d2f7b7061636b6167655f7265766973696f6e7d2f7b66696c655f6e616d657d2f617574686f72697a65",
+      "risk": "Provider mutation; requires reverse ETL plan, preview, explicit approval, execute, and typed confirmation",
+      "summary": "PUT /packages/conan/v1/files/{package_name}/{package_version}/{package_username}/{package_channel}/{recipe_revision}/package/{conan_package_reference}/{package_revision}/{file_name}/authorize",
+      "write": "source_write_505554202f7061636b616765732f636f6e616e2f76312f66696c65732f7b7061636b6167655f6e616d657d2f7b7061636b6167655f76657273696f6e7d2f7b7061636b6167655f757365726e616d657d2f7b7061636b6167655f6368616e6e656c7d2f7b7265636970655f7265766973696f6e7d2f7061636b6167652f7b636f6e616e5f7061636b6167655f7265666572656e63657d2f7b7061636b6167655f7265766973696f6e7d2f7b66696c655f6e616d657d2f617574686f72697a65"
+    }
+  },
+  {
+    "connector": "gitlab",
+    "source_id": "write:source_write_504f5354202f736e697070657473",
+    "operation_index": 845,
+    "command_index": 0,
+    "old_name": "file-name",
+    "new_name": "provider-file-name",
+    "maps_to": "record.file_name",
+    "command": {
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/snippets"
+        }
+      ],
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "availability": "implemented",
+      "flags": [
+        {
+          "maps_to": "record.content",
+          "max_bytes": 32768,
+          "name": "content",
+          "type": "string"
+        },
+        {
+          "maps_to": "record.description",
+          "max_bytes": 32768,
+          "name": "description",
+          "type": "string"
+        },
+        {
+          "maps_to": "record.file_name",
+          "max_bytes": 32768,
+          "name": "file-name",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "maps_to": "record.files",
+          "max_bytes": 1048576,
+          "name": "files",
+          "type": "json"
+        },
+        {
+          "maps_to": "record.title",
+          "max_bytes": 32768,
+          "name": "title",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "maps_to": "record.visibility",
+          "name": "visibility",
+          "type": "enum",
+          "values": [
+            "private",
+            "internal",
+            "public"
+          ]
+        }
+      ],
+      "intent": "reverse_etl",
+      "path": "api op-504f5354202f6170692f76342f736e697070657473",
+      "risk": "Provider mutation; requires reverse ETL plan, preview, explicit approval, execute, and typed confirmation",
+      "summary": "POST /snippets",
+      "write": "source_write_504f5354202f736e697070657473"
+    }
+  },
+  {
+    "connector": "gitlab",
+    "source_id": "write:source_write_505554202f6170706c69636174696f6e2f706c616e5f6c696d697473",
+    "operation_index": 902,
+    "command_index": 0,
+    "old_name": "plan-name",
+    "new_name": "provider-plan-name",
+    "maps_to": "record.plan_name",
+    "command": {
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/application/plan_limits"
+        }
+      ],
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "availability": "implemented",
+      "flags": [
+        {
+          "maps_to": "record.cargo_max_file_size",
+          "name": "cargo-max-file-size",
+          "type": "integer"
+        },
+        {
+          "maps_to": "record.ci_active_jobs",
+          "name": "ci-active-jobs",
+          "type": "integer"
+        },
+        {
+          "maps_to": "record.ci_instance_level_variables",
+          "name": "ci-instance-level-variables",
+          "type": "integer"
+        },
+        {
+          "maps_to": "record.ci_needs_size_limit",
+          "name": "ci-needs-size-limit",
+          "type": "integer"
+        },
+        {
+          "maps_to": "record.ci_pipeline_schedules",
+          "name": "ci-pipeline-schedules",
+          "type": "integer"
+        },
+        {
+          "maps_to": "record.ci_pipeline_size",
+          "name": "ci-pipeline-size",
+          "type": "integer"
+        },
+        {
+          "maps_to": "record.ci_project_subscriptions",
+          "name": "ci-project-subscriptions",
+          "type": "integer"
+        },
+        {
+          "maps_to": "record.ci_registered_group_runners",
+          "name": "ci-registered-group-runners",
+          "type": "integer"
+        },
+        {
+          "maps_to": "record.ci_registered_project_runners",
+          "name": "ci-registered-project-runners",
+          "type": "integer"
+        },
+        {
+          "maps_to": "record.conan_max_file_size",
+          "name": "conan-max-file-size",
+          "type": "integer"
+        },
+        {
+          "maps_to": "record.dotenv_size",
+          "name": "dotenv-size",
+          "type": "integer"
+        },
+        {
+          "maps_to": "record.dotenv_variables",
+          "name": "dotenv-variables",
+          "type": "integer"
+        },
+        {
+          "maps_to": "record.enforcement_limit",
+          "name": "enforcement-limit",
+          "type": "integer"
+        },
+        {
+          "maps_to": "record.generic_packages_max_file_size",
+          "name": "generic-packages-max-file-size",
+          "type": "integer"
+        },
+        {
+          "maps_to": "record.helm_max_file_size",
+          "name": "helm-max-file-size",
+          "type": "integer"
+        },
+        {
+          "maps_to": "record.maven_max_file_size",
+          "name": "maven-max-file-size",
+          "type": "integer"
+        },
+        {
+          "maps_to": "record.max_pipelines_per_merge_train",
+          "name": "max-pipelines-per-merge-train",
+          "type": "integer"
+        },
+        {
+          "maps_to": "record.notification_limit",
+          "name": "notification-limit",
+          "type": "integer"
+        },
+        {
+          "maps_to": "record.npm_max_file_size",
+          "name": "npm-max-file-size",
+          "type": "integer"
+        },
+        {
+          "maps_to": "record.nuget_max_file_size",
+          "name": "nuget-max-file-size",
+          "type": "integer"
+        },
+        {
+          "maps_to": "record.pipeline_hierarchy_size",
+          "name": "pipeline-hierarchy-size",
+          "type": "integer"
+        },
+        {
+          "maps_to": "record.plan_name",
+          "name": "plan-name",
+          "required": true,
+          "type": "enum",
+          "values": [
+            "default",
+            "free",
+            "bronze",
+            "silver",
+            "premium",
+            "gold",
+            "ultimate",
+            "ultimate_trial",
+            "ultimate_trial_paid_customer",
+            "premium_trial",
+            "opensource"
+          ]
+        },
+        {
+          "maps_to": "record.pypi_max_file_size",
+          "name": "pypi-max-file-size",
+          "type": "integer"
+        },
+        {
+          "maps_to": "record.storage_size_limit",
+          "name": "storage-size-limit",
+          "type": "integer"
+        },
+        {
+          "maps_to": "record.terraform_module_max_file_size",
+          "name": "terraform-module-max-file-size",
+          "type": "integer"
+        },
+        {
+          "maps_to": "record.web_hook_calls",
+          "name": "web-hook-calls",
+          "type": "integer"
+        },
+        {
+          "maps_to": "record.web_hook_calls_low",
+          "name": "web-hook-calls-low",
+          "type": "integer"
+        },
+        {
+          "maps_to": "record.web_hook_calls_mid",
+          "name": "web-hook-calls-mid",
+          "type": "integer"
+        }
+      ],
+      "intent": "reverse_etl",
+      "path": "api op-505554202f6170692f76342f6170706c69636174696f6e2f706c616e5f6c696d697473",
+      "risk": "Provider mutation; requires reverse ETL plan, preview, explicit approval, execute, and typed confirmation",
+      "summary": "PUT /application/plan_limits",
+      "write": "source_write_505554202f6170706c69636174696f6e2f706c616e5f6c696d697473"
+    }
+  },
+  {
+    "connector": "gitlab",
+    "source_id": "write:source_write_505554202f656c61737469637365617263685f696e64657865645f6e616d657370616365732f726f6c6c6261636b",
+    "operation_index": 905,
+    "command_index": 0,
+    "old_name": "plan",
+    "new_name": "provider-plan",
+    "maps_to": "record.plan",
+    "command": {
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/elasticsearch_indexed_namespaces/rollback"
+        }
+      ],
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "availability": "implemented",
+      "flags": [
+        {
+          "maps_to": "record.percentage",
+          "name": "percentage",
+          "required": true,
+          "type": "integer"
+        },
+        {
+          "maps_to": "record.plan",
+          "name": "plan",
+          "required": true,
+          "type": "enum",
+          "values": [
+            "bronze",
+            "silver",
+            "premium",
+            "gold",
+            "ultimate",
+            "ultimate_trial",
+            "ultimate_trial_paid_customer",
+            "premium_trial",
+            "opensource"
+          ]
+        }
+      ],
+      "intent": "reverse_etl",
+      "path": "api op-505554202f6170692f76342f656c61737469637365617263685f696e64657865645f6e616d657370616365732f726f6c6c6261636b",
+      "risk": "Provider mutation; requires reverse ETL plan, preview, explicit approval, execute, and typed confirmation",
+      "summary": "PUT /elasticsearch_indexed_namespaces/rollback",
+      "write": "source_write_505554202f656c61737469637365617263685f696e64657865645f6e616d657370616365732f726f6c6c6261636b"
+    }
+  },
+  {
+    "connector": "gitlab",
+    "source_id": "write:source_write_505554202f656c61737469637365617263685f696e64657865645f6e616d657370616365732f726f6c6c6f7574",
+    "operation_index": 906,
+    "command_index": 0,
+    "old_name": "plan",
+    "new_name": "provider-plan",
+    "maps_to": "record.plan",
+    "command": {
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/elasticsearch_indexed_namespaces/rollout"
+        }
+      ],
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "availability": "implemented",
+      "flags": [
+        {
+          "maps_to": "record.percentage",
+          "name": "percentage",
+          "required": true,
+          "type": "integer"
+        },
+        {
+          "maps_to": "record.plan",
+          "name": "plan",
+          "required": true,
+          "type": "enum",
+          "values": [
+            "bronze",
+            "silver",
+            "premium",
+            "gold",
+            "ultimate",
+            "ultimate_trial",
+            "ultimate_trial_paid_customer",
+            "premium_trial",
+            "opensource"
+          ]
+        }
+      ],
+      "intent": "reverse_etl",
+      "path": "api op-505554202f6170692f76342f656c61737469637365617263685f696e64657865645f6e616d657370616365732f726f6c6c6f7574",
+      "risk": "Provider mutation; requires reverse ETL plan, preview, explicit approval, execute, and typed confirmation",
+      "summary": "PUT /elasticsearch_indexed_namespaces/rollout",
+      "write": "source_write_505554202f656c61737469637365617263685f696e64657865645f6e616d657370616365732f726f6c6c6f7574"
+    }
+  },
+  {
+    "connector": "gitlab",
+    "source_id": "write:source_write_505554202f736e6970706574732f7b69647d",
+    "operation_index": 963,
+    "command_index": 0,
+    "old_name": "file-name",
+    "new_name": "provider-file-name",
+    "maps_to": "record.file_name",
+    "command": {
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/snippets/{id}"
+        }
+      ],
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "availability": "implemented",
+      "flags": [
+        {
+          "maps_to": "record.content",
+          "max_bytes": 32768,
+          "name": "content",
+          "type": "string"
+        },
+        {
+          "maps_to": "record.description",
+          "max_bytes": 32768,
+          "name": "description",
+          "type": "string"
+        },
+        {
+          "maps_to": "record.file_name",
+          "max_bytes": 32768,
+          "name": "file-name",
+          "type": "string"
+        },
+        {
+          "maps_to": "record.files",
+          "max_bytes": 1048576,
+          "name": "files",
+          "type": "json"
+        },
+        {
+          "maps_to": "record.id",
+          "name": "id",
+          "required": true,
+          "type": "integer"
+        },
+        {
+          "maps_to": "record.title",
+          "max_bytes": 32768,
+          "name": "title",
+          "type": "string"
+        },
+        {
+          "maps_to": "record.visibility",
+          "name": "visibility",
+          "type": "enum",
+          "values": [
+            "private",
+            "internal",
+            "public"
+          ]
+        }
+      ],
+      "intent": "reverse_etl",
+      "path": "api op-505554202f6170692f76342f736e6970706574732f7b69647d",
+      "risk": "Provider mutation; requires reverse ETL plan, preview, explicit approval, execute, and typed confirmation",
+      "summary": "PUT /snippets/{id}",
+      "write": "source_write_505554202f736e6970706574732f7b69647d"
+    }
+  },
+  {
+    "connector": "gitlab",
+    "source_id": "write:source_write_504f5354202f736e697070657473",
+    "operation_index": 845,
+    "command_index": 1,
+    "old_name": "file-name",
+    "new_name": "provider-file-name",
+    "maps_to": "record.file_name",
+    "command": {
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/snippets"
+        }
+      ],
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "availability": "implemented",
+      "flags": [
+        {
+          "maps_to": "record.content",
+          "max_bytes": 32768,
+          "name": "content",
+          "type": "string"
+        },
+        {
+          "maps_to": "record.description",
+          "max_bytes": 32768,
+          "name": "description",
+          "type": "string"
+        },
+        {
+          "maps_to": "record.file_name",
+          "max_bytes": 32768,
+          "name": "file-name",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "maps_to": "record.files",
+          "max_bytes": 1048576,
+          "name": "files",
+          "type": "json"
+        },
+        {
+          "maps_to": "record.title",
+          "max_bytes": 32768,
+          "name": "title",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "maps_to": "record.visibility",
+          "name": "visibility",
+          "type": "enum",
+          "values": [
+            "private",
+            "internal",
+            "public"
+          ]
+        }
+      ],
+      "intent": "direct_write",
+      "path": "api direct-op-504f5354202f6170692f76342f736e697070657473",
+      "risk": "Provider mutation; requires reverse ETL plan, preview, explicit approval, execute, and typed confirmation",
+      "summary": "POST /snippets",
+      "write": "source_write_504f5354202f736e697070657473"
+    }
+  },
+  {
+    "connector": "gitlab",
+    "source_id": "write:source_write_505554202f6170706c69636174696f6e2f706c616e5f6c696d697473",
+    "operation_index": 902,
+    "command_index": 1,
+    "old_name": "plan-name",
+    "new_name": "provider-plan-name",
+    "maps_to": "record.plan_name",
+    "command": {
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/application/plan_limits"
+        }
+      ],
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "availability": "implemented",
+      "flags": [
+        {
+          "maps_to": "record.cargo_max_file_size",
+          "name": "cargo-max-file-size",
+          "type": "integer"
+        },
+        {
+          "maps_to": "record.ci_active_jobs",
+          "name": "ci-active-jobs",
+          "type": "integer"
+        },
+        {
+          "maps_to": "record.ci_instance_level_variables",
+          "name": "ci-instance-level-variables",
+          "type": "integer"
+        },
+        {
+          "maps_to": "record.ci_needs_size_limit",
+          "name": "ci-needs-size-limit",
+          "type": "integer"
+        },
+        {
+          "maps_to": "record.ci_pipeline_schedules",
+          "name": "ci-pipeline-schedules",
+          "type": "integer"
+        },
+        {
+          "maps_to": "record.ci_pipeline_size",
+          "name": "ci-pipeline-size",
+          "type": "integer"
+        },
+        {
+          "maps_to": "record.ci_project_subscriptions",
+          "name": "ci-project-subscriptions",
+          "type": "integer"
+        },
+        {
+          "maps_to": "record.ci_registered_group_runners",
+          "name": "ci-registered-group-runners",
+          "type": "integer"
+        },
+        {
+          "maps_to": "record.ci_registered_project_runners",
+          "name": "ci-registered-project-runners",
+          "type": "integer"
+        },
+        {
+          "maps_to": "record.conan_max_file_size",
+          "name": "conan-max-file-size",
+          "type": "integer"
+        },
+        {
+          "maps_to": "record.dotenv_size",
+          "name": "dotenv-size",
+          "type": "integer"
+        },
+        {
+          "maps_to": "record.dotenv_variables",
+          "name": "dotenv-variables",
+          "type": "integer"
+        },
+        {
+          "maps_to": "record.enforcement_limit",
+          "name": "enforcement-limit",
+          "type": "integer"
+        },
+        {
+          "maps_to": "record.generic_packages_max_file_size",
+          "name": "generic-packages-max-file-size",
+          "type": "integer"
+        },
+        {
+          "maps_to": "record.helm_max_file_size",
+          "name": "helm-max-file-size",
+          "type": "integer"
+        },
+        {
+          "maps_to": "record.maven_max_file_size",
+          "name": "maven-max-file-size",
+          "type": "integer"
+        },
+        {
+          "maps_to": "record.max_pipelines_per_merge_train",
+          "name": "max-pipelines-per-merge-train",
+          "type": "integer"
+        },
+        {
+          "maps_to": "record.notification_limit",
+          "name": "notification-limit",
+          "type": "integer"
+        },
+        {
+          "maps_to": "record.npm_max_file_size",
+          "name": "npm-max-file-size",
+          "type": "integer"
+        },
+        {
+          "maps_to": "record.nuget_max_file_size",
+          "name": "nuget-max-file-size",
+          "type": "integer"
+        },
+        {
+          "maps_to": "record.pipeline_hierarchy_size",
+          "name": "pipeline-hierarchy-size",
+          "type": "integer"
+        },
+        {
+          "maps_to": "record.plan_name",
+          "name": "plan-name",
+          "required": true,
+          "type": "enum",
+          "values": [
+            "default",
+            "free",
+            "bronze",
+            "silver",
+            "premium",
+            "gold",
+            "ultimate",
+            "ultimate_trial",
+            "ultimate_trial_paid_customer",
+            "premium_trial",
+            "opensource"
+          ]
+        },
+        {
+          "maps_to": "record.pypi_max_file_size",
+          "name": "pypi-max-file-size",
+          "type": "integer"
+        },
+        {
+          "maps_to": "record.storage_size_limit",
+          "name": "storage-size-limit",
+          "type": "integer"
+        },
+        {
+          "maps_to": "record.terraform_module_max_file_size",
+          "name": "terraform-module-max-file-size",
+          "type": "integer"
+        },
+        {
+          "maps_to": "record.web_hook_calls",
+          "name": "web-hook-calls",
+          "type": "integer"
+        },
+        {
+          "maps_to": "record.web_hook_calls_low",
+          "name": "web-hook-calls-low",
+          "type": "integer"
+        },
+        {
+          "maps_to": "record.web_hook_calls_mid",
+          "name": "web-hook-calls-mid",
+          "type": "integer"
+        }
+      ],
+      "intent": "direct_write",
+      "path": "api direct-op-505554202f6170692f76342f6170706c69636174696f6e2f706c616e5f6c696d697473",
+      "risk": "Provider mutation; requires reverse ETL plan, preview, explicit approval, execute, and typed confirmation",
+      "summary": "PUT /application/plan_limits",
+      "write": "source_write_505554202f6170706c69636174696f6e2f706c616e5f6c696d697473"
+    }
+  },
+  {
+    "connector": "gitlab",
+    "source_id": "write:source_write_505554202f656c61737469637365617263685f696e64657865645f6e616d657370616365732f726f6c6c6261636b",
+    "operation_index": 905,
+    "command_index": 1,
+    "old_name": "plan",
+    "new_name": "provider-plan",
+    "maps_to": "record.plan",
+    "command": {
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/elasticsearch_indexed_namespaces/rollback"
+        }
+      ],
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "availability": "implemented",
+      "flags": [
+        {
+          "maps_to": "record.percentage",
+          "name": "percentage",
+          "required": true,
+          "type": "integer"
+        },
+        {
+          "maps_to": "record.plan",
+          "name": "plan",
+          "required": true,
+          "type": "enum",
+          "values": [
+            "bronze",
+            "silver",
+            "premium",
+            "gold",
+            "ultimate",
+            "ultimate_trial",
+            "ultimate_trial_paid_customer",
+            "premium_trial",
+            "opensource"
+          ]
+        }
+      ],
+      "intent": "direct_write",
+      "path": "api direct-op-505554202f6170692f76342f656c61737469637365617263685f696e64657865645f6e616d657370616365732f726f6c6c6261636b",
+      "risk": "Provider mutation; requires reverse ETL plan, preview, explicit approval, execute, and typed confirmation",
+      "summary": "PUT /elasticsearch_indexed_namespaces/rollback",
+      "write": "source_write_505554202f656c61737469637365617263685f696e64657865645f6e616d657370616365732f726f6c6c6261636b"
+    }
+  },
+  {
+    "connector": "gitlab",
+    "source_id": "write:source_write_505554202f656c61737469637365617263685f696e64657865645f6e616d657370616365732f726f6c6c6f7574",
+    "operation_index": 906,
+    "command_index": 1,
+    "old_name": "plan",
+    "new_name": "provider-plan",
+    "maps_to": "record.plan",
+    "command": {
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/elasticsearch_indexed_namespaces/rollout"
+        }
+      ],
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "availability": "implemented",
+      "flags": [
+        {
+          "maps_to": "record.percentage",
+          "name": "percentage",
+          "required": true,
+          "type": "integer"
+        },
+        {
+          "maps_to": "record.plan",
+          "name": "plan",
+          "required": true,
+          "type": "enum",
+          "values": [
+            "bronze",
+            "silver",
+            "premium",
+            "gold",
+            "ultimate",
+            "ultimate_trial",
+            "ultimate_trial_paid_customer",
+            "premium_trial",
+            "opensource"
+          ]
+        }
+      ],
+      "intent": "direct_write",
+      "path": "api direct-op-505554202f6170692f76342f656c61737469637365617263685f696e64657865645f6e616d657370616365732f726f6c6c6f7574",
+      "risk": "Provider mutation; requires reverse ETL plan, preview, explicit approval, execute, and typed confirmation",
+      "summary": "PUT /elasticsearch_indexed_namespaces/rollout",
+      "write": "source_write_505554202f656c61737469637365617263685f696e64657865645f6e616d657370616365732f726f6c6c6f7574"
+    }
+  },
+  {
+    "connector": "gitlab",
+    "source_id": "write:source_write_505554202f7061636b616765732f636f6e616e2f76312f66696c65732f7b7061636b6167655f6e616d657d2f7b7061636b6167655f76657273696f6e7d2f7b7061636b6167655f757365726e616d657d2f7b7061636b6167655f6368616e6e656c7d2f7b7265636970655f7265766973696f6e7d2f6578706f72742f7b66696c655f6e616d657d2f617574686f72697a65",
+    "operation_index": 939,
+    "command_index": 1,
+    "old_name": "file-name",
+    "new_name": "provider-file-name",
+    "maps_to": "record.file_name",
+    "command": {
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/packages/conan/v1/files/{package_name}/{package_version}/{package_username}/{package_channel}/{recipe_revision}/export/{file_name}/authorize"
+        }
+      ],
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "availability": "implemented",
+      "flags": [
+        {
+          "maps_to": "record.file_name",
+          "name": "file-name",
+          "required": true,
+          "type": "enum",
+          "values": [
+            "conanfile.py",
+            "conanmanifest.txt",
+            "conan_sources.tgz",
+            "conan_export.tgz",
+            "conaninfo.txt",
+            "conan_package.tgz"
+          ]
+        },
+        {
+          "maps_to": "record.package_channel",
+          "max_bytes": 32768,
+          "name": "package-channel",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "maps_to": "record.package_name",
+          "max_bytes": 32768,
+          "name": "package-name",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "maps_to": "record.package_username",
+          "max_bytes": 32768,
+          "name": "package-username",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "maps_to": "record.package_version",
+          "max_bytes": 32768,
+          "name": "package-version",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "maps_to": "record.recipe_revision",
+          "max_bytes": 32768,
+          "name": "recipe-revision",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "intent": "direct_write",
+      "path": "api direct-op-505554202f6170692f76342f7061636b616765732f636f6e616e2f76312f66696c65732f7b7061636b6167655f6e616d657d2f7b7061636b6167655f76657273696f6e7d2f7b7061636b6167655f757365726e616d657d2f7b7061636b6167655f6368616e6e656c7d2f7b7265636970655f7265766973696f6e7d2f6578706f72742f7b66696c655f6e616d657d2f617574686f72697a65",
+      "risk": "Provider mutation; requires reverse ETL plan, preview, explicit approval, execute, and typed confirmation",
+      "summary": "PUT /packages/conan/v1/files/{package_name}/{package_version}/{package_username}/{package_channel}/{recipe_revision}/export/{file_name}/authorize",
+      "write": "source_write_505554202f7061636b616765732f636f6e616e2f76312f66696c65732f7b7061636b6167655f6e616d657d2f7b7061636b6167655f76657273696f6e7d2f7b7061636b6167655f757365726e616d657d2f7b7061636b6167655f6368616e6e656c7d2f7b7265636970655f7265766973696f6e7d2f6578706f72742f7b66696c655f6e616d657d2f617574686f72697a65"
+    }
+  },
+  {
+    "connector": "gitlab",
+    "source_id": "write:source_write_505554202f7061636b616765732f636f6e616e2f76312f66696c65732f7b7061636b6167655f6e616d657d2f7b7061636b6167655f76657273696f6e7d2f7b7061636b6167655f757365726e616d657d2f7b7061636b6167655f6368616e6e656c7d2f7b7265636970655f7265766973696f6e7d2f7061636b6167652f7b636f6e616e5f7061636b6167655f7265666572656e63657d2f7b7061636b6167655f7265766973696f6e7d2f7b66696c655f6e616d657d2f617574686f72697a65",
+    "operation_index": 940,
+    "command_index": 1,
+    "old_name": "file-name",
+    "new_name": "provider-file-name",
+    "maps_to": "record.file_name",
+    "command": {
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/packages/conan/v1/files/{package_name}/{package_version}/{package_username}/{package_channel}/{recipe_revision}/package/{conan_package_reference}/{package_revision}/{file_name}/authorize"
+        }
+      ],
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "availability": "implemented",
+      "flags": [
+        {
+          "maps_to": "record.conan_package_reference",
+          "max_bytes": 32768,
+          "name": "conan-package-reference",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "maps_to": "record.file_name",
+          "name": "file-name",
+          "required": true,
+          "type": "enum",
+          "values": [
+            "conanfile.py",
+            "conanmanifest.txt",
+            "conan_sources.tgz",
+            "conan_export.tgz",
+            "conaninfo.txt",
+            "conan_package.tgz"
+          ]
+        },
+        {
+          "maps_to": "record.package_channel",
+          "max_bytes": 32768,
+          "name": "package-channel",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "maps_to": "record.package_name",
+          "max_bytes": 32768,
+          "name": "package-name",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "maps_to": "record.package_revision",
+          "max_bytes": 32768,
+          "name": "package-revision",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "maps_to": "record.package_username",
+          "max_bytes": 32768,
+          "name": "package-username",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "maps_to": "record.package_version",
+          "max_bytes": 32768,
+          "name": "package-version",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "maps_to": "record.recipe_revision",
+          "max_bytes": 32768,
+          "name": "recipe-revision",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "intent": "direct_write",
+      "path": "api direct-op-505554202f6170692f76342f7061636b616765732f636f6e616e2f76312f66696c65732f7b7061636b6167655f6e616d657d2f7b7061636b6167655f76657273696f6e7d2f7b7061636b6167655f757365726e616d657d2f7b7061636b6167655f6368616e6e656c7d2f7b7265636970655f7265766973696f6e7d2f7061636b6167652f7b636f6e616e5f7061636b6167655f7265666572656e63657d2f7b7061636b6167655f7265766973696f6e7d2f7b66696c655f6e616d657d2f617574686f72697a65",
+      "risk": "Provider mutation; requires reverse ETL plan, preview, explicit approval, execute, and typed confirmation",
+      "summary": "PUT /packages/conan/v1/files/{package_name}/{package_version}/{package_username}/{package_channel}/{recipe_revision}/package/{conan_package_reference}/{package_revision}/{file_name}/authorize",
+      "write": "source_write_505554202f7061636b616765732f636f6e616e2f76312f66696c65732f7b7061636b6167655f6e616d657d2f7b7061636b6167655f76657273696f6e7d2f7b7061636b6167655f757365726e616d657d2f7b7061636b6167655f6368616e6e656c7d2f7b7265636970655f7265766973696f6e7d2f7061636b6167652f7b636f6e616e5f7061636b6167655f7265666572656e63657d2f7b7061636b6167655f7265766973696f6e7d2f7b66696c655f6e616d657d2f617574686f72697a65"
+    }
+  },
+  {
+    "connector": "gitlab",
+    "source_id": "write:source_write_505554202f736e6970706574732f7b69647d",
+    "operation_index": 963,
+    "command_index": 1,
+    "old_name": "file-name",
+    "new_name": "provider-file-name",
+    "maps_to": "record.file_name",
+    "command": {
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/snippets/{id}"
+        }
+      ],
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "availability": "implemented",
+      "flags": [
+        {
+          "maps_to": "record.content",
+          "max_bytes": 32768,
+          "name": "content",
+          "type": "string"
+        },
+        {
+          "maps_to": "record.description",
+          "max_bytes": 32768,
+          "name": "description",
+          "type": "string"
+        },
+        {
+          "maps_to": "record.file_name",
+          "max_bytes": 32768,
+          "name": "file-name",
+          "type": "string"
+        },
+        {
+          "maps_to": "record.files",
+          "max_bytes": 1048576,
+          "name": "files",
+          "type": "json"
+        },
+        {
+          "maps_to": "record.id",
+          "name": "id",
+          "required": true,
+          "type": "integer"
+        },
+        {
+          "maps_to": "record.title",
+          "max_bytes": 32768,
+          "name": "title",
+          "type": "string"
+        },
+        {
+          "maps_to": "record.visibility",
+          "name": "visibility",
+          "type": "enum",
+          "values": [
+            "private",
+            "internal",
+            "public"
+          ]
+        }
+      ],
+      "intent": "direct_write",
+      "path": "api direct-op-505554202f6170692f76342f736e6970706574732f7b69647d",
+      "risk": "Provider mutation; requires reverse ETL plan, preview, explicit approval, execute, and typed confirmation",
+      "summary": "PUT /snippets/{id}",
+      "write": "source_write_505554202f736e6970706574732f7b69647d"
+    }
+  }
+]

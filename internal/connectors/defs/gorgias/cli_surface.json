@@ -1,12 +1,6 @@
 {
   "tagline": "Work with Gorgias tickets, customers, messages, users, teams, tags, views, macros, rules, widgets, integrations, jobs and files from the command line.",
   "usage": "pm gorgias <command> [flags]",
-  "source_cli": {
-    "name": "Gorgias REST API",
-    "docs": "https://developers.gorgias.com/reference",
-    "reference": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
-    "source": "official OpenAPI 3.1.0 document, retrieved 2026-08-07"
-  },
   "groups": [
     {
       "id": "account",
@@ -333,7 +327,6 @@
       "availability": "implemented",
       "operation": "gorgias.get_account",
       "flags": [],
-      "source_url": "https://developers.gorgias.com/reference/get-account",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -353,7 +346,6 @@
       "availability": "implemented",
       "operation": "gorgias.list_account_settings",
       "flags": [],
-      "source_url": "https://developers.gorgias.com/reference/list-account-settings",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -373,7 +365,6 @@
       "availability": "implemented",
       "operation": "gorgias.list_custom_fields",
       "flags": [],
-      "source_url": "https://developers.gorgias.com/reference/list-custom-fields",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -393,7 +384,6 @@
       "availability": "implemented",
       "operation": "gorgias.get_custom_field",
       "flags": [],
-      "source_url": "https://developers.gorgias.com/reference/get-custom-field",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -413,7 +403,6 @@
       "availability": "implemented",
       "operation": "gorgias.list_customer_custom_field_values",
       "flags": [],
-      "source_url": "https://developers.gorgias.com/reference/list-customer-custom-fields-values",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -433,7 +422,6 @@
       "availability": "implemented",
       "operation": "gorgias.get_customer",
       "flags": [],
-      "source_url": "https://developers.gorgias.com/reference/get-customer",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -453,7 +441,6 @@
       "availability": "implemented",
       "operation": "gorgias.list_events",
       "flags": [],
-      "source_url": "https://developers.gorgias.com/reference/list-events",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -473,7 +460,6 @@
       "availability": "implemented",
       "operation": "gorgias.get_event",
       "flags": [],
-      "source_url": "https://developers.gorgias.com/reference/get-event",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -493,7 +479,6 @@
       "availability": "implemented",
       "operation": "gorgias.list_integrations",
       "flags": [],
-      "source_url": "https://developers.gorgias.com/reference/list-integrations",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -513,7 +498,6 @@
       "availability": "implemented",
       "operation": "gorgias.get_integration",
       "flags": [],
-      "source_url": "https://developers.gorgias.com/reference/get-integration",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -533,7 +517,6 @@
       "availability": "implemented",
       "operation": "gorgias.list_jobs",
       "flags": [],
-      "source_url": "https://developers.gorgias.com/reference/list-jobs",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -553,7 +536,6 @@
       "availability": "implemented",
       "operation": "gorgias.get_job",
       "flags": [],
-      "source_url": "https://developers.gorgias.com/reference/get-job",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -573,7 +555,6 @@
       "availability": "implemented",
       "operation": "gorgias.list_macros",
       "flags": [],
-      "source_url": "https://developers.gorgias.com/reference/list-macros",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -593,7 +574,6 @@
       "availability": "implemented",
       "operation": "gorgias.get_macro",
       "flags": [],
-      "source_url": "https://developers.gorgias.com/reference/get-macro",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -613,7 +593,6 @@
       "availability": "implemented",
       "operation": "gorgias.search_metric_cards",
       "flags": [],
-      "source_url": "https://developers.gorgias.com/reference/search-metric-cards",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -633,7 +612,6 @@
       "availability": "implemented",
       "operation": "gorgias.get_metric_card",
       "flags": [],
-      "source_url": "https://developers.gorgias.com/reference/get-metric-card",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -653,7 +631,6 @@
       "availability": "implemented",
       "operation": "gorgias.list_voice_call_events",
       "flags": [],
-      "source_url": "https://developers.gorgias.com/reference/list-voice-call-events",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -673,7 +650,6 @@
       "availability": "implemented",
       "operation": "gorgias.get_voice_call_event",
       "flags": [],
-      "source_url": "https://developers.gorgias.com/reference/get-voice-call-event",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -693,7 +669,6 @@
       "availability": "implemented",
       "operation": "gorgias.list_voice_call_recordings",
       "flags": [],
-      "source_url": "https://developers.gorgias.com/reference/list-voice-call-recordings",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -713,7 +688,6 @@
       "availability": "implemented",
       "operation": "gorgias.get_voice_call_recording",
       "flags": [],
-      "source_url": "https://developers.gorgias.com/reference/get-voice-call-recording",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -733,7 +707,6 @@
       "availability": "implemented",
       "operation": "gorgias.list_voice_calls",
       "flags": [],
-      "source_url": "https://developers.gorgias.com/reference/list-voice-calls",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -753,7 +726,6 @@
       "availability": "implemented",
       "operation": "gorgias.get_voice_call",
       "flags": [],
-      "source_url": "https://developers.gorgias.com/reference/get-voice-call",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -773,7 +745,6 @@
       "availability": "implemented",
       "operation": "gorgias.list_rules",
       "flags": [],
-      "source_url": "https://developers.gorgias.com/reference/list-rules",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -793,7 +764,6 @@
       "availability": "implemented",
       "operation": "gorgias.get_rule",
       "flags": [],
-      "source_url": "https://developers.gorgias.com/reference/get-rule",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -813,7 +783,6 @@
       "availability": "implemented",
       "operation": "gorgias.get_satisfaction_survey",
       "flags": [],
-      "source_url": "https://developers.gorgias.com/reference/get-satisfaction-survey",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -833,7 +802,6 @@
       "availability": "implemented",
       "operation": "gorgias.list_tags",
       "flags": [],
-      "source_url": "https://developers.gorgias.com/reference/list-tags",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -853,7 +821,6 @@
       "availability": "implemented",
       "operation": "gorgias.get_tag",
       "flags": [],
-      "source_url": "https://developers.gorgias.com/reference/get-tag",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -873,7 +840,6 @@
       "availability": "implemented",
       "operation": "gorgias.list_teams",
       "flags": [],
-      "source_url": "https://developers.gorgias.com/reference/list-teams",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -893,7 +859,6 @@
       "availability": "implemented",
       "operation": "gorgias.get_team",
       "flags": [],
-      "source_url": "https://developers.gorgias.com/reference/get-team",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -913,7 +878,6 @@
       "availability": "implemented",
       "operation": "gorgias.get_ticket",
       "flags": [],
-      "source_url": "https://developers.gorgias.com/reference/get-ticket",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -933,7 +897,6 @@
       "availability": "implemented",
       "operation": "gorgias.list_ticket_custom_fields",
       "flags": [],
-      "source_url": "https://developers.gorgias.com/reference/list-ticket-custom-fields",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -953,7 +916,6 @@
       "availability": "implemented",
       "operation": "gorgias.get_ticket_message",
       "flags": [],
-      "source_url": "https://developers.gorgias.com/reference/get-ticket-message",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -973,7 +935,6 @@
       "availability": "implemented",
       "operation": "gorgias.list_ticket_tags",
       "flags": [],
-      "source_url": "https://developers.gorgias.com/reference/list-ticket-tags",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -993,7 +954,6 @@
       "availability": "implemented",
       "operation": "gorgias.list_users",
       "flags": [],
-      "source_url": "https://developers.gorgias.com/reference/list-users",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -1013,7 +973,6 @@
       "availability": "implemented",
       "operation": "gorgias.get_user",
       "flags": [],
-      "source_url": "https://developers.gorgias.com/reference/get-user",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -1033,7 +992,6 @@
       "availability": "implemented",
       "operation": "gorgias.list_views",
       "flags": [],
-      "source_url": "https://developers.gorgias.com/reference/list-views",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -1053,7 +1011,6 @@
       "availability": "implemented",
       "operation": "gorgias.get_view",
       "flags": [],
-      "source_url": "https://developers.gorgias.com/reference/get-view",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -1073,7 +1030,6 @@
       "availability": "implemented",
       "operation": "gorgias.list_view_items",
       "flags": [],
-      "source_url": "https://developers.gorgias.com/reference/list-view-items",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -1093,7 +1049,6 @@
       "availability": "implemented",
       "operation": "gorgias.list_widgets",
       "flags": [],
-      "source_url": "https://developers.gorgias.com/reference/list-widgets",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -1113,7 +1068,6 @@
       "availability": "implemented",
       "operation": "gorgias.get_widget",
       "flags": [],
-      "source_url": "https://developers.gorgias.com/reference/get-widget",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -1165,7 +1119,6 @@
           "maps_to": "body.size"
         }
       ],
-      "source_url": "https://developers.gorgias.com/reference/search",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -1185,7 +1138,6 @@
       "availability": "implemented",
       "operation": "gorgias.get_legacy_statistic",
       "flags": [],
-      "source_url": "https://developers.gorgias.com/reference/get-legacy-statistic",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -1227,7 +1179,6 @@
           "required": true
         }
       ],
-      "source_url": "https://developers.gorgias.com/reference/download-file",
       "api_surface": [
         {
           "method": "GET",
@@ -1256,7 +1207,6 @@
           "required": true
         }
       ],
-      "source_url": "https://developers.gorgias.com/reference/create-account-setting",
       "api_surface": [
         {
           "method": "POST",
@@ -1291,7 +1241,6 @@
           "required": true
         }
       ],
-      "source_url": "https://developers.gorgias.com/reference/update-account-setting",
       "api_surface": [
         {
           "method": "PUT",
@@ -1350,7 +1299,6 @@
           "maps_to": "record.external_id"
         }
       ],
-      "source_url": "https://developers.gorgias.com/reference/create-custom-field",
       "api_surface": [
         {
           "method": "POST",
@@ -1409,7 +1357,6 @@
           "maps_to": "record.external_id"
         }
       ],
-      "source_url": "https://developers.gorgias.com/reference/update-custom-field",
       "api_surface": [
         {
           "method": "PUT",
@@ -1437,7 +1384,6 @@
           "required": true
         }
       ],
-      "source_url": "https://developers.gorgias.com/reference/update-custom-fields",
       "api_surface": [
         {
           "method": "PUT",
@@ -1496,7 +1442,6 @@
           "maps_to": "record.timezone"
         }
       ],
-      "source_url": "https://developers.gorgias.com/reference/create-customer",
       "api_surface": [
         {
           "method": "POST",
@@ -1555,7 +1500,6 @@
           "maps_to": "record.timezone"
         }
       ],
-      "source_url": "https://developers.gorgias.com/reference/update-customer",
       "api_surface": [
         {
           "method": "PUT",
@@ -1602,7 +1546,6 @@
           "maps_to": "record.name"
         }
       ],
-      "source_url": "https://developers.gorgias.com/reference/merge-customers",
       "api_surface": [
         {
           "method": "PUT",
@@ -1638,7 +1581,6 @@
           "required": true
         }
       ],
-      "source_url": "https://developers.gorgias.com/reference/update-customer-custom-field-values",
       "api_surface": [
         {
           "method": "PUT",
@@ -1680,7 +1622,6 @@
           "maps_to": "record.version"
         }
       ],
-      "source_url": "https://developers.gorgias.com/reference/update-customer-data",
       "api_surface": [
         {
           "method": "PUT",
@@ -1709,7 +1650,6 @@
           "required": true
         }
       ],
-      "source_url": "https://developers.gorgias.com/reference/delete-customer",
       "api_surface": [
         {
           "method": "DELETE",
@@ -1737,7 +1677,6 @@
           "required": true
         }
       ],
-      "source_url": "https://developers.gorgias.com/reference/delete-customers",
       "api_surface": [
         {
           "method": "DELETE",
@@ -1785,7 +1724,6 @@
           "maps_to": "record.managed"
         }
       ],
-      "source_url": "https://developers.gorgias.com/reference/create-integration",
       "api_surface": [
         {
           "method": "POST",
@@ -1826,7 +1764,6 @@
           "maps_to": "record.description"
         }
       ],
-      "source_url": "https://developers.gorgias.com/reference/update-integration",
       "api_surface": [
         {
           "method": "PUT",
@@ -1854,7 +1791,6 @@
           "required": true
         }
       ],
-      "source_url": "https://developers.gorgias.com/reference/delete-integration",
       "api_surface": [
         {
           "method": "DELETE",
@@ -1899,7 +1835,6 @@
           "required": true
         }
       ],
-      "source_url": "https://developers.gorgias.com/reference/create-job",
       "api_surface": [
         {
           "method": "POST",
@@ -1934,7 +1869,6 @@
           "maps_to": "record.status"
         }
       ],
-      "source_url": "https://developers.gorgias.com/reference/update-job",
       "api_surface": [
         {
           "method": "PUT",
@@ -1962,7 +1896,6 @@
           "required": true
         }
       ],
-      "source_url": "https://developers.gorgias.com/reference/cancel-job",
       "api_surface": [
         {
           "method": "DELETE",
@@ -2008,7 +1941,6 @@
           "maps_to": "record.language"
         }
       ],
-      "source_url": "https://developers.gorgias.com/reference/create-macro",
       "api_surface": [
         {
           "method": "POST",
@@ -2054,7 +1986,6 @@
           "maps_to": "record.language"
         }
       ],
-      "source_url": "https://developers.gorgias.com/reference/update-macro",
       "api_surface": [
         {
           "method": "PUT",
@@ -2082,7 +2013,6 @@
           "required": true
         }
       ],
-      "source_url": "https://developers.gorgias.com/reference/delete-macro",
       "api_surface": [
         {
           "method": "DELETE",
@@ -2110,7 +2040,6 @@
           "required": true
         }
       ],
-      "source_url": "https://developers.gorgias.com/reference/bulk-archive-macros",
       "api_surface": [
         {
           "method": "PUT",
@@ -2139,7 +2068,6 @@
           "required": true
         }
       ],
-      "source_url": "https://developers.gorgias.com/reference/bulk-unarchive-macros",
       "api_surface": [
         {
           "method": "PUT",
@@ -2188,7 +2116,6 @@
           "maps_to": "record.comment"
         }
       ],
-      "source_url": "https://developers.gorgias.com/reference/create-metric-card-feedback",
       "api_surface": [
         {
           "method": "POST",
@@ -2216,7 +2143,6 @@
           "required": true
         }
       ],
-      "source_url": "https://developers.gorgias.com/reference/delete-voice-call-recording",
       "api_surface": [
         {
           "method": "DELETE",
@@ -2269,7 +2195,6 @@
           "maps_to": "record.event_types"
         }
       ],
-      "source_url": "https://developers.gorgias.com/reference/create-rule",
       "api_surface": [
         {
           "method": "POST",
@@ -2321,7 +2246,6 @@
           "maps_to": "record.priority"
         }
       ],
-      "source_url": "https://developers.gorgias.com/reference/update-rule",
       "api_surface": [
         {
           "method": "PUT",
@@ -2349,7 +2273,6 @@
           "required": true
         }
       ],
-      "source_url": "https://developers.gorgias.com/reference/delete-rule",
       "api_surface": [
         {
           "method": "DELETE",
@@ -2377,7 +2300,6 @@
           "required": true
         }
       ],
-      "source_url": "https://developers.gorgias.com/reference/update-rules-priorities",
       "api_surface": [
         {
           "method": "POST",
@@ -2425,7 +2347,6 @@
           "maps_to": "record.body_text"
         }
       ],
-      "source_url": "https://developers.gorgias.com/reference/create-satisfaction-survey",
       "api_surface": [
         {
           "method": "POST",
@@ -2465,7 +2386,6 @@
           "maps_to": "record.body_text"
         }
       ],
-      "source_url": "https://developers.gorgias.com/reference/update-satisfaction-survey",
       "api_surface": [
         {
           "method": "PUT",
@@ -2499,7 +2419,6 @@
           "maps_to": "record.description"
         }
       ],
-      "source_url": "https://developers.gorgias.com/reference/create-tag",
       "api_surface": [
         {
           "method": "POST",
@@ -2539,7 +2458,6 @@
           "maps_to": "record.description"
         }
       ],
-      "source_url": "https://developers.gorgias.com/reference/update-tag",
       "api_surface": [
         {
           "method": "PUT",
@@ -2567,7 +2485,6 @@
           "required": true
         }
       ],
-      "source_url": "https://developers.gorgias.com/reference/delete-tag",
       "api_surface": [
         {
           "method": "DELETE",
@@ -2595,7 +2512,6 @@
           "required": true
         }
       ],
-      "source_url": "https://developers.gorgias.com/reference/delete-tags",
       "api_surface": [
         {
           "method": "DELETE",
@@ -2631,7 +2547,6 @@
           "required": true
         }
       ],
-      "source_url": "https://developers.gorgias.com/reference/merge-tags",
       "api_surface": [
         {
           "method": "PUT",
@@ -2666,7 +2581,6 @@
           "maps_to": "record.description"
         }
       ],
-      "source_url": "https://developers.gorgias.com/reference/create-team",
       "api_surface": [
         {
           "method": "POST",
@@ -2706,7 +2620,6 @@
           "maps_to": "record.description"
         }
       ],
-      "source_url": "https://developers.gorgias.com/reference/update-team",
       "api_surface": [
         {
           "method": "PUT",
@@ -2734,7 +2647,6 @@
           "required": true
         }
       ],
-      "source_url": "https://developers.gorgias.com/reference/delete-team",
       "api_surface": [
         {
           "method": "DELETE",
@@ -2780,7 +2692,6 @@
           "maps_to": "record.priority"
         }
       ],
-      "source_url": "https://developers.gorgias.com/reference/create-ticket",
       "api_surface": [
         {
           "method": "POST",
@@ -2833,7 +2744,6 @@
           "maps_to": "record.is_unread"
         }
       ],
-      "source_url": "https://developers.gorgias.com/reference/update-ticket",
       "api_surface": [
         {
           "method": "PUT",
@@ -2861,7 +2771,6 @@
           "required": true
         }
       ],
-      "source_url": "https://developers.gorgias.com/reference/delete-ticket",
       "api_surface": [
         {
           "method": "DELETE",
@@ -2896,7 +2805,6 @@
           "required": true
         }
       ],
-      "source_url": "https://developers.gorgias.com/reference/update-ticket-custom-fields",
       "api_surface": [
         {
           "method": "PUT",
@@ -2932,7 +2840,6 @@
           "required": true
         }
       ],
-      "source_url": "https://developers.gorgias.com/reference/delete-ticket-custom-field",
       "api_surface": [
         {
           "method": "DELETE",
@@ -2992,7 +2899,6 @@
           "maps_to": "record.public"
         }
       ],
-      "source_url": "https://developers.gorgias.com/reference/create-ticket-message",
       "api_surface": [
         {
           "method": "POST",
@@ -3054,7 +2960,6 @@
           "maps_to": "record.subject"
         }
       ],
-      "source_url": "https://developers.gorgias.com/reference/update-ticket-message",
       "api_surface": [
         {
           "method": "PUT",
@@ -3089,7 +2994,6 @@
           "required": true
         }
       ],
-      "source_url": "https://developers.gorgias.com/reference/delete-ticket-message",
       "api_surface": [
         {
           "method": "DELETE",
@@ -3123,7 +3027,6 @@
           "maps_to": "record.names"
         }
       ],
-      "source_url": "https://developers.gorgias.com/reference/create-ticket-tags",
       "api_surface": [
         {
           "method": "POST",
@@ -3157,7 +3060,6 @@
           "maps_to": "record.names"
         }
       ],
-      "source_url": "https://developers.gorgias.com/reference/update-ticket-tags",
       "api_surface": [
         {
           "method": "PUT",
@@ -3191,7 +3093,6 @@
           "maps_to": "record.names"
         }
       ],
-      "source_url": "https://developers.gorgias.com/reference/delete-ticket-tags",
       "api_surface": [
         {
           "method": "DELETE",
@@ -3257,7 +3158,6 @@
           "maps_to": "record.timezone"
         }
       ],
-      "source_url": "https://developers.gorgias.com/reference/create-user",
       "api_surface": [
         {
           "method": "POST",
@@ -3309,7 +3209,6 @@
           "maps_to": "record.bio"
         }
       ],
-      "source_url": "https://developers.gorgias.com/reference/update-user",
       "api_surface": [
         {
           "method": "PUT",
@@ -3337,7 +3236,6 @@
           "required": true
         }
       ],
-      "source_url": "https://developers.gorgias.com/reference/delete-user",
       "api_surface": [
         {
           "method": "DELETE",
@@ -3395,7 +3293,6 @@
           "maps_to": "record.visibility"
         }
       ],
-      "source_url": "https://developers.gorgias.com/reference/create-view",
       "api_surface": [
         {
           "method": "POST",
@@ -3447,7 +3344,6 @@
           "maps_to": "record.visibility"
         }
       ],
-      "source_url": "https://developers.gorgias.com/reference/update-view",
       "api_surface": [
         {
           "method": "PUT",
@@ -3475,7 +3371,6 @@
           "required": true
         }
       ],
-      "source_url": "https://developers.gorgias.com/reference/delete-view",
       "api_surface": [
         {
           "method": "DELETE",
@@ -3522,7 +3417,6 @@
           "maps_to": "record.order"
         }
       ],
-      "source_url": "https://developers.gorgias.com/reference/create-widget",
       "api_surface": [
         {
           "method": "POST",
@@ -3563,7 +3457,6 @@
           "maps_to": "record.integration_id"
         }
       ],
-      "source_url": "https://developers.gorgias.com/reference/update-widget",
       "api_surface": [
         {
           "method": "PUT",
@@ -3591,7 +3484,6 @@
           "required": true
         }
       ],
-      "source_url": "https://developers.gorgias.com/reference/delete-widget",
       "api_surface": [
         {
           "method": "DELETE",
@@ -3626,7 +3518,6 @@
           "required": true
         }
       ],
-      "source_url": "https://developers.gorgias.com/reference/delete-customer-custom-field-value",
       "api_surface": [
         {
           "method": "DELETE",

@@ -1,8 +1,0 @@
-{
-  "issue": 4329,
-  "state": "verified_ready_to_push",
-  "base": "main",
-  "working_branch": "fm/cli-read-only-source-coverage-r1",
-  "scope": "sourceprojection.go, operationevidence.go, one closed engine api_surface enum member, and tests; no Sentry/Vercel connector files",
-  "next": "push the verified branch, open the direct main-targeted PR, read the API-reported base, and wait for the Claude automatic review route"
-}

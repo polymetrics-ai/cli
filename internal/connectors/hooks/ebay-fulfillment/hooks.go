@@ -36,10 +36,6 @@ const (
 	defaultLimit    = 50
 )
 
-func init() {
-	engine.RegisterHooks("ebay-fulfillment", func() engine.Hooks { return New() })
-}
-
 // Hooks is the ebay-fulfillment hook set: AuthHook + StreamHook.
 type Hooks struct {
 	Now    func() time.Time // injectable for tests; nil uses time.Now

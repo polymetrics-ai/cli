@@ -1,4 +1,0 @@
-{
-  "record": { "_type": "lead", "lead_id": "lead_1", "text": "Fixture task" },
-  "expect": { "method": "POST", "path": "/task/" }
-}

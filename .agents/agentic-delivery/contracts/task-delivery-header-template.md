@@ -18,7 +18,7 @@ pull request can drift.
 - Delivery:
   <!-- State the concrete completion condition for this task, for example `pull request open against the stated base with its checks green` or `branch committed and ready, no push`; committing locally is not delivery, and verify the pull request exists rather than assuming it. -->
 - Working branch:
-  <!-- Use the exact branch this agent creates, for example `fix/certification-schema-version`. -->
+  <!-- Use the exact branch this agent creates, for example `fix/execution-schema-version`. -->
 - Task:
   <!-- Describe what this agent will build in its own words and list the acceptance criteria that make it done. -->
 - Verification:

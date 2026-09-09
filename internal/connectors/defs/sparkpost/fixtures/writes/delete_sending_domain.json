@@ -1,9 +1,0 @@
-{
-  "record": {
-    "domain": "fixture.example.com"
-  },
-  "expect": {
-    "method": "DELETE",
-    "path": "/sending-domains/fixture.example.com"
-  }
-}

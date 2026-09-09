@@ -7,7 +7,7 @@ description: FastBill connector knowledge and safe action guide.
 
 ## Purpose
 
-Reads FastBill customers, invoices, products, recurring invoices, and revenues through the FastBill JSON API.
+Reads FastBill billing records through fixed JSON SERVICE envelopes.
 
 ## Icon
 
@@ -24,17 +24,40 @@ Reads FastBill customers, invoices, products, recurring invoices, and revenues t
 
 ## Authentication
 
-- No secret authentication is required for this connector.
+- Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 ## Configuration
 
-- No connector-specific config fields.
+- username (required)
+- api_key (secret) (required)
+
+## ETL Streams
+
+- customers:
+  - primary key: CUSTOMER_ID
+  - fields: CUSTOMER_ID(string)
+- invoices:
+  - primary key: INVOICE_ID
+  - fields: INVOICE_ID(string)
+- products:
+  - primary key: ARTICLE_NUMBER
+  - fields: ARTICLE_NUMBER(string)
+- recurring_invoices:
+  - primary key: INVOICE_ID
+  - fields: INVOICE_ID(string)
+- revenues:
+  - primary key: REVENUE_ID
+  - fields: REVENUE_ID(string)
+
+## Sync Modes
+
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Security
 
-- read risk: connector-specific
-- write risk: connector-specific
-- approval: external mutations require preview and approval
+- read risk: Bounded FastBill JSON API requests use fixed origin and declared Basic authentication.
+- write risk: unsupported
+- approval: none; read-only
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 ## Commands

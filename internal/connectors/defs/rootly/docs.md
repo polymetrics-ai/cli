@@ -1,43 +1,38 @@
-# Overview
+# Rootly Connector
 
-Reads Rootly incidents, services, and users through the Rootly API. Read-only.
+## Overview
+
+Reads Rootly incidents, services, and users through fixed JSON:API routes.
 
 Readable streams: `incidents`, `services`, `users`.
 
-This connector is read-only; no write actions are declared.
-
-Service API documentation: https://rootly.com/api.
+Service API documentation: https://docs.rootly.com/api-reference.
 
 ## Auth setup
 
 Connection fields:
 
-- `api_key` (required, secret, string).
-- `base_url` (optional, string).
-- `mode` (optional, string).
-- `start_date` (required, string).
+- `api_key` (required, secret, string); Rootly API token.
+- `start_date` (required, string); Retained initial ETL lower-bound configuration.
 
-Secret fields are redacted in logs and write previews: `api_key`.
+Authentication uses declared mode(s): `bearer`.
 
-Provide the secret fields listed above. Authentication is applied by the connector-specific
-implementation for this service.
+## Execution contract
 
-Requests use the configured `base_url` value after applying defaults.
+Default stream pagination: `next_url`.
 
-Connection checks use a connector-managed request.
+Connection check: `GET /v1/incidents`
+Check query: `page[size]`=`1`.
 
 ## Streams notes
 
-Default pagination: single request; no pagination.
-
-- `incidents`: GET connector-managed request path - records path `data`.
-- `services`: GET connector-managed request path - records path `data`.
-- `users`: GET connector-managed request path - records path `data`.
+- `incidents`: `GET /v1/incidents`; records `data`
+  - Query: `page[number]`=`1`; `page[size]`=`100`.
+- `services`: `GET /v1/services`; records `data`
+  - Query: `page[number]`=`1`; `page[size]`=`100`.
+- `users`: `GET /v1/users`; records `data`
+  - Query: `page[number]`=`1`; `page[size]`=`100`.
 
 ## Write actions & risks
 
-This connector is read-only; no reverse-ETL write actions are declared.
-
-## Known limits
-
-- API coverage includes 3 stream-backed endpoint group(s).
+This connector's write surface is declared separately in the rendered execution bundle.

@@ -1,8 +1,0 @@
-{
-  "record": { "id": "video_fixture_1" },
-  "expect": {
-    "method": "DELETE",
-    "path": "/videos/video_fixture_1"
-  },
-  "response": { "status": 200, "body": {} }
-}

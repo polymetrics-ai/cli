@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "hook_id": {
+      "type": "integer"
+    },
+    "key": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "value": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "hook_id",
+    "key",
+    "value"
+  ],
+  "type": "object"
+}

@@ -1,0 +1,1046 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Authoring-only source-keyed foundation demand register",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "kind",
+    "atlas",
+    "assessments",
+    "baseline",
+    "source_manifest_content_sha256",
+    "coverage",
+    "known_obligations",
+    "requirements",
+    "source_fit",
+    "atlas_examples",
+    "adopter_relations",
+    "inputs",
+    "foundation_proof_observations",
+    "checks",
+    "foundation_proof_document",
+    "source_admission"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "kind": {
+      "const": "foundation_demand_register"
+    },
+    "atlas": {
+      "$ref": "../source-lane-manifest.schema.json#/$defs/pin"
+    },
+    "assessments": {
+      "$ref": "../source-lane-manifest.schema.json#/$defs/pin"
+    },
+    "baseline": {
+      "$ref": "../source-lane-manifest.schema.json#/$defs/pin"
+    },
+    "source_manifest_content_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "coverage": {
+      "$ref": "#/$defs/coverage"
+    },
+    "known_obligations": {
+      "type": "array",
+      "minItems": 0,
+      "items": {
+        "$ref": "#/$defs/known"
+      }
+    },
+    "requirements": {
+      "type": "array",
+      "minItems": 0,
+      "items": {
+        "$ref": "#/$defs/requirement"
+      }
+    },
+    "source_fit": {
+      "type": "array",
+      "minItems": 0,
+      "items": {
+        "$ref": "#/$defs/facet"
+      }
+    },
+    "atlas_examples": {
+      "type": "array",
+      "minItems": 0,
+      "items": {
+        "$ref": "#/$defs/example"
+      }
+    },
+    "adopter_relations": {
+      "type": "array",
+      "minItems": 0,
+      "items": {
+        "$ref": "#/$defs/adoption"
+      }
+    },
+    "inputs": {
+      "type": "array",
+      "minItems": 0,
+      "items": {
+        "$ref": "../source-lane-manifest.schema.json#/$defs/pin"
+      }
+    },
+    "foundation_proof_observations": {
+      "type": "array",
+      "minItems": 0,
+      "items": {
+        "$ref": "#/$defs/proof"
+      }
+    },
+    "checks": {
+      "$ref": "#/$defs/checks"
+    },
+    "foundation_proof_document": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "status",
+        "issues"
+      ],
+      "properties": {
+        "path": {
+          "const": "docs/connector-canon/foundations/proofs.json"
+        },
+        "status": {
+          "enum": [
+            "present",
+            "proof_unavailable"
+          ]
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/proof_issue"
+          }
+        }
+      }
+    },
+    "source_admission": {
+      "$ref": "#/$defs/source_admission"
+    }
+  },
+  "$defs": {
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "key",
+        "lane"
+      ],
+      "properties": {
+        "key": {
+          "$ref": "../source-lane-manifest.schema.json#/$defs/key"
+        },
+        "lane": {
+          "$ref": "../source-lane-manifest.schema.json#/$defs/cell/properties/lane"
+        }
+      }
+    },
+    "assertion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "atlas_id",
+        "contract",
+        "assertion",
+        "status",
+        "limitations"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "atlas_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "contract": {
+          "$ref": "assessments.schema.json#/$defs/contract"
+        },
+        "assertion": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "enum": [
+            "current",
+            "unreviewed",
+            "proof_unavailable",
+            "proof_stale"
+          ]
+        },
+        "limitations": {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "requirement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "identity",
+        "id",
+        "statement",
+        "authored_assessment",
+        "status",
+        "source_refs",
+        "proofs",
+        "next_owner",
+        "missing_evidence",
+        "decision_refs",
+        "source_state",
+        "source_applicability",
+        "gap_refs",
+        "retained_decision_owners",
+        "atlas_lookup",
+        "affected_artifacts",
+        "fit_bindings",
+        "requested_proof_ids",
+        "proof_issues",
+        "mechanism_fits"
+      ],
+      "properties": {
+        "identity": {
+          "$ref": "#/$defs/identity"
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "statement": {
+          "type": "string",
+          "minLength": 1
+        },
+        "authored_assessment": {
+          "enum": [
+            "existing_shared_capability",
+            "connector_local_configuration",
+            "provider_limitation",
+            "absent_shared_foundation",
+            "unresolved",
+            "no_demand_for_this_cell"
+          ]
+        },
+        "status": {
+          "enum": [
+            "existing_shared_capability",
+            "connector_local_configuration",
+            "provider_limitation",
+            "absent_shared_foundation",
+            "unresolved",
+            "no_demand_for_this_cell"
+          ]
+        },
+        "source_refs": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "../source-lane-manifest.schema.json#/$defs/fact_ref"
+          }
+        },
+        "proofs": {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "$ref": "#/$defs/assertion"
+          }
+        },
+        "next_owner": {
+          "type": "string",
+          "minLength": 1
+        },
+        "missing_evidence": {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "type": "string"
+          }
+        },
+        "decision_refs": {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "$ref": "assessments.schema.json#/$defs/decision"
+          }
+        },
+        "source_state": {
+          "$ref": "../source-lane-manifest.schema.json#/$defs/cell/properties/state"
+        },
+        "source_applicability": {
+          "$ref": "../source-lane-manifest.schema.json#/$defs/cell/properties/applicability"
+        },
+        "gap_refs": {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "type": "string"
+          }
+        },
+        "retained_decision_owners": {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "type": "string"
+          }
+        },
+        "atlas_lookup": {
+          "$ref": "assessments.schema.json#/$defs/lookup"
+        },
+        "affected_artifacts": {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "type": "string"
+          }
+        },
+        "fit_bindings": {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "$ref": "../source-lane-manifest.schema.json#/$defs/target_ref"
+          }
+        },
+        "provider_clause": {
+          "$ref": "../source-lane-manifest.schema.json#/$defs/fact_ref"
+        },
+        "source_exclusion": {
+          "$ref": "../source-lane-manifest.schema.json#/$defs/fact_ref"
+        },
+        "requested_proof_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "proof_issues": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/requirement_proof_issue"
+          }
+        },
+        "mechanism_fits": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/mechanism_fit"
+          }
+        }
+      }
+    },
+    "known": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "identity",
+        "source_refs",
+        "source_document_pins",
+        "source_state",
+        "source_applicability",
+        "historical_receiver_candidate",
+        "sentry_registration"
+      ],
+      "properties": {
+        "identity": {
+          "$ref": "#/$defs/identity"
+        },
+        "source_refs": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "../source-lane-manifest.schema.json#/$defs/fact_ref"
+          }
+        },
+        "source_document_pins": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "../source-lane-manifest.schema.json#/$defs/pin"
+          }
+        },
+        "source_state": {
+          "$ref": "../source-lane-manifest.schema.json#/$defs/cell/properties/state"
+        },
+        "source_applicability": {
+          "$ref": "../source-lane-manifest.schema.json#/$defs/cell/properties/applicability"
+        },
+        "historical_receiver_candidate": {
+          "type": "boolean"
+        },
+        "sentry_registration": {
+          "type": "boolean"
+        }
+      }
+    },
+    "owner": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "atlas_id",
+        "owner",
+        "contract",
+        "symbols",
+        "constraints"
+      ],
+      "properties": {
+        "atlas_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "owner": {
+          "type": "string",
+          "minLength": 1
+        },
+        "contract": {
+          "$ref": "assessments.schema.json#/$defs/contract"
+        },
+        "symbols": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "proofs.schema.json#/properties/records/items/properties/owner_symbols/items"
+          }
+        },
+        "constraints": {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "fit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "binding",
+        "result"
+      ],
+      "properties": {
+        "binding": {
+          "$ref": "../source-lane-manifest.schema.json#/$defs/target_ref"
+        },
+        "result": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "facet": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "identity",
+        "kind",
+        "source_refs",
+        "observed_values",
+        "declaration_refs",
+        "fit_evidence",
+        "candidate_owners",
+        "status",
+        "limitation"
+      ],
+      "properties": {
+        "identity": {
+          "$ref": "#/$defs/identity"
+        },
+        "kind": {
+          "enum": [
+            "mime",
+            "auth",
+            "body",
+            "paging"
+          ]
+        },
+        "source_refs": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "../source-lane-manifest.schema.json#/$defs/fact_ref"
+          }
+        },
+        "observed_values": {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "type": "string"
+          }
+        },
+        "declaration_refs": {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "$ref": "../source-lane-manifest.schema.json#/$defs/target_ref"
+          }
+        },
+        "fit_evidence": {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "$ref": "#/$defs/fit"
+          }
+        },
+        "candidate_owners": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/owner"
+          }
+        },
+        "status": {
+          "const": "unresolved"
+        },
+        "limitation": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "example_file": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "state",
+        "sha256",
+        "bytes"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "state": {
+          "enum": [
+            "missing",
+            "present_regular"
+          ]
+        },
+        "sha256": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            {
+              "const": ""
+            }
+          ]
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "example": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "atlas_id",
+        "pointer",
+        "value_sha256",
+        "name",
+        "owner",
+        "notes",
+        "files",
+        "status",
+        "reason"
+      ],
+      "properties": {
+        "atlas_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "pointer": {
+          "type": "string",
+          "minLength": 1
+        },
+        "value_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "owner": {
+          "type": "string",
+          "minLength": 1
+        },
+        "notes": {
+          "type": "string"
+        },
+        "files": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/example_file"
+          }
+        },
+        "status": {
+          "const": "example_unresolved"
+        },
+        "reason": {
+          "enum": [
+            "referenced_file_missing",
+            "reference_observed_without_exact_source_and_selector_join"
+          ]
+        }
+      }
+    },
+    "adoption": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "atlas_id",
+        "contract",
+        "identity",
+        "requirement_id",
+        "binding",
+        "relationship",
+        "proof_id",
+        "mechanism",
+        "declaration_state",
+        "selectors",
+        "source_refs"
+      ],
+      "properties": {
+        "atlas_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "contract": {
+          "$ref": "assessments.schema.json#/$defs/contract"
+        },
+        "identity": {
+          "$ref": "#/$defs/identity"
+        },
+        "requirement_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "binding": {
+          "$ref": "../source-lane-manifest.schema.json#/$defs/target_ref"
+        },
+        "relationship": {
+          "enum": [
+            "existing_shared_capability",
+            "connector_local_configuration"
+          ]
+        },
+        "proof_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "mechanism": {
+          "enum": [
+            "rest_write_structured_json_body",
+            "rest_write_static_api_key_header"
+          ]
+        },
+        "declaration_state": {
+          "enum": [
+            "materialized",
+            "canonical_intended"
+          ]
+        },
+        "selectors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/selector"
+          }
+        },
+        "source_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "../source-lane-manifest.schema.json#/$defs/fact_ref"
+          }
+        }
+      }
+    },
+    "coverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "universe_count",
+        "universe_sha256",
+        "assessed",
+        "assessed_sha256",
+        "unassessed",
+        "unassessed_sha256"
+      ],
+      "properties": {
+        "universe_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "universe_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "assessed": {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "$ref": "#/$defs/identity"
+          }
+        },
+        "assessed_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "unassessed": {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "$ref": "#/$defs/identity"
+          }
+        },
+        "unassessed_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "checks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "structural_valid",
+        "coverage_accounted",
+        "required_reconciliation_complete",
+        "selected_reuse_proof_complete",
+        "selected_reuse_requirements",
+        "unresolved_requirements",
+        "authority"
+      ],
+      "properties": {
+        "structural_valid": {
+          "type": "boolean"
+        },
+        "coverage_accounted": {
+          "type": "boolean"
+        },
+        "required_reconciliation_complete": {
+          "type": "boolean"
+        },
+        "selected_reuse_proof_complete": {
+          "type": "boolean"
+        },
+        "selected_reuse_requirements": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "unresolved_requirements": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "authority": {
+          "const": "authoring_consistency_only; no lane authority or checkpoint acceptance"
+        }
+      }
+    },
+    "proof": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "record",
+        "status",
+        "issues"
+      ],
+      "properties": {
+        "record": {
+          "$ref": "proofs.schema.json#/properties/records/items"
+        },
+        "status": {
+          "enum": [
+            "current",
+            "unreviewed",
+            "proof_unavailable",
+            "proof_stale"
+          ]
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/proof_issue"
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "current"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "issues": {
+                "maxItems": 0
+              }
+            }
+          }
+        }
+      ]
+    },
+    "proof_issue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "code",
+        "path"
+      ],
+      "properties": {
+        "code": {
+          "enum": [
+            "proof_document_missing",
+            "proof_record_missing",
+            "proof_input_missing",
+            "proof_input_stale",
+            "proof_atlas_pin_stale"
+          ]
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "requirement_proof_issue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "code",
+        "path"
+      ],
+      "properties": {
+        "code": {
+          "enum": [
+            "proof_document_missing",
+            "proof_record_missing",
+            "proof_input_missing",
+            "proof_input_stale",
+            "proof_atlas_pin_stale"
+          ]
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "selector": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "pointer",
+        "artifact_sha256",
+        "value_sha256"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "pointer": {
+          "type": "string"
+        },
+        "artifact_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "value_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    },
+    "mechanism_fit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "proof_id",
+        "mechanism",
+        "declaration_state",
+        "selectors",
+        "source_refs",
+        "atlas_id",
+        "contract",
+        "binding"
+      ],
+      "properties": {
+        "proof_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "mechanism": {
+          "enum": [
+            "rest_write_structured_json_body",
+            "rest_write_static_api_key_header"
+          ]
+        },
+        "declaration_state": {
+          "enum": [
+            "materialized",
+            "canonical_intended"
+          ]
+        },
+        "selectors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/selector"
+          }
+        },
+        "source_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "../source-lane-manifest.schema.json#/$defs/fact_ref"
+          }
+        },
+        "atlas_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "contract": {
+          "$ref": "assessments.schema.json#/$defs/contract"
+        },
+        "binding": {
+          "$ref": "../source-lane-manifest.schema.json#/$defs/target_ref"
+        }
+      }
+    },
+    "missing_command": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "identity",
+        "binding",
+        "local_requirement_ids"
+      ],
+      "properties": {
+        "identity": {
+          "$ref": "#/$defs/identity"
+        },
+        "binding": {
+          "$ref": "../source-lane-manifest.schema.json#/$defs/target_ref"
+        },
+        "local_requirement_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "missing_cli": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "connector",
+        "path",
+        "source_lock",
+        "partial_generation",
+        "canonical_generation",
+        "intended_cli",
+        "affected",
+        "diagnostic_indices"
+      ],
+      "properties": {
+        "connector": {
+          "type": "string",
+          "minLength": 1
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_lock": {
+          "$ref": "../source-lane-manifest.schema.json#/$defs/pin"
+        },
+        "partial_generation": {
+          "type": "string",
+          "minLength": 1
+        },
+        "canonical_generation": {
+          "type": "string",
+          "minLength": 1
+        },
+        "intended_cli": {
+          "$ref": "../source-lane-manifest.schema.json#/$defs/pin"
+        },
+        "affected": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/missing_command"
+          }
+        },
+        "diagnostic_indices": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      }
+    },
+    "source_admission": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "current_validation",
+        "current_diagnostics",
+        "missing_cli"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "current_valid",
+            "canonical_intended_missing_cli"
+          ]
+        },
+        "current_validation": {
+          "$ref": "../source-lane-manifest.schema.json#/properties/validation"
+        },
+        "current_diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "../source-lane-manifest.schema.json#/$defs/diagnostic"
+          }
+        },
+        "missing_cli": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/missing_cli"
+          }
+        }
+      }
+    }
+  }
+}

@@ -115,5 +115,5 @@ require `--confirm destructive`.
 - Patient-document binary download and patient image binary reads are blocked by default rather than
   exposed as generic byte-stream downloads. Permanent patient deletion/purge, OpenMRS server
   administration/global-property helpers, bulk observation upload, visit-document upload, and
-  discharge/ADT mutations are blocked or excluded with recorded evidence in `api_surface.json`.
+  discharge/ADT mutations are blocked or excluded with recorded evidence in `execution bundle`.
 - Live clinical writes are human-gated against any non-local/non-disposable deployment.

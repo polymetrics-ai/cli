@@ -53,10 +53,6 @@ var entityEndpoints = map[string]struct {
 	"systemusers":   {resource: "systemusers", idField: "systemuserid", nameKeys: []string{"fullname", "name"}},
 }
 
-func init() {
-	engine.RegisterHooks("microsoft-dataverse", func() engine.Hooks { return New() })
-}
-
 // Hooks implements engine.StreamHook for the microsoft-dataverse bundle. It
 // has no state of its own; every method is a pure function of its
 // arguments.

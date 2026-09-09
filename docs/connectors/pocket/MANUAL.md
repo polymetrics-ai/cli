@@ -10,7 +10,7 @@ SYNOPSIS
   pm credentials add <name> --connector pocket [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads saved Pocket items through the v3 retrieve API.
+  Reads saved Pocket items through the fixed v3 retrieve API.
 
 ICON
   id: pocket
@@ -23,15 +23,32 @@ CAPABILITIES
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  contentType
+  detail_type
+  favorite
+  since
+  sort
+  state
+  tag
+  access_token (secret) (required)
+  consumer_key (secret) (required)
+
+ETL STREAMS
+  items:
+    primary key: item_id
+    cursor: updated_at
+    fields: excerpt(string), item_id(string), title(string), updated_at(string), url(string)
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: Bounded POST reads use the fixed Pocket origin and source-declared request credentials.
+  write risk: unsupported
+  approval: none; read-only
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

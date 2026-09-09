@@ -1,27 +1,27 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "email_sender_list",
-  "type": "object",
   "properties": {
-    "email": {
-      "type": "string",
-      "description": "The email address that can be used to send a sequence",
-      "format": "email"
-    },
     "displayName": {
       "type": "string"
     },
+    "email": {
+      "description": "The email address that can be used to send a sequence",
+      "format": "email",
+      "type": "string"
+    },
     "type": {
-      "type": "string",
       "description": "How the address is made available to the acting identity",
       "enum": [
         "Primary",
         "PersonalAlias",
         "OrganizationAlias",
         "NoReply"
-      ]
+      ],
+      "type": "string"
     }
   },
+  "title": "email_sender_list",
+  "type": "object",
   "x-primary-key": [
     "email"
   ]

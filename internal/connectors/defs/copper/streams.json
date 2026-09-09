@@ -1,86 +1,119 @@
 {
   "base": {
-    "url": "{{ config.base_url }}",
-    "user_agent": "polymetrics-go-cli",
     "auth": [
       {
         "mode": "none"
       }
     ],
-    "pagination": {
-      "type": "none"
-    },
     "check": {
-      "method": "GET",
-      "path": "/__legacy_hook/check"
+      "body": {
+        "page_number": 1,
+        "page_size": 1
+      },
+      "method": "POST",
+      "path": "/people/search"
     },
-    "error_map": []
+    "error_map": [],
+    "headers": {
+      "X-PW-AccessToken": "{{ secrets.api_key }}",
+      "X-PW-Application": "developer_api",
+      "X-PW-UserEmail": "{{ config.user_email }}"
+    },
+    "pagination": {
+      "body_page_field": "page_number",
+      "max_pages": 100,
+      "page_param": "page_number",
+      "page_size": 100,
+      "type": "page_number"
+    },
+    "url": "https://api.copper.com/developer_api/v1",
+    "user_agent": "polymetrics-go-cli"
   },
   "streams": [
     {
+      "body": {
+        "page_size": 100
+      },
+      "incremental": {
+        "client_filtered": true,
+        "cursor_field": "date_modified"
+      },
+      "method": "POST",
       "name": "people",
-      "method": "GET",
-      "path": "/__legacy_hook/people",
+      "path": "/people/search",
+      "projection": "passthrough",
       "records": {
-        "path": "data"
+        "path": "."
       },
-      "schema": "schemas/people.json",
-      "incremental": {
-        "cursor_field": "date_modified",
-        "client_filtered": true
-      }
+      "schema": "schemas/people.json"
     },
     {
+      "body": {
+        "page_size": 100
+      },
+      "incremental": {
+        "client_filtered": true,
+        "cursor_field": "date_modified"
+      },
+      "method": "POST",
       "name": "companies",
-      "method": "GET",
-      "path": "/__legacy_hook/companies",
+      "path": "/companies/search",
+      "projection": "passthrough",
       "records": {
-        "path": "data"
+        "path": "."
       },
-      "schema": "schemas/companies.json",
-      "incremental": {
-        "cursor_field": "date_modified",
-        "client_filtered": true
-      }
+      "schema": "schemas/companies.json"
     },
     {
+      "body": {
+        "page_size": 100
+      },
+      "incremental": {
+        "client_filtered": true,
+        "cursor_field": "date_modified"
+      },
+      "method": "POST",
       "name": "opportunities",
-      "method": "GET",
-      "path": "/__legacy_hook/opportunities",
+      "path": "/opportunities/search",
+      "projection": "passthrough",
       "records": {
-        "path": "data"
+        "path": "."
       },
-      "schema": "schemas/opportunities.json",
-      "incremental": {
-        "cursor_field": "date_modified",
-        "client_filtered": true
-      }
+      "schema": "schemas/opportunities.json"
     },
     {
+      "body": {
+        "page_size": 100
+      },
+      "incremental": {
+        "client_filtered": true,
+        "cursor_field": "date_modified"
+      },
+      "method": "POST",
       "name": "leads",
-      "method": "GET",
-      "path": "/__legacy_hook/leads",
+      "path": "/leads/search",
+      "projection": "passthrough",
       "records": {
-        "path": "data"
+        "path": "."
       },
-      "schema": "schemas/leads.json",
-      "incremental": {
-        "cursor_field": "date_modified",
-        "client_filtered": true
-      }
+      "schema": "schemas/leads.json"
     },
     {
-      "name": "tasks",
-      "method": "GET",
-      "path": "/__legacy_hook/tasks",
-      "records": {
-        "path": "data"
+      "body": {
+        "page_size": 100
       },
-      "schema": "schemas/tasks.json",
       "incremental": {
-        "cursor_field": "date_modified",
-        "client_filtered": true
-      }
+        "client_filtered": true,
+        "cursor_field": "date_modified"
+      },
+      "method": "POST",
+      "name": "tasks",
+      "path": "/tasks/search",
+      "projection": "passthrough",
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/tasks.json"
     }
   ]
 }

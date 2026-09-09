@@ -7,40 +7,35 @@
       "summary": "Declared etl: GET /services/data/{version}/sobjects.",
       "intent": "etl",
       "availability": "partial",
-      "source_url": "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_list.htm",
-      "notes": "Blocked: locked source operation salesforce.local-api-surface.get-services-data-version-sobjects-1 has no declaration-owned executable etl route."
+      "notes": "Unavailable: no ETL executor is declared for this provider operation."
     },
     {
       "path": "operations get-services-data-version-query-select-from-account",
       "summary": "Declared etl: GET /services/data/{version}/query (SELECT ... FROM Account).",
       "intent": "etl",
       "availability": "partial",
-      "source_url": "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_list.htm",
-      "notes": "Blocked: locked source operation salesforce.local-api-surface.get-services-data-version-query-select-from-account-2 has no declaration-owned executable etl route."
+      "notes": "Unavailable: no ETL executor is declared for this provider operation."
     },
     {
       "path": "operations get-services-data-version-query-select-from-contact",
       "summary": "Declared etl: GET /services/data/{version}/query (SELECT ... FROM Contact).",
       "intent": "etl",
       "availability": "partial",
-      "source_url": "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_list.htm",
-      "notes": "Blocked: locked source operation salesforce.local-api-surface.get-services-data-version-query-select-from-contact-3 has no declaration-owned executable etl route."
+      "notes": "Unavailable: no ETL executor is declared for this provider operation."
     },
     {
       "path": "operations get-services-data-version-query-select-from-lead",
       "summary": "Declared etl: GET /services/data/{version}/query (SELECT ... FROM Lead).",
       "intent": "etl",
       "availability": "partial",
-      "source_url": "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_list.htm",
-      "notes": "Blocked: locked source operation salesforce.local-api-surface.get-services-data-version-query-select-from-lead-4 has no declaration-owned executable etl route."
+      "notes": "Unavailable: no ETL executor is declared for this provider operation."
     },
     {
       "path": "operations get-services-data-version-query-arbitrary-soql",
       "summary": "Declared direct read: GET /services/data/{version}/query (arbitrary SOQL).",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_list.htm",
-      "notes": "Blocked: locked source operation salesforce.local-api-surface.get-services-data-version-query-arbitrary-soql-5 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -53,8 +48,7 @@
       "summary": "Declared direct read: GET /services/data/{version}/sobjects/{sObject}/describe.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_list.htm",
-      "notes": "Blocked: locked source operation salesforce.local-api-surface.get-services-data-version-sobjects-sobject-describe-6 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -67,8 +61,7 @@
       "summary": "Declared direct write: POST /services/data/{version}/sobjects/{sObject}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_list.htm",
-      "notes": "Blocked: locked source operation salesforce.local-api-surface.post-services-data-version-sobjects-sobject-7 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Declared provider mutation: POST /services/data/{version}/sobjects/{sObject}.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -77,8 +70,7 @@
       "summary": "Declared direct write: PATCH /services/data/{version}/sobjects/{sObject}/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_list.htm",
-      "notes": "Blocked: locked source operation salesforce.local-api-surface.patch-services-data-version-sobjects-sobject-id-8 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Declared provider mutation: PATCH /services/data/{version}/sobjects/{sObject}/{id}.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -87,8 +79,7 @@
       "summary": "Declared direct write: DELETE /services/data/{version}/sobjects/{sObject}/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_list.htm",
-      "notes": "Blocked: locked source operation salesforce.local-api-surface.delete-services-data-version-sobjects-sobject-id-9 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Declared provider mutation: DELETE /services/data/{version}/sobjects/{sObject}/{id}.",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -97,8 +88,7 @@
       "summary": "Declared direct read: GET /services/data/{version}/jobs/query (Bulk API).",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_list.htm",
-      "notes": "Blocked: locked source operation salesforce.local-api-surface.get-services-data-version-jobs-query-bulk-api-10 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",

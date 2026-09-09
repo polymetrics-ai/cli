@@ -61,7 +61,6 @@ Reads Zoom users, meetings, and webinars through the Zoom REST API.
 
 - Read the currently stream-backed Zoom users, meetings, and webinars API routes.
 - Usage: pm zoom <users|meetings|webinars> list [flags]
-- Source CLI: Zoom API reference (OpenAPI 3.1.1; docs static build 2026-08-03T14-58-19-06-00; retrieved 2026-08-05)
 - Global flags:
   - --credential (string): Credential name to use for the Zoom request.
   - --connection (string): Credential name alias used only when --credential is omitted; does not resolve pm connections.

@@ -3,17 +3,33 @@
     "url": "{{ config.base_url }}",
     "user_agent": "polymetrics-go-cli",
     "auth": [
-      { "mode": "bearer", "token": "{{ secrets.api_key }}" }
+      {
+        "mode": "bearer",
+        "token": "{{ secrets.api_key }}"
+      }
     ],
     "pagination": {
       "type": "next_url",
       "next_url_path": "pagination.next_page"
     },
-    "check": { "method": "GET", "path": "/users/me" },
+    "check": {
+      "method": "GET",
+      "path": "/users/me"
+    },
     "error_map": [
-      { "status": 401, "hint": "calendly api_key is missing or invalid; re-run pm credentials add calendly" },
-      { "status": 403, "hint": "calendly account lacks access for this request" },
-      { "status": 429, "class": "rate_limited", "hint": "calendly rate limit exceeded; the connector will retry with backoff" }
+      {
+        "status": 401,
+        "hint": "calendly api_key is missing or invalid; re-run pm credentials add calendly"
+      },
+      {
+        "status": 403,
+        "hint": "calendly account lacks access for this request"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "calendly rate limit exceeded; the connector will retry with backoff"
+      }
     ]
   },
   "streams": [
@@ -24,7 +40,9 @@
         "organization": "{{ config.organization_uri }}",
         "count": "{{ config.page_size }}"
       },
-      "records": { "path": "collection" },
+      "records": {
+        "path": "collection"
+      },
       "computed_fields": {
         "id": "{{ record.uri | last_path_segment }}"
       },
@@ -42,7 +60,9 @@
         "organization": "{{ config.organization_uri }}",
         "count": "{{ config.page_size }}"
       },
-      "records": { "path": "collection" },
+      "records": {
+        "path": "collection"
+      },
       "computed_fields": {
         "id": "{{ record.uri | last_path_segment }}"
       },
@@ -55,7 +75,9 @@
         "organization": "{{ config.organization_uri }}",
         "count": "{{ config.page_size }}"
       },
-      "records": { "path": "collection" },
+      "records": {
+        "path": "collection"
+      },
       "computed_fields": {
         "id": "{{ record.uri | last_path_segment }}",
         "user": "{{ record.user.uri }}",
@@ -71,7 +93,9 @@
         "organization": "{{ config.organization_uri }}",
         "count": "{{ config.page_size }}"
       },
-      "records": { "path": "collection" },
+      "records": {
+        "path": "collection"
+      },
       "computed_fields": {
         "id": "{{ record.uri | last_path_segment }}"
       },
@@ -80,11 +104,16 @@
     {
       "name": "users",
       "path": "/users/me",
-      "records": { "path": "resource", "single_object": true },
+      "records": {
+        "path": "resource",
+        "single_object": true
+      },
       "computed_fields": {
         "id": "{{ record.uri | last_path_segment }}"
       },
-      "pagination": { "type": "none" },
+      "pagination": {
+        "type": "none"
+      },
       "schema": "schemas/users.json"
     },
     {
@@ -94,7 +123,9 @@
         "organization": "{{ config.organization_uri }}",
         "count": "{{ config.page_size }}"
       },
-      "records": { "path": "collection" },
+      "records": {
+        "path": "collection"
+      },
       "computed_fields": {
         "id": "{{ record.uri | last_path_segment }}"
       },
@@ -110,15 +141,16 @@
         "routing_form": "{{ config.routing_form_uri }}",
         "count": "{{ config.page_size }}"
       },
-      "records": { "path": "collection" },
+      "records": {
+        "path": "collection"
+      },
       "computed_fields": {
         "id": "{{ record.uri | last_path_segment }}"
       },
       "incremental": {
         "cursor_field": "updated_at"
       },
-      "schema": "schemas/routing_form_submissions.json",
-      "conformance": { "skip_dynamic": true, "reason": "requires a config-supplied routing_form_uri (Calendly's routing_form query filter names one specific form, mirroring organization_uri/user_uri's documented per-account-invariant-value pattern); conformance's synthetic non-secret config value for this key cannot represent a real routing form uri meaningfully, but the stream's declarative shape is identical to every other collection+next_url stream in this bundle and is proven by that shared pattern plus static validation" }
+      "schema": "schemas/routing_form_submissions.json"
     },
     {
       "name": "webhook_subscriptions",
@@ -128,7 +160,9 @@
         "scope": "organization",
         "count": "{{ config.page_size }}"
       },
-      "records": { "path": "collection" },
+      "records": {
+        "path": "collection"
+      },
       "computed_fields": {
         "id": "{{ record.uri | last_path_segment }}"
       },
@@ -143,13 +177,16 @@
       "query": {
         "user": "{{ config.user_uri }}"
       },
-      "records": { "path": "collection" },
+      "records": {
+        "path": "collection"
+      },
       "computed_fields": {
         "id": "{{ record.uri | last_path_segment }}"
       },
-      "pagination": { "type": "none" },
-      "schema": "schemas/user_availability_schedules.json",
-      "conformance": { "skip_dynamic": true, "reason": "requires a config-supplied user_uri (Calendly's user query filter names one specific user, resolvable via GET /users/me but not auto-chainable by the declarative dialect — see spec.json); conformance's synthetic non-secret config value cannot represent a real user uri meaningfully, but the stream's declarative shape (unpaginated collection, identical to the users stream's single_object shape) is proven by static validation and the same pattern used elsewhere in this bundle" }
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/user_availability_schedules.json"
     },
     {
       "name": "group_relationships",
@@ -158,7 +195,9 @@
         "organization": "{{ config.organization_uri }}",
         "count": "{{ config.page_size }}"
       },
-      "records": { "path": "collection" },
+      "records": {
+        "path": "collection"
+      },
       "computed_fields": {
         "id": "{{ record.uri | last_path_segment }}"
       },
@@ -174,7 +213,9 @@
         "organization": "{{ config.organization_uri }}",
         "count": "{{ config.page_size }}"
       },
-      "records": { "path": "collection" },
+      "records": {
+        "path": "collection"
+      },
       "computed_fields": {
         "id": "{{ record.uri | last_path_segment }}"
       },
@@ -190,7 +231,9 @@
       "query": {
         "count": "{{ config.page_size }}"
       },
-      "records": { "path": "collection" },
+      "records": {
+        "path": "collection"
+      },
       "computed_fields": {
         "id": "{{ record.uri | last_path_segment }}"
       },
@@ -205,11 +248,12 @@
             "id_field": "uri"
           }
         },
-        "into": { "path_var": "parent_id" },
+        "into": {
+          "path_var": "parent_id"
+        },
         "stamp_field": "scheduled_event_id"
       },
-      "schema": "schemas/invitees.json",
-      "conformance": { "skip_dynamic": true, "reason": "fan_out-driven stream: the id-listing preliminary request has no declarative fixture-replay equivalent (conformance's dynamic checks assume one fixed request path per stream, not a two-phase list-then-fan-out sequence) — proven by static validation (fan_out.ids_from.request.path is checked by checkInterpolations like any other templated path) plus the identical, already-proven fan_out mechanism used by other migrated bundles" }
+      "schema": "schemas/invitees.json"
     }
   ]
 }

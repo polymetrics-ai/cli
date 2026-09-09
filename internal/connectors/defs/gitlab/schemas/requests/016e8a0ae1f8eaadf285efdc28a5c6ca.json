@@ -1,0 +1,190 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "cargo_max_file_size": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "ci_active_jobs": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "ci_instance_level_variables": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "ci_needs_size_limit": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "ci_pipeline_schedules": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "ci_pipeline_size": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "ci_project_subscriptions": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "ci_registered_group_runners": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "ci_registered_project_runners": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "conan_max_file_size": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "dotenv_size": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "dotenv_variables": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "enforcement_limit": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "generic_packages_max_file_size": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "helm_max_file_size": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "maven_max_file_size": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "max_pipelines_per_merge_train": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "notification_limit": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "npm_max_file_size": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "nuget_max_file_size": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "pipeline_hierarchy_size": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "plan_name": {
+      "enum": [
+        "default",
+        "free",
+        "bronze",
+        "silver",
+        "premium",
+        "gold",
+        "ultimate",
+        "ultimate_trial",
+        "ultimate_trial_paid_customer",
+        "premium_trial",
+        "opensource"
+      ],
+      "maxLength": 8192,
+      "minLength": 1,
+      "type": "string"
+    },
+    "pypi_max_file_size": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "storage_size_limit": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "terraform_module_max_file_size": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "web_hook_calls": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "web_hook_calls_low": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "web_hook_calls_mid": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "plan_name"
+  ],
+  "type": "object"
+}

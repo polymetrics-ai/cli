@@ -1,0 +1,85 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "base_role": {
+      "enum": [
+        "reader",
+        "no_access"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "description": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "general_instructions": {
+      "maxLength": 4000,
+      "type": "string"
+    },
+    "name": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "resources_attributes": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "metadata": {
+            "additionalProperties": false,
+            "properties": {
+              "file_path": {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "name": {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "number": {
+                "type": "integer"
+              },
+              "repository_id": {
+                "type": "integer"
+              },
+              "text": {
+                "maxLength": 8192,
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "resource_type": {
+            "enum": [
+              "repository",
+              "github_file",
+              "free_text",
+              "github_issue",
+              "github_pull_request",
+              "media_content",
+              "uploaded_text_file"
+            ],
+            "maxLength": 8192,
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "maxItems": 256,
+      "type": "array"
+    },
+    "space_number": {
+      "type": "integer"
+    },
+    "username": {
+      "maxLength": 8192,
+      "type": "string"
+    }
+  },
+  "required": [
+    "space_number",
+    "username"
+  ],
+  "type": "object"
+}

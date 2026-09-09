@@ -1,29 +1,17 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "categories",
-  "type": "object",
   "properties": {
-    "id": {
-      "type": "string"
-    },
-    "name": {
-      "type": "string"
-    },
     "created": {
       "type": "string"
     },
-    "postCount": {
-      "type": "integer"
-    },
-    "url": {
-      "type": "string"
-    },
-    "parentID": {
+    "id": {
       "type": "string"
     }
   },
+  "title": "categories",
+  "type": "object",
+  "x-cursor-field": "created",
   "x-primary-key": [
     "id"
-  ],
-  "x-cursor-field": "created"
+  ]
 }

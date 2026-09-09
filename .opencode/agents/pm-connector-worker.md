@@ -40,20 +40,20 @@ The one active canonical worker owns the assigned job and its parent GitHub stat
 8. `verify_gaps` — Run verify-work. When gaps exist, diagnose them, run plan-phase --gaps, then execute-phase --gaps-only and repeat verification until green.
 9. `review_no_mistakes` — Run code-review, disposition every finding with reasons, then run the applicable no-mistakes review/test/docs/lint gates without --yes.
 10. `open_sub_pr` — Open the wave sub-PR to the parent branch only after its local gates pass.
-11. `integrate_sub_pr` — Integrate the sub-PR only after required checks pass, actionable findings are resolved, automated review coverage satisfies the stacked-PR contract, and an in-scope connector certification Shepherd verdict is PROCEED.
+11. `integrate_sub_pr` — Integrate the sub-PR only after required checks pass, actionable findings are resolved, and automated review coverage satisfies the stacked-PR contract.
 12. `integrated_parent_gates` — After all children are integrated, run the full no-mistakes pipeline and integrated parent verification and review gates on the parent branch.
-13. `ready_parent` — Mark the draft parent PR ready only when every child is integrated, full parent checks are green, required review coverage is complete, and every in-scope connector certification Shepherd verdict is PROCEED. Ready is not merge approval.
+13. `ready_parent` — Mark the draft parent PR ready only when every child is integrated, full parent checks are green, and required review coverage is complete. Ready is not merge approval.
 14. `captain_merge` — Merge the parent only while it is green and only after explicit captain approval.
 
 ## Connector overlay
 
 Apply the same delivery state machine with connector-specific evidence inserted around implementation. It inherits every base state and wraps `execute_tdd` with these ordered gates:
 
-1. `source_policy_map` — Build the accepted source-policy API map before implementation.
-2. `bundle_operation_plan` — Plan the bundle and operations with per-field provenance.
-3. `replay_conformance` — Add replay fixtures and conformance tests as the RED evidence before production behavior.
+1. `source_lock_authoring` — Author the immutable compact source.lock.json as the connector evidence input.
+2. `canonical_descriptor_plan` — Plan canonical per-operation descriptors with shared request and response schema references.
+3. `projection_characterization` — Add source-lock projection and execution-only runtime characterization tests as RED evidence before production behavior.
 4. `implementation_slices` — Execute the inherited RED, GREEN, and REFACTOR implementation slices.
-5. `runtime_surface_gates` — Run the real commandrunner Preflight sweep plus connectorgen validate and connectorgen surface-sync --check; do not copy runtime rules into a validator.
+5. `runtime_execution_gates` — Run source-lock rendering drift checks, execution JSON validation, and real commandrunner preflight against the rendered bundle only.
 6. `website_data_refresh` — Refresh generated website data and run its drift check.
 
 ## Tracker and pull-request topology
@@ -66,29 +66,12 @@ Apply the same delivery state machine with connector-specific evidence inserted 
   - automated review findings are resolved and required coverage exists
   - the diff stays inside the sub-issue scope
   - no requested-changes review or human gate remains
-  - connector certification Shepherd verdict is PROCEED before an in-scope certification transition
 - Mark the parent ready only when:
   - all children are integrated
   - full parent verification is green
   - integrated review coverage is complete
   - no actionable finding remains
-  - connector certification Shepherd verdict is PROCEED before an in-scope certification transition
 - Final merge: Explicit captain approval is mandatory, approval is valid only while the parent is green, and no worker may merge red.
-
-<!-- BEGIN POLYMETRICS CONNECTOR CERTIFICATION SHEPHERD GATE -->
-## Connector certification Shepherd gate
-
-This is the versioned, read-only `connector-certification-shepherd` gate. It reads only definition-owned certification shards below `internal/connectors/defs`, `internal/connectors/certifications/status.json`, and accepted records below `internal/connectors/certifications/evidence`; it never creates evidence, loads credentials, invokes a provider, or mutates provider/production state.
-
-- Enforce a `PROCEED` verdict before `integrate_sub_pr, accepted, ready_parent, and human_ready`.
-- Run argv `["go","run","./cmd/agentcontractgen","certification-gate","--root","<repository-root>","--connector","<connector>","--transition","<transition>"]` at the transition boundary. Run this read-only command at each protected transition with one canonical absolute non-symlink repository root. It emits the complete deterministic verdict as JSON, exits zero only for PROCEED, and otherwise preserves RETRY or HALT evidence on stdout while blocking the transition.
-- Input schema v1 requires every field: `schema_version`, `connector`, `transition`, `inputs.certification_shards`, `inputs.status`, and `inputs.evidence_directory`.
-- The nested `inputs` values must exactly equal the canonical paths above; no adapter-local default or replacement is allowed.
-- Every applicable capability, workflow, sync-mode primitive, and flow pair needs declared, implemented, fixture_tested, live_tested, and live_evidence plus a matching accepted live-evidence record. File presence, reachability, or `implemented` alone cannot pass.
-- Verdict schema v1 contains every field: `schema_version`, `connector`, `transition`, `decision`, and `failures`. Allowed decisions: `PROCEED`, `RETRY`, and `HALT`.
-- Preserve every exact `failures[].id`, `cell_id`, and `evidence_id` in a `RETRY` or `HALT` handoff; do not replace them with prose.
-- An unknown/missing matrix, evidence schema, proof redaction strategy, or adapter field is `HALT`; do not invent #3989 proof fields.
-<!-- END POLYMETRICS CONNECTOR CERTIFICATION SHEPHERD GATE -->
 
 ## Installed GSD lifecycle
 

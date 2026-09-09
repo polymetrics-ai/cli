@@ -96,7 +96,7 @@ Reads users, content, completions, assignments, audiences, tags, CPD records, an
 ## Security
 
 - read risk: external Thrive Learning API read of user, content, completion, assignment, audience, tag, and CPD data
-- approval: none; read-only, no dialect-expressible write path could be safely conformance-verified for this connector (see docs.md Known limits' write-actions ENGINE_GAP)
+- approval: none; read-only, no dialect-expressible write path could be safely execution-contract-verified for this connector (see docs.md Known limits' write-actions ENGINE_GAP)
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 ## Commands

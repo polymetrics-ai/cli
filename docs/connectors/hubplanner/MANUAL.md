@@ -349,7 +349,6 @@ SECURITY
 COMMAND SURFACE
   Inspect, sync, directly read, and safely plan typed Hubplanner operations.
   Usage: pm hubplanner <command> [flags]
-  Source CLI: Hubplanner API (Provider-owned Sections/*.md endpoint reference)
   Global flags:
     --credential (string): Credential name to use for the Hubplanner request.
     --connection (string): Alias for --credential.

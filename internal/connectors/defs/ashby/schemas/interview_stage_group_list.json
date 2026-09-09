@@ -1,22 +1,15 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "interview_stage_group_list",
-  "type": "object",
   "properties": {
     "id": {
-      "type": "string",
-      "description": "The unique identifier for the interview stage group"
-    },
-    "title": {
-      "type": "string",
-      "description": "The title of the interview stage group"
+      "description": "The unique identifier for the interview stage group",
+      "type": "string"
     },
     "order": {
-      "type": "integer",
-      "description": "The order of the interview stage group within an interview plan"
+      "description": "The order of the interview stage group within an interview plan",
+      "type": "integer"
     },
     "stageType": {
-      "type": "string",
       "description": "The category of interview stage group",
       "enum": [
         "Active",
@@ -25,9 +18,16 @@
         "PreInterviewScreen",
         "Offer",
         "Lead"
-      ]
+      ],
+      "type": "string"
+    },
+    "title": {
+      "description": "The title of the interview stage group",
+      "type": "string"
     }
   },
+  "title": "interview_stage_group_list",
+  "type": "object",
   "x-primary-key": [
     "id"
   ]

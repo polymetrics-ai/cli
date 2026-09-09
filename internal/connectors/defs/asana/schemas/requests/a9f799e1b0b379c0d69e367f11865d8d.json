@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "attachment_gid": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "opt_pretty": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "attachment_gid"
+  ],
+  "type": "object"
+}

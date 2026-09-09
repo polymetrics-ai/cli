@@ -389,7 +389,6 @@ SECURITY
 COMMAND SURFACE
   Read Help Scout Mailbox records, run bounded reads and reports, and safely plan typed Help Scout mutations.
   Usage: pm help-scout <command> [flags]
-  Source CLI: Help Scout Mailbox API (Help Scout Mailbox API reference fetched 2026-08-07 (146 endpoint pages))
   PM execution policy pm-request-contract-bounds-v1: each max N bytes qualifier is the effective PM request limit, not a provider schema assertion; path/query values are measured after exact wire encoding and rejected rather than truncated.
   Global flags:
     --credential (string): Credential name to use for the Help Scout request.

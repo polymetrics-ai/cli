@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "diffs": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "files_content": {
+      "additionalProperties": false,
+      "properties": {},
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "mr_description": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "mr_title": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "diffs",
+    "files_content",
+    "mr_description",
+    "mr_title"
+  ],
+  "type": "object"
+}

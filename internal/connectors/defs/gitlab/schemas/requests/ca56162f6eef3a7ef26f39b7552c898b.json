@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "body": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "created_at": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "discussion_id": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "id": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "noteable_id": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "body",
+    "discussion_id",
+    "id",
+    "noteable_id"
+  ],
+  "type": "object"
+}

@@ -7,7 +7,7 @@ description: Rootly connector knowledge and safe action guide.
 
 ## Purpose
 
-Reads Rootly incidents, services, and users through the Rootly API. Read-only.
+Reads Rootly incidents, services, and users through fixed JSON:API routes.
 
 ## Icon
 
@@ -24,17 +24,34 @@ Reads Rootly incidents, services, and users through the Rootly API. Read-only.
 
 ## Authentication
 
-- No secret authentication is required for this connector.
+- Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 ## Configuration
 
-- No connector-specific config fields.
+- start_date (required)
+- api_key (secret) (required)
+
+## ETL Streams
+
+- incidents:
+  - primary key: id
+  - fields: id(string), status(string), title(string)
+- services:
+  - primary key: id
+  - fields: id(string), status(string), title(string)
+- users:
+  - primary key: id
+  - fields: id(string), status(string), title(string)
+
+## Sync Modes
+
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Security
 
-- read risk: connector-specific
-- write risk: connector-specific
-- approval: external mutations require preview and approval
+- read risk: Bounded Rootly JSON:API reads use the fixed provider origin and declared bearer authentication.
+- write risk: unsupported
+- approval: none; read-only
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 ## Commands

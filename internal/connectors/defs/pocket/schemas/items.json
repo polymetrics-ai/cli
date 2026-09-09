@@ -1,26 +1,26 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "items",
-  "type": "object",
   "properties": {
+    "excerpt": {
+      "type": "string"
+    },
     "item_id": {
       "type": "string"
     },
     "title": {
       "type": "string"
     },
-    "url": {
-      "type": "string"
-    },
-    "excerpt": {
-      "type": "string"
-    },
     "updated_at": {
+      "type": "string"
+    },
+    "url": {
       "type": "string"
     }
   },
+  "title": "items",
+  "type": "object",
+  "x-cursor-field": "updated_at",
   "x-primary-key": [
     "item_id"
-  ],
-  "x-cursor-field": "updated_at"
+  ]
 }

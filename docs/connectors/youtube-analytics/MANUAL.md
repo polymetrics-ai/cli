@@ -108,7 +108,6 @@ SECURITY
 COMMAND SURFACE
   Read YouTube Reporting/Analytics metadata and safely plan documented job/group mutations.
   Usage: pm youtube-analytics <command> [flags]
-  Source CLI: YouTube Analytics and Reporting APIs (Google Discovery: YouTube Analytics API v2 revision 20260803 and YouTube Reporting API v1 revision 20260803)
   PM execution policy pm-request-contract-bounds-v1: each max N bytes qualifier is the effective PM request limit, not a provider schema assertion; path/query values are measured after exact wire encoding and rejected rather than truncated.
   Global flags:
     --credential (string): Credential name to use for the YouTube request.

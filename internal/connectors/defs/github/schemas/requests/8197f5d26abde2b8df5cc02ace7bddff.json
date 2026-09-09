@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "pull_requests": {
+      "items": {
+        "type": "integer"
+      },
+      "maxItems": 100,
+      "minItems": 1,
+      "type": "array"
+    },
+    "stack_number": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "pull_requests",
+    "stack_number"
+  ],
+  "type": "object"
+}

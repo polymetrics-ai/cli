@@ -100,12 +100,12 @@ func TestAuthenticator_RequiresBaseURLUsernamePassword(t *testing.T) {
 	}
 }
 
-func TestConnectorNameAndRegistration(t *testing.T) {
+func TestConnectorNameAndExplicitFactory(t *testing.T) {
 	h := jamfprohooks.New()
 	if h.ConnectorName() != "jamf-pro" {
 		t.Fatalf("ConnectorName() = %q, want jamf-pro", h.ConnectorName())
 	}
-	if hooks := engine.HooksFor("jamf-pro"); hooks == nil {
-		t.Fatal("engine.HooksFor(\"jamf-pro\") = nil, want registered hooks (init side effect)")
+	if hooks := jamfprohooks.ExplicitFactory(); hooks == nil {
+		t.Fatal("ExplicitFactory returned nil")
 	}
 }

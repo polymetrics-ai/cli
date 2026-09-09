@@ -1,0 +1,13 @@
+=== RUN   TestCP11OwnershipPreparedOpenCompletionMustRemainRecoverable
+    vnext_publication_ownership_test.go:65: stranded transaction=.connectorgen-control-repair-57050ee2bdb0d06736f55e8a8185eef1 members=[prepared.json] bytes=0
+    vnext_publication_ownership_test.go:71: Publish=close publication control repair prepared authority parent: review: real prepared-open parent Close completed with error
+        remove unprepared publication control repair transaction: remove directory unprepared publication control repair transaction: directory not empty; Check=decode publication control repair prepared authority: EOF; Recover=decode publication control repair prepared authority: EOF; CURRENT unchanged=true
+    vnext_publication_ownership_test.go:73: F03-A first real creation frontier must recover after owned prepared-open parent Close failure: decode publication control repair prepared authority: EOF
+--- FAIL: TestCP11OwnershipPreparedOpenCompletionMustRemainRecoverable (0.49s)
+=== RUN   TestCP11OwnershipTempRetryMustNotSwallowCompletion
+    vnext_publication_ownership_test.go:142: Publish pointer=main.vNextGenerationPointer{Generation:"g-e4f0926211a1f038eb3ca59a2135d10163977108724e79e76d037b0b1fb26123", IntegrityDigest:"sha256:84f000189e565ebd140efbefd09262fe753530a7ae644f3014e3452681df2fa6"} error=<nil> A/B identities and bytes preserved=true
+    vnext_publication_ownership_test.go:144: EEXIST retry swallowed meaningful owned Close completion: <nil>
+--- FAIL: TestCP11OwnershipTempRetryMustNotSwallowCompletion (0.35s)
+FAIL
+FAIL	polymetrics.ai/cmd/connectorgen	1.786s
+FAIL

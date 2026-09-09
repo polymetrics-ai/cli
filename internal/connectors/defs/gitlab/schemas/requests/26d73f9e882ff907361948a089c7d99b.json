@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "access_level": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "id": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "user_id": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "id",
+    "user_id"
+  ],
+  "type": "object"
+}

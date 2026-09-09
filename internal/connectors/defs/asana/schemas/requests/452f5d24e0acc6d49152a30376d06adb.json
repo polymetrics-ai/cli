@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "data": {
+      "additionalProperties": false,
+      "properties": {
+        "access_level": {
+          "maxLength": 8192,
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "membership_gid": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "opt_pretty": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "data",
+    "membership_gid"
+  ],
+  "type": "object"
+}

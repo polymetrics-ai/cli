@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "custom_pattern_version": {
+      "type": "string"
+    },
+    "end_delimiter": {
+      "type": "string"
+    },
+    "must_match": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "must_not_match": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "pattern": {
+      "type": "string"
+    },
+    "pattern_id": {
+      "type": "integer"
+    },
+    "start_delimiter": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "pattern_id",
+    "custom_pattern_version",
+    "pattern"
+  ],
+  "type": "object"
+}

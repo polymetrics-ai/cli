@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "emoji": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "gid": {
+      "type": "string"
+    },
+    "user": {
+      "type": [
+        "object",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "gid"
+  ],
+  "title": "reactions",
+  "type": "object",
+  "x-primary-key": [
+    "gid"
+  ]
+}

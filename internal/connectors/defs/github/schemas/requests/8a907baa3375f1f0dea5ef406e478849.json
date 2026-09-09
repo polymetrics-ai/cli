@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "action": {
+      "enum": [
+        "revoke"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "org": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "pat_id": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "action",
+    "org",
+    "pat_id"
+  ],
+  "type": "object"
+}

@@ -1,0 +1,60 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "description": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "name": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "notification_setting": {
+      "enum": [
+        "notifications_enabled",
+        "notifications_disabled"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "parent_team_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "parent_team_slug": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "permission": {
+      "enum": [
+        "pull",
+        "push",
+        "admin"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "privacy": {
+      "enum": [
+        "secret",
+        "closed"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "team_id": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "name",
+    "team_id"
+  ],
+  "type": "object"
+}

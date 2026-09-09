@@ -1,64 +1,78 @@
 {
   "base": {
-    "url": "{{ config.base_url }}",
-    "user_agent": "polymetrics-go-cli",
     "auth": [
       {
-        "mode": "none"
+        "header": "X-Metabase-Session",
+        "mode": "api_key_header",
+        "value": "{{ secrets.session_token }}",
+        "when": "{{ secrets.session_token }}"
+      },
+      {
+        "mode": "declared_session",
+        "password": "{{ secrets.password }}",
+        "token_url": "https://unused.invalid/session",
+        "username": "{{ config.username }}"
       }
     ],
+    "check": {
+      "method": "GET",
+      "path": "/card"
+    },
+    "error_map": [],
     "pagination": {
       "type": "none"
     },
-    "check": {
-      "method": "GET",
-      "path": "/__legacy_hook/check"
+    "tenant_origin": {
+      "allow_loopback_http": true,
+      "append_path": "/api",
+      "config_key": "instance_api_url"
     },
-    "error_map": []
+    "url": "https://unused.invalid",
+    "user_agent": "polymetrics-go-cli"
   },
   "streams": [
     {
-      "name": "cards",
       "method": "GET",
-      "path": "/__legacy_hook/cards",
+      "name": "cards",
+      "path": "/card",
       "records": {
-        "path": "data"
+        "path": "."
       },
       "schema": "schemas/cards.json"
     },
     {
-      "name": "dashboards",
       "method": "GET",
-      "path": "/__legacy_hook/dashboards",
+      "name": "dashboards",
+      "path": "/dashboard",
       "records": {
-        "path": "data"
+        "path": "."
       },
       "schema": "schemas/dashboards.json"
     },
     {
-      "name": "collections",
       "method": "GET",
-      "path": "/__legacy_hook/collections",
+      "name": "collections",
+      "path": "/collection",
       "records": {
-        "path": "data"
+        "path": "."
       },
       "schema": "schemas/collections.json"
     },
     {
-      "name": "databases",
       "method": "GET",
-      "path": "/__legacy_hook/databases",
+      "name": "databases",
+      "path": "/database",
       "records": {
-        "path": "data"
+        "path": "."
       },
       "schema": "schemas/databases.json"
     },
     {
-      "name": "users",
       "method": "GET",
-      "path": "/__legacy_hook/users",
+      "name": "users",
+      "path": "/user",
       "records": {
-        "path": "data"
+        "path": "."
       },
       "schema": "schemas/users.json"
     }

@@ -1,0 +1,3 @@
+# Independent schema test tools; not pm runtime dependencies.
+jsonschema==4.25.1
+referencing==0.37.0

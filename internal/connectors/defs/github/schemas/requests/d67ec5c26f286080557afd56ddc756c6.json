@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "org": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "runner_group_id": {
+      "type": "integer"
+    },
+    "runner_id": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "org",
+    "runner_group_id",
+    "runner_id"
+  ],
+  "type": "object"
+}

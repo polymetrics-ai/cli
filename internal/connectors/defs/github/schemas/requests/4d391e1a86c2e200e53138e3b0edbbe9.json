@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "enterprise": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "max_cache_size_gb": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "enterprise"
+  ],
+  "type": "object"
+}

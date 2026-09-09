@@ -1,0 +1,52 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "body": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "confidential": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "created_at": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "id": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "internal": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "merge_request_diff_head_sha": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "noteable_id": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "body",
+    "id",
+    "noteable_id"
+  ],
+  "type": "object"
+}

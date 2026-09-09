@@ -1,0 +1,70 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "artifact_url": {
+      "maxLength": 152,
+      "pattern": "^https://",
+      "type": "string"
+    },
+    "digest": {
+      "maxLength": 71,
+      "minLength": 71,
+      "pattern": "^sha256:[a-f0-9]{64}$",
+      "type": "string"
+    },
+    "github_repository": {
+      "maxLength": 100,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9.\\-_]+$",
+      "type": "string"
+    },
+    "name": {
+      "maxLength": 256,
+      "minLength": 1,
+      "type": "string"
+    },
+    "org": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "path": {
+      "maxLength": 512,
+      "type": "string"
+    },
+    "registry_url": {
+      "maxLength": 256,
+      "minLength": 1,
+      "pattern": "^https://",
+      "type": "string"
+    },
+    "repository": {
+      "maxLength": 128,
+      "type": "string"
+    },
+    "return_records": {
+      "type": "boolean"
+    },
+    "status": {
+      "enum": [
+        "active",
+        "eol",
+        "deleted"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "version": {
+      "maxLength": 100,
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "required": [
+    "digest",
+    "name",
+    "org",
+    "registry_url"
+  ],
+  "type": "object"
+}

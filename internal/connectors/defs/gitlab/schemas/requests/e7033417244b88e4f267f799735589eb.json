@@ -1,0 +1,68 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "artifact_type": {
+      "enum": [
+        "archive",
+        "metadata",
+        "trace",
+        "junit",
+        "sast",
+        "dependency_scanning",
+        "container_scanning",
+        "dast",
+        "codequality",
+        "license_scanning",
+        "performance",
+        "metrics",
+        "metrics_referee",
+        "network_referee",
+        "lsif",
+        "dotenv",
+        "cobertura",
+        "terraform",
+        "accessibility",
+        "cluster_applications",
+        "secret_detection",
+        "requirements",
+        "coverage_fuzzing",
+        "browser_performance",
+        "load_performance",
+        "api_fuzzing",
+        "cluster_image_scanning",
+        "cyclonedx",
+        "requirements_v2",
+        "annotations",
+        "repository_xray",
+        "jacoco",
+        "sarif"
+      ],
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "filesize": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "id": {
+      "type": "integer"
+    },
+    "token": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "id"
+  ],
+  "type": "object"
+}

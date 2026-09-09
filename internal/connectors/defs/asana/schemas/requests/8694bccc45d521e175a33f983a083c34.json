@@ -1,0 +1,54 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "data": {
+      "additionalProperties": false,
+      "properties": {
+        "assignee": {
+          "type": "string"
+        },
+        "assignee_section": {
+          "type": "string"
+        },
+        "completed": {
+          "type": "boolean"
+        },
+        "custom_fields": {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        "due_at": {
+          "type": "string"
+        },
+        "due_on": {
+          "type": "string"
+        },
+        "html_notes": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "notes": {
+          "type": "string"
+        },
+        "parent": {
+          "type": "string"
+        },
+        "start_on": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "gid": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "gid",
+    "data"
+  ],
+  "type": "object"
+}

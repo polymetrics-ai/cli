@@ -1,0 +1,721 @@
+{
+  "schema_version": 4,
+  "connector": "prestashop",
+  "lanes": {
+    "binary_download": "unsupported",
+    "binary_upload": "unsupported",
+    "direct_read": "unsupported",
+    "direct_write": "unsupported",
+    "etl": "implemented",
+    "reverse_etl": "unsupported",
+    "sync_transport": "unsupported"
+  },
+  "provider_evidence": {
+    "documentation": [
+      {
+        "role": "provider_reference",
+        "url": "https://devdocs.prestashop-project.org/9/webservice/"
+      }
+    ],
+    "operation_facts": [
+      {
+        "operation_id": "prestashop.customers",
+        "stream": "customers",
+        "method": "GET",
+        "path": "/customers",
+        "query": {
+          "output_format": "JSON",
+          "display": "full",
+          "sort": "[date_upd_ASC]",
+          "filter[date_upd]": {
+            "template": "[{{ incremental.lower_bound }},]",
+            "omit_when_absent": true
+          }
+        },
+        "records": {
+          "path": "customers.customer"
+        },
+        "pagination": {
+          "type": "offset_count",
+          "limit_param": "limit",
+          "page_size": 100,
+          "max_pages": 100,
+          "require_continuation_on_cap": true
+        },
+        "incremental": {
+          "cursor_field": "date_upd",
+          "start_config_key": "start_date"
+        }
+      },
+      {
+        "operation_id": "prestashop.orders",
+        "stream": "orders",
+        "method": "GET",
+        "path": "/orders",
+        "query": {
+          "output_format": "JSON",
+          "display": "full",
+          "sort": "[date_upd_ASC]",
+          "filter[date_upd]": {
+            "template": "[{{ incremental.lower_bound }},]",
+            "omit_when_absent": true
+          }
+        },
+        "records": {
+          "path": "orders.order"
+        },
+        "pagination": {
+          "type": "offset_count",
+          "limit_param": "limit",
+          "page_size": 100,
+          "max_pages": 100,
+          "require_continuation_on_cap": true
+        },
+        "incremental": {
+          "cursor_field": "date_upd",
+          "start_config_key": "start_date"
+        }
+      },
+      {
+        "operation_id": "prestashop.products",
+        "stream": "products",
+        "method": "GET",
+        "path": "/products",
+        "query": {
+          "output_format": "JSON",
+          "display": "full",
+          "sort": "[date_upd_ASC]",
+          "filter[date_upd]": {
+            "template": "[{{ incremental.lower_bound }},]",
+            "omit_when_absent": true
+          }
+        },
+        "records": {
+          "path": "products.product"
+        },
+        "pagination": {
+          "type": "offset_count",
+          "limit_param": "limit",
+          "page_size": 100,
+          "max_pages": 100,
+          "require_continuation_on_cap": true
+        },
+        "incremental": {
+          "cursor_field": "date_upd",
+          "start_config_key": "start_date"
+        }
+      },
+      {
+        "operation_id": "prestashop.addresses",
+        "stream": "addresses",
+        "method": "GET",
+        "path": "/addresses",
+        "query": {
+          "output_format": "JSON",
+          "display": "full",
+          "sort": "[date_upd_ASC]",
+          "filter[date_upd]": {
+            "template": "[{{ incremental.lower_bound }},]",
+            "omit_when_absent": true
+          }
+        },
+        "records": {
+          "path": "addresses.address"
+        },
+        "pagination": {
+          "type": "offset_count",
+          "limit_param": "limit",
+          "page_size": 100,
+          "max_pages": 100,
+          "require_continuation_on_cap": true
+        },
+        "incremental": {
+          "cursor_field": "date_upd",
+          "start_config_key": "start_date"
+        }
+      },
+      {
+        "operation_id": "prestashop.carts",
+        "stream": "carts",
+        "method": "GET",
+        "path": "/carts",
+        "query": {
+          "output_format": "JSON",
+          "display": "full",
+          "sort": "[date_upd_ASC]",
+          "filter[date_upd]": {
+            "template": "[{{ incremental.lower_bound }},]",
+            "omit_when_absent": true
+          }
+        },
+        "records": {
+          "path": "carts.cart"
+        },
+        "pagination": {
+          "type": "offset_count",
+          "limit_param": "limit",
+          "page_size": 100,
+          "max_pages": 100,
+          "require_continuation_on_cap": true
+        },
+        "incremental": {
+          "cursor_field": "date_upd",
+          "start_config_key": "start_date"
+        }
+      }
+    ]
+  },
+  "metadata": {
+    "name": "prestashop",
+    "display_name": "PrestaShop",
+    "description": "Reads PrestaShop customers, orders, products, addresses, and carts through the PrestaShop Webservice REST API.",
+    "integration_type": "api",
+    "release_stage": "alpha",
+    "capabilities": {
+      "check": true,
+      "read": true,
+      "write": false,
+      "query": false,
+      "cdc": false,
+      "dynamic_schema": false
+    },
+    "risk": {
+      "read": "external PrestaShop Webservice API reads through the declaration-bound tenant origin",
+      "write": "unsupported",
+      "approval": "none; read-only"
+    },
+    "docs_url": "https://devdocs.prestashop-project.org/9/webservice/"
+  },
+  "config_schema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "PrestaShop Connection Specification",
+    "type": "object",
+    "required": [
+      "access_key",
+      "url"
+    ],
+    "properties": {
+      "access_key": {
+        "type": "string",
+        "x-secret": true,
+        "description": "Your PrestaShop access key. See <a href=\"https://devdocs.prestashop.com/1.7/webservice/tutorials/creating-access/#create-an-access-key\"> the docs </a> for info on how to obtain this."
+      },
+      "start_date": {
+        "type": "string",
+        "description": "The Start date in the format YYYY-MM-DD."
+      },
+      "url": {
+        "type": "string",
+        "description": "Required PrestaShop shop HTTPS origin."
+      }
+    },
+    "x-reject-unknown-config": true
+  },
+  "http": {
+    "url": "https://unused.invalid",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "basic",
+        "username": "{{ secrets.access_key }}",
+        "password": ""
+      }
+    ],
+    "pagination": {
+      "type": "none"
+    },
+    "check": {
+      "method": "GET",
+      "path": "/customers",
+      "query": {
+        "output_format": "JSON",
+        "display": "full",
+        "limit": "1"
+      }
+    },
+    "error_map": [],
+    "tenant_origin": {
+      "config_key": "url",
+      "append_path": "/api",
+      "allow_loopback_http": true
+    }
+  },
+  "schemas": {
+    "schemas/orders.json": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "orders",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "id_customer": {
+          "type": "integer"
+        },
+        "id_address_delivery": {
+          "type": "integer"
+        },
+        "id_address_invoice": {
+          "type": "integer"
+        },
+        "current_state": {
+          "type": "integer"
+        },
+        "reference": {
+          "type": "string"
+        },
+        "payment": {
+          "type": "string"
+        },
+        "total_paid": {
+          "type": "string"
+        },
+        "total_paid_real": {
+          "type": "string"
+        },
+        "valid": {
+          "type": "boolean"
+        },
+        "date_add": {
+          "type": [
+            "string",
+            "number",
+            "integer",
+            "boolean",
+            "object",
+            "array",
+            "null"
+          ]
+        },
+        "date_upd": {
+          "type": [
+            "string",
+            "number",
+            "integer",
+            "boolean",
+            "object",
+            "array",
+            "null"
+          ]
+        }
+      },
+      "x-primary-key": [
+        "id"
+      ],
+      "x-cursor-field": "date_upd"
+    },
+    "schemas/customers.json": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "customers",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "id_default_group": {
+          "type": "integer"
+        },
+        "id_lang": {
+          "type": "integer"
+        },
+        "firstname": {
+          "type": "string"
+        },
+        "lastname": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "company": {
+          "type": "string"
+        },
+        "active": {
+          "type": "boolean"
+        },
+        "newsletter": {
+          "type": "boolean"
+        },
+        "date_add": {
+          "type": [
+            "string",
+            "number",
+            "integer",
+            "boolean",
+            "object",
+            "array",
+            "null"
+          ]
+        },
+        "date_upd": {
+          "type": [
+            "string",
+            "number",
+            "integer",
+            "boolean",
+            "object",
+            "array",
+            "null"
+          ]
+        }
+      },
+      "x-primary-key": [
+        "id"
+      ],
+      "x-cursor-field": "date_upd"
+    },
+    "schemas/addresses.json": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "addresses",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "id_customer": {
+          "type": "integer"
+        },
+        "id_country": {
+          "type": "integer"
+        },
+        "id_state": {
+          "type": "integer"
+        },
+        "firstname": {
+          "type": "string"
+        },
+        "lastname": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "postcode": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "date_add": {
+          "type": [
+            "string",
+            "number",
+            "integer",
+            "boolean",
+            "object",
+            "array",
+            "null"
+          ]
+        },
+        "date_upd": {
+          "type": [
+            "string",
+            "number",
+            "integer",
+            "boolean",
+            "object",
+            "array",
+            "null"
+          ]
+        }
+      },
+      "x-primary-key": [
+        "id"
+      ],
+      "x-cursor-field": "date_upd"
+    },
+    "schemas/products.json": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "products",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "id_manufacturer": {
+          "type": "integer"
+        },
+        "id_supplier": {
+          "type": "integer"
+        },
+        "id_category_default": {
+          "type": "integer"
+        },
+        "reference": {
+          "type": "string"
+        },
+        "price": {
+          "type": "string"
+        },
+        "active": {
+          "type": "boolean"
+        },
+        "quantity": {
+          "type": "integer"
+        },
+        "date_add": {
+          "type": [
+            "string",
+            "number",
+            "integer",
+            "boolean",
+            "object",
+            "array",
+            "null"
+          ]
+        },
+        "date_upd": {
+          "type": [
+            "string",
+            "number",
+            "integer",
+            "boolean",
+            "object",
+            "array",
+            "null"
+          ]
+        }
+      },
+      "x-primary-key": [
+        "id"
+      ],
+      "x-cursor-field": "date_upd"
+    },
+    "schemas/carts.json": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "carts",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "id_customer": {
+          "type": "integer"
+        },
+        "id_address_delivery": {
+          "type": "integer"
+        },
+        "id_address_invoice": {
+          "type": "integer"
+        },
+        "id_currency": {
+          "type": "integer"
+        },
+        "id_lang": {
+          "type": "integer"
+        },
+        "id_carrier": {
+          "type": "integer"
+        },
+        "date_add": {
+          "type": [
+            "string",
+            "number",
+            "integer",
+            "boolean",
+            "object",
+            "array",
+            "null"
+          ]
+        },
+        "date_upd": {
+          "type": [
+            "string",
+            "number",
+            "integer",
+            "boolean",
+            "object",
+            "array",
+            "null"
+          ]
+        }
+      },
+      "x-primary-key": [
+        "id"
+      ],
+      "x-cursor-field": "date_upd"
+    }
+  },
+  "operations": [
+    {
+      "id": "prestashop.customers",
+      "stream_order": 0,
+      "stream": {
+        "name": "customers",
+        "method": "GET",
+        "path": "/customers",
+        "records": {
+          "path": "customers.customer"
+        },
+        "schema": "schemas/customers.json",
+        "incremental": {
+          "cursor_field": "date_upd",
+          "start_config_key": "start_date"
+        },
+        "query": {
+          "output_format": "JSON",
+          "display": "full",
+          "sort": "[date_upd_ASC]",
+          "filter[date_upd]": {
+            "template": "[{{ incremental.lower_bound }},]",
+            "omit_when_absent": true
+          }
+        },
+        "pagination": {
+          "type": "offset_count",
+          "limit_param": "limit",
+          "page_size": 100,
+          "max_pages": 100,
+          "require_continuation_on_cap": true
+        }
+      },
+      "schema_refs": {
+        "record": "schemas/customers.json"
+      }
+    },
+    {
+      "id": "prestashop.orders",
+      "stream_order": 1,
+      "stream": {
+        "name": "orders",
+        "method": "GET",
+        "path": "/orders",
+        "records": {
+          "path": "orders.order"
+        },
+        "schema": "schemas/orders.json",
+        "incremental": {
+          "cursor_field": "date_upd",
+          "start_config_key": "start_date"
+        },
+        "query": {
+          "output_format": "JSON",
+          "display": "full",
+          "sort": "[date_upd_ASC]",
+          "filter[date_upd]": {
+            "template": "[{{ incremental.lower_bound }},]",
+            "omit_when_absent": true
+          }
+        },
+        "pagination": {
+          "type": "offset_count",
+          "limit_param": "limit",
+          "page_size": 100,
+          "max_pages": 100,
+          "require_continuation_on_cap": true
+        }
+      },
+      "schema_refs": {
+        "record": "schemas/orders.json"
+      }
+    },
+    {
+      "id": "prestashop.products",
+      "stream_order": 2,
+      "stream": {
+        "name": "products",
+        "method": "GET",
+        "path": "/products",
+        "records": {
+          "path": "products.product"
+        },
+        "schema": "schemas/products.json",
+        "incremental": {
+          "cursor_field": "date_upd",
+          "start_config_key": "start_date"
+        },
+        "query": {
+          "output_format": "JSON",
+          "display": "full",
+          "sort": "[date_upd_ASC]",
+          "filter[date_upd]": {
+            "template": "[{{ incremental.lower_bound }},]",
+            "omit_when_absent": true
+          }
+        },
+        "pagination": {
+          "type": "offset_count",
+          "limit_param": "limit",
+          "page_size": 100,
+          "max_pages": 100,
+          "require_continuation_on_cap": true
+        }
+      },
+      "schema_refs": {
+        "record": "schemas/products.json"
+      }
+    },
+    {
+      "id": "prestashop.addresses",
+      "stream_order": 3,
+      "stream": {
+        "name": "addresses",
+        "method": "GET",
+        "path": "/addresses",
+        "records": {
+          "path": "addresses.address"
+        },
+        "schema": "schemas/addresses.json",
+        "incremental": {
+          "cursor_field": "date_upd",
+          "start_config_key": "start_date"
+        },
+        "query": {
+          "output_format": "JSON",
+          "display": "full",
+          "sort": "[date_upd_ASC]",
+          "filter[date_upd]": {
+            "template": "[{{ incremental.lower_bound }},]",
+            "omit_when_absent": true
+          }
+        },
+        "pagination": {
+          "type": "offset_count",
+          "limit_param": "limit",
+          "page_size": 100,
+          "max_pages": 100,
+          "require_continuation_on_cap": true
+        }
+      },
+      "schema_refs": {
+        "record": "schemas/addresses.json"
+      }
+    },
+    {
+      "id": "prestashop.carts",
+      "stream_order": 4,
+      "stream": {
+        "name": "carts",
+        "method": "GET",
+        "path": "/carts",
+        "records": {
+          "path": "carts.cart"
+        },
+        "schema": "schemas/carts.json",
+        "incremental": {
+          "cursor_field": "date_upd",
+          "start_config_key": "start_date"
+        },
+        "query": {
+          "output_format": "JSON",
+          "display": "full",
+          "sort": "[date_upd_ASC]",
+          "filter[date_upd]": {
+            "template": "[{{ incremental.lower_bound }},]",
+            "omit_when_absent": true
+          }
+        },
+        "pagination": {
+          "type": "offset_count",
+          "limit_param": "limit",
+          "page_size": 100,
+          "max_pages": 100,
+          "require_continuation_on_cap": true
+        }
+      },
+      "schema_refs": {
+        "record": "schemas/carts.json"
+      }
+    }
+  ]
+}

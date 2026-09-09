@@ -1,6 +1,0 @@
-Green: POLYMETRICS_DATABASE_INTEGRATION=1 POLYMETRICS_CONTAINER_RUNTIME=docker POLYMETRICS_CONTAINER_ENDPOINT=unix:///Users/karthiksivadas/.colima/default/docker.sock go test -tags=databaseintegration -count=1 -timeout 20m -v ./internal/connectors/native/postgres
-Result: PASS
-
-The full PostgreSQL tagged package completed with the history-target proof and
-the existing CDC/catalog/managed-target integration checks. The harness owned
-only its run-specific Docker resources and cleaned them through dbtest.

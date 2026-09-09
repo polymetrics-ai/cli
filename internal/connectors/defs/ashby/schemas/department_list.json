@@ -1,38 +1,38 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "department_list",
-  "type": "object",
   "properties": {
-    "id": {
-      "type": "string",
-      "description": "The department's unique identifier"
-    },
-    "name": {
-      "type": "string",
-      "description": "The name of the department or team"
+    "createdAt": {
+      "description": "The timestamp when the department was created",
+      "type": "string"
     },
     "externalName": {
       "type": "string"
     },
+    "extraData": {
+      "type": "object"
+    },
+    "id": {
+      "description": "The department's unique identifier",
+      "type": "string"
+    },
     "isArchived": {
-      "type": "boolean",
-      "description": "Whether the department has been archived"
+      "description": "Whether the department has been archived",
+      "type": "boolean"
+    },
+    "name": {
+      "description": "The name of the department or team",
+      "type": "string"
     },
     "parentId": {
       "type": "string"
     },
-    "createdAt": {
-      "type": "string",
-      "description": "The timestamp when the department was created"
-    },
     "updatedAt": {
-      "type": "string",
-      "description": "The timestamp when the department was last updated"
-    },
-    "extraData": {
-      "type": "object"
+      "description": "The timestamp when the department was last updated",
+      "type": "string"
     }
   },
+  "title": "department_list",
+  "type": "object",
   "x-primary-key": [
     "id"
   ]

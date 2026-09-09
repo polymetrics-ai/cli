@@ -1,39 +1,39 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "candidate_list_client_info",
-  "type": "object",
   "properties": {
+    "candidateId": {
+      "description": "The ID of the candidate that interacted with the system",
+      "type": "string"
+    },
+    "createdAt": {
+      "type": "string"
+    },
     "id": {
-      "type": "string",
-      "description": "The ID of this client information record"
+      "description": "The ID of this client information record",
+      "type": "string"
     },
     "ipAddress": {
       "type": "string"
     },
-    "userAgent": {
+    "relatedEntityId": {
+      "description": "The ID of the entity that was related to the client interaction",
       "type": "string"
     },
     "relatedEntityType": {
-      "type": "string",
       "description": "The type of the entity that the client interacted with",
       "enum": [
         "application",
         "blocked_application_submission",
         "meeting_availability_request"
-      ]
+      ],
+      "type": "string"
     },
-    "relatedEntityId": {
-      "type": "string",
-      "description": "The ID of the entity that was related to the client interaction"
-    },
-    "candidateId": {
-      "type": "string",
-      "description": "The ID of the candidate that interacted with the system"
-    },
-    "createdAt": {
+    "userAgent": {
       "type": "string"
     }
   },
+  "title": "candidate_list_client_info",
+  "type": "object",
   "x-primary-key": [
     "id"
   ]

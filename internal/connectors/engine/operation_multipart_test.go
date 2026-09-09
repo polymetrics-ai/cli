@@ -40,20 +40,6 @@ const validMultipartRestWrite = `{
 
 func multipartRestWriteBundleFS(rest, kind string) fstest.MapFS {
 	fsys := fullValidBundleFS("acme")
-	fsys["acme/api_surface.json"] = &fstest.MapFile{Data: []byte(`{
-		"api": "test API v1",
-		"endpoints": [{
-			"method": "POST",
-			"path": "/attachments",
-			"operation": {
-				"model": "destructive_action",
-				"status": "blocked",
-				"risk": "high",
-				"blocked_by_default": true,
-				"reason": "operation metadata is bound by the executor"
-			}
-		}]
-	}`)}
 	fsys["acme/operations.json"] = &fstest.MapFile{Data: []byte(fmt.Sprintf(`{
 		"operations": [{
 			"id": "acme.attachments.create",
@@ -276,13 +262,36 @@ func TestBundleLoadRejectsUnsafeMultipartRestWriteContracts(t *testing.T) {
 		},
 	}
 
+	public := map[string]struct{ field, code, reason string }{
+		"rest read cannot declare multipart":                       {"/operations/0/rest/multipart", "multipart_kind_invalid", "multipart is only valid for rest_write operations"},
+		"provider search cannot declare multipart":                 {"/operations/0/rest/multipart", "multipart_kind_invalid", "multipart is only valid for rest_write operations"},
+		"content type must be literal multipart form data":         {"/operations/0/rest/content_type", "multipart_content_type_invalid", "multipart requires literal content_type multipart/form-data"},
+		"endpoint must be connector relative":                      {"/operations/0/rest/path", "multipart_path_invalid", "multipart endpoint must be connector-relative"},
+		"response capture must be bounded separately":              {"/operations/0/rest/max_bytes", "multipart_response_bound_invalid", "multipart requires positive response capture max_bytes"},
+		"aggregate upload cap is required":                         {"/operations/0/rest/multipart/max_bytes", "multipart_aggregate_bound_invalid", "multipart requires positive aggregate max_bytes"},
+		"parts cannot be empty":                                    {"/operations/0/rest/multipart/parts", "array_too_short", "array has too few items"},
+		"body schema must be closed":                               {"/operations/0/rest/body_schema/additionalProperties", "multipart_schema_open", "multipart body object must declare additionalProperties: false"},
+		"body schema is required":                                  {"/operations/0/rest/body_schema", "multipart_schema_missing", "multipart requires body_schema"},
+		"every part names a declared body field":                   {"/operations/0/rest/multipart/parts/0/field", "multipart_field_invalid", "multipart part must reference a declared body field"},
+		"file source must be a required string":                    {"/operations/0/rest/multipart/parts/1/field", "multipart_file_field_invalid", "multipart file part must reference a required string body field"},
+		"inline bytes cannot substitute for a file source path":    {"/operations/0/rest/multipart/parts/1/field", "multipart_file_field_invalid", "multipart file part must reference a required string body field"},
+		"file source must have a positive cap":                     {"/operations/0/rest/multipart/parts/1/max_bytes", "multipart_file_bound_invalid", "multipart file part requires positive max_bytes"},
+		"file source must declare media policy":                    {"/operations/0/rest/multipart/parts/1", "multipart_media_policy_missing", "multipart file part requires declared media policy"},
+		"legacy file upload does not become an operation executor": {"/operations/0/kind", "operation_execution_kind_mismatch", "execution block must match the operation kind"},
+	}
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			_, err := Load(multipartRestWriteBundleFS(tt.rest, tt.kind), "acme")
 			if err == nil {
 				t.Fatal("Load unsafe multipart declaration: error = nil")
 			}
-			if !strings.Contains(strings.ToLower(err.Error()), strings.ToLower(tt.wantErr)) {
+			want, ok := public[tt.name]
+			if !ok || !publicBundleMatches167(err, "operations.json", want.field, want.code, want.reason) {
+				t.Fatalf("wrong public multipart diagnostic: %v", err)
+			}
+
+			if !strings.Contains(strings.ToLower(bundleCauseText165(err)), strings.ToLower(tt.wantErr)) {
 				t.Fatalf("Load unsafe multipart declaration error = %q, want it to contain %q", err, tt.wantErr)
 			}
 		})

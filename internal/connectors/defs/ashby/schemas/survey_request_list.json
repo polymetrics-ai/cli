@@ -1,32 +1,32 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "survey_request_list",
-  "type": "object",
   "properties": {
-    "id": {
-      "type": "string",
-      "description": "The unique identifier for the survey request"
-    },
-    "surveyUrl": {
-      "type": "string",
-      "description": "The URL that the candidate can use to complete the survey",
-      "format": "uri"
-    },
-    "surveyFormDefinitionId": {
-      "type": "string",
-      "description": "The unique identifier for the survey form definition"
-    },
     "applicationId": {
-      "type": "string",
-      "description": "The unique identifier for the associated application"
+      "description": "The unique identifier for the associated application",
+      "type": "string"
     },
     "candidateId": {
-      "type": "string",
-      "description": "The unique identifier for the associated candidate"
+      "description": "The unique identifier for the associated candidate",
+      "type": "string"
+    },
+    "id": {
+      "description": "The unique identifier for the survey request",
+      "type": "string"
+    },
+    "surveyFormDefinitionId": {
+      "description": "The unique identifier for the survey form definition",
+      "type": "string"
+    },
+    "surveyUrl": {
+      "description": "The URL that the candidate can use to complete the survey",
+      "format": "uri",
+      "type": "string"
     }
   },
+  "title": "survey_request_list",
+  "type": "object",
+  "x-cursor-field": "candidateId",
   "x-primary-key": [
     "id"
-  ],
-  "x-cursor-field": "candidateId"
+  ]
 }

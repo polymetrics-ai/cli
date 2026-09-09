@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "inputs": {
+      "additionalProperties": true,
+      "maxProperties": 25,
+      "type": "object"
+    },
+    "ref": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "return_run_details": {
+      "type": "boolean"
+    },
+    "workflow_id": {
+      "maxLength": 1048576,
+      "type": [
+        "integer",
+        "string"
+      ]
+    }
+  },
+  "required": [
+    "ref",
+    "workflow_id"
+  ],
+  "type": "object"
+}

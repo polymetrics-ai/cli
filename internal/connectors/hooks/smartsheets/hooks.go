@@ -33,10 +33,6 @@ import (
 
 const defaultPageSize = 100
 
-func init() {
-	engine.RegisterHooks("smartsheets", func() engine.Hooks { return Hooks{} })
-}
-
 // Hooks is smartsheets' Tier-2 hook set: a single StreamHook handling only
 // the sheet_rows stream (handled=false for every other stream falls back to
 // the declarative path — the sheets stream is fully declarative and never

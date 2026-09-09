@@ -1,9 +1,0 @@
-{
-  "record": {
-    "name": "Fixture Position"
-  },
-  "expect": {
-    "method": "POST",
-    "path": "/2/positions"
-  }
-}

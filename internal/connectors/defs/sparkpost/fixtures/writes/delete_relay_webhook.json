@@ -1,9 +1,0 @@
-{
-  "record": {
-    "id": "relay_webhook_fixture_1"
-  },
-  "expect": {
-    "method": "DELETE",
-    "path": "/relay-webhooks/relay_webhook_fixture_1"
-  }
-}

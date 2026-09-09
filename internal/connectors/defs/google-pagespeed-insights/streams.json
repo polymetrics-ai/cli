@@ -1,28 +1,71 @@
 {
   "base": {
-    "url": "{{ config.base_url }}",
-    "user_agent": "polymetrics-go-cli",
     "auth": [
+      {
+        "mode": "api_key_query",
+        "param": "key",
+        "value": "{{ secrets.api_key }}",
+        "when": "{{ secrets.api_key }}"
+      },
       {
         "mode": "none"
       }
     ],
+    "check": {
+      "method": "GET",
+      "path": "/runPagespeed",
+      "query": {
+        "category": "performance",
+        "strategy": "desktop",
+        "url": "https://example.com"
+      }
+    },
+    "error_map": [],
     "pagination": {
       "type": "none"
     },
-    "check": {
-      "method": "GET",
-      "path": "/__legacy_hook/check"
-    },
-    "error_map": []
+    "url": "https://www.googleapis.com/pagespeedonline/v5",
+    "user_agent": "polymetrics-go-cli"
   },
   "streams": [
     {
-      "name": "pagespeed_reports",
+      "cartesian_config_fan_out": {
+        "categories": [
+          "accessibility",
+          "best-practices",
+          "performance",
+          "pwa",
+          "seo"
+        ],
+        "category_query_param": "category",
+        "max_combinations": 20,
+        "max_requests": 20,
+        "strategy_config_key": "strategies",
+        "strategy_query_param": "strategy",
+        "url_config_key": "urls",
+        "url_query_param": "url"
+      },
+      "computed_fields": {
+        "accessibility_score": "{{ record.lighthouseResult.categories.accessibility.score }}",
+        "analysis_utc_timestamp": "{{ record.analysisUTCTimestamp }}",
+        "best_practices_score": "{{ record.lighthouseResult.categories.best-practices.score }}",
+        "fetch_time": "{{ record.lighthouseResult.fetchTime }}",
+        "final_url": "{{ record.lighthouseResult.finalUrl }}",
+        "id": "{{ record.id }}",
+        "kind": "{{ record.kind }}",
+        "lighthouse_version": "{{ record.lighthouseResult.lighthouseVersion }}",
+        "overall_loading_experience": "{{ record.loadingExperience.overall_category }}",
+        "performance_score": "{{ record.lighthouseResult.categories.performance.score }}",
+        "pwa_score": "{{ record.lighthouseResult.categories.pwa.score }}",
+        "requested_url": "{{ record.lighthouseResult.requestedUrl }}",
+        "seo_score": "{{ record.lighthouseResult.categories.seo.score }}"
+      },
       "method": "GET",
-      "path": "/__legacy_hook/pagespeed_reports",
+      "name": "pagespeed_reports",
+      "path": "/runPagespeed",
       "records": {
-        "path": "data"
+        "path": ".",
+        "single_object": true
       },
       "schema": "schemas/pagespeed_reports.json"
     }

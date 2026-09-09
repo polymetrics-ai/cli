@@ -1,5 +1,0 @@
-=== RUN   TestPMBinaryExecutesPostgresIncrementalDedupeHistory
---- PASS: TestPMBinaryExecutesPostgresIncrementalDedupeHistory (30.70s)
-PASS
-certify CLI real invocations: 0 (budget 92)
-ok  	polymetrics.ai/internal/cli	31.765s

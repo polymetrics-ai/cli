@@ -1,31 +1,31 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "interview_plan_list",
-  "type": "object",
   "properties": {
-    "id": {
-      "type": "string",
-      "description": "The interview plan's unique identifier"
+    "createdAt": {
+      "description": "The timestamp when the interview plan was created",
+      "format": "date-time",
+      "type": "string"
     },
-    "title": {
-      "type": "string",
-      "description": "The title of the interview plan"
+    "id": {
+      "description": "The interview plan's unique identifier",
+      "type": "string"
     },
     "isArchived": {
-      "type": "boolean",
-      "description": "Whether the interview plan has been archived"
+      "description": "Whether the interview plan has been archived",
+      "type": "boolean"
     },
-    "createdAt": {
-      "type": "string",
-      "description": "The timestamp when the interview plan was created",
-      "format": "date-time"
+    "title": {
+      "description": "The title of the interview plan",
+      "type": "string"
     },
     "updatedAt": {
-      "type": "string",
       "description": "The timestamp when the interview plan was last updated",
-      "format": "date-time"
+      "format": "date-time",
+      "type": "string"
     }
   },
+  "title": "interview_plan_list",
+  "type": "object",
   "x-primary-key": [
     "id"
   ]

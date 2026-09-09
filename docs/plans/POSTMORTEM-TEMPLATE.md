@@ -11,7 +11,7 @@ One paragraph: what broke, blast radius, how it was detected, how it was resolve
 
 ## Impact
 
-- Gates affected (build/test/lint/conformance/certify/parity):
+- Gates affected (build/test/lint/render/runtime proof):
 - Connectors/bundles affected:
 - Data or resource leaks (certify ledger reference, if any):
 - Time lost / repair-agent runs consumed:

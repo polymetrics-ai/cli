@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "data": {
+      "additionalProperties": false,
+      "properties": {
+        "followers": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "followers"
+      ],
+      "type": "object"
+    },
+    "project_gid": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "project_gid",
+    "data"
+  ],
+  "type": "object"
+}

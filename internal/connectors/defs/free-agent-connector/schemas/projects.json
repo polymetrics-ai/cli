@@ -1,27 +1,13 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "projects",
-  "type": "object",
   "properties": {
-    "url": {
-      "type": "string"
-    },
-    "name": {
-      "type": "string"
-    },
-    "contact": {
-      "type": "string"
-    },
-    "status": {
-      "type": "string"
-    },
-    "currency": {
-      "type": "string"
-    },
     "budget": {
       "type": "string"
     },
     "budget_units": {
+      "type": "string"
+    },
+    "contact": {
       "type": "string"
     },
     "created_at": {
@@ -35,6 +21,15 @@
         "null"
       ]
     },
+    "currency": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string"
+    },
     "updated_at": {
       "type": [
         "string",
@@ -45,10 +40,15 @@
         "array",
         "null"
       ]
+    },
+    "url": {
+      "type": "string"
     }
   },
+  "title": "projects",
+  "type": "object",
+  "x-cursor-field": "updated_at",
   "x-primary-key": [
     "url"
-  ],
-  "x-cursor-field": "updated_at"
+  ]
 }

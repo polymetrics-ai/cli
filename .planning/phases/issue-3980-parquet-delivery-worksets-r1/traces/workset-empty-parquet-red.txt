@@ -1,9 +1,0 @@
-# `go test -timeout 20m ./internal/connectors/database -run 'TestDeriveChangeDeliveryWorksetAcceptsWarehouseEmptyParquet' -count=1`
-
-```text
---- FAIL: TestDeriveChangeDeliveryWorksetAcceptsWarehouseEmptyParquet (0.06s)
-    parquet_delivery_workset_test.go:315: DeriveChangeDeliveryWorkset() error = change delivery workset is unavailable
-FAIL
-FAIL	polymetrics.ai/internal/connectors/database	0.505s
-FAIL
-```

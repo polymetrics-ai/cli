@@ -10,7 +10,7 @@ SYNOPSIS
   pm credentials add <name> --connector dixa [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads Dixa conversations (and their queue, rating, and assignment projections) from the Dixa conversation_export API.
+  Reads Dixa conversation export records through fixed bearer-authenticated export routes.
 
 ICON
   id: dixa
@@ -24,15 +24,38 @@ CAPABILITIES
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  updated_after
+  updated_before
+  api_token (secret)
+
+ETL STREAMS
+  conversations:
+    primary key: id
+    cursor: updated_at
+    fields: id(integer), updated_at(integer)
+  conversation_queue:
+    primary key: id
+    cursor: updated_at
+    fields: id(integer), updated_at(integer)
+  conversation_rating:
+    primary key: id
+    cursor: updated_at
+    fields: id(integer), updated_at(integer)
+  conversation_assignment:
+    primary key: id
+    cursor: updated_at
+    fields: id(integer), updated_at(integer)
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: Bounded Dixa conversation export reads use a fixed provider origin and declared bearer authentication.
+  write risk: unsupported
+  approval: none; read-only
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

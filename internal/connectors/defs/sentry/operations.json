@@ -2,14 +2,8 @@
   "operations": [
     {
       "id": "sentry.seer_models_list",
-      "source_operation": {
-        "id": "sentry.rest.listSeerModels",
-        "method": "GET",
-        "path": "/api/0/seer/models/"
-      },
       "kind": "rest_read",
       "summary": "List Seer models",
-      "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
       "risk": "low",
       "approval": "none",
       "output_policy": "json_redacted",

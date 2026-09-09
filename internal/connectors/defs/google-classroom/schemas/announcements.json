@@ -1,51 +1,41 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "announcements",
-  "type": "object",
   "properties": {
-    "courseId": {
-      "type": "string"
-    },
-    "id": {
-      "type": "string"
-    },
-    "text": {
-      "type": "string"
-    },
-    "state": {
-      "type": "string"
-    },
     "alternateLink": {
+      "type": "string"
+    },
+    "courseId": {
       "type": "string"
     },
     "creationTime": {
       "type": [
         "string",
-        "number",
-        "integer",
-        "boolean",
-        "object",
-        "array",
-        "null"
-      ]
-    },
-    "updateTime": {
-      "type": [
-        "string",
-        "number",
-        "integer",
-        "boolean",
-        "object",
-        "array",
         "null"
       ]
     },
     "creatorUserId": {
       "type": "string"
+    },
+    "id": {
+      "type": "string"
+    },
+    "state": {
+      "type": "string"
+    },
+    "text": {
+      "type": "string"
+    },
+    "updateTime": {
+      "type": [
+        "string",
+        "null"
+      ]
     }
   },
+  "title": "announcements",
+  "type": "object",
+  "x-cursor-field": "updateTime",
   "x-primary-key": [
     "id"
-  ],
-  "x-cursor-field": "updateTime"
+  ]
 }

@@ -1,45 +1,34 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "quotes",
-  "type": "object",
   "properties": {
-    "quoteId": {
-      "type": "string"
-    },
-    "mode": {
-      "type": "string"
-    },
-    "method": {
-      "type": "string"
-    },
-    "source": {
-      "type": "string"
-    },
-    "status": {
-      "type": "string"
-    },
     "amount": {
       "type": "number"
     },
-    "currency": {
-      "type": "string"
-    },
-    "quoteNum": {
-      "type": "string"
-    },
     "carrierId": {
-      "type": "string"
-    },
-    "serviceId": {
       "type": "string"
     },
     "createdDate": {
       "type": "string"
     },
-    "pricingType": {
+    "currency": {
+      "type": "string"
+    },
+    "equipmentType": {
+      "type": "string"
+    },
+    "method": {
+      "type": "string"
+    },
+    "mode": {
       "type": "string"
     },
     "paymentTerms": {
+      "type": "string"
+    },
+    "pricingMethod": {
+      "type": "string"
+    },
+    "pricingType": {
       "type": "string"
     },
     "providerCode": {
@@ -48,13 +37,24 @@
     "providerName": {
       "type": "string"
     },
-    "equipmentType": {
+    "quoteId": {
       "type": "string"
     },
-    "pricingMethod": {
+    "quoteNum": {
+      "type": "string"
+    },
+    "serviceId": {
+      "type": "string"
+    },
+    "source": {
+      "type": "string"
+    },
+    "status": {
       "type": "string"
     }
   },
+  "title": "quotes",
+  "type": "object",
   "x-primary-key": [
     "quoteId"
   ]

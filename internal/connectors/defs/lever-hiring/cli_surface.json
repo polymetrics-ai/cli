@@ -1,12 +1,6 @@
 {
   "tagline": "Read Lever Hiring records and safely plan typed Lever mutations.",
   "usage": "pm lever-hiring <command> [flags]",
-  "source_cli": {
-    "name": "Lever API",
-    "docs": "https://hire.lever.co/developer/documentation",
-    "reference": "Lever Developer documentation fetched 2026-08-01",
-    "source": "provider_api"
-  },
   "groups": [
     {
       "id": "etl",

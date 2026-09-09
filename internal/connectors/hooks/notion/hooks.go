@@ -32,10 +32,6 @@ const (
 	maxPageSize     = 100
 )
 
-func init() {
-	engine.RegisterHooks("notion", func() engine.Hooks { return Hooks{} })
-}
-
 // Hooks is the notion bundle's Tier-2 hook set: StreamHook only. It has no
 // state of its own; every method is a pure function of its arguments.
 type Hooks struct{}

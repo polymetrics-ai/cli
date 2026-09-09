@@ -1,9 +1,0 @@
-=== RUN   TestOpenPostgresHistoryModeResolvesRegisteredExecutors
-    transport_composition_test.go:228: PostgreSQL history preflight = source transport does not support sync mode "incremental_dedupe_history"
---- FAIL: TestOpenPostgresHistoryModeResolvesRegisteredExecutors (1.26s)
-=== RUN   TestOpenPostgresTransportDeclarationsAreExactModeIntersection
-    transport_composition_test.go:271: PostgreSQL source modes = [full_overwrite full_append incremental_append incremental_upsert incremental_dedupe], want exact reachable intersection [full_overwrite full_append incremental_append incremental_upsert incremental_dedupe incremental_dedupe_history]
---- FAIL: TestOpenPostgresTransportDeclarationsAreExactModeIntersection (0.27s)
-FAIL
-FAIL	polymetrics.ai/internal/app	2.526s
-FAIL

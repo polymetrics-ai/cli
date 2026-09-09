@@ -1,6 +1,6 @@
 {
   "tagline": "Run DocuSeal's declared streams and reverse-ETL actions.",
-  "usage": "pm docuseal \u003ccommand\u003e [flags]",
+  "usage": "pm docuseal <command> [flags]",
   "groups": [
     {
       "id": "read",
@@ -31,7 +31,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "archive_submission",
-      "source_url": "https://console.docuseal.com/openapi.yml",
       "flags": [
         {
           "name": "id",
@@ -42,7 +41,7 @@
         }
       ],
       "examples": [
-        "pm docuseal archive submission apply --plan \u003cplan-name\u003e"
+        "pm docuseal archive submission apply --plan <plan-name>"
       ],
       "api_surface": [
         {
@@ -59,7 +58,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "archive_template",
-      "source_url": "https://console.docuseal.com/openapi.yml",
       "flags": [
         {
           "name": "id",
@@ -70,7 +68,7 @@
         }
       ],
       "examples": [
-        "pm docuseal archive template apply --plan \u003cplan-name\u003e"
+        "pm docuseal archive template apply --plan <plan-name>"
       ],
       "api_surface": [
         {
@@ -87,7 +85,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "clone_template",
-      "source_url": "https://console.docuseal.com/openapi.yml",
       "flags": [
         {
           "name": "id",
@@ -98,7 +95,7 @@
         }
       ],
       "examples": [
-        "pm docuseal clone template apply --plan \u003cplan-name\u003e"
+        "pm docuseal clone template apply --plan <plan-name>"
       ],
       "api_surface": [
         {
@@ -115,7 +112,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "submissions",
-      "source_url": "https://console.docuseal.com/openapi.yml",
       "examples": [
         "pm docuseal submissions list --json"
       ],
@@ -132,7 +128,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "submitters",
-      "source_url": "https://console.docuseal.com/openapi.yml",
       "examples": [
         "pm docuseal submitters list --json"
       ],
@@ -149,7 +144,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "template_detail",
-      "source_url": "https://console.docuseal.com/openapi.yml",
       "examples": [
         "pm docuseal template detail list --json"
       ],
@@ -166,7 +160,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "templates",
-      "source_url": "https://console.docuseal.com/openapi.yml",
       "examples": [
         "pm docuseal templates list --json"
       ],
@@ -183,7 +176,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "update_submitter",
-      "source_url": "https://console.docuseal.com/openapi.yml",
       "flags": [
         {
           "name": "id",
@@ -194,7 +186,7 @@
         }
       ],
       "examples": [
-        "pm docuseal update submitter apply --plan \u003cplan-name\u003e"
+        "pm docuseal update submitter apply --plan <plan-name>"
       ],
       "api_surface": [
         {
@@ -211,7 +203,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "update_template",
-      "source_url": "https://console.docuseal.com/openapi.yml",
       "flags": [
         {
           "name": "id",
@@ -222,7 +213,7 @@
         }
       ],
       "examples": [
-        "pm docuseal update template apply --plan \u003cplan-name\u003e"
+        "pm docuseal update template apply --plan <plan-name>"
       ],
       "api_surface": [
         {

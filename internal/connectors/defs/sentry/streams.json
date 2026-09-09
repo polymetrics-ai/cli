@@ -45,11 +45,7 @@
       "records": {
         "path": ""
       },
-      "schema": "schemas/projects.json",
-      "conformance": {
-        "skip_dynamic": true,
-        "reason": "StreamHook-handled (Link-header + results= pagination the declarative link_header type cannot express; see docs.md's resolution-ladder note); hook-covered, proven live by archived parity evidence for sentry (TestParitySentry_IssuesTwoPagePaginationAndResultsFalseStop) and internal/connectors/hooks/sentry/hooks_test.go"
-      }
+      "schema": "schemas/projects.json"
     },
     {
       "name": "issues",
@@ -57,11 +53,7 @@
       "records": {
         "path": ""
       },
-      "schema": "schemas/issues.json",
-      "conformance": {
-        "skip_dynamic": true,
-        "reason": "StreamHook-handled (Link-header + results= pagination the declarative link_header type cannot express; see docs.md's resolution-ladder note); hook-covered, proven live by archived parity evidence for sentry (TestParitySentry_IssuesTwoPagePaginationAndResultsFalseStop) and internal/connectors/hooks/sentry/hooks_test.go"
-      }
+      "schema": "schemas/issues.json"
     },
     {
       "name": "events",
@@ -69,11 +61,7 @@
       "records": {
         "path": ""
       },
-      "schema": "schemas/events.json",
-      "conformance": {
-        "skip_dynamic": true,
-        "reason": "StreamHook-handled (Link-header + results= pagination the declarative link_header type cannot express; see docs.md's resolution-ladder note); hook-covered, proven live by archived parity evidence for sentry (TestParitySentry_IssuesTwoPagePaginationAndResultsFalseStop) and internal/connectors/hooks/sentry/hooks_test.go"
-      }
+      "schema": "schemas/events.json"
     },
     {
       "name": "releases",
@@ -81,11 +69,7 @@
       "records": {
         "path": ""
       },
-      "schema": "schemas/releases.json",
-      "conformance": {
-        "skip_dynamic": true,
-        "reason": "StreamHook-handled (Link-header + results= pagination the declarative link_header type cannot express; see docs.md's resolution-ladder note); hook-covered, proven live by archived parity evidence for sentry (TestParitySentry_IssuesTwoPagePaginationAndResultsFalseStop) and internal/connectors/hooks/sentry/hooks_test.go"
-      }
+      "schema": "schemas/releases.json"
     }
   ]
 }

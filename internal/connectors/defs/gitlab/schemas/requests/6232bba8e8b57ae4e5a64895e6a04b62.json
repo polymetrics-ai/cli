@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "merge_request_iid": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "id",
+    "merge_request_iid"
+  ],
+  "type": "object"
+}

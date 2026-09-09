@@ -15,7 +15,7 @@ The document's 31 top-level `webhooks` entries are webhook **events**, not reque
 are excluded per the sweep counting policy. Notion publishes **no webhook management endpoints**
 (there is no `/v1/webhooks` path), so there is nothing in that area to implement.
 
-Every documented operation is partitioned exactly once in `api_surface.json` and carries exactly one
+Every documented operation is partitioned exactly once in `execution bundle` and carries exactly one
 disposition — executable, blocked with a named dependency, or not executable with a source citation.
 None is blank.
 
@@ -46,7 +46,7 @@ express (`engine/read.go` issues a nil body on every declarative read):
 | `views` | `GET /v1/views` | declarative |
 
 `POST /v1/search` is **one documented operation** exercised with two documented object filters. The
-`api_surface.json` `covered_by` block accepts a single stream name and no bundle leaves a declared
+`execution bundle` `covered_by` block accepts a single stream name and no bundle leaves a declared
 stream without a row, so it is carried on two qualified rows — the convention this bundle already
 shipped. The same applies to `PATCH /v1/comments/{comment_id}`, which carries its two modelled union
 arms.

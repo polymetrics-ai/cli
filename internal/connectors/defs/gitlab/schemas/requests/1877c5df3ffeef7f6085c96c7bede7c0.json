@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "context": {
+      "additionalProperties": false,
+      "properties": {},
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "experiment_name": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "variant": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "experiment_name",
+    "variant"
+  ],
+  "type": "object"
+}

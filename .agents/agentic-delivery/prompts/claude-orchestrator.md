@@ -25,7 +25,7 @@ apply it before anything else.
    - ISSUE_CREATE → create the parent + sub-issues with `gh` (idempotent; reuse existing).
    - PARENT_SETUP → create the parent branch from `main`; open the DRAFT parent PR → `main`.
    - VERIFY → run the gates (`make connectorgen-validate`, `make verify`, focused tests,
-     `pm connectors certify`), write `VERIFICATION.md`.
+     focused command/fake-server/DuckDB proofs), write `VERIFICATION.md`.
    - REVIEW → adversarially review the sub-PR; leave a disposition on EVERY finding per
      `code-review-disposition-template.md`.
    - INTEGRATE / PARENT_FINALIZE → merge sub-PR into the parent branch; stop at the human gate.

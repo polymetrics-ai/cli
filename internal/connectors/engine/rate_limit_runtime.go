@@ -20,11 +20,6 @@ var processRateLimitRegistry = struct {
 	registry *coordination.RateLimitRegistry
 }{registry: coordination.NewRateLimitRegistry(nil)}
 
-var processSharedRateLimitRegistry = struct {
-	mu       sync.RWMutex
-	registry *coordination.SharedRateLimitRegistry
-}{}
-
 var processRateLimitEventSinks = struct {
 	mu    sync.RWMutex
 	sinks map[string]connsdk.RateLimitEventSink
@@ -56,24 +51,9 @@ func replaceRateLimitRegistryForTest(registry *coordination.RateLimitRegistry) f
 	}
 }
 
-// ConfigureSharedRateLimitRegistry makes an optional coordinator available to
-// explicitly require-shared policies. Local policies never consult it, so a
-// configured runtime endpoint cannot silently upgrade their enforcement.
-func ConfigureSharedRateLimitRegistry(registry *coordination.SharedRateLimitRegistry) {
-	processSharedRateLimitRegistry.mu.Lock()
-	processSharedRateLimitRegistry.registry = registry
-	processSharedRateLimitRegistry.mu.Unlock()
-}
-
-func currentSharedRateLimitRegistry() *coordination.SharedRateLimitRegistry {
-	processSharedRateLimitRegistry.mu.RLock()
-	defer processSharedRateLimitRegistry.mu.RUnlock()
-	return processSharedRateLimitRegistry.registry
-}
-
 // ConfigureRateLimitEventSink attaches a bounded rate-limit event sink to one
 // project-local runtime. The project directory is an engine RuntimeConfig
-// boundary, so concurrent certification runs cannot collect each other's
+// boundary, so concurrent processes cannot collect each other's
 // events. The returned cleanup restores the prior registration.
 func ConfigureRateLimitEventSink(projectDir string, sink connsdk.RateLimitEventSink) func() {
 	if projectDir == "" || sink == nil {
@@ -102,7 +82,7 @@ func rateLimitEventSinkFor(projectDir string) connsdk.RateLimitEventSink {
 
 // ConfigureRateLimitAdmissionTimeout bounds individual waits for a project
 // runtime. It is deliberately narrower than a run deadline: normal
-// certification work may continue, but an exhausted provider budget cannot
+// unrelated work may continue, but an exhausted provider budget cannot
 // hold the run indefinitely.
 func ConfigureRateLimitAdmissionTimeout(projectDir string, timeout time.Duration) func() {
 	if projectDir == "" || timeout <= 0 {
@@ -129,18 +109,6 @@ func rateLimitAdmissionTimeoutFor(projectDir string) time.Duration {
 	return processRateLimitAdmissionTimeouts.timeouts[projectDir]
 }
 
-func replaceSharedRateLimitRegistryForTest(registry *coordination.SharedRateLimitRegistry) func() {
-	processSharedRateLimitRegistry.mu.Lock()
-	previous := processSharedRateLimitRegistry.registry
-	processSharedRateLimitRegistry.registry = registry
-	processSharedRateLimitRegistry.mu.Unlock()
-	return func() {
-		processSharedRateLimitRegistry.mu.Lock()
-		processSharedRateLimitRegistry.registry = previous
-		processSharedRateLimitRegistry.mu.Unlock()
-	}
-}
-
 // rateLimitResolver is built once per engine runtime and resolves concrete
 // declared request paths to opaque, shared policy limiters. It keeps only the
 // connector configuration and CoordinationIdentity: never Secrets or a
@@ -153,7 +121,7 @@ type rateLimitResolver struct {
 	coordinationIdentity connectors.CoordinationIdentity
 	policies             []connsdk.RateLimitPolicy
 	registry             *coordination.RateLimitRegistry
-	sharedRegistry       *coordination.SharedRateLimitRegistry
+	sharedRegistry       connectors.SharedRateLimitCoordinator
 	parking              connectors.RateParkingAdmission
 }
 
@@ -172,7 +140,7 @@ func newRateLimitResolverWithContext(ctx context.Context, b Bundle, cfg connecto
 		coordinationIdentity: cfg.CoordinationIdentity,
 		policies:             b.RateLimits.Policies,
 		registry:             currentRateLimitRegistry(),
-		sharedRegistry:       currentSharedRateLimitRegistry(),
+		sharedRegistry:       cfg.SharedRateLimits,
 		parking:              cfg.RateParkingAdmission,
 	}
 }
@@ -333,11 +301,20 @@ func (r *rateLimitResolver) resolve(ctx context.Context, policy connsdk.RateLimi
 	}
 	key := coordination.RateLimitKey{Connector: r.connector, PolicyID: policy.ID, Scope: scope}
 	if policy.Coordination == connsdk.RateLimitCoordinationRequireShared {
-		if err := r.sharedRegistry.EnsureAvailable(ctx); err != nil {
+		if err := ctx.Err(); err != nil {
 			return resolvedRateLimitPolicy{}, rateBudgetRefusal(err)
 		}
-		limiter := r.sharedRegistry.Limiter(key, policy.Budgets)
-		return resolvedRateLimitPolicy{id: policy.ID, admission: limiter, observer: limiter, costHeader: costHeader, budgets: policy.Budgets, scope: scope, parking: r.parking}, nil
+		if r.sharedRegistry == nil {
+			return resolvedRateLimitPolicy{}, rateBudgetRefusal(&coordination.SharedRateLimitUnavailableError{Component: "dragonfly", Reason: coordination.SharedRateLimitCoordinatorNotConfigured})
+		}
+		admission, observer, err := r.sharedRegistry.ResolveRateLimit(ctx, r.connector, policy.ID, scope, policy.Budgets)
+		if err != nil {
+			return resolvedRateLimitPolicy{}, rateBudgetRefusal(err)
+		}
+		if admission == nil || observer == nil {
+			return resolvedRateLimitPolicy{}, rateBudgetRefusal(&coordination.SharedRateLimitUnavailableError{Component: "dragonfly", Reason: coordination.SharedRateLimitCoordinatorUnreachable})
+		}
+		return resolvedRateLimitPolicy{id: policy.ID, admission: admission, observer: observer, costHeader: costHeader, budgets: policy.Budgets, scope: scope, parking: r.parking}, nil
 	}
 	if r.registry == nil {
 		return resolvedRateLimitPolicy{}, fmt.Errorf("rate-limit policy %q local registry is unavailable", policy.ID)
@@ -514,7 +491,7 @@ func (r *endpointRateLimitResolver) AdmitRoute(ctx context.Context, route connsd
 // rateLimitSelectorMatchesNonRoute distinguishes a require-shared policy that
 // genuinely selected this credential/tier from one that belongs to another
 // traffic family. A selected policy with no matching endpoint must fail closed;
-// an unrelated GitHub certification overlay must not change ordinary traffic.
+// an unrelated selector tier must not change ordinary traffic.
 func rateLimitSelectorMatchesNonRoute(selector connsdk.RateLimitSelector, cfg map[string]string) bool {
 	selector.Endpoints = nil
 	selector.ExcludeEndpoints = nil

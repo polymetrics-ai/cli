@@ -144,13 +144,15 @@ SYNOPSIS
 
 DESCRIPTION
   This command selects a destination only when the saved connection's
-  destination descriptor declares declarative_typed_destination. The persisted
-  stream owns the exact eligible writes.json action through destination_action;
-  it is never an argument to this command or pm etl run.
+  destination descriptor declares declarative_typed_destination (retry-safe)
+  or declarative_single_attempt_destination (one request with no automatic
+  replay). The persisted stream owns the exact eligible writes.json action
+  through destination_action; it is never an argument to this command or pm
+  etl run.
 
   The connector definition owns the typed action, request method, route,
   record mapping, source-executor allowlist, acknowledgement, delivery
-  contract, per-mode apply strategy, and conformance evidence. Shared Go only
+  contract and per-mode apply strategy. Shared Go only
   validates and dispatches that sealed declaration through the warehouse
   workset. It cannot write an arbitrary HTTP request.
 

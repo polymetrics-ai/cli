@@ -1,9 +1,0 @@
-{
-  "record": {
-    "key": "asset"
-  },
-  "expect": {
-    "method": "DELETE",
-    "path": "/objects/types/asset"
-  }
-}

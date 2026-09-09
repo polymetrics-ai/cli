@@ -1,84 +1,84 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "location_list",
-  "type": "object",
   "properties": {
-    "id": {
-      "type": "string",
-      "description": "The unique identifier for the location"
-    },
-    "name": {
-      "type": "string",
-      "description": "The name of the location"
-    },
-    "externalName": {
-      "type": "string"
-    },
-    "isArchived": {
-      "type": "boolean",
-      "description": "Whether the location is archived"
-    },
-    "isRemote": {
-      "type": "boolean"
-    },
     "address": {
-      "type": "object",
       "description": "The address for the location",
       "properties": {
         "postalAddress": {
-          "type": "object",
           "description": "The postal address for the location",
           "properties": {
             "addressCountry": {
-              "type": "string",
-              "description": "The country for the location address"
-            },
-            "addressRegion": {
-              "type": "string",
-              "description": "The region for the location address"
+              "description": "The country for the location address",
+              "type": "string"
             },
             "addressLocality": {
-              "type": "string",
-              "description": "The locality for the location address"
+              "description": "The locality for the location address",
+              "type": "string"
+            },
+            "addressRegion": {
+              "description": "The region for the location address",
+              "type": "string"
             },
             "postalCode": {
-              "type": "string",
-              "description": "The postal code for the location address"
+              "description": "The postal code for the location address",
+              "type": "string"
             },
             "streetAddress": {
-              "type": "string",
-              "description": "The street address for the location"
+              "description": "The street address for the location",
+              "type": "string"
             }
-          }
+          },
+          "type": "object"
         }
       },
       "required": [
         "postalAddress"
-      ]
+      ],
+      "type": "object"
+    },
+    "externalName": {
+      "type": "string"
+    },
+    "extraData": {
+      "type": "object"
+    },
+    "id": {
+      "description": "The unique identifier for the location",
+      "type": "string"
+    },
+    "isArchived": {
+      "description": "Whether the location is archived",
+      "type": "boolean"
+    },
+    "isRemote": {
+      "type": "boolean"
+    },
+    "name": {
+      "description": "The name of the location",
+      "type": "string"
     },
     "parentLocationId": {
       "type": "string"
     },
     "type": {
-      "type": "string",
       "description": "The type of the location component",
       "enum": [
         "Location",
         "LocationHierarchy"
-      ]
+      ],
+      "type": "string"
     },
     "workplaceType": {
-      "type": "string",
       "enum": [
         "OnSite",
         "Hybrid",
         "Remote"
-      ]
-    },
-    "extraData": {
-      "type": "object"
+      ],
+      "type": "string"
     }
   },
+  "title": "location_list",
+  "type": "object",
   "x-primary-key": [
     "id"
   ]

@@ -39,17 +39,6 @@
           },
           "summary": { "type": "string" },
           "description": { "type": "string" },
-          "source_url": { "type": "string" },
-          "source_operation": {
-            "type": "object",
-            "required": ["id", "method", "path"],
-            "additionalProperties": false,
-            "properties": {
-              "id": { "type": "string", "minLength": 1 },
-              "method": { "type": "string", "minLength": 1 },
-              "path": { "type": "string", "minLength": 1 }
-            }
-          },
           "risk": {
             "type": "string",
             "enum": ["none", "low", "medium", "high", "critical"]
@@ -126,6 +115,18 @@
                   "last_record_field": { "type": "string" },
                   "stop_path": { "type": "string" },
                   "next_url_path": { "type": "string" },
+                  "body_cursor_field": {"type": "string", "minLength": 1},
+                  "body_page_field": {"type": "string", "minLength": 1},
+                  "body_offset_field": {"type": "string", "minLength": 1},
+                  "body_limit_field": {"type": "string", "minLength": 1},
+                  "next_url_query": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "allowed": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+                      "retain": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+                    }
+                  },
                   "start_index_param": { "type": "string" },
                   "count_param": { "type": "string" },
                   "total_path": { "type": "string" },
@@ -197,6 +198,7 @@
                 "type": "object",
                 "additionalProperties": true
               },
+              "request_inputs": {"type":"object","required":["version","schema","bindings"],"additionalProperties":false,"properties":{"query_encoding":{"type":"object","additionalProperties":false,"required":["version","max_depth","max_members","max_items","max_pairs","max_bytes","fields"],"properties":{"version":{"type":"integer","enum":[1]},"fields":{"type":"object","additionalProperties":false,"patternProperties":{"^.+$":{"type":"object","additionalProperties":false,"required":["mode"],"properties":{"mode":{"type":"string","enum":["scalar","json","brackets","repeated","indexed","bracket_repeated"]},"arrays":{"type":"string","enum":["indexed","repeated","bracket_repeated"]},"empty_array":{"type":"string","enum":["omit","empty"]},"null":{"type":"string","enum":["reject","empty","literal"]}}}}},"max_depth":{"type":"integer","minimum":1,"maximum":32},"max_members":{"type":"integer","minimum":1,"maximum":10000},"max_items":{"type":"integer","minimum":1,"maximum":10000},"max_pairs":{"type":"integer","minimum":1,"maximum":10000},"max_bytes":{"type":"integer","minimum":1,"maximum":16777216}}},"version":{"type":"integer","enum":[1]},"schema":{"type":"string"},"bindings":{"type":"array","items":{"type":"object","required":["in"],"additionalProperties":false,"properties":{"config_key":{"type":"string"},"in":{"type":"string","enum":["path","query","header","body"]},"name":{"type":"string"},"pointer":{"type":"string"}}}}}},
               "body_schema": { "type": "object" },
               "multipart": {
                 "type": "object",
@@ -204,6 +206,7 @@
                 "additionalProperties": false,
                 "properties": {
                   "max_bytes": { "type": "integer" },
+                  "max_metadata_bytes": { "type": "integer" },
                   "parts": {
                     "type": "array",
                     "minItems": 1,
@@ -216,6 +219,8 @@
                         "type": { "type": "string", "enum": ["field", "file"] },
                         "field": { "type": "string" },
                         "content_type": { "type": "string" },
+                        "filename_encoding": { "type": "string" },
+                        "media_policy": { "type": "string", "enum": ["provider_unrestricted"] },
                         "allowed_media_types": {
                           "type": "array",
                           "minItems": 1,

@@ -1,0 +1,52 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "contact_link": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "description": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "ends_at": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "generate_issues": {
+      "type": "boolean"
+    },
+    "managers": {
+      "items": {},
+      "maxItems": 256,
+      "type": "array"
+    },
+    "name": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "org": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "secret_scanning_alerts": {
+      "items": {},
+      "maxItems": 256,
+      "type": "array"
+    },
+    "team_managers": {
+      "items": {},
+      "maxItems": 256,
+      "type": "array"
+    }
+  },
+  "required": [
+    "description",
+    "ends_at",
+    "name",
+    "org",
+    "secret_scanning_alerts"
+  ],
+  "type": "object"
+}

@@ -1,0 +1,58 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "conan_package_reference": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "file_name": {
+      "enum": [
+        "conanfile.py",
+        "conanmanifest.txt",
+        "conan_sources.tgz",
+        "conan_export.tgz",
+        "conaninfo.txt",
+        "conan_package.tgz"
+      ],
+      "maxLength": 8192,
+      "minLength": 1,
+      "type": "string"
+    },
+    "package_channel": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "package_name": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "package_revision": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "package_username": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "package_version": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "recipe_revision": {
+      "maxLength": 8192,
+      "type": "string"
+    }
+  },
+  "required": [
+    "conan_package_reference",
+    "file_name",
+    "package_channel",
+    "package_name",
+    "package_revision",
+    "package_username",
+    "package_version",
+    "recipe_revision"
+  ],
+  "type": "object"
+}

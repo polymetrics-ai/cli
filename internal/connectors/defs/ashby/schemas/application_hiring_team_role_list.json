@@ -1,17 +1,17 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "application_hiring_team_role_list",
-  "type": "object",
   "properties": {
     "id": {
-      "type": "string",
-      "description": "The unique identifier for the application hiring team role"
+      "description": "The unique identifier for the application hiring team role",
+      "type": "string"
     },
     "title": {
-      "type": "string",
-      "description": "The title of the application hiring team role"
+      "description": "The title of the application hiring team role",
+      "type": "string"
     }
   },
+  "title": "application_hiring_team_role_list",
+  "type": "object",
   "x-primary-key": [
     "id"
   ]

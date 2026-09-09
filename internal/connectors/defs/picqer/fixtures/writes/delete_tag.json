@@ -1,5 +1,0 @@
-{
-  "record": { "idtag": 601 },
-  "expect": { "method": "DELETE", "path": "/tags/601" },
-  "response": { "status": 200, "body": {} }
-}

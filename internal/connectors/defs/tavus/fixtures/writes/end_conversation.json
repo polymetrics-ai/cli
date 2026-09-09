@@ -1,8 +1,0 @@
-{
-  "record": { "id": "conversation_fixture_1" },
-  "expect": {
-    "method": "POST",
-    "path": "/conversations/conversation_fixture_1/end"
-  },
-  "response": { "status": 200, "body": {} }
-}

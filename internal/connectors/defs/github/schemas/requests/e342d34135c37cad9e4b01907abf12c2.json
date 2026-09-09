@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "environment_name": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "integration_id": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "environment_name"
+  ],
+  "type": "object"
+}

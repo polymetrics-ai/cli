@@ -1,0 +1,134 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "data": {
+      "additionalProperties": false,
+      "properties": {
+        "archived": {
+          "type": "boolean"
+        },
+        "color": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "current_status": {
+          "additionalProperties": false,
+          "properties": {
+            "author": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "color": {
+              "type": "string"
+            },
+            "created_by": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "html_text": {
+              "type": "string"
+            },
+            "text": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "current_status_update": {
+          "additionalProperties": false,
+          "properties": {
+            "title": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "custom_fields": {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        "default_access_level": {
+          "type": "string"
+        },
+        "default_view": {
+          "type": "string"
+        },
+        "due_date": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "due_on": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "followers": {
+          "type": "string"
+        },
+        "html_notes": {
+          "type": "string"
+        },
+        "icon": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "minimum_access_level_for_customization": {
+          "type": "string"
+        },
+        "minimum_access_level_for_sharing": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "notes": {
+          "type": "string"
+        },
+        "owner": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "privacy_setting": {
+          "type": "string"
+        },
+        "public": {
+          "type": "boolean"
+        },
+        "start_on": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "team": {
+          "type": "string"
+        },
+        "workspace": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "workspace_gid": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "workspace_gid",
+    "data"
+  ],
+  "type": "object"
+}

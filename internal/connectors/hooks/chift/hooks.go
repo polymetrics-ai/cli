@@ -28,10 +28,6 @@ import (
 	"polymetrics.ai/internal/connectors/engine"
 )
 
-func init() {
-	engine.RegisterHooks("chift", func() engine.Hooks { return New() })
-}
-
 // Hooks is the chift bundle's stateless Tier-2 hook set. Authenticator
 // returns a fresh *sessionTokenAuth per call, which internally caches and
 // refreshes its own minted token for the lifetime of that authenticator

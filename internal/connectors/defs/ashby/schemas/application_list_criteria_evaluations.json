@@ -1,40 +1,33 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "application_list_criteria_evaluations",
-  "type": "object",
   "properties": {
-    "id": {
-      "type": "string",
-      "description": "The id of the criteria evaluation."
-    },
     "criterion": {
-      "type": "object",
       "description": "The criterion that was evaluated.",
       "properties": {
+        "applicationFormDefinitionId": {
+          "type": "string"
+        },
+        "applicationFormFieldPath": {
+          "type": "string"
+        },
         "id": {
-          "type": "string",
-          "description": "The id of the criterion version."
+          "description": "The id of the criterion version.",
+          "type": "string"
+        },
+        "prompt": {
+          "type": "string"
         },
         "title": {
-          "type": "string",
-          "description": "The title of the criterion."
+          "description": "The title of the criterion.",
+          "type": "string"
         },
         "type": {
-          "type": "string",
           "description": "The type of criterion evaluation.",
           "enum": [
             "ResumePrompt",
             "DidAnswerApplicationFormQuestion",
             "SimilarityToAiGeneratedAnswer"
-          ]
-        },
-        "prompt": {
-          "type": "string"
-        },
-        "applicationFormDefinitionId": {
-          "type": "string"
-        },
-        "applicationFormFieldPath": {
+          ],
           "type": "string"
         }
       },
@@ -42,20 +35,22 @@
         "id",
         "title",
         "type"
-      ]
+      ],
+      "type": "object"
     },
-    "status": {
-      "type": "string",
-      "description": "The status of the evaluation.",
-      "enum": [
-        "Pending",
-        "Completed",
-        "Failed",
-        "Skipped"
-      ]
+    "evaluatedAt": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "id": {
+      "description": "The id of the criteria evaluation.",
+      "type": "string"
     },
     "outcome": {
       "type": "string"
+    },
+    "outcomeNumber": {
+      "type": "number"
     },
     "reasoning": {
       "type": "string"
@@ -63,14 +58,19 @@
     "skipReason": {
       "type": "string"
     },
-    "outcomeNumber": {
-      "type": "number"
-    },
-    "evaluatedAt": {
-      "type": "string",
-      "format": "date-time"
+    "status": {
+      "description": "The status of the evaluation.",
+      "enum": [
+        "Pending",
+        "Completed",
+        "Failed",
+        "Skipped"
+      ],
+      "type": "string"
     }
   },
+  "title": "application_list_criteria_evaluations",
+  "type": "object",
   "x-primary-key": [
     "id"
   ]

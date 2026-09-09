@@ -1,8 +1,0 @@
-{
-  "record": { "Name": "Fixture Category" },
-  "expect": {
-    "method": "POST",
-    "path": "/ref/category",
-    "body": { "Name": "Fixture Category" }
-  }
-}

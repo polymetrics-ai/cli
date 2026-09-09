@@ -1,7 +1,0 @@
-{
-  "request": { "method": "GET", "path": "/leads.json", "query": { "batchSize": "1" } },
-  "response": {
-    "status": 200,
-    "body": { "success": true, "result": [] }
-  }
-}

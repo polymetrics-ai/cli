@@ -1,7 +1,0 @@
-{
-  "record": { "firstName": "Fixture", "lastName": "Contact" },
-  "expect": {
-    "method": "POST",
-    "path": "/crm/contacts"
-  }
-}

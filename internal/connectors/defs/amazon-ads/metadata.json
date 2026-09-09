@@ -19,9 +19,5 @@
   "risk": {
     "read": "external Amazon Ads API read of profile, campaign, ad group, product ad, keyword, negative keyword, and portfolio data",
     "approval": "none; read-only, no reverse-ETL write surface"
-  },
-  "conformance": {
-    "skip_dynamic": true,
-    "reason": "custom-auth-only (mode:custom AuthHook, no when-gated non-custom fallback); hook-covered, proven live by internal/connectors/hooks/amazon-ads's own unit tests (real httptest.Server driving the AuthHook's LWA refresh_token-grant exchange, Amazon-Advertising-API-ClientId/-Scope headers, and full read/pagination behavior) -- conformance's synthetic non-secret config has no real token_url and cannot exercise mode:custom auth at all (the hook would POST to the literal string \"synthetic-conformance-value\"), so every auth-resolving dynamic check would otherwise fail identically and uninformatively"
   }
 }

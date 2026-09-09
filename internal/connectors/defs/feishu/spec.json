@@ -1,50 +1,42 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Feishu / Lark Connection Specification",
-  "type": "object",
+  "properties": {
+    "app_id": {
+      "description": "Feishu/Lark app ID used only for the tenant token exchange.",
+      "type": "string",
+      "x-secret": true
+    },
+    "app_secret": {
+      "description": "Feishu/Lark app secret used only for the tenant token exchange.",
+      "type": "string",
+      "x-secret": true
+    },
+    "app_token": {
+      "description": "Feishu/Lark Bitable app token.",
+      "type": "string",
+      "x-secret": true
+    },
+    "region": {
+      "default": "feishu.cn",
+      "description": "Declared Feishu/Lark provider host suffix.",
+      "enum": [
+        "feishu.cn",
+        "larksuite.com"
+      ],
+      "type": "string"
+    },
+    "table_id": {
+      "description": "Bitable table identifier for records and fields streams.",
+      "type": "string"
+    }
+  },
   "required": [
     "app_id",
     "app_secret",
     "app_token",
-    "lark_host",
     "table_id"
   ],
-  "properties": {
-    "app_id": {
-      "type": "string",
-      "x-secret": true,
-      "description": "The unique identifier for your application. Found in the Feishu/Lark Developer Console under \"Credentials & Basic Info\"."
-    },
-    "app_secret": {
-      "type": "string",
-      "x-secret": true,
-      "description": "The secret key used to verify your application's identity. Found alongside the App ID."
-    },
-    "app_token": {
-      "type": "string",
-      "x-secret": true,
-      "description": "The unique identifier of the Bitable (Base). Found in the URL: /base/{app_token}."
-    },
-    "lark_host": {
-      "type": "string",
-      "description": "Base URL of the Feishu/Lark Open Platform. Use https://open.feishu.cn for Feishu (China mainland) accounts and https://open.larksuite.com for Lark (international) accounts."
-    },
-    "page_size": {
-      "type": "string",
-      "description": "Number of records per request. Max: 500. Default: 100."
-    },
-    "table_id": {
-      "type": "string",
-      "description": "The unique identifier of the table. Found in the URL query parameter table={table_id}."
-    },
-    "base_url": {
-      "type": "string",
-      "default": "https://example.invalid",
-      "description": "Placeholder base URL used only to construct the engine runtime before the Tier-2 hook delegates to the legacy connector."
-    },
-    "mode": {
-      "type": "string",
-      "description": "Set to fixture for credential-free legacy fixture tests."
-    }
-  }
+  "title": "Feishu / Lark Connection Specification",
+  "type": "object",
+  "x-reject-unknown-config": true
 }

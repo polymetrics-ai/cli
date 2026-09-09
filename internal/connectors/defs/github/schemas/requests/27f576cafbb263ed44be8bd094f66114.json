@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "new_name": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "new_owner": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "team_ids": {
+      "items": {
+        "type": "integer"
+      },
+      "maxItems": 256,
+      "type": "array"
+    }
+  },
+  "required": [
+    "new_owner"
+  ],
+  "type": "object"
+}

@@ -28,10 +28,6 @@ import (
 	"polymetrics.ai/internal/connectors/engine"
 )
 
-func init() {
-	engine.RegisterHooks("google-forms", func() engine.Hooks { return New() })
-}
-
 // Hooks is the google-forms hook set. It implements engine.AuthHook and
 // engine.CheckHook.
 type Hooks struct {

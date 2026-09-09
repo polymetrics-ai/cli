@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "can_approve_pull_request_reviews": {
+      "type": "boolean"
+    },
+    "default_workflow_permissions": {
+      "enum": [
+        "read",
+        "write"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "org": {
+      "maxLength": 8192,
+      "type": "string"
+    }
+  },
+  "required": [
+    "org"
+  ],
+  "type": "object"
+}

@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "email": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "id": {
+      "maxLength": 8192,
+      "type": "string"
+    }
+  },
+  "required": [
+    "email",
+    "id"
+  ],
+  "type": "object"
+}

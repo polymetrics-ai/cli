@@ -24,7 +24,7 @@ func newRuntime(baseURL string) *engine.Runtime {
 // --- registration -----------------------------------------------------
 
 func TestHooksRegisteredUnderSlack(t *testing.T) {
-	h := engine.HooksFor("slack")
+	h := ExplicitFactory()
 	if h == nil {
 		t.Fatal("engine.HooksFor(\"slack\") = nil, want registered hooks")
 	}

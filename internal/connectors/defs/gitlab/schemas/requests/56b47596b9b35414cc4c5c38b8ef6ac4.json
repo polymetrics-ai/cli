@@ -1,0 +1,62 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "assignee_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "board_id": {
+      "type": "integer"
+    },
+    "hide_backlog_list": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "hide_closed_list": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "id": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "labels": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "milestone_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "name": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "weight": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "board_id",
+    "id"
+  ],
+  "type": "object"
+}

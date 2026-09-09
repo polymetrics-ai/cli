@@ -38,10 +38,6 @@ import (
 	"polymetrics.ai/internal/connectors/engine"
 )
 
-func init() {
-	engine.RegisterHooks("jamf-pro", func() engine.Hooks { return New() })
-}
-
 // Hooks implements engine.AuthHook for the jamf-pro bundle. Its only state is
 // test-injection overrides (mirrors hooks/keka's Hooks shape); every method
 // is otherwise a pure function of its arguments (the returned Authenticator

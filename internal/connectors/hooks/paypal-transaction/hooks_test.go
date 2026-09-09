@@ -18,7 +18,7 @@ import (
 // --- registration -----------------------------------------------------
 
 func TestHooksRegisteredUnderPaypalTransaction(t *testing.T) {
-	h := engine.HooksFor("paypal-transaction")
+	h := ExplicitFactory()
 	if h == nil {
 		t.Fatal(`engine.HooksFor("paypal-transaction") = nil, want registered hooks (hooks/paypal-transaction's init() must call engine.RegisterHooks)`)
 	}

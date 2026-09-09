@@ -1,7 +1,0 @@
-{
-  "request": { "method": "GET", "path": "/me/messages" },
-  "response": {
-    "status": 200,
-    "body": { "value": [ { "id": "fixture_message_1", "subject": "Fixture subject" } ] }
-  }
-}

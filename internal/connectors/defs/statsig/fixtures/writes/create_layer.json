@@ -1,4 +1,0 @@
-{
-  "record": { "name": "fixture_layer", "idType": "userID", "description": "fixture record" },
-  "expect": { "method": "POST", "path": "/layers" }
-}

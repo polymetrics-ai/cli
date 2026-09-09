@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "content": {
+      "enum": [
+        "+1",
+        "laugh",
+        "heart",
+        "hooray",
+        "rocket",
+        "eyes"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "release_id": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "content",
+    "release_id"
+  ],
+  "type": "object"
+}

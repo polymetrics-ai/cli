@@ -1,7 +1,0 @@
-{
-  "record": { "name": "Fixture Connector", "transformation": "function handler(webhook) { return webhook; }" },
-  "expect": {
-    "method": "POST",
-    "path": "/connector"
-  }
-}

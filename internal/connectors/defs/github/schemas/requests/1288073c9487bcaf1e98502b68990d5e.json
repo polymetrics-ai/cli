@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "assignees": {
+      "items": {},
+      "maxItems": 256,
+      "type": "array"
+    },
+    "issue_number": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "issue_number"
+  ],
+  "type": "object"
+}

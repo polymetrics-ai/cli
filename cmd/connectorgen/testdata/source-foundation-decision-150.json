@@ -1,0 +1,137 @@
+[
+  {
+    "name": "pending_explicit_empty",
+    "wire": "[{\"id\":\"cli-batch1-vercel-inbound-sync-decision-r1\",\"state\":\"pending\",\"condition\":\"\"}]",
+    "valid": true
+  },
+  {
+    "name": "both_distinct_owners",
+    "wire": "[{\"id\":\"cli-batch1-vercel-inbound-sync-decision-r1\",\"state\":\"pending\",\"condition\":\"\"},{\"id\":\"cli-plan-webhook-receiver-foundation-r1-decision-webhook-exposure-product-boundary\",\"state\":\"conditional\",\"condition\":\"explicit product boundary remains pending\"}]",
+    "valid": true
+  },
+  {
+    "name": "no_decisions",
+    "wire": "[]",
+    "valid": true
+  },
+  {
+    "name": "pending_missing",
+    "wire": "[{\"id\":\"cli-batch1-vercel-inbound-sync-decision-r1\",\"state\":\"pending\"}]",
+    "valid": false
+  },
+  {
+    "name": "pending_null",
+    "wire": "[{\"id\":\"cli-batch1-vercel-inbound-sync-decision-r1\",\"state\":\"pending\",\"condition\":null}]",
+    "valid": false
+  },
+  {
+    "name": "pending_number",
+    "wire": "[{\"id\":\"cli-batch1-vercel-inbound-sync-decision-r1\",\"state\":\"pending\",\"condition\":1}]",
+    "valid": false
+  },
+  {
+    "name": "pending_array",
+    "wire": "[{\"id\":\"cli-batch1-vercel-inbound-sync-decision-r1\",\"state\":\"pending\",\"condition\":[]}]",
+    "valid": false
+  },
+  {
+    "name": "pending_object",
+    "wire": "[{\"id\":\"cli-batch1-vercel-inbound-sync-decision-r1\",\"state\":\"pending\",\"condition\":{}}]",
+    "valid": false
+  },
+  {
+    "name": "unknown_field",
+    "wire": "[{\"id\":\"cli-batch1-vercel-inbound-sync-decision-r1\",\"state\":\"pending\",\"condition\":\"\",\"approved\":true}]",
+    "valid": false
+  },
+  {
+    "name": "wrong_owner",
+    "wire": "[{\"id\":\"unrecognized\",\"state\":\"pending\",\"condition\":\"\"}]",
+    "valid": false
+  },
+  {
+    "name": "wrong_state",
+    "wire": "[{\"id\":\"cli-batch1-vercel-inbound-sync-decision-r1\",\"state\":\"approved\",\"condition\":\"\"}]",
+    "valid": false
+  },
+  {
+    "name": "nonempty_pending",
+    "wire": "[{\"id\":\"cli-batch1-vercel-inbound-sync-decision-r1\",\"state\":\"pending\",\"condition\":\"approved\"}]",
+    "valid": false
+  },
+  {
+    "name": "duplicate_owner",
+    "wire": "[{\"id\":\"cli-batch1-vercel-inbound-sync-decision-r1\",\"state\":\"pending\",\"condition\":\"\"},{\"id\":\"cli-batch1-vercel-inbound-sync-decision-r1\",\"state\":\"pending\",\"condition\":\"\"}]",
+    "valid": false
+  },
+  {
+    "name": "conditional_text",
+    "wire": "[{\"id\":\"cli-plan-webhook-receiver-foundation-r1-decision-webhook-exposure-product-boundary\",\"state\":\"conditional\",\"condition\":\"external exposure requires separate decision\"}]",
+    "valid": true
+  },
+  {
+    "name": "conditional_empty",
+    "wire": "[{\"id\":\"cli-plan-webhook-receiver-foundation-r1-decision-webhook-exposure-product-boundary\",\"state\":\"conditional\",\"condition\":\"\"}]",
+    "valid": false
+  },
+  {
+    "name": "conditional_ascii_space",
+    "wire": "[{\"id\":\"cli-plan-webhook-receiver-foundation-r1-decision-webhook-exposure-product-boundary\",\"state\":\"conditional\",\"condition\":\" \\t\\r\\n\"}]",
+    "valid": false
+  },
+  {
+    "name": "conditional_unicode_space",
+    "wire": "[{\"id\":\"cli-plan-webhook-receiver-foundation-r1-decision-webhook-exposure-product-boundary\",\"state\":\"conditional\",\"condition\":\"\\u0085\\u00a0\\u1680\\u2000\\u202f\\u3000\"}]",
+    "valid": false
+  },
+  {
+    "name": "conditional_U001C",
+    "wire": "[{\"id\":\"cli-plan-webhook-receiver-foundation-r1-decision-webhook-exposure-product-boundary\",\"state\":\"conditional\",\"condition\":\"\\u001c\"}]",
+    "valid": true
+  },
+  {
+    "name": "duplicate_condition",
+    "wire": "[{\"id\":\"cli-batch1-vercel-inbound-sync-decision-r1\",\"state\":\"pending\",\"condition\":\"\",\"condition\":\"\"}]",
+    "valid": false
+  },
+  {
+    "name": "id_missing",
+    "wire": "[{\"state\":\"pending\",\"condition\":\"\"}]",
+    "valid": false
+  },
+  {
+    "name": "id_null",
+    "wire": "[{\"id\":null,\"state\":\"pending\",\"condition\":\"\"}]",
+    "valid": false
+  },
+  {
+    "name": "state_missing",
+    "wire": "[{\"id\":\"cli-batch1-vercel-inbound-sync-decision-r1\",\"condition\":\"\"}]",
+    "valid": false
+  },
+  {
+    "name": "state_null",
+    "wire": "[{\"id\":\"cli-batch1-vercel-inbound-sync-decision-r1\",\"state\":null,\"condition\":\"\"}]",
+    "valid": false
+  },
+  {
+    "name": "conditional_missing",
+    "wire": "[{\"id\":\"cli-plan-webhook-receiver-foundation-r1-decision-webhook-exposure-product-boundary\",\"state\":\"conditional\"}]",
+    "valid": false
+  },
+  {
+    "name": "conditional_null",
+    "wire": "[{\"id\":\"cli-plan-webhook-receiver-foundation-r1-decision-webhook-exposure-product-boundary\",\"state\":\"conditional\",\"condition\":null}]",
+    "valid": false
+  },
+  {
+    "name": "conditional_U0085",
+    "wire": "[{\"id\":\"cli-plan-webhook-receiver-foundation-r1-decision-webhook-exposure-product-boundary\",\"state\":\"conditional\",\"condition\":\"\\u0085\"}]",
+    "valid": false
+  },
+  {
+    "name": "null_decisions",
+    "wire": "null",
+    "valid": false
+  }
+]

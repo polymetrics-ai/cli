@@ -1,86 +1,169 @@
 {
   "base": {
-    "url": "{{ config.base_url }}",
-    "user_agent": "polymetrics-go-cli",
     "auth": [
       {
-        "mode": "none"
+        "mode": "api_key_query",
+        "param": "apikey",
+        "value": "{{ secrets.api_key }}"
       }
     ],
+    "check": {
+      "method": "GET",
+      "path": "/query",
+      "query": {
+        "function": "GLOBAL_QUOTE",
+        "symbol": "{{ config.symbol }}"
+      }
+    },
+    "error_map": [],
     "pagination": {
       "type": "none"
     },
-    "check": {
-      "method": "GET",
-      "path": "/__legacy_hook/check"
-    },
-    "error_map": []
+    "url": "https://www.alphavantage.co",
+    "user_agent": "polymetrics-go-cli"
   },
   "streams": [
     {
+      "computed_fields": {
+        "close": "{{ record.4. close }}",
+        "high": "{{ record.2. high }}",
+        "low": "{{ record.3. low }}",
+        "open": "{{ record.1. open }}",
+        "symbol": "{{ config.symbol }}",
+        "volume": "{{ record.5. volume }}"
+      },
+      "incremental": {
+        "client_filtered": true,
+        "cursor_field": "date"
+      },
+      "method": "GET",
       "name": "time_series_daily",
-      "method": "GET",
-      "path": "/__legacy_hook/time_series_daily",
-      "records": {
-        "path": "data"
+      "path": "/query",
+      "query": {
+        "function": "TIME_SERIES_DAILY",
+        "outputsize": "{{ config.outputsize }}",
+        "symbol": "{{ config.symbol }}"
       },
-      "schema": "schemas/time_series_daily.json",
-      "incremental": {
-        "cursor_field": "date",
-        "client_filtered": true
-      }
+      "records": {
+        "key_field": "date",
+        "keyed_object": true,
+        "path": "Time Series (Daily)"
+      },
+      "schema": "schemas/time_series_daily.json"
     },
     {
+      "computed_fields": {
+        "close": "{{ record.4. close }}",
+        "high": "{{ record.2. high }}",
+        "low": "{{ record.3. low }}",
+        "open": "{{ record.1. open }}",
+        "symbol": "{{ config.symbol }}",
+        "volume": "{{ record.5. volume }}"
+      },
+      "incremental": {
+        "client_filtered": true,
+        "cursor_field": "date"
+      },
+      "method": "GET",
       "name": "time_series_weekly",
-      "method": "GET",
-      "path": "/__legacy_hook/time_series_weekly",
-      "records": {
-        "path": "data"
+      "path": "/query",
+      "query": {
+        "function": "TIME_SERIES_WEEKLY",
+        "symbol": "{{ config.symbol }}"
       },
-      "schema": "schemas/time_series_weekly.json",
-      "incremental": {
-        "cursor_field": "date",
-        "client_filtered": true
-      }
+      "records": {
+        "key_field": "date",
+        "keyed_object": true,
+        "path": "Weekly Time Series"
+      },
+      "schema": "schemas/time_series_weekly.json"
     },
     {
+      "computed_fields": {
+        "close": "{{ record.4. close }}",
+        "high": "{{ record.2. high }}",
+        "low": "{{ record.3. low }}",
+        "open": "{{ record.1. open }}",
+        "symbol": "{{ config.symbol }}",
+        "volume": "{{ record.5. volume }}"
+      },
+      "incremental": {
+        "client_filtered": true,
+        "cursor_field": "date"
+      },
+      "method": "GET",
       "name": "time_series_monthly",
-      "method": "GET",
-      "path": "/__legacy_hook/time_series_monthly",
-      "records": {
-        "path": "data"
+      "path": "/query",
+      "query": {
+        "function": "TIME_SERIES_MONTHLY",
+        "symbol": "{{ config.symbol }}"
       },
-      "schema": "schemas/time_series_monthly.json",
-      "incremental": {
-        "cursor_field": "date",
-        "client_filtered": true
-      }
+      "records": {
+        "key_field": "date",
+        "keyed_object": true,
+        "path": "Monthly Time Series"
+      },
+      "schema": "schemas/time_series_monthly.json"
     },
     {
+      "computed_fields": {
+        "close": "{{ record.4. close }}",
+        "high": "{{ record.2. high }}",
+        "low": "{{ record.3. low }}",
+        "open": "{{ record.1. open }}",
+        "symbol": "{{ config.symbol }}",
+        "volume": "{{ record.5. volume }}"
+      },
+      "incremental": {
+        "client_filtered": true,
+        "cursor_field": "date"
+      },
+      "method": "GET",
       "name": "time_series_intraday",
-      "method": "GET",
-      "path": "/__legacy_hook/time_series_intraday",
-      "records": {
-        "path": "data"
+      "path": "/query",
+      "query": {
+        "adjusted": "{{ config.adjusted }}",
+        "function": "TIME_SERIES_INTRADAY",
+        "interval": "{{ config.interval }}",
+        "outputsize": "{{ config.outputsize }}",
+        "symbol": "{{ config.symbol }}"
       },
-      "schema": "schemas/time_series_intraday.json",
-      "incremental": {
-        "cursor_field": "date",
-        "client_filtered": true
-      }
+      "records": {
+        "key_field": "date",
+        "keyed_object": true,
+        "path": "Time Series (1min)"
+      },
+      "schema": "schemas/time_series_intraday.json"
     },
     {
-      "name": "global_quote",
-      "method": "GET",
-      "path": "/__legacy_hook/global_quote",
-      "records": {
-        "path": "data"
+      "computed_fields": {
+        "change": "{{ record.09. change }}",
+        "change_percent": "{{ record.10. change percent }}",
+        "high": "{{ record.03. high }}",
+        "latest_trading_day": "{{ record.07. latest trading day }}",
+        "low": "{{ record.04. low }}",
+        "open": "{{ record.02. open }}",
+        "previous_close": "{{ record.08. previous close }}",
+        "price": "{{ record.05. price }}",
+        "symbol": "{{ record.01. symbol }}",
+        "volume": "{{ record.06. volume }}"
       },
-      "schema": "schemas/global_quote.json",
       "incremental": {
-        "cursor_field": "latest_trading_day",
-        "client_filtered": true
-      }
+        "client_filtered": true,
+        "cursor_field": "latest_trading_day"
+      },
+      "method": "GET",
+      "name": "global_quote",
+      "path": "/query",
+      "query": {
+        "function": "GLOBAL_QUOTE",
+        "symbol": "{{ config.symbol }}"
+      },
+      "records": {
+        "path": "Global Quote",
+        "single_object": true
+      },
+      "schema": "schemas/global_quote.json"
     }
   ]
 }

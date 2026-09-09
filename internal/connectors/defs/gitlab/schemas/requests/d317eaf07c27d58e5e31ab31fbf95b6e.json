@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "external_status_check_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "id": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "merge_request_iid": {
+      "type": "integer"
+    },
+    "sha": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "status": {
+      "enum": [
+        "passed",
+        "failed",
+        "pending"
+      ],
+      "maxLength": 8192,
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "required": [
+    "external_status_check_id",
+    "id",
+    "merge_request_iid",
+    "sha",
+    "status"
+  ],
+  "type": "object"
+}

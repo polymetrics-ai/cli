@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "enable_debug_logging": {
+      "type": "boolean"
+    },
+    "enable_debugger": {
+      "type": "boolean"
+    },
+    "job_id": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "job_id"
+  ],
+  "type": "object"
+}

@@ -1,0 +1,171 @@
+{
+  "scope": "Owner preservation witnesses only; original receipts and outputs remain in named private run directories. No live/shared-coordinator or checkpoint acceptance.",
+  "runs": [
+    {
+      "name": "cp15-send-order-baseline-166-01",
+      "command": [
+        "go",
+        "test",
+        "-json",
+        "-count=1",
+        "-timeout",
+        "20m",
+        "./internal/connectors/connsdk",
+        "-run",
+        "^TestRequesterCallerCapPrecedesProviderAdmission165$"
+      ],
+      "head": "2c13f068c9635a515417381f6544201b359663e1",
+      "tree": "4186c949569455ed32d15d112671aa83be4a42ed",
+      "exit_code": 0,
+      "wall_seconds": 0.9471269589848816,
+      "output_sha256": "9d863e3f6cf960621b2f38ecd9973a897f16c2efa73cf016e568f80695e29281",
+      "output_bytes": 12949,
+      "selected_test_events": 13,
+      "passing_test_events": 13,
+      "changed_inputs_after": []
+    },
+    {
+      "name": "cp15-requester-preservation-normal-166-01",
+      "command": [
+        "go",
+        "test",
+        "-json",
+        "-count=1",
+        "-timeout",
+        "20m",
+        "./internal/connectors/connsdk",
+        "-run",
+        "^Test(Requester|DoStream|RateBudgetRefusal|OAuthTokenExchanges)"
+      ],
+      "head": "2c13f068c9635a515417381f6544201b359663e1",
+      "tree": "4186c949569455ed32d15d112671aa83be4a42ed",
+      "exit_code": 0,
+      "wall_seconds": 1.0638525410322472,
+      "output_sha256": "ee831f5a4bdb1ce7b4efd870d81ba546f52aaa104e6879bd234a5e8ec58bc02e",
+      "output_bytes": 102107,
+      "selected_test_events": 113,
+      "passing_test_events": 113,
+      "changed_inputs_after": []
+    },
+    {
+      "name": "cp15-requester-preservation-race-166-01",
+      "command": [
+        "go",
+        "test",
+        "-race",
+        "-json",
+        "-count=1",
+        "-timeout",
+        "20m",
+        "./internal/connectors/connsdk",
+        "-run",
+        "^Test(Requester|DoStream|RateBudgetRefusal|OAuthTokenExchanges)"
+      ],
+      "head": "2c13f068c9635a515417381f6544201b359663e1",
+      "tree": "4186c949569455ed32d15d112671aa83be4a42ed",
+      "exit_code": 0,
+      "wall_seconds": 2.9957580839982256,
+      "output_sha256": "42952cbb530a85854728723d41793ce1821e4a4027337b9d857fd24ff78bbafe",
+      "output_bytes": 102126,
+      "selected_test_events": 113,
+      "passing_test_events": 113,
+      "changed_inputs_after": []
+    },
+    {
+      "name": "cp15-send-order-complete-normal-166-01",
+      "command": [
+        "go",
+        "test",
+        "-json",
+        "-count=1",
+        "-timeout",
+        "20m",
+        "./internal/connectors/connsdk",
+        "-run",
+        "^Test(Requester|DoStream|RateBudgetRefusal|OAuthTokenExchanges)"
+      ],
+      "head": "2c13f068c9635a515417381f6544201b359663e1",
+      "tree": "4186c949569455ed32d15d112671aa83be4a42ed",
+      "exit_code": 0,
+      "wall_seconds": 1.5264297089888714,
+      "output_sha256": "461cc043ae347bce36867be412ee10c7d4f3c742409056863444a11228ad661d",
+      "output_bytes": 105885,
+      "selected_test_events": 117,
+      "passing_test_events": 117,
+      "changed_inputs_after": []
+    },
+    {
+      "name": "cp15-closed-inventory-baseline-166-01",
+      "command": [
+        "go",
+        "test",
+        "-json",
+        "-count=1",
+        "-timeout",
+        "20m",
+        "./internal/connectors/hooks/hookset",
+        "./internal/connectors/native/nativeset",
+        "-run",
+        "^Test(ClosedHookInventory165|ProtectedFactoryInventory165|DatabaseAdapter|CompatibilityAdapter)"
+      ],
+      "head": "2c13f068c9635a515417381f6544201b359663e1",
+      "tree": "4186c949569455ed32d15d112671aa83be4a42ed",
+      "exit_code": 0,
+      "wall_seconds": 4.787345916964114,
+      "output_sha256": "186f60024ca061edd432422a8d38353c0bbcfbae0349a42c9034be3144f6c828",
+      "output_bytes": 51597,
+      "selected_test_events": 61,
+      "passing_test_events": 61,
+      "changed_inputs_after": []
+    },
+    {
+      "name": "cp15-route-parking-preservation-normal-166-01",
+      "command": [
+        "go",
+        "test",
+        "-json",
+        "-count=1",
+        "-timeout",
+        "20m",
+        "./internal/connectors/hooks/github",
+        "./internal/connectors/engine",
+        "./internal/app",
+        "-run",
+        "^(TestGitHubWriteHook|TestGitHubAppAuthRateAdmission|TestGitHubAppAuthBudgetLifecycle|TestRateLimitAdmission|TestDefaultRequester|TestEndpoint.*RateLimit|TestParkRateLimitedRun|TestParkedFullAppendRateResume|TestRunETLTransportParksSourceRateLimit)"
+      ],
+      "head": "2c13f068c9635a515417381f6544201b359663e1",
+      "tree": "4186c949569455ed32d15d112671aa83be4a42ed",
+      "exit_code": 0,
+      "wall_seconds": 7.127520541951526,
+      "output_sha256": "732bb6b207377ec2a77b73dddf4a909c26b324a0fd1ac2793ace2f1091cb8b9d",
+      "output_bytes": 49115,
+      "selected_test_events": 46,
+      "passing_test_events": 46,
+      "changed_inputs_after": []
+    },
+    {
+      "name": "cp15-independent-preservation-race-166-01",
+      "command": [
+        "go",
+        "test",
+        "-race",
+        "-json",
+        "-count=1",
+        "-timeout",
+        "20m",
+        "./internal/connectors/connsdk",
+        "./internal/connectors/hooks/hookset",
+        "./internal/connectors/native/nativeset",
+        "./internal/connectors/hooks/github",
+        "-run",
+        "^Test(Requester|DoStream|RateBudgetRefusal|OAuthTokenExchanges|ClosedHookInventory165|ProtectedFactoryInventory165|DatabaseAdapter|CompatibilityAdapter|GitHubWriteHook|GitHubAppAuthRateAdmission|GitHubAppAuthBudgetLifecycle|ExecuteWrite)"
+      ],
+      "exit_code": 0,
+      "output_sha256": "c7fd491563c9cc200216336e994833d62e555d9822a38fe984809c14c95445c0",
+      "output_bytes": 190009,
+      "selected_test_events": 209,
+      "passing_test_events": 209,
+      "changed_inputs_after": []
+    }
+  ]
+}
