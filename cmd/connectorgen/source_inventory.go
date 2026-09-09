@@ -72,6 +72,7 @@ type retainedSourceOperation struct {
 }
 
 type retainedSourceDocument struct {
+	documentaryBytes       []byte              `json:"-"`
 	view                   *sourceDocumentView `json:"-"`
 	ContentType            string              `json:"content_type"`
 	ID                     string              `json:"id"`

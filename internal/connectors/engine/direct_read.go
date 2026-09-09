@@ -81,6 +81,10 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 		}
 		return operationGraphQLDirectRead(ctx, b, op, req, h)
 	}
+	req, err = prepareOperationReadInputs(op, req)
+	if err != nil {
+		return connectors.DirectReadResult{}, err
+	}
 	method := strings.ToUpper(strings.TrimSpace(op.REST.Method))
 	cfg := materializeConfigDefaults(b, req.Config)
 	effectivePathParams, err := materializeOperationDirectReadPathParams(op, cfg, req.PathParams)

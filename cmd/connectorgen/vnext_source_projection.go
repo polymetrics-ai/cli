@@ -9,16 +9,43 @@ import (
 // vNextSourceProjection is authoring input, never a runtime execution reader.
 // Its derived output must enter the existing canonical graph.
 type vNextSourceProjection struct {
+	Documents   []vNextSourceProjectionDocument  `json:"documents,omitempty"`
 	Version     int                              `json:"version"`
 	Inventories []vNextSourceProjectionInventory `json:"inventories"`
 	Semantics   []vNextSourceProjectionSemantic  `json:"semantics,omitempty"`
 }
 
+type sourceProjectionInventoryClass string
+
+func (class *sourceProjectionInventoryClass) UnmarshalJSON(raw []byte) error {
+	var value string
+	if err := json.Unmarshal(raw, &value); err != nil {
+		return fmt.Errorf("invalid source inventory class")
+	}
+	if value != "primary" && value != "supplement" {
+		return fmt.Errorf("source inventory class must be primary or supplement")
+	}
+	*class = sourceProjectionInventoryClass(value)
+	return nil
+}
+
+func (class sourceProjectionInventoryClass) resolved() (string, error) {
+	switch class {
+	case "", "primary":
+		return "primary", nil
+	case "supplement":
+		return "supplement", nil
+	default:
+		return "", fmt.Errorf("invalid source inventory class")
+	}
+}
+
 type vNextSourceProjectionInventory struct {
-	ID     string `json:"id"`
-	Path   string `json:"path"`
-	SHA256 string `json:"sha256"`
-	Bytes  int64  `json:"bytes"`
+	Class  sourceProjectionInventoryClass `json:"class,omitempty"`
+	ID     string                         `json:"id"`
+	Path   string                         `json:"path"`
+	SHA256 string                         `json:"sha256"`
+	Bytes  int64                          `json:"bytes"`
 }
 
 type vNextSourceProjectionKey struct {
@@ -90,6 +117,9 @@ func validateVNextSourceProjection(lock vNextSourceLock, members map[string]json
 	ids, paths := map[string]bool{}, map[string]bool{}
 	var total int64
 	for index, pin := range p.Inventories {
+		if _, err := pin.Class.resolved(); err != nil {
+			return err
+		}
 		if !sourceLaneIdentityPart(pin.ID) || ids[pin.ID] || paths[pin.Path] ||
 			!sourceLaneRelativePath(pin.Path) || !strings.HasPrefix(pin.Path, "sources/") ||
 			!sourceLaneDigest(pin.SHA256) || pin.Bytes <= 0 || pin.Bytes > 64<<20 {
@@ -100,6 +130,9 @@ func validateVNextSourceProjection(lock vNextSourceLock, members map[string]json
 		if total > 512<<20 {
 			return fmt.Errorf("source_projection retained byte budget exceeded")
 		}
+	}
+	if err := validateSourceProjectionDocuments(p); err != nil {
+		return err
 	}
 	if len(p.Semantics) > 100000 {
 		return fmt.Errorf("source_projection semantic budget exceeded")
@@ -145,4 +178,16 @@ func validateVNextSourceProjection(lock vNextSourceLock, members map[string]json
 		}
 	}
 	return nil
+}
+
+// vNextSourceProjectionDocument is inert documentary evidence, never membership.
+type vNextSourceProjectionDocument struct {
+	ID          string `json:"id"`
+	Path        string `json:"path"`
+	SHA256      string `json:"sha256"`
+	Bytes       int64  `json:"bytes"`
+	Format      string `json:"format"`
+	SourceURL   string `json:"source_url"`
+	Revision    string `json:"revision"`
+	RetrievedAt string `json:"retrieved_at"`
 }

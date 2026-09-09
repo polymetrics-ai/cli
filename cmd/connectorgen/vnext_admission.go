@@ -263,6 +263,7 @@ func vNextValidateSourceSchemas(descriptor vNextCanonicalDescriptor, outputs map
 		{role: "request", name: source.SchemaRefs.Request},
 		{role: "response", name: source.SchemaRefs.Response},
 		{role: "record", name: source.SchemaRefs.Record},
+		{role: "input", name: source.SchemaRefs.Input},
 	} {
 		if reference.name == "" {
 			continue
@@ -277,6 +278,17 @@ func vNextValidateSourceSchemas(descriptor vNextCanonicalDescriptor, outputs map
 		}
 		var effective []json.RawMessage
 		switch reference.role {
+		case "input":
+			if source.Stream != nil {
+				if loaded, found := streams[source.Stream.Spec.Name]; found {
+					effective = append(effective, loaded.RequestInputSchema())
+				}
+			}
+			if source.Operation != nil {
+				if loaded, found := operations[source.Operation.Spec.ID]; found && loaded.REST != nil {
+					effective = append(effective, loaded.REST.RequestInputSchema())
+				}
+			}
 		case "request":
 			if source.Write != nil {
 				if loaded, found := writes[source.Write.Spec.Name]; found && len(loaded.RecordSchema) > 0 {

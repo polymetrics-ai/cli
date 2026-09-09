@@ -377,7 +377,7 @@ func TestBodyPagingSaved233(t *testing.T) {
 	defer server.Close()
 	b := newTestBundle(t, server, StreamSpec{Method: "POST", BodyType: "json", Pagination: op.REST.Pagination})
 	b.Streams[0].RequestInputs = &RequestInputContract{Version: 1, Schema: "schemas/input.json"}
-	b.Streams[0].inputPlan = &compiledRequestInputPlan{bodySchema: op.REST.BodySchema}
+	bodyPagingInputPlan233(t, &b.Streams[0], op.REST.BodySchema)
 	b.Streams[0].preparedReadBody = op.REST.Body
 	b.Streams[0].preparedReadBodyPresent = true
 	rows, err := readAll(t, t.Context(), b, connectors.ReadRequest{Stream: "widgets"}, nil)
@@ -419,7 +419,7 @@ func TestBodyPagingPreRuntime233(t *testing.T) {
 					_, err = OperationDirectRead(t.Context(), b, connectors.OperationDirectReadRequest{Operation: op.ID, Body: body}, h)
 				} else {
 					b.Streams[0].RequestInputs = &RequestInputContract{Version: 1, Schema: "schemas/input.json"}
-					b.Streams[0].inputPlan = &compiledRequestInputPlan{bodySchema: op.REST.BodySchema}
+					bodyPagingInputPlan233(t, &b.Streams[0], op.REST.BodySchema)
 					b.Streams[0].preparedReadBody = body
 					b.Streams[0].preparedReadBodyPresent = true
 					_, err = readAll(t, t.Context(), b, connectors.ReadRequest{Stream: "widgets"}, h)
@@ -465,7 +465,7 @@ func TestBodyPagingSavedCapsule233(t *testing.T) {
 			op := bodyPagingOperation233()
 			b := newTestBundle(t, server, StreamSpec{Method: "POST", BodyType: "json", Pagination: op.REST.Pagination})
 			b.Streams[0].RequestInputs = &RequestInputContract{Version: 1, Schema: "schemas/input.json"}
-			b.Streams[0].inputPlan = &compiledRequestInputPlan{bodySchema: op.REST.BodySchema}
+			bodyPagingInputPlan233(t, &b.Streams[0], op.REST.BodySchema)
 			b.Streams[0].preparedReadBody = op.REST.Body
 			b.Streams[0].preparedReadBodyPresent = true
 			req := connectors.ReadRequest{Stream: "widgets", MaxPages: 1}
@@ -492,7 +492,7 @@ func TestBodyPagingSavedCapsule233(t *testing.T) {
 			case "query":
 				req.Query = map[string]string{"filter": "changed"}
 			case "schema":
-				b.Streams[0].inputPlan = &compiledRequestInputPlan{bodySchema: json.RawMessage(strings.ReplaceAll(string(op.REST.BodySchema), `"maximum":10000`, `"maximum":9999`))}
+				bodyPagingInputPlan233(t, &b.Streams[0], json.RawMessage(strings.ReplaceAll(string(op.REST.BodySchema), `"maximum":10000`, `"maximum":9999`)))
 			}
 			err = ReadWithOutcome(t.Context(), b, req, nil, emit)
 			if change != "healthy" {
@@ -723,7 +723,7 @@ func TestBodyPagingSavedQuerySize233(t *testing.T) {
 	defer server.Close()
 	b := newTestBundle(t, server, StreamSpec{Method: "POST", BodyType: "json", Pagination: spec})
 	b.Streams[0].RequestInputs = &RequestInputContract{Version: 1, Schema: "schemas/input.json"}
-	b.Streams[0].inputPlan = &compiledRequestInputPlan{bodySchema: rawSchema}
+	bodyPagingInputPlan233(t, &b.Streams[0], rawSchema)
 	b.Streams[0].preparedReadBody = map[string]any{}
 	b.Streams[0].preparedReadBodyPresent = true
 	rows, err := readAll(t, t.Context(), b, connectors.ReadRequest{Stream: "widgets", Query: map[string]string{"limit": "3"}}, nil)
@@ -793,7 +793,7 @@ func TestBodyPagingSavedPathCapsule233(t *testing.T) {
 			op := bodyPagingOperation233()
 			b := newTestBundle(t, server, StreamSpec{Method: "POST", Path: "/scopes/{{ config.scope }}/widgets", BodyType: "json", Pagination: op.REST.Pagination})
 			b.Streams[0].RequestInputs = &RequestInputContract{Version: 1, Schema: "schemas/input.json"}
-			b.Streams[0].inputPlan = &compiledRequestInputPlan{bodySchema: op.REST.BodySchema}
+			bodyPagingInputPlan233(t, &b.Streams[0], op.REST.BodySchema)
 			b.Streams[0].preparedReadBody = op.REST.Body
 			b.Streams[0].preparedReadBodyPresent = true
 			req := connectors.ReadRequest{Stream: "widgets", MaxPages: 1, Config: connectors.RuntimeConfig{Config: map[string]string{"scope": "a"}}}
@@ -818,4 +818,44 @@ func TestBodyPagingSavedPathCapsule233(t *testing.T) {
 			}
 		})
 	}
+}
+
+// Keep the original placement witnesses and literal assertions, but compile
+// their complete input envelope through the real plan loader. These remain
+// placement fixtures; request_inputs_body248_test.go covers public Load.
+func bodyPagingInputPlan233(t *testing.T, stream *StreamSpec, body json.RawMessage) {
+	t.Helper()
+	containers := map[string]any{}
+	properties := map[string]map[string]any{}
+	for _, location := range []string{"path", "query", "header"} {
+		properties[location] = map[string]any{}
+		containers[location] = map[string]any{"type": "object", "properties": properties[location], "additionalProperties": false}
+	}
+	containers["body"] = body
+	contract := &RequestInputContract{Version: 1, Schema: "schemas/input.json"}
+	stream.Query = map[string]QueryParam{}
+	add := func(location, name, kind string) {
+		properties[location][name] = map[string]any{"type": kind}
+		contract.Bindings = append(contract.Bindings, RequestInputBinding{ConfigKey: name, In: location, Name: name})
+		if location == "query" {
+			stream.Query[name] = QueryParam{Template: "{{ config." + name + " }}", OmitWhenAbsent: true}
+		}
+	}
+	add("query", "filter", "string")
+	if strings.Contains(stream.Path, "{{ config.scope }}") {
+		add("path", "scope", "string")
+		containers["path"].(map[string]any)["required"] = []string{"scope"}
+	}
+	if spec := stream.Pagination; spec != nil && spec.LimitParam != "" && spec.BodyLimitField == "" {
+		add("query", spec.LimitParam, "integer")
+	}
+	raw, err := json.Marshal(map[string]any{"type": "object", "additionalProperties": false, "required": []string{"path", "query", "header", "body"}, "properties": containers})
+	if err != nil {
+		t.Fatal(err)
+	}
+	plan, err := loadRequestInputPlan(fstest.MapFS{"schemas/input.json": &fstest.MapFile{Data: raw}}, contract)
+	if err != nil {
+		t.Fatal(err)
+	}
+	stream.RequestInputs, stream.inputPlan = contract, plan
 }

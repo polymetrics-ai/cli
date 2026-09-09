@@ -1148,6 +1148,7 @@ type CLICommandGroup struct {
 
 // CLIFlag describes one command or global flag.
 type CLIFlag struct {
+	InputCodec      string                  `json:"input_codec,omitempty"`
 	Name            string                  `json:"name"`
 	Type            string                  `json:"type"`
 	Summary         string                  `json:"summary,omitempty"`
@@ -1507,10 +1508,18 @@ func loadBundle(fsys fs.FS, dirName string) (loaded Bundle, loadErr error) {
 		return Bundle{}, err
 	}
 
+	if err := loadRequestInputPlans(sub, streams, operations, httpBase); err != nil {
+		return Bundle{}, fmt.Errorf("load bundle %s: %w", dirName, err)
+	}
+
 	currentFile = "cli_surface.json"
 	cliSurface, rawCLISurface, err := loadCLISurface(sub, dirName)
 	if err != nil {
 		return Bundle{}, err
+	}
+
+	if err := validateRequestInputCommands(cliSurface, streams, operations); err != nil {
+		return Bundle{}, fmt.Errorf("load bundle %s: %w", dirName, err)
 	}
 
 	currentFile = "rate_limits.json"
@@ -1879,6 +1888,22 @@ func validateStaticStreamHeaders(streams []StreamSpec) error {
 		}
 		for ordinal, name := range sortedDiagnosticKeys(stream.Headers) {
 			value := stream.Headers[name]
+			if stream.RequestInputs != nil {
+				matched := false
+				for _, binding := range stream.RequestInputs.Bindings {
+					if binding.In == "header" && binding.Name == name && binding.ConfigKey != "" && value == "{{ config."+binding.ConfigKey+" }}" {
+						matched = true
+						break
+					}
+				}
+				if matched {
+					canonical, err := connectors.CanonicalOperationHeaderName(name)
+					if err != nil || connectors.IsProtectedOperationHeaderName(canonical) {
+						return fmt.Errorf("stream input header is invalid or protected")
+					}
+					continue
+				}
+			}
 			if name != "Accept" {
 				return diagnosticAt(fmt.Sprintf("/streams/%d/headers", streamIndex)+diagnosticMember(ordinal), "stream_header_unsupported", "only fixed Accept headers are supported", fmt.Errorf("stream %d (%q) header %q is not permitted; only fixed Accept headers are supported", streamIndex, stream.Name, name))
 			}

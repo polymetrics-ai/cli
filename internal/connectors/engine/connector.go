@@ -166,6 +166,9 @@ func (c *Connector) Catalog(ctx context.Context, cfg connectors.RuntimeConfig) (
 }
 
 func (c *Connector) Read(ctx context.Context, req connectors.ReadRequest, emit func(connectors.Record) error) error {
+	if _, _, err := prepareConnectorReadInputs(c.bundle, req); err != nil {
+		return err
+	}
 	if err := c.validateNetworkConfiguration(req.Config); err != nil {
 		return err
 	}
@@ -178,6 +181,9 @@ func (c *Connector) Read(ctx context.Context, req connectors.ReadRequest, emit f
 // the normal authentication boundary while making a known page budget stop
 // distinguishable from provider exhaustion for a durable continuation.
 func (c *Connector) ReadWithOutcome(ctx context.Context, req connectors.ReadRequest, emit func(connectors.Record) error) error {
+	if _, _, err := prepareConnectorReadInputs(c.bundle, req); err != nil {
+		return err
+	}
 	if err := c.validateNetworkConfiguration(req.Config); err != nil {
 		return err
 	}
@@ -1198,6 +1204,7 @@ func commandSurfaceEndpointRefs(refs []CLISurfaceEndpointRef) []connectors.Comma
 
 func commandSurfaceFlag(flag CLIFlag) connectors.CommandSurfaceFlag {
 	projected := connectors.CommandSurfaceFlag{
+		InputCodec:      flag.InputCodec,
 		Name:            flag.Name,
 		Type:            flag.Type,
 		Summary:         flag.Summary,

@@ -29,6 +29,7 @@ type Schema struct {
 type schemaNode struct {
 	// Set only for embedded, code-owned bundle meta-schemas.
 	trustedProperties bool
+	inputFormats      bool // Set only on freshly compiled request-input schemas.
 	// types holds the accepted JSON types ("string", "number", "integer",
 	// "boolean", "object", "array", "null"); empty means "any type".
 	types []string
@@ -678,7 +679,7 @@ func (n *schemaNode) validateAt(v any, path, safePath string) (validationErr err
 		if n.hasMaxLength && len([]rune(val)) > n.maxLength {
 			return diagnosticAt(safePath, "string_too_long", "string is too long", fmt.Errorf("%s: maxLength %d exceeded (got %d)", displayPath(path), n.maxLength, len([]rune(val))))
 		}
-		if n.format == "uri" && !validURI(val) {
+		if n.format == "uri" && !validURI(val) || n.inputFormats && n.format != "" && !matchesConfigurationFormat(val, n.format) {
 			return diagnosticAt(safePath, "format_mismatch", "value does not match the required format", fmt.Errorf("%s: value does not match format %q", displayPath(path), n.format))
 		}
 	case map[string]any:

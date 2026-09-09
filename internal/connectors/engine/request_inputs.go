@@ -39,3 +39,20 @@ func streamRequestBodySchema(stream StreamSpec) (json.RawMessage, error) {
 	}
 	return append(json.RawMessage(nil), stream.inputPlan.bodySchema...), nil
 }
+
+// RequestInputSchema returns a detached copy of the schema actually compiled
+// for this loaded stream, for canonical admission and definition identity.
+func (stream StreamSpec) RequestInputSchema() json.RawMessage {
+	if stream.inputPlan == nil {
+		return nil
+	}
+	return append(json.RawMessage(nil), stream.inputPlan.raw...)
+}
+
+// RequestInputSchema returns the loaded operation's compiled input schema.
+func (operation RESTOperationSpec) RequestInputSchema() json.RawMessage {
+	if operation.inputPlan == nil {
+		return nil
+	}
+	return append(json.RawMessage(nil), operation.inputPlan.raw...)
+}
