@@ -45,8 +45,12 @@ func TestRunETLReadInputPreSecret234(t *testing.T) {
 			source := &guardedReadSource234{streamingSource: streamingSource{total: 5}}
 			destination := &batchDestination{}
 			registry := connectors.NewRegistry()
-			registry.Register(source)
-			registry.Register(destination)
+			if err := registry.Register(source); err != nil {
+				t.Fatal(err)
+			}
+			if err := registry.Register(destination); err != nil {
+				t.Fatal(err)
+			}
 			a.registry = registry
 			if _, err := a.AddCredential(ctx, AddCredentialRequest{Name: "source", Connector: source.Name(), Config: map[string]string{"page_size": "invalid"}}); err != nil {
 				t.Fatal(err)

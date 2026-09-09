@@ -8,10 +8,11 @@ import (
 	"path"
 	"strings"
 
+	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/safety"
 )
 
-func loadRequestInputPlans(fsys fs.FS, streams []StreamSpec, operations []OperationSpec) error {
+func loadRequestInputPlans(fsys fs.FS, streams []StreamSpec, operations []OperationSpec, base HTTPBase) error {
 	for index := range streams {
 		plan, err := loadRequestInputPlan(fsys, streams[index].RequestInputs)
 		if err != nil {
@@ -19,6 +20,20 @@ func loadRequestInputPlans(fsys fs.FS, streams []StreamSpec, operations []Operat
 		}
 		if err := validateStreamRequestInputBindings(streams[index], plan); err != nil {
 			return fmt.Errorf("stream %s request input binding: %w", streams[index].Name, err)
+		}
+		if plan != nil {
+			protected := operationRuntimeHeaderNamesForBase(base)
+			for _, binding := range plan.bindings {
+				if binding.In == "header" {
+					name, err := connectors.CanonicalOperationHeaderName(binding.Name)
+					if err != nil {
+						return err
+					}
+					if _, forbidden := protected[name]; forbidden {
+						return fmt.Errorf("request input header is runtime-owned")
+					}
+				}
+			}
 		}
 		streams[index].inputPlan = plan
 	}
@@ -64,6 +79,9 @@ func loadRequestInputPlan(fsys fs.FS, contract *RequestInputContract) (*compiled
 	}
 	schema, err := CompileSchema(raw)
 	if err != nil {
+		return nil, err
+	}
+	if err := prepareInputSchemaNode(schema.node); err != nil {
 		return nil, err
 	}
 	root := schema.node
@@ -113,7 +131,11 @@ func loadRequestInputPlan(fsys fs.FS, contract *RequestInputContract) (*compiled
 				return nil, fmt.Errorf("parameter input needs an exclusive name")
 			}
 			if binding.In == "header" {
-				coordinate = binding.In + "/" + strings.ToLower(binding.Name)
+				canonical, err := connectors.CanonicalOperationHeaderName(binding.Name)
+				if err != nil || connectors.IsProtectedOperationHeaderName(canonical) {
+					return nil, fmt.Errorf("request input header is invalid or protected")
+				}
+				coordinate = binding.In + "/" + canonical
 			}
 			node = node.properties[binding.Name]
 		}
@@ -159,6 +181,24 @@ func validateStreamRequestInputBindings(stream StreamSpec, plan *compiledRequest
 	if plan == nil {
 		return nil
 	}
+	boundQuery := map[string]bool{}
+	boundPath := stream.Path
+	for _, binding := range plan.bindings {
+		if binding.In == "query" {
+			boundQuery[binding.Name] = true
+		}
+		if binding.In == "path" {
+			boundPath = strings.ReplaceAll(boundPath, "{{ config."+binding.ConfigKey+" }}", "bound")
+		}
+	}
+	if strings.Contains(boundPath, "{{") || strings.Contains(boundPath, "}}") {
+		return fmt.Errorf("stream path contains unbound input")
+	}
+	for name := range stream.Query {
+		if !boundQuery[name] {
+			return fmt.Errorf("stream query contains unbound input")
+		}
+	}
 	for _, binding := range plan.bindings {
 		if binding.In == "body" {
 			continue
@@ -185,6 +225,47 @@ func validateStreamRequestInputBindings(stream StreamSpec, plan *compiledRequest
 			if stream.Headers[binding.Name] != template {
 				return fmt.Errorf("header alias differs from selected input binding")
 			}
+		}
+	}
+	return nil
+}
+
+// Input contracts use the existing validator with the configuration format
+// predicates. The nodes belong solely to this newly compiled input schema.
+func prepareInputSchemaNode(node *schemaNode) error {
+	if node == nil {
+		return nil
+	}
+	node.inputFormats = true
+	if node.format != "" && !isSupportedConfigurationFormat(node.format) {
+		return fmt.Errorf("unsupported request input format")
+	}
+	for _, child := range node.properties {
+		if err := prepareInputSchemaNode(child); err != nil {
+			return err
+		}
+	}
+	for _, child := range node.oneOf {
+		if err := prepareInputSchemaNode(child); err != nil {
+			return err
+		}
+	}
+	for _, child := range node.prefixItems {
+		if err := prepareInputSchemaNode(child); err != nil {
+			return err
+		}
+	}
+	for _, child := range node.patternProperties {
+		if err := prepareInputSchemaNode(child.schema); err != nil {
+			return err
+		}
+	}
+	if err := prepareInputSchemaNode(node.items); err != nil {
+		return err
+	}
+	if node.hasDefault {
+		if err := node.validate(node.defaultVal, ""); err != nil {
+			return fmt.Errorf("request input default violates its schema")
 		}
 	}
 	return nil

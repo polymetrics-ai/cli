@@ -108,7 +108,11 @@ func (inputs *vNextSourceProjectionInputs) inventory(lock vNextSourceLock) (reta
 		if (envelope.SchemaVersion != 2 && envelope.SchemaVersion != 3) || envelope.Connector != lock.Connector {
 			return retainedSourceInventory{}, fmt.Errorf("source_projection inventory %q requires a supported retained envelope", pin.ID)
 		}
-		anchor := sourceInventoryAnchor{Connector: lock.Connector, Inventory: pin.ID, Class: "primary", Path: pin.Path, SHA256: pin.SHA256}
+		class, err := pin.Class.resolved()
+		if err != nil {
+			return retainedSourceInventory{}, err
+		}
+		anchor := sourceInventoryAnchor{Connector: lock.Connector, Inventory: pin.ID, Class: class, Path: pin.Path, SHA256: pin.SHA256}
 		if envelope.SchemaVersion == 2 {
 			for _, operation := range envelope.Rest.Operations {
 				anchor.ExpectedIDs = append(anchor.ExpectedIDs, operation.ID)

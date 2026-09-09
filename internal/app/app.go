@@ -37,6 +37,17 @@ const (
 
 var errStateRevisionConflict = errors.New("project state changed in another process")
 
+// credentialVault is the existing private credential storage boundary. Keeping
+// its three operations explicit lets tests observe reads without exposing a
+// runtime hook or changing the concrete vault installed by Open.
+type credentialVault interface {
+	Get(context.Context, string) (map[string]string, error)
+	Put(context.Context, string, map[string]string) error
+	Delete(context.Context, string) error
+}
+
+var _ credentialVault = (*vault.Vault)(nil)
+
 type App struct {
 	sharedRateLimits        connectors.SharedRateLimitCoordinator
 	lifecycleCancel         context.CancelFunc
@@ -49,7 +60,7 @@ type App struct {
 	deferStateNormalization bool
 	deferredState           *state
 	deferredStateRevision   uint64
-	vault                   *vault.Vault
+	vault                   credentialVault
 	approval                *projectWriteApprovalAuthority
 	registry                *connectors.Registry
 	transportRegistry       *connectors.Registry

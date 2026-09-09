@@ -1,7 +1,7 @@
 {
   "$schema": "./catalog.schema.json",
   "schema_version": 1,
-  "catalog_revision": 54,
+  "catalog_revision": 55,
   "authority": {
     "authoring_only": true,
     "runtime_input": false,
@@ -449,7 +449,8 @@
         "Every authored command path, including planned, unsupported and deferred paths, must pass the shared exact CommandPathSegments parser before normalized alias collision admission; validation never rewrites a declared name.",
         "Canonical authoring reserves the shared closed PM control namespace. Conflicting provider flags receive deterministic unoccupied provider- aliases, preserving MapsTo and all other metadata. Only the exact optional nonrepeatable non-EnvOnly integer limit-to-limit tuple on stream-backed ETL/direct-read may share a control name. Final render and admission independently reject reserved provider names or changed source-bound alias metadata; alias provenance is authoring-only.",
         "Command path segments are positional tokens: the shared guard rejects every --prefixed segment at any position before publication, while legal flag-name grammar and provider request mappings remain separate.",
-        "Generated scalar request inputs use a per-consumer schema_refs.input role joined to the loaded request_inputs schema and source-to-execution provenance; operation constraints are not promoted into connection-wide configuration."
+        "Generated scalar request inputs use a per-consumer schema_refs.input role joined to the loaded request_inputs schema and source-to-execution provenance; operation constraints are not promoted into connection-wide configuration.",
+        "Pinned source_projection inventories preserve explicit primary/supplement class; omitted legacy class remains primary. Classification never grants an executable lane."
       ],
       "non_goals": [
         "Executing provider or credential I/O.",
@@ -1239,6 +1240,16 @@
           "package": "./cmd/connectorgen",
           "file": "cmd/connectorgen/source_projection_pipeline206_test.go",
           "name": "TestSourceProjection206ScalarInputs"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/source_projection_class250_test.go",
+          "name": "TestSourceProjectionGitLabClass250"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/source_projection_class250_test.go",
+          "name": "TestSourceProjectionClassGrammar250"
         }
       ],
       "publication_guarantee_proofs": [
@@ -1658,7 +1669,8 @@
         "Database declaration diagnostics retain schema-owned $.field[index] coordinates; @byte:N identifies an unknown member token end without publishing member text.",
         "Generic and root command-target path/method refusals retain safe exact command-owner JSON coordinates and inspectable causes through the App and CLI.",
         "Explicit multipart metadata budgets are positive and whole envelopes equal the checked sum of file caps plus metadata; filename encoding is closed and file-only.",
-        "Opt-in request_inputs schemas are confined, bounded and compiled into detached plans; named bindings must exist and saved aliases must match their selected wire templates. This does not prove unsupported source variants or grant runtime source access."
+        "Opt-in request_inputs schemas are confined, bounded and compiled into detached plans; named bindings must exist and saved aliases must match their selected wire templates. This does not prove unsupported source variants or grant runtime source access.",
+        "Selected input plans validate schema defaults and supported configuration formats, exact flag enum/format/bounds correspondence, bound path/query templates and declared nonprotected header ownership. Body preparation supports typed literal/template/named object inputs; broader source variant lowering remains separately required."
       ],
       "non_goals": [
         "Importing provider documentation.",
@@ -1858,6 +1870,16 @@
           "package": "./internal/connectors/engine",
           "file": "internal/connectors/engine/request_inputs_test.go",
           "name": "TestLoadRequestInputContract234"
+        },
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/request_inputs_matrix248_test.go",
+          "name": "TestRequestInputDefaultAdmissionMatrix248"
+        },
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/request_inputs_matrix248_test.go",
+          "name": "TestRequestInputHeaderCustody248"
         }
       ],
       "known_gap_refs": [],
@@ -2106,7 +2128,8 @@
         "Selected source visibility uses one bounded gzip member with cancellation, exact decoded size and digest, checked EOF/CRC and no trailing bytes; ordinary execution does not decode this metadata. Encoding never grants lane authority.",
         "Executable runtimes borrow an invocation-owned shared rate-limit coordinator through RuntimeConfig.SharedRateLimits. Required shared policies fail closed without it; owned Apps cancel and join parked work before the invocation closes its lazily created client. Metadata/preflight do not create that client.",
         "Multipart percent encoding affects only the ordinary wire filename; original file custody remains unchanged. Metadata, file and total bounds are separate; nondefault prepared identity binds policy and logical/wire names.",
-        "Generated source_scalar_v1 values retain exact numeric lexemes and strict boolean spelling. Opt-in direct and saved input validation precedes runtime construction; absent-contract legacy coercion remains unchanged. Named body/variant lowering remains a separately required consumer contract."
+        "Generated source_scalar_v1 values retain exact numeric lexemes and strict boolean spelling. Opt-in direct and saved input validation precedes runtime construction; absent-contract legacy coercion remains unchanged. Named body/variant lowering remains a separately required consumer contract.",
+        "Saved opt-in inputs prepare detached typed bodies and validate effective query/body values after paging composition before each send. Aggregate scalar preparation uses the existing16MiB request budget, separately from each1MiB scalar bound. This does not prove every source variant or complete provider chains."
       ],
       "non_goals": [
         "Bulk ETL, warehouse materialization, scheduling, or flow orchestration.",
@@ -2301,6 +2324,21 @@
           "package": "./internal/connectors/engine",
           "file": "internal/connectors/engine/request_inputs_test.go",
           "name": "TestOperationDirectReadInputContract234"
+        },
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/request_inputs_body248_test.go",
+          "name": "TestRequestInputLoadedBodyMatrix248"
+        },
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/request_inputs_matrix248_test.go",
+          "name": "TestRequestInputEffectivePagingMatrix248"
+        },
+        {
+          "package": "./internal/app",
+          "file": "internal/app/read_input_vault248_test.go",
+          "name": "TestRunETLRealInputVaultFrontier248"
         }
       ],
       "known_gap_refs": [

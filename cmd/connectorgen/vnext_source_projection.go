@@ -15,11 +15,37 @@ type vNextSourceProjection struct {
 	Semantics   []vNextSourceProjectionSemantic  `json:"semantics,omitempty"`
 }
 
+type sourceProjectionInventoryClass string
+
+func (class *sourceProjectionInventoryClass) UnmarshalJSON(raw []byte) error {
+	var value string
+	if err := json.Unmarshal(raw, &value); err != nil {
+		return fmt.Errorf("invalid source inventory class")
+	}
+	if value != "primary" && value != "supplement" {
+		return fmt.Errorf("source inventory class must be primary or supplement")
+	}
+	*class = sourceProjectionInventoryClass(value)
+	return nil
+}
+
+func (class sourceProjectionInventoryClass) resolved() (string, error) {
+	switch class {
+	case "", "primary":
+		return "primary", nil
+	case "supplement":
+		return "supplement", nil
+	default:
+		return "", fmt.Errorf("invalid source inventory class")
+	}
+}
+
 type vNextSourceProjectionInventory struct {
-	ID     string `json:"id"`
-	Path   string `json:"path"`
-	SHA256 string `json:"sha256"`
-	Bytes  int64  `json:"bytes"`
+	Class  sourceProjectionInventoryClass `json:"class,omitempty"`
+	ID     string                         `json:"id"`
+	Path   string                         `json:"path"`
+	SHA256 string                         `json:"sha256"`
+	Bytes  int64                          `json:"bytes"`
 }
 
 type vNextSourceProjectionKey struct {
@@ -91,6 +117,9 @@ func validateVNextSourceProjection(lock vNextSourceLock, members map[string]json
 	ids, paths := map[string]bool{}, map[string]bool{}
 	var total int64
 	for index, pin := range p.Inventories {
+		if _, err := pin.Class.resolved(); err != nil {
+			return err
+		}
 		if !sourceLaneIdentityPart(pin.ID) || ids[pin.ID] || paths[pin.Path] ||
 			!sourceLaneRelativePath(pin.Path) || !strings.HasPrefix(pin.Path, "sources/") ||
 			!sourceLaneDigest(pin.SHA256) || pin.Bytes <= 0 || pin.Bytes > 64<<20 {

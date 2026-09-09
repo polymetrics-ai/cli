@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"maps"
+	"net/url"
 	"strconv"
 	"strings"
 
@@ -13,12 +14,12 @@ import (
 
 // prepareReadInputs validates a detached selected-consumer snapshot. It never
 // resolves credentials, constructs runtime clients, or marks a caller trusted.
-func prepareReadInputs(stream StreamSpec, req connectors.ReadRequest) (StreamSpec, connectors.ReadRequest, error) {
+func prepareReadInputs(stream StreamSpec, req connectors.ReadRequest, pagination *PaginationSpec) (StreamSpec, connectors.ReadRequest, error) {
 	if stream.RequestInputs == nil {
 		return stream, req, nil
 	}
 	plan := stream.inputPlan
-	if plan == nil {
+	if plan == nil || plan.schema == nil || plan.schema.node == nil {
 		return stream, req, fmt.Errorf("request input contract is not compiled")
 	}
 	req.Config.Config = maps.Clone(req.Config.Config)
@@ -28,11 +29,42 @@ func prepareReadInputs(stream StreamSpec, req connectors.ReadRequest) (StreamSpe
 	req.Query = maps.Clone(req.Query)
 	envelope := map[string]any{"path": map[string]any{}, "query": map[string]any{}, "header": map[string]any{}}
 	knownQuery := map[string]bool{}
-	for _, binding := range plan.bindings {
-		if binding.In == "body" {
-			return stream, req, fmt.Errorf("named body input preparation requires its typed consumer")
+	scalarBytes := 0
+	stream.Headers = maps.Clone(stream.Headers)
+	var body map[string]any
+	if plan.schema.node.properties["body"] != nil {
+		var err error
+		if stream.preparedReadBodyPresent {
+			var ok bool
+			body, ok = copyRecordValue(stream.preparedReadBody).(map[string]any)
+			if !ok {
+				return stream, req, fmt.Errorf("prepared request body must be an object")
+			}
+		} else {
+			body, err = resolveStreamBodyMap(stream.Body, requestVars(req.Config, nil, "", req.Query))
 		}
-		node := plan.schema.node.properties[binding.In].properties[binding.Name]
+		if err != nil {
+			return stream, req, err
+		}
+		if body == nil {
+			body = map[string]any{}
+		}
+	}
+	for _, binding := range plan.bindings {
+		node := plan.schema.node.properties[binding.In]
+		if binding.In == "body" {
+			for _, part := range strings.Split(binding.Pointer[1:], "/") {
+				if node == nil {
+					break
+				}
+				node = node.properties[part]
+			}
+		} else if node != nil {
+			node = node.properties[binding.Name]
+		}
+		if node == nil {
+			return stream, req, fmt.Errorf("request input binding lacks its compiled schema")
+		}
 		if len(node.types) != 1 {
 			return stream, req, fmt.Errorf("flat request input requires an unambiguous scalar type")
 		}
@@ -55,8 +87,15 @@ func prepareReadInputs(stream StreamSpec, req connectors.ReadRequest) (StreamSpe
 			present = true
 		}
 		if !present {
+			if binding.In == "header" {
+				delete(stream.Headers, binding.Name)
+			}
 			continue
 		}
+		if len(raw) > maxOperationDirectReadBytes-scalarBytes {
+			return stream, req, fmt.Errorf("request inputs exceed aggregate preparation budget")
+		}
+		scalarBytes += len(raw)
 		value, err := connectors.DecodeSourceScalar(node.types[0], raw, 1<<20)
 		if err != nil {
 			return stream, req, fmt.Errorf("request input %s/%s: %w", binding.In, binding.Name, err)
@@ -64,7 +103,37 @@ func prepareReadInputs(stream StreamSpec, req connectors.ReadRequest) (StreamSpe
 		if binding.In == "path" && strings.TrimSpace(raw) == "" {
 			return stream, req, fmt.Errorf("path request input must be nonempty")
 		}
-		envelope[binding.In].(map[string]any)[binding.Name] = value
+		if binding.In == "body" {
+			target := body
+			parts := strings.Split(binding.Pointer[1:], "/")
+			for _, part := range parts[:len(parts)-1] {
+				child, exists := target[part]
+				if !exists {
+					child = map[string]any{}
+					target[part] = child
+				}
+				object, ok := child.(map[string]any)
+				if !ok {
+					return stream, req, fmt.Errorf("named body input crosses a non-object")
+				}
+				target = object
+			}
+			target[parts[len(parts)-1]] = value
+		} else {
+			envelope[binding.In].(map[string]any)[binding.Name] = value
+		}
+		if binding.In == "header" {
+			if len(raw) > maxOperationParameterMaxBytes {
+				return stream, req, fmt.Errorf("request header exceeds byte bound")
+			}
+			if _, err := canonicalPreparedRequestHeaders(map[string]string{binding.Name: raw}); err != nil {
+				return stream, req, fmt.Errorf("request header value is invalid")
+			}
+			if stream.Headers == nil {
+				stream.Headers = map[string]string{}
+			}
+			stream.Headers[binding.Name] = raw
+		}
 		if binding.ConfigKey != "" {
 			req.Config.Config[binding.ConfigKey] = raw
 		}
@@ -74,16 +143,29 @@ func prepareReadInputs(stream StreamSpec, req connectors.ReadRequest) (StreamSpe
 			return stream, req, fmt.Errorf("undeclared request query input %q", name)
 		}
 	}
-	if plan.schema.node.properties["body"] != nil {
-		// The body placement consumer receives a detached typed body. Template and
-		// named-member preparation are handled before exposing that capability.
-		if len(stream.Body) > 0 {
-			return stream, req, fmt.Errorf("request body requires typed preparation")
+	if body != nil {
+		envelope["body"] = body
+		stream.preparedReadBody = body
+		stream.preparedReadBodyPresent = true
+	}
+	root := *plan.schema.node
+	if bodyNode := root.properties["body"]; bodyNode != nil && pagination != nil && hasPaginationBody(*pagination) {
+		// Only engine-owned body positions can be absent until pagination composes
+		// them. All supplied values and all caller-owned required fields still validate.
+		copyBody := *bodyNode
+		copyBody.required = nil
+		for _, name := range bodyNode.required {
+			if name != pagination.BodyCursorField && name != pagination.BodyLimitField && name != pagination.BodyOffsetField && name != pagination.BodyPageField {
+				copyBody.required = append(copyBody.required, name)
+			}
 		}
+		root.properties = maps.Clone(root.properties)
+		root.properties["body"] = &copyBody
 	}
-	if err := plan.schema.Validate(envelope); err != nil {
-		return stream, req, fmt.Errorf("request inputs: %w", err)
+	if err := root.validate(envelope, ""); err != nil {
+		return stream, req, fmt.Errorf("request inputs violate the selected schema")
 	}
+
 	return stream, req, nil
 }
 
@@ -106,7 +188,11 @@ func prepareConnectorReadInputs(bundle Bundle, req connectors.ReadRequest) (Stre
 		return stream, req, err
 	}
 	req.Config = materializeConfigDefaults(bundle, req.Config)
-	return prepareReadInputs(stream, req)
+	pagination := stream.Pagination
+	if pagination == nil {
+		pagination = bundle.HTTP.Pagination
+	}
+	return prepareReadInputs(stream, req, pagination)
 }
 
 // ValidateReadInputs implements the optional pre-secret App contract using the
@@ -124,7 +210,7 @@ func prepareOperationReadInputs(op OperationSpec, req connectors.OperationDirect
 		return req, nil
 	}
 	plan := op.REST.inputPlan
-	if plan == nil {
+	if plan == nil || plan.schema == nil || plan.schema.node == nil {
 		return req, fmt.Errorf("request input contract is not compiled")
 	}
 	req.PathParams = maps.Clone(req.PathParams)
@@ -172,7 +258,7 @@ func prepareOperationReadInputs(op OperationSpec, req connectors.OperationDirect
 	if len(req.HeaderValues) != 0 {
 		return req, fmt.Errorf("scalar request inputs do not accept repeated header values")
 	}
-	_, prepared, err := prepareReadInputs(StreamSpec{RequestInputs: op.REST.RequestInputs, inputPlan: plan}, connectors.ReadRequest{Config: connectors.RuntimeConfig{Config: config}, Query: req.Query})
+	_, prepared, err := prepareReadInputs(StreamSpec{RequestInputs: op.REST.RequestInputs, inputPlan: plan}, connectors.ReadRequest{Config: connectors.RuntimeConfig{Config: config}, Query: req.Query}, op.REST.Pagination)
 	if err != nil {
 		return req, err
 	}
@@ -191,4 +277,60 @@ func prepareOperationReadInputs(op OperationSpec, req connectors.OperationDirect
 		}
 	}
 	return req, nil
+}
+
+// Validate the effective placed values after the paginator and caller merge,
+// immediately before selecting a requester. No query is rebuilt here.
+func validateEffectiveReadInputs(stream StreamSpec, req connectors.ReadRequest, query url.Values, body any) error {
+	if stream.RequestInputs == nil {
+		return nil
+	}
+	plan := stream.inputPlan
+	if plan == nil || plan.schema == nil {
+		return fmt.Errorf("request input contract is not compiled")
+	}
+	envelope := map[string]any{"path": map[string]any{}, "query": map[string]any{}, "header": map[string]any{}}
+	for _, binding := range plan.bindings {
+		if binding.In == "body" {
+			continue
+		}
+		raw, present := req.Config.Config[binding.ConfigKey]
+		if binding.In == "query" {
+			values, exists := query[binding.Name]
+			present = exists
+			if exists {
+				if len(values) != 1 {
+					return fmt.Errorf("scalar request input has repeated values")
+				}
+				raw = values[0]
+			}
+		}
+		if binding.In == "header" {
+			raw, present = stream.Headers[binding.Name]
+		}
+		if !present {
+			continue
+		}
+		node := plan.schema.node.properties[binding.In].properties[binding.Name]
+		if node == nil || len(node.types) != 1 {
+			return fmt.Errorf("effective request input lacks its scalar type")
+		}
+		value, err := connectors.DecodeSourceScalar(node.types[0], raw, 1<<20)
+		if err != nil {
+			return fmt.Errorf("effective request input is invalid")
+		}
+		envelope[binding.In].(map[string]any)[binding.Name] = value
+	}
+	for name := range query {
+		if _, exists := plan.schema.node.properties["query"].properties[name]; !exists {
+			return fmt.Errorf("effective request contains undeclared query input")
+		}
+	}
+	if body != nil {
+		envelope["body"] = body
+	}
+	if err := plan.schema.Validate(envelope); err != nil {
+		return fmt.Errorf("effective request inputs violate the selected schema")
+	}
+	return nil
 }

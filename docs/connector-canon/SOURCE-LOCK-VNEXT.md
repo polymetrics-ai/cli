@@ -31,7 +31,10 @@ archives before they have executable forms. It is an authoring-only evidence
 projection, not a second execution-lock dialect or a runtime admission gate.
 The additive schema4 source_projection arm can also consume pinned retained
 archives during authoring, lowering supported shapes into the same canonical
-graph. Runtime still consumes only execution JSON.
+graph. Each pinned inventory may declare `class: "primary"` or
+`class: "supplement"`; omission preserves the legacy primary classification.
+Inventory names never determine class, and class does not grant lane capability.
+Runtime still consumes only execution JSON.
 
 ## 1. Source-lock document
 

@@ -85,7 +85,11 @@ func readWithSleeper(ctx context.Context, b Bundle, req connectors.ReadRequest, 
 		return err
 	}
 	req.Config = materializeConfigDefaults(b, req.Config)
-	stream, req, err = prepareReadInputs(stream, req)
+	inputPagination := stream.Pagination
+	if inputPagination == nil {
+		inputPagination = b.HTTP.Pagination
+	}
+	stream, req, err = prepareReadInputs(stream, req, inputPagination)
 	if err != nil {
 		return err
 	}
@@ -691,6 +695,8 @@ func readOneSequence(ctx context.Context, b Bundle, stream StreamSpec, req conne
 		if state := stream.preparedBodyPagination; state != nil {
 			query = mergeQuery(baseQuery, mergeQuery(declaredSizeQuery(specForPaginator, pageSize), page.Query))
 			body, query, err = state.plan.compose(state.initial, query, maxOperationDirectReadBytes)
+		} else if stream.preparedReadBodyPresent {
+			body = copyRecordValue(stream.preparedReadBody)
 		} else {
 			body, err = buildStreamRequestBody(stream, req.Config, req.Query, page, specForPaginator, formattedLowerBound, fc)
 		}
@@ -698,14 +704,27 @@ func readOneSequence(ctx context.Context, b Bundle, stream StreamSpec, req conne
 			return &Error{Connector: b.Name, Stream: stream.Name, Page: pageNum, RecordIndex: -1, Err: err}
 		}
 
+		reqPath, query, err = nextLinks.request(reqPath, query, page.URL != "")
+		if err != nil {
+			return err
+		}
+		if stream.RequestInputs != nil {
+			target, parseErr := url.Parse(reqPath)
+			if parseErr != nil {
+				return fmt.Errorf("invalid effective request path")
+			}
+			embeddedQuery, parseErr := url.ParseQuery(target.RawQuery)
+			if parseErr != nil {
+				return fmt.Errorf("invalid effective request query")
+			}
+			if err := validateEffectiveReadInputs(stream, req, mergeQuery(embeddedQuery, query), body); err != nil {
+				return err
+			}
+		}
 		method := methodOrDefault(stream.Method)
 		requester, err := rt.requesterFor(method, stream.Path)
 		if err != nil {
 			return &Error{Connector: b.Name, Stream: stream.Name, Page: pageNum, RecordIndex: -1, Err: err}
-		}
-		reqPath, query, err = nextLinks.request(reqPath, query, page.URL != "")
-		if err != nil {
-			return err
 		}
 		pageCtx, cancelPage := readPageContext(ctx, req.PageDeadline)
 		pageStarted := time.Now()
