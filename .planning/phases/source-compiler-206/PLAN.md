@@ -94,3 +94,43 @@ Firstmate250 adds CP18-248-05 to the same compiler batch: source_projection.inve
 248 aggregate resource closure uses the existing16MiB direct/body request budget as a PM aggregate scalar-preparation bound, separate from each1MiB scalar bound and provider schema constraints. Exactly16 one-MiB values are the preparation control;17 are refused by actual ValidateReadInputs before any network client. Final serialized body/query accounting remains independently required; do not interpret preparation control as successful16MiB HTTP execution.
 
 Firstmate255 / CP18-252-07 is adopted as a separate required typed structured-query obligation: source inspection identifies37 source identities/67 variants requiring bracket array/hash serialization; this is prerequisite evidence, not executed RED. Current Query map[string]string/scalar materialization cannot claim it. Reuse existing238/source220/224 selected context for the smallest explicit shared contract and real generated flags/loader/engine/wire RED before implementation. No raw-query/JSON-string escape or provider branch. Publish the passing234 scalar/body corrections first; this extension and full GitLab completion remain pending. Original finding: operational-home data/cli-batch1-cp18-gitlab/lane-proof-240/FINDINGS/CP18-252-07.md.
+
+
+## CP18-248-06 canonical local overwrite — execution addendum
+
+Firstmate248/254 selects this remaining shared port after published234/class250.
+Base6cf2272596d5f3c14c65da7644017504d0a44fce. Discuss: existing
+synctransport.FullOverwriteDestination/FullOverwriteRun is the declared seam;
+warehouse.stage-etl.v1 names local_warehouse_transport.go, local_warehouse.go,
+warehouse/layout.go and parquet.go. Extend that implementation; no new runtime
+selection, source declaration, receiver, SQL path, dependency or agent.
+GSD sources discuss/plan/execute/verify resolved; generated discuss-phase,
+plan-phase --tdd and execute-phase read. Existing inline/manual fallback remains:
+Firstmate248 forbids resuming internal specialists; parent owns implementation.
+
+TDD plan, before production edits:
+1. Real loaded GitLab groups → App.RunETL → registered local warehouse: seed
+   an existing table through full_append, then canonical full_overwrite with
+   more records than batch size. Check exact IDs in durable Parquet and JSONL,
+   request pages, completed counters, fresh App reads and committed checkpoint.
+   Group empty/source404/malformed-later-page/cancel controls; prior WAL/table
+   bytes and prior checkpoint must survive every prepublication source failure.
+2. Run-scoped adapter negative matrix: mode/binding/generation/stream/workset
+   identity/counts/tombstones/aggregate mismatch/canceled calls/repeated terminal
+   calls. Per-batch private JSONL remains bounded and fsynced; single complete
+   materialization/publish; idempotent abort only removes owned private files.
+3. Real read-back verifies bytes/counts and original acknowledgement binding;
+   empty durable recovery uses existing EmptyPublicationReadBackDestination
+   and derives current structural paths from bound identity, never receipt paths.
+4. Reuse existing JSONL WAL then atomic single-Parquet publication order.
+   Do not claim atomic WAL/table pair or physical power-loss proof. Test failures
+   around publication, directory durability/read-back and postpublish reconciliation;
+   no checkpoint precedes successful durable acknowledgement/read-back.
+5. Update same Atlas entry/docs and affected App/warehouse/synctransport/CLI
+   expectations coherently. GitLab worker's four historical refusal cases remain
+   original evidence until updated against the actual new candidate. No source C2
+   or full connector acceptance follows from this shared behavioral slice.
+
+Red: pending actual production consumer run. Green: pending implementation.
+Remaining234 resource/authority closure, structured query255, approval243 and
+completion/proof244 remain independent required obligations.

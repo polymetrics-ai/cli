@@ -28,3 +28,58 @@ The initial green01 build failed before tests because a patch matched the fan-ou
 Limits: whole234 compiler/variant/source-to-input proof, final serialized request resource coverage, complete App auth/coordinator/WAL proof,243 form/standing action identity,244 E2 completion,FC238-26 trusted proof catalog and all full connector chains remain open. Firstmate255 CP18-252-07 structured-query37 identities/67 variants is a separate source-inspection prerequisite, not executed RED. No provider-live or C2/connector/checkpoint acceptance. Passing increments are normally published under248/254/255; no main merge or force.
 
 R1 integration: normal merge5008268cf06f5c9f97298a960ba7b53c9afeedb2 (treee0b6a6bf5f059b29537cc9b7d5626b92e087c4a2) includes314982b4 and preserved43be3ebf basic234/doc230 checkpoint. Complete affected four-package anchored selection passes480/480 events, exit0,21.947s, native1.26.6 count1, no drift; raw806743e380618f28b0c2ff1b6dd43a027729bf9a4da26f693cd2cc17ac352568. Full original argv/snapshots/receipt: operational-home receipts-cp13-141/scoped-input-integration-248-01; pre-run SELECTION-input248-integration.json. No full-suite/provider/source-C2 or whole234 acceptance; listed remaining obligations persist.
+
+
+## CP18-248-06 / Firstmate259 coherent overwrite verification
+
+Passing shared implementation increment; no whole connector, source C2, CP18 or
+independent final acceptance. Original raw receipts and complete source/input
+snapshots live under operational-home data/cli-batch1-pi-takeover/receipts-cp13-141.
+Firstmate259 authorizes parent ownership of only cp18Lane248ETLCollections in the
+GitLab proof file; its other files/expectations remain worker-owned. Historical
+four zero-HTTP refusal cases remain in published ancestor9686b65; the changed
+helper now executes all20 overwrite scenarios and preserves append/legacy logic.
+
+Red: real App missing-port refusal after valid append seed,5 leaves; direct port
+matrix21 leaves also blocked by that same missing port, not21 separate defects.
+Publication-cut run already passed5 actual cut cases; its new per-page bypass
+regression failed and then was repaired by refusing generic per-page overwrite.
+The later in-place acknowledgement byte mutation genuinely failed the initial
+implementation. The saved acknowledgement now owns a defensive output copy.
+Green: final affected race60/60 with the copy regression and existing full-mode
+App consumers; earlier normal60 predates only that copy correction. CLI22/22 is
+parent+mode+20 actual scenarios, never22 source identities. No count summation.
+
+Behavior: selected built-in groups and four CLI collection streams use the
+existing run-scoped port, bounded private fsynced JSONL, whole single-Parquet
+materialization, WAL-before-table publication, exact byte/count read-back and
+existing coordinator checkpoint order. Source404/malformed/cancel preserve prior
+public WAL/table bytes and committed checkpoint. Empty recovery binds current
+structural identity, owner path digest, original time and exact table/WAL hashes.
+Five actual publication cuts distinguish old/complete WAL and old/new table by
+reached rename frontiers; no acknowledgement follows a failed durability cut.
+This is ordered two-file publication, not atomic WAL/table or power-loss proof.
+No provider-live, new protocol, runtime switch, source-authority or native database
+change is included. Runtime help, bare etl, etl run --help, exact manual parity,
+connector docs validation and website explanation pass. Atlas revision56 records
+this existing warehouse.stage-etl.v1 extension and owner/proof selectors.
+
+| Receipt | Exit | Passing/events | Seconds | Original raw SHA256 |
+|---|---:|---:|---:|---|
+| overwrite-consumer-red-248-01 | 1 | 0/6 | 15.383 | 997d00a4035c94fab9f546fb352855f7079f310e53261f2709d82cac6dd6a846 |
+| overwrite-port-red-248-01 | 1 | 0/22 | 8.376 | 2ee6ae50cd2d0822fb57980d11b9cc2b1d4dac4622ef1ff92a896350518fddcd |
+| overwrite-consumer-green-248-01 | 0 | 28/28 | 18.973 | 50366999d37a4d9c266caad4305de157350f0f03b19eb546527cde45f30b389d |
+| overwrite-publication-red-248-01 | 1 | 6/7 | 6.175 | 41630accd4d1fed1c0e160fb70b62f7b5a74a23ac45e032bb48b7d720fb8e670 |
+| overwrite-consumer-green-248-02 | 0 | 60/60 | 23.474 | 51b92066ea18e3a18e53ee912374da285556f4e0ca80a86a4df6b0d25817b460 |
+| overwrite-cli-green-248-01 | 0 | 22/22 | 52.595 | 351e82c64c4d0331b0388df855e7ea0f6bc86ad1611e28fdf3f1da309cbe0049 |
+| overwrite-ack-alias-red-248-01 | 1 | 0/2 | 5.354 | 68f65926621ef75e328be50fbdd019a4e9572300f3cb28f53f5d372436b9698d |
+| overwrite-affected-race-248-01 | 0 | 60/60 | 164.884 | 054704b4e30a065af87efd54b7c2d6e73a2c58b023e9af207f98f01fb5e02771 |
+| overwrite-vet-248-01 | 0 | 0/0 | 2.652 | e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 |
+| overwrite-lint-248-01 | 0 | 0/0 | 3.355 | e92606b0bf483111dff0a120c315ea165821348f31365020e2468a0059095c47 |
+| overwrite-atlas-248-01 | 0 | 20/20 | 6.221 | b01cfa4519db6c61941b952aad0871c4e7286681a0e65a42015d4d278f421095 |
+| overwrite-build-248-01 | 0 | 0/0 | 9.075 | e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 |
+| overwrite-docs-248-01 | 0 | 0/0 | 5.392 | d453a36df33b8915eb9d470468357b8e571ac6802995e1fd6cfed63bc9056203 |
+
+Private help-check script SHA256 aefd8f2f41d7afbc99637d6754ccdec1d0060f236709083099a6baf1c51dce1c. Binary SHA256 2ee9cf3fe3a20a629afb9c6fa0c3d0c84ef2ea6d14ba5a27b5e056d7026892ff.
+
+GSD verify-work prompt resolved/read; local automated obligations above pass. Parent inline quality inspection is not an independent review. Firstmate259 requires passing-increment normal publication now; full independent programme judgment remains gated. Remaining234/255/243/244 obligations are unchanged.

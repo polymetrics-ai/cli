@@ -220,3 +220,64 @@ Red: remaining aggregate boundary request-input-aggregate-red-248-01 executes3 e
 248 terminal checks: native focused vet passes, Atlas selectors20/20 pass. New-range lint first attempt reports3 test-only issues: two unchecked registry.Register results in preserved234 App fixture and tagged-switch simplification in new adapter matrix. Raw09558b1b8e1eb12a9d23e084eb0057af695a9a72dc53964ddd9e8e765f828697 retained; checked errors and equivalent switch applied. Only modified test selections and lint rerun required; unchanged body/schema receipts retain their exact source binding.
 
 Final bounded increment: consumer-green03=345/345; source-class-consumer-green250=100/100; focused vet and Atlas20/20; lint248-02 exit0 and changed test selection request-input-lint-affected-248-02=152/152 exit0. Failed concurrent capture248-01 never launched tests and retains private capture-failure JSON; do not run private snapshot-capture runners concurrently when new snapshot objects may be created. Full details and limitations in VERIFICATION.md.
+
+## CP18-248-06 local overwrite
+Red: preparing grouped real App/source/warehouse regression; no new execution claimed.
+Green: pending. Source404/cancellation/fault variants blocked at missing port are not downstream fault coverage.
+
+CP18-248-06 Red: overwrite-consumer-red-248-01 exit1,6 events/0 passed,15.383s; all five leaves reached actual App missing-port refusal after successful full_append seeding. Raw SHA256 997d00a4035c94fab9f546fb352855f7079f310e53261f2709d82cac6dd6a846. Source-failure/empty/cancellation downstream boundaries remain blocked, not separately reproduced defects. Green: pending existing-port implementation.
+
+
+## CP18-248-06 / Firstmate259 coherent overwrite verification
+
+Passing shared implementation increment; no whole connector, source C2, CP18 or
+independent final acceptance. Original raw receipts and complete source/input
+snapshots live under operational-home data/cli-batch1-pi-takeover/receipts-cp13-141.
+Firstmate259 authorizes parent ownership of only cp18Lane248ETLCollections in the
+GitLab proof file; its other files/expectations remain worker-owned. Historical
+four zero-HTTP refusal cases remain in published ancestor9686b65; the changed
+helper now executes all20 overwrite scenarios and preserves append/legacy logic.
+
+Red: real App missing-port refusal after valid append seed,5 leaves; direct port
+matrix21 leaves also blocked by that same missing port, not21 separate defects.
+Publication-cut run already passed5 actual cut cases; its new per-page bypass
+regression failed and then was repaired by refusing generic per-page overwrite.
+The later in-place acknowledgement byte mutation genuinely failed the initial
+implementation. The saved acknowledgement now owns a defensive output copy.
+Green: final affected race60/60 with the copy regression and existing full-mode
+App consumers; earlier normal60 predates only that copy correction. CLI22/22 is
+parent+mode+20 actual scenarios, never22 source identities. No count summation.
+
+Behavior: selected built-in groups and four CLI collection streams use the
+existing run-scoped port, bounded private fsynced JSONL, whole single-Parquet
+materialization, WAL-before-table publication, exact byte/count read-back and
+existing coordinator checkpoint order. Source404/malformed/cancel preserve prior
+public WAL/table bytes and committed checkpoint. Empty recovery binds current
+structural identity, owner path digest, original time and exact table/WAL hashes.
+Five actual publication cuts distinguish old/complete WAL and old/new table by
+reached rename frontiers; no acknowledgement follows a failed durability cut.
+This is ordered two-file publication, not atomic WAL/table or power-loss proof.
+No provider-live, new protocol, runtime switch, source-authority or native database
+change is included. Runtime help, bare etl, etl run --help, exact manual parity,
+connector docs validation and website explanation pass. Atlas revision56 records
+this existing warehouse.stage-etl.v1 extension and owner/proof selectors.
+
+| Receipt | Exit | Passing/events | Seconds | Original raw SHA256 |
+|---|---:|---:|---:|---|
+| overwrite-consumer-red-248-01 | 1 | 0/6 | 15.383 | 997d00a4035c94fab9f546fb352855f7079f310e53261f2709d82cac6dd6a846 |
+| overwrite-port-red-248-01 | 1 | 0/22 | 8.376 | 2ee6ae50cd2d0822fb57980d11b9cc2b1d4dac4622ef1ff92a896350518fddcd |
+| overwrite-consumer-green-248-01 | 0 | 28/28 | 18.973 | 50366999d37a4d9c266caad4305de157350f0f03b19eb546527cde45f30b389d |
+| overwrite-publication-red-248-01 | 1 | 6/7 | 6.175 | 41630accd4d1fed1c0e160fb70b62f7b5a74a23ac45e032bb48b7d720fb8e670 |
+| overwrite-consumer-green-248-02 | 0 | 60/60 | 23.474 | 51b92066ea18e3a18e53ee912374da285556f4e0ca80a86a4df6b0d25817b460 |
+| overwrite-cli-green-248-01 | 0 | 22/22 | 52.595 | 351e82c64c4d0331b0388df855e7ea0f6bc86ad1611e28fdf3f1da309cbe0049 |
+| overwrite-ack-alias-red-248-01 | 1 | 0/2 | 5.354 | 68f65926621ef75e328be50fbdd019a4e9572300f3cb28f53f5d372436b9698d |
+| overwrite-affected-race-248-01 | 0 | 60/60 | 164.884 | 054704b4e30a065af87efd54b7c2d6e73a2c58b023e9af207f98f01fb5e02771 |
+| overwrite-vet-248-01 | 0 | 0/0 | 2.652 | e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 |
+| overwrite-lint-248-01 | 0 | 0/0 | 3.355 | e92606b0bf483111dff0a120c315ea165821348f31365020e2468a0059095c47 |
+| overwrite-atlas-248-01 | 0 | 20/20 | 6.221 | b01cfa4519db6c61941b952aad0871c4e7286681a0e65a42015d4d278f421095 |
+| overwrite-build-248-01 | 0 | 0/0 | 9.075 | e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 |
+| overwrite-docs-248-01 | 0 | 0/0 | 5.392 | d453a36df33b8915eb9d470468357b8e571ac6802995e1fd6cfed63bc9056203 |
+
+Private help-check script SHA256 aefd8f2f41d7afbc99637d6754ccdec1d0060f236709083099a6baf1c51dce1c. Binary SHA256 2ee9cf3fe3a20a629afb9c6fa0c3d0c84ef2ea6d14ba5a27b5e056d7026892ff.
+
+GSD verify-work prompt resolved/read; local automated obligations above pass. Parent inline quality inspection is not an independent review. Firstmate259 requires passing-increment normal publication now; full independent programme judgment remains gated. Remaining234/255/243/244 obligations are unchanged.
