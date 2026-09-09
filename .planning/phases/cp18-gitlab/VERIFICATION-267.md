@@ -14,3 +14,4 @@
 ## Verified slices
 
 - [x] G1 source scalar declarations: renderer check, targeted one-connector validation, 203 source-to-canonical-to-CLI joins, generated command preflight, and three exact fake-provider wires. See `TDD-LEDGER-267.md` and `RUN-267.md`.
+- [x] G2 four source numeric bounds: a pre-fix `-count=1` RED showed all four bounds absent from execution declarations and each of eight invalid inputs planned; the rendered projection now refuses each invalid input before plan/provider I/O and accepts inclusive lower/interior/upper values in isolated project state. See `TDD-LEDGER-267.md` and the external `g2-red-267-d1aad9f8/RECEIPT.json`.

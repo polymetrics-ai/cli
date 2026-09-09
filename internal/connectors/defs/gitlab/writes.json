@@ -12813,6 +12813,8 @@
             ]
           },
           "pagination_limit": {
+            "maximum": 100,
+            "minimum": 1,
             "type": [
               "integer",
               "null"
@@ -17730,6 +17732,8 @@
             "type": "string"
           },
           "expires_in": {
+            "maximum": 43200,
+            "minimum": 1,
             "type": [
               "integer",
               "null"
@@ -25423,6 +25427,8 @@
         "additionalProperties": false,
         "properties": {
           "percentage": {
+            "maximum": 100,
+            "minimum": 0,
             "type": "integer"
           },
           "plan": {
@@ -25469,6 +25475,8 @@
         "additionalProperties": false,
         "properties": {
           "percentage": {
+            "maximum": 100,
+            "minimum": 0,
             "type": "integer"
           },
           "plan": {
