@@ -462,3 +462,11 @@ Shapes255 normal original typed-query-source-shapes-255-02 passed21/21 events,8.
 
 Shape-only terminal checks: {"name": "typed-query-shapes-atlas-255-01", "exit_code": 0, "selected_test_events": 20, "passing_test_events": 20, "wall_seconds": 4.621311625000089, "output_sha256": "88df47356aaac393207e032f8170d291a05cf57dedba4c73d5a6601ed5fae456", "changed_inputs_after": []}
 {"name": "typed-query-shapes-lint-255-01", "exit_code": 0, "selected_test_events": 0, "passing_test_events": 0, "wall_seconds": 2.6943969999992987, "output_sha256": "e92606b0bf483111dff0a120c315ea165821348f31365020e2468a0059095c47", "changed_inputs_after": []}
+
+## Actual GitLab query cohort reconciliation255
+
+Read-only frozen84f6d456 source join covers all37 source IDs/67 variants and49 structured query parameters. Parameter classifications:29 source-explicit form/explode:false arrays;13 untyped nullable objects;4 oneOf/nullable union parameters;3 nullable arrays without explicit serialization. None of these actual source contracts is certified by the representative standard/dialect fixtures. In particular generic documentary bracket-array examples cannot silently replace an explicit source style/explode tuple. Full source/member/null/union reconciliation remains required.
+
+Private original matrix: data/cli-batch1-pi-takeover/QUERY-255-source-contract-matrix.json, SHA256 8ba6019580e117b86f36791319e67be7d1254f577458a8ef7b2584448edceb7d; retains exact source bytes/hash, original gaps hash, source pointers, each parameter schema and all67 variant pointers. This is source inspection, not executed RED or runtime acceptance. Original worker gap files remain unchanged.
+
+264 supported-route inspection: existing coerceDeclaredStructuredJSONRecordFlagValue deliberately preserves every non-container token when allow_bare_string=true. With that option absent/false, the existing strict JSON route preserves json.Number/string/null and has an existing BuildWriteCommand scalar-union test. That test proves prepared values only, not a generated companion authoring route or actual GitLab wire/approval outcome. Do not disable existing bare-string compatibility in the preserved commands. No new scalar-union implementation or claim is made by this inspection.
