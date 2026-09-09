@@ -1,0 +1,22 @@
+[
+  {
+    "original_path": ".planning/phases/cp18-gitlab/PLAN.md",
+    "snapshot": "before/.planning/phases/cp18-gitlab/PLAN.md",
+    "sha256": "594af7a2d4618be19021d7dd8574cc65f095ccbbc0766cda04360e4b47c97fd6"
+  },
+  {
+    "original_path": "cmd/connectorgen/batch1_cp18_gitlab_source_identity_248_test.go",
+    "snapshot": "before/cmd/connectorgen/batch1_cp18_gitlab_source_identity_248_test.go.txt",
+    "sha256": "271be87f424fffa3df7cb50dfcdb595a33c25bda8bbf2218797fac7012d025d3"
+  },
+  {
+    "original_path": "internal/cli/batch1_cp18_gitlab_lane_proof_240_pending_test.go",
+    "snapshot": "before/internal/cli/batch1_cp18_gitlab_lane_proof_240_pending_test.go.txt",
+    "sha256": "6c4b4ab647f86592b6a982347b20e481530e411dea2a200f48be81b36b838e7d"
+  },
+  {
+    "original_path": "internal/connectors/engine/batch1_cp18_gitlab_lane_proof_240_test.go",
+    "snapshot": "before/internal/connectors/engine/batch1_cp18_gitlab_lane_proof_240_test.go.txt",
+    "sha256": "4fdb83ec1abcb624e66320208647e2f3c285e052212ef1224c9a1188d0917180"
+  }
+]

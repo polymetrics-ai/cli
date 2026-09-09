@@ -1,0 +1,11 @@
+# CP18-248-06 — canonical overwrite source/warehouse combination is unavailable
+
+Owner cli-batch1-pi-takeover shared App/warehouse transport. Requirement CP18-02/12; no provider-unsupported claim.
+
+Source descriptors list projects,groups,users,issues,mlflow_metrics_history with full_overwrite/full_append. Actual compatible execution is a separate intersection. On742b37cc6884500ed4ee4af7a98f36eec3a6eb2b plus retained managed-etl248 test snapshot, four REST source targets each refuse canonical full_overwrite before any HTTP. Exact error: sync mode "full_overwrite" is not executable: no matching closed source/destination transport has registered compatible executors. Actual path App.dispatchETLMode→selectTransportRoute→isExecutableFullSnapshotWarehouseTransport requires the selected local warehouse executor to implement synctransport.FullOverwriteDestination. No connector declaration can supply that shared port.
+
+Original40-case managed-etl248 sweep retained all failures, including20 overwrite cases that never reached their HTTP fixtures. Do not claim five reached fault phases per source: only one pre-I/O mode refusal was reached per target, repeated by the planned variants. Four exact source keys: primary/getApiV4Projects, primary/getApiV4Groups, primary/getApiV4Users, primary/getApiV4Issues. Expected wire inputs are in the test; source pins/pointers and exact streams are committed evidence-248/SOURCE-JOINS.json. No inference about unexecuted MLflow here.
+
+Explicit legacy full_refresh_overwrite remains separately verified. This does not establish canonical full_overwrite. The corrected follow-up retains four zero-I/O refusal cases; sixteen canonical downstream fault variants remain blocked. Required disposition is source/role/mode applicability plus shared compatible executor support or exact admitted limitation, not an enum switch or hidden legacy fallback.
+
+Append Link diagnostics in the same sweep are oracle corrections, not this finding: engine/read.go emits valid page records before evaluating continuation; acknowledged IDs may include valid final-page rows even when its next link fails. Corrected proof asserts expected IDs and committed ordinal, with full original receipts preserved. No foundation defect inferred from that ordering alone.

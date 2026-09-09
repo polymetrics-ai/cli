@@ -1,0 +1,54 @@
+{
+  "head": "d547497d893a0ce71752051cf01c9226522dfe3d",
+  "tree": "52e94e5ab10d6f1d80c9809b262703df290cf2f2",
+  "command": [
+    "/Users/karthiksivadas/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.6.darwin-arm64/bin/go",
+    "test",
+    "-json",
+    "-count=1",
+    "-timeout",
+    "20m",
+    "./internal/cli",
+    "-run",
+    "^TestBatch1CP18GitLabLane240(StatusWrites|ReceiptOracle)$"
+  ],
+  "go_version": "go version go1.26.6 darwin/arm64",
+  "go_sha256": "a1c83801d1756c3eca78366c6b585f2c21c20694fb1c7eb92c446a0580420412",
+  "go_env": {
+    "CC": "clang",
+    "CGO_ENABLED": "1",
+    "GOARCH": "arm64",
+    "GOCACHE": "/Users/karthiksivadas/Library/Caches/go-build",
+    "GOOS": "darwin",
+    "GOTOOLCHAIN": "local",
+    "GOVERSION": "go1.26.6"
+  },
+  "cache": "retained warm build cache; fresh -count=1 tests",
+  "before_uncommitted": [
+    {
+      "path": "cmd/connectorgen/batch1_cp18_gitlab_source_identity_248_test.go",
+      "sha256": "271be87f424fffa3df7cb50dfcdb595a33c25bda8bbf2218797fac7012d025d3",
+      "bytes": 3158
+    },
+    {
+      "path": "internal/cli/batch1_cp18_gitlab_lane_proof_240_pending_test.go",
+      "sha256": "eedd67a8491e870ab2f15e5039c7c9e8e3f8fb41ac6c0b9fe8f098c62a652ec4",
+      "bytes": 2651
+    },
+    {
+      "path": "internal/cli/batch1_cp18_gitlab_status_248_test.go",
+      "sha256": "d073e9dc5a5ed7c8690300b9ecca4e2bde8635eab2ab46421a413bf85fec7d6c",
+      "bytes": 4797
+    },
+    {
+      "path": "internal/connectors/engine/batch1_cp18_gitlab_lane_proof_240_test.go",
+      "sha256": "4fdb83ec1abcb624e66320208647e2f3c285e052212ef1224c9a1188d0917180",
+      "bytes": 5844
+    },
+    {
+      "path": ".planning/phases/cp18-gitlab/PLAN.md",
+      "sha256": "64e1fbb31d9af0763551ce538fba07dae5c2890d58c049da27066ddb3375afe0",
+      "bytes": 5214
+    }
+  ]
+}
