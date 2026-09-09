@@ -41,6 +41,54 @@
 5. At each all-green coherent increment, commit; transfer only complete dependencies into the clean integration worktree, validate there, push normally, and verify its remote SHA.
 6. Freeze the final GitLab candidate, request Firstmate's independent Terra/xhigh review, disposition findings, and run the prescribed GSD gap loop if verification finds gaps.
 
+## Firstmate277 G3 admission-closure increment
+
+The preserved G3 candidate is `deleteApiV4AdminCiVariablesKey`, for its direct-write and reverse-ETL commands.  The previous source-lane result is retained diagnostic evidence, not an admission result: it reports a source/canonical/execution coordinate mismatch plus the three open proof-contract deficits below.  This increment closes those deficits through the canonical source-lock producer and production runtime; it does not start another broad G3 batch or G4 work.
+
+| Track | Red first | Green acceptance | Foundation classification |
+| --- | --- | --- | --- |
+| Coordinate producer | A focused source-lane check observes divergent canonical and execution generation identities after a rendered GitLab source lock. | The isolated canonical producer derives matching identities; the source-lane check accepts the candidate's exact canonical/action coordinates without hand-edited output. | Reuse `authoring.source-lock-vnext.v1` producer seam; constrained compiler repair only if the canonical producer, not the annotation, owns the mismatch. |
+| Input bound provenance | The retained source declares `key` as string without `maxLength`, while the request schema adds `maxLength:8192`, yielding `target_schema_unverified`. | Provider source fact and existing PM transport/safety policy remain separate and observable; the declared policy bound is accepted only through a reusable, typed compatibility rule with a narrow negative control. | Constrained extension of `authoring.source-lock-vnext.v1` schema-projection compatibility, if existing policy is insufficient. |
+| Typed success response | The source declares a 200 JSON `APIEntitiesCiVariable`; the write action exposes only status/body capture, yielding `target_response_contract_unverified`. | The typed action declaration drives production direct-write and saved-write consumers; success is decoded/validated and source-relevant error/malformed responses are not represented as successful typed parity. | Constrained extension through the typed write-action response seam; no status-only shortcut. |
+| Review catalog | The normal source-lane producer receives an empty review catalog, so a current executable proof cannot be admitted. | A canonical external catalog reader accepts a valid test-scoped review and rejects missing, stale, and coordinate-mismatched reviews. Production contains no self-authored approval; the independent reviewer supplies the frozen-candidate review file. | Reuse `authoring.source-lock-vnext.v1` proof-catalog seam with an external-input adapter. |
+
+The completion artifact will contain two precise proof proposals, one for direct write and one for reverse ETL. Each proposal binds the target action, selected test leaf, portable raw receipt, retained source identity, changed implementation inputs, coverage, and stated limitations. The independent reviewer output path and strict document format are part of the committed candidate so Firstmate can route an immutable review without inferring a design.
+
+## Firstmate282 source-lane correction
+
+The post-transfer `source-lanes` run preserved the intended source → canonical →
+execution identity for `deleteApiV4AdminCiVariablesKey`; it no longer reports
+either generation mismatch. Its two remaining reference errors occur because
+the authoring-only checker (1) classifies JSON Schema's `$schema` document
+meta-keyword as an unknown instance-use edge and (2) rechecks a request-side
+path mapping independently for the companion response-schema binding to the
+same typed write. The retained target has the correct `record.key` route
+coordinate and exact source-derived request/response schemas. `proof_unavailable`
+remains an honest, separate review/proof deficit.
+
+This is a constrained extension of Atlas
+`authoring.source-lock-vnext.v1`, specifically
+`sourceLaneCheckedProjectionNode`, `sourceLaneCheckPresent`,
+`sourceLaneRouteContract`, and `sourceLaneProjectionContract`. It reuses the
+existing source-lanes projection seam: the change may recognize JSON Schema
+document metadata and aggregate exact same-target route/parameter mappings
+across request and response roles, but may not change runtime execution,
+command availability, lane implementation, or proof admission. The red test
+must show both failures against a typed write with a source response; its
+negative control must still reject a missing request-side path mapping.
+
+Firstmate283's report delta establishes the causal classification: the
+`target_schema_unverified` result predates response-role work and is the
+pre-existing JSON-Schema-document metadata gap. The parameter and path errors
+first appear when the response binding is added; that binding correctly has no
+second copy of the request-side route map, so the errors were fix-created
+role-local checking behavior, not an annotation mistake. The focused red test
+captures both. Its green result accepts the two role-specific bindings while
+the missing-request-map control still refuses. The exact post-correction
+source-lanes report is valid with zero errors; it retains only the two
+independently reviewed-proof deficits and therefore does not promote either
+lane to implemented.
+
 ## Guardrails
 
 - No provider credentials, provider-live checks, whole-repository suite, new dependencies, source-lock runtime reader, generic HTTP/SQL/shell write surface, raw cursor, fake implemented lane, or hand-edited generated execution/index/proof output.

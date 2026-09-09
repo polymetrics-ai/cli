@@ -232,8 +232,11 @@ func validateVNextSchemaRoles(operation vNextCanonicalOperation, schemas map[str
 			return vNextGraphError(vNextOperationPointer(operation.Index, "schema_refs", "request"), fmt.Errorf("request schema %q has no write record_schema binding", reference))
 		}
 	}
-	if reference := operation.SchemaRefs.Response; reference != "" && operation.Stream == nil && operation.Operation == nil {
-		return vNextGraphError(vNextOperationPointer(operation.Index, "schema_refs", "response"), fmt.Errorf("response schema %q has no stream or operation binding", reference))
+	if reference := operation.SchemaRefs.Response; reference != "" && operation.Stream == nil && operation.Write == nil && operation.Operation == nil {
+		return vNextGraphError(vNextOperationPointer(operation.Index, "schema_refs", "response"), fmt.Errorf("response schema %q has no stream, write, or operation binding", reference))
+	}
+	if reference := operation.SchemaRefs.Response; reference != "" && operation.Write != nil && operation.Stream == nil && operation.Operation == nil && len(operation.Write.Spec.ResponseSchema) == 0 {
+		return vNextGraphError(vNextOperationPointer(operation.Index, "schema_refs", "response"), fmt.Errorf("response schema %q has no write response_schema binding", reference))
 	}
 	if reference := operation.SchemaRefs.Record; reference != "" {
 		if operation.Stream == nil {

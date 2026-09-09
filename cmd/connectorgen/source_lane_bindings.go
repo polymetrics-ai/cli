@@ -337,7 +337,7 @@ func sourceLaneSharedConsumer(inputs *sourceLaneBindingInputs, a, b sourceLaneTa
 				if source.Stream != nil && (ref.SchemaRole == sourceLaneSchemaRecord || ref.SchemaRole == sourceLaneSchemaResponse || ref.Kind == "canonical_operation") {
 					ids = append(ids, "stream:"+source.Stream.Spec.Name)
 				}
-				if source.Write != nil && (ref.SchemaRole == sourceLaneSchemaRequest || ref.Kind == "canonical_operation") {
+				if source.Write != nil && (ref.SchemaRole == sourceLaneSchemaRequest || ref.SchemaRole == sourceLaneSchemaResponse || ref.Kind == "canonical_operation") {
 					ids = append(ids, "write:"+source.Write.Spec.Name)
 				}
 				if source.Operation != nil && (ref.SchemaRole == sourceLaneSchemaRequest || ref.Kind == "canonical_operation") {
@@ -1146,7 +1146,7 @@ func sourceLaneCheckedProjectionNode(node map[string]json.RawMessage) (sourceLan
 	state := sourceLaneLineageSupported
 	for key, value := range node {
 		switch key {
-		case "$ref", "properties", "items", "prefixItems", "required", "type":
+		case "$schema", "$ref", "properties", "items", "prefixItems", "required", "type":
 		case "$defs", "definitions":
 			var registry map[string]json.RawMessage
 			if json.Unmarshal(value, &registry) != nil || registry == nil {
@@ -1451,7 +1451,7 @@ func sourceLaneSchemaCompare(facts sourceFacts, source, target json.RawMessage) 
 		out := map[string]any{}
 		for k, v := range node {
 			switch k {
-			case "description", "title", "example", "examples", "$comment":
+			case "$schema", "description", "title", "example", "examples", "$comment":
 				continue
 			case "properties", "$defs", "definitions":
 				if k != "properties" {
@@ -1626,7 +1626,12 @@ func sourceLaneEffectiveSchema(observed sourceLaneTypedTarget, bundle engine.Bun
 		if observed.GraphQL != nil {
 			return observed.GraphQL.VariablesSchema, ""
 		}
-	case sourceLaneSchemaResponse, sourceLaneSchemaRecord:
+	case sourceLaneSchemaResponse:
+		if observed.Write != nil && len(observed.Write.ResponseSchema) > 0 {
+			return observed.Write.ResponseSchema, ""
+		}
+		fallthrough
+	case sourceLaneSchemaRecord:
 		if observed.Stream != nil && observed.Stream.SchemaRef != "" {
 			if schema, ok := bundle.Schemas[observed.Stream.Name]; ok {
 				return schema.Raw, ""
@@ -1637,6 +1642,29 @@ func sourceLaneEffectiveSchema(observed sourceLaneTypedTarget, bundle engine.Bun
 		return nil, "target_schema_role_mismatch"
 	}
 	return nil, "target_schema_consumer_unverified"
+}
+
+func sourceLaneHasResponseBinding(annotation sourceSemanticAnnotation, ref sourceLaneTargetRef) bool {
+	for _, candidate := range append(append([]sourceLaneTargetRef{}, annotation.IntendedBindings...), annotation.MaterializedBindings...) {
+		if candidate.Kind == "write" && candidate.Connector == ref.Connector && candidate.ID == ref.ID && candidate.Lane == ref.Lane && candidate.CanonicalID == ref.CanonicalID && candidate.SchemaRole == sourceLaneSchemaResponse && candidate.SourceSchema != nil {
+			return true
+		}
+	}
+	return false
+}
+
+// sourceLaneTargetFieldMappings groups mapping facts by the one concrete
+// execution target. Schema roles describe different source facts consumed by
+// that target; they do not create a second request parameter or route.
+func sourceLaneTargetFieldMappings(annotation sourceSemanticAnnotation, ref sourceLaneTargetRef) []sourceLaneFieldMapping {
+	mappings := []sourceLaneFieldMapping{}
+	for _, candidate := range append(append([]sourceLaneTargetRef{}, annotation.IntendedBindings...), annotation.MaterializedBindings...) {
+		if candidate.Kind != ref.Kind || candidate.Connector != ref.Connector || candidate.ID != ref.ID || candidate.Lane != ref.Lane || candidate.Artifact != ref.Artifact || candidate.Pointer != ref.Pointer || candidate.ArtifactSHA256 != ref.ArtifactSHA256 || candidate.CanonicalID != ref.CanonicalID || candidate.CanonicalPointer != ref.CanonicalPointer || candidate.Generation != ref.Generation {
+			continue
+		}
+		mappings = append(mappings, candidate.FieldMappings...)
+	}
+	return mappings
 }
 
 func sourceLaneCheckPresent(key sourceOperationKey, facts sourceFacts, a sourceSemanticAnnotation, ref sourceLaneTargetRef, raw, node []byte, scopeOnly ...bool) []sourceLaneBindingIssue {
@@ -1656,12 +1684,13 @@ func sourceLaneCheckPresent(key sourceOperationKey, facts sourceFacts, a sourceS
 		return issues
 	}
 	bundle := facts.bindings.Bundles[key.Connector]
+	mappings := sourceLaneTargetFieldMappings(a, ref)
 	if observed.REST != nil {
 		add(sourceLaneRESTParameterContract(facts, *observed.REST), ptr)
 	} else {
 		for _, parameter := range facts.Parameters {
 			mapped := false
-			for _, m := range ref.FieldMappings {
+			for _, m := range mappings {
 				mapped = mapped || m.Source == parameter.Ref
 			}
 			if !mapped {
@@ -1676,7 +1705,7 @@ func sourceLaneCheckPresent(key sourceOperationKey, facts sourceFacts, a sourceS
 			add("target_parameter_contract_unverified", ptr)
 		}
 	}
-	add(sourceLaneRouteContract(facts, ref, observed, bundle), ptr)
+	add(sourceLaneRouteContract(facts, mappings, observed, bundle), ptr)
 	issues = append(issues, sourceLaneGraphQLContract(facts, a, ref, observed)...)
 	if facts.bindings == nil || ref.CanonicalID == "" || ref.CanonicalPointer == "" || ref.Generation == "" {
 		add("target_contract_unverified", ptr)
@@ -1727,16 +1756,16 @@ func sourceLaneCheckPresent(key sourceOperationKey, facts sourceFacts, a sourceS
 	// Missing current provenance remains visible, but cannot hide a known
 	// schema/template contradiction encountered above.
 	if len(issues) == 0 || ref.SourceSchema != nil || len(ref.FieldMappings) > 0 {
-		if observed.Write != nil && observed.Write.GraphQL != nil {
+		if ref.SchemaRole != sourceLaneSchemaResponse && observed.Write != nil && observed.Write.GraphQL != nil {
 			issues = append(issues, sourceLaneGraphQLVariablesContract(facts, ref, *observed.Write.GraphQL)...)
-		} else if observed.Write != nil || observed.REST != nil {
+		} else if ref.SchemaRole != sourceLaneSchemaResponse && (observed.Write != nil || observed.REST != nil) {
 			add(sourceLaneBodyContract(facts, ref, observed), ptr)
 		}
 		if observed.Stream != nil {
 			if ref.SourceSchema == nil {
 				add("target_response_contract_unverified", ptr)
 			}
-		} else if len(scopeOnly) == 0 && !sourceLaneNoResponseBody(facts) {
+		} else if ref.SchemaRole != sourceLaneSchemaResponse && len(scopeOnly) == 0 && !sourceLaneNoResponseBody(facts) && !sourceLaneHasResponseBinding(a, ref) {
 			add("target_response_contract_unverified", ptr)
 		}
 	}
@@ -1933,7 +1962,7 @@ func sourceLaneCheckAggregate(key sourceOperationKey, facts sourceFacts, a sourc
 	if source.Stream != nil && (ref.SchemaRole == sourceLaneSchemaRecord || ref.SchemaRole == sourceLaneSchemaResponse || ref.Lane == "etl" || ref.Lane == "direct_read") {
 		child("stream", source.Stream.Spec.Name)
 	}
-	if source.Write != nil && (ref.SchemaRole == sourceLaneSchemaRequest || ref.Lane == "direct_write" || ref.Lane == "reverse_etl") {
+	if source.Write != nil && (ref.SchemaRole == sourceLaneSchemaRequest || ref.SchemaRole == sourceLaneSchemaResponse || ref.Lane == "direct_write" || ref.Lane == "reverse_etl") {
 		child("write", source.Write.Spec.Name)
 	}
 	if source.Operation != nil && (ref.SchemaRole == sourceLaneSchemaRequest || ref.Kind == "canonical_operation") {
@@ -2106,7 +2135,7 @@ func sourceLaneNoResponseBody(facts sourceFacts) bool {
 	return success
 }
 
-func sourceLaneRouteContract(facts sourceFacts, ref sourceLaneTargetRef, target sourceLaneTypedTarget, bundle engine.Bundle) string {
+func sourceLaneRouteContract(facts sourceFacts, mappings []sourceLaneFieldMapping, target sourceLaneTypedTarget, bundle engine.Bundle) string {
 	if facts.Protocol != "rest" && facts.Protocol != "graphql" {
 		return "target_contract_unverified"
 	}
@@ -2149,14 +2178,14 @@ func sourceLaneRouteContract(facts sourceFacts, ref sourceLaneTargetRef, target 
 			if p.In != "path" || p.Name != name {
 				continue
 			}
-			for _, m := range ref.FieldMappings {
+			for _, m := range mappings {
 				if m.Source == p.Ref && m.Target.Pointer != nil && m.Target.Kind == kind && *m.Target.Pointer == coordinate {
 					matched = true
 				}
 			}
 		}
 		if !matched {
-			if len(ref.FieldMappings) == 0 {
+			if len(mappings) == 0 {
 				return "target_path_projection_unverified"
 			}
 			return "target_path_projection_mismatch"
@@ -2327,6 +2356,10 @@ func sourceLaneProjectionContract(facts sourceFacts, a sourceSemanticAnnotation,
 				}
 			} else if !reflect.DeepEqual(source.Path, actual.Path) || !reflect.DeepEqual(source.Required, actual.Required) {
 				add("target_body_projection_mismatch", m.Source.Pointer)
+			}
+		} else if ref.SchemaRole == sourceLaneSchemaResponse && target.Write != nil && m.Target.Kind == sourceLaneFieldSchema {
+			if !reflect.DeepEqual(source.Path, actual.Path) || len(actual.Path) != 0 {
+				add("target_response_projection_mismatch", m.Source.Pointer)
 			}
 		} else {
 			if target.Stream == nil || m.Target.Kind != sourceLaneFieldSchema {

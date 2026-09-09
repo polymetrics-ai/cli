@@ -3,6 +3,8 @@
   "additionalProperties": false,
   "properties": {
     "percentage": {
+      "maximum": 100,
+      "minimum": 0,
       "type": "integer"
     },
     "plan": {

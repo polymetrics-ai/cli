@@ -147,6 +147,7 @@
             }
           },
           "record_schema": { "type": "object" },
+          "response_schema": { "type": "object" },
           "idempotency_key_header": { "type": "string", "pattern": "^[!#$%&'*+.^_`|~0-9A-Za-z-]+$" },
           "dynamic_fields": {
             "type": "object",

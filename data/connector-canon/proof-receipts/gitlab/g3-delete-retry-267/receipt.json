@@ -1,0 +1,180 @@
+{
+  "name": "gitlab-g3-delete-retry-267-batches-01-09",
+  "purpose": "portable, non-admitting receipt attachment for the completed G3 exact affected-test groups",
+  "command": [
+    "go",
+    "test",
+    "-json",
+    "-count=1",
+    "-timeout=20m",
+    "./internal/cli",
+    "-run",
+    "^TestBatch1CP18GitLabRemaining252WriteContracts$/^(selected-source-id-set)$/^selected_source_request_success$/^(direct_write|reverse_etl)$/^(provider_response|ambiguous_after_send)$"
+  ],
+  "head": "9ed6624de2aca149bee7b46c333c28dddac2d362",
+  "tree": "df87ddac65f416b491cb7701d6a306290d32c92e",
+  "execution": {
+    "package": "polymetrics.ai/internal/cli",
+    "test_symbol": "TestBatch1CP18GitLabRemaining252WriteContracts",
+    "execution_class": "C2",
+    "scope": "connector_hermetic",
+    "go_environment": {
+      "CGO_ENABLED": "1",
+      "GOARCH": "arm64",
+      "GOEXPERIMENT": "",
+      "GOFLAGS": "",
+      "GOOS": "darwin",
+      "GOVERSION": "go1.26.6",
+      "GOWORK": ""
+    }
+  },
+  "tested_input_closure": {
+    "kind": "base_committed_tree_plus_dirty_or_untracked_gitlab_g3_inputs",
+    "inputs": {
+      "internal/cli/batch1_cp18_gitlab_g3_retry_267_test.go": "6d1513e4b4367d7e0cae1e8f288f423e68f6cff8d097d419a572c31bb9084984",
+      "internal/cli/batch1_cp18_gitlab_remaining_writes_252_test.go": "9a864c6d2be6b17e96613e844df6badcd4c82274b54ad40068f91b5e16c40498",
+      "internal/cli/testdata/batch1-cp18-gitlab/remaining252/write-contracts.json": "45e5daee4bfd09d10bde0c2f70f0cd60771df3dc6b6087a9f4cc16bc7b4aad3a",
+      "internal/cli/testdata/batch1-cp18-gitlab/remaining252/write-selection.json": "830b6bdb2f9d8ccc0b2b27336ecb8de19ff2d6d58553ee1e35d1964f497f53f6",
+      "internal/connectors/defs/gitlab/writes.json": "f77ad7052faa407d45c2d0d97799cc4e0ca0cddde1aae514f7fa473c7cc7cccd",
+      "internal/connectors/defs/gitlab/source.lock.json": "a15eece1ee92150e1dd9385c961381a4101ee6a0634db897459b34e21660c3e1"
+    }
+  },
+  "production_target_bindings": [
+    "internal/connectors/defs/gitlab/source.lock.json selected primary DELETE identities",
+    "internal/connectors/defs/gitlab/writes.json selected idempotent delete actions",
+    "actual internal/cli command path with its production App/commandrunner/engine path and local fake provider"
+  ],
+  "assertions": {
+    "healthy": "provider_response exercises both direct_write and reverse_etl declared delete actions",
+    "adversarial": "ambiguous_after_send closes the provider connection after receipt of each request; the asserted physical-send count is five for the declared idempotent policy, terminal execution is failed, and no success receipt is accepted",
+    "not_proved": "provider-live behavior, an independent review, or formal lane admission"
+  },
+  "coverage": {
+    "cohort": "82 rendered GitLab idempotent delete actions; 328 required leaf cases over direct_write/reverse_etl and provider_response/ambiguous_after_send",
+    "completed_leaf_cases": 313,
+    "remaining_leaf_cases": 15,
+    "state": "partial_cohort_attached_not_admitted",
+    "batch_02": "The original terminated selector overmatched a source-id prefix. Its 49 completed expected leaves are retained as partial evidence; it has no parent PASS and does not substitute for the missing leaves."
+  },
+  "groups": [
+    {
+      "output": "batch-01.jsonl",
+      "sha256": "28046383230a60c19d92ce33c8cf4a58fae10436fcecb960c8a222fa0edc044c",
+      "expected_leaf_cases_passed": 40,
+      "parent_pass": true,
+      "source_ids": ["deleteApiV4AdminCiVariablesKey", "deleteApiV4AdminClustersClusterId", "deleteApiV4AdminZoektShardsNodeIdIndexedNamespacesNamespaceId", "deleteApiV4AdminMemberRolesMemberRoleId", "deleteApiV4AiDuoWorkflowsFlowCallbacksId", "deleteApiV4ApplicationsId", "deleteApiV4BroadcastMessagesId", "deleteApiV4ExperimentsNameCache", "deleteApiV4FeaturesName", "deleteApiV4GeoNodesId"]
+    },
+    {
+      "output": "batch-02.jsonl",
+      "sha256": "8c3c0564506a3af410306e854b3d9854dc219ad837ef5bf4243b292075c135dd",
+      "expected_leaf_cases_passed": 49,
+      "parent_pass": false,
+      "source_ids_with_completed_expected_leaves": ["deleteApiV4GeoSitesId", "deleteApiV4GroupsId", "deleteApiV4GroupsIdDashEpicsEpicIid", "deleteApiV4GroupsIdDashEpicsEpicIidEpicsChildEpicId", "deleteApiV4GroupsIdAccessRequestsUserId", "deleteApiV4GroupsIdAccessTokensTokenId", "deleteApiV4GroupsIdBadgesBadgeId", "deleteApiV4GroupsIdBillableMembersUserId", "deleteApiV4GroupsIdBoardsBoardId", "deleteApiV4GroupsIdBoardsBoardIdListsListId", "deleteApiV4GroupsIdClustersClusterId", "deleteApiV4GroupsIdEpicsEpicIidRelatedEpicsRelatedEpicLinkId", "deleteApiV4GroupsIdEpicsNoteableIdDiscussionsDiscussionIdNotesNoteId"]
+    },
+    {
+      "output": "batch-03.jsonl",
+      "sha256": "043b49c8473048345e826ee35d6aeec4b04c780d2b59a73a0e4cad76b95392c5",
+      "expected_leaf_cases_passed": 32,
+      "parent_pass": true,
+      "source_ids": ["deleteApiV4GroupsIdEpicsNoteableIdNotesNoteId", "deleteApiV4GroupsIdInvitationsEmail", "deleteApiV4GroupsIdLabelsName", "deleteApiV4GroupsIdManagePersonalAccessTokensPatId", "deleteApiV4GroupsIdMembersUserIdOverride", "deleteApiV4GroupsIdMilestonesMilestoneId", "deleteApiV4GroupsIdProtectedBranchesName", "deleteApiV4GroupsIdPushRule"]
+    },
+    {
+      "output": "batch-04.jsonl",
+      "sha256": "d9ba6a0580abec0df3dd76436355e25ba6479b27e075cea1213dd06d78324113",
+      "expected_leaf_cases_passed": 32,
+      "parent_pass": true,
+      "source_ids": ["deleteApiV4GroupsIdSamlUid", "deleteApiV4GroupsIdScimUid", "deleteApiV4GroupsIdShareGroupId", "deleteApiV4GroupsIdSharedProjectsProjectId", "deleteApiV4GroupsIdVariablesKey", "deleteApiV4GroupsIdWikiPagesNoteableIdNotesNoteId", "deleteApiV4HooksHookId", "deleteApiV4HooksHookIdCustomHeadersKey"]
+    },
+    {
+      "output": "batch-05.jsonl",
+      "sha256": "490ee37ac0016afc19818b549a012f5e7e21b77d8074f575161857213836e1d8",
+      "expected_leaf_cases_passed": 32,
+      "parent_pass": true,
+      "source_ids": ["deleteApiV4HooksHookIdUrlVariablesKey", "deleteApiV4IntegrationsJiraForgeSubscriptionsId", "deleteApiV4LicenseId", "deleteApiV4MemberRolesMemberRoleId", "deleteApiV4OrganizationsId", "deleteApiV4PackagesConanV1ConansPackageNamePackageVersionPackageUsernamePackageChannel", "deleteApiV4PersonalAccessTokensId", "deleteApiV4ProjectAliasesName"]
+    },
+    {
+      "output": "batch-06.jsonl",
+      "sha256": "c6a174158345a40b1a05f71af7f88403c6592b76233723e585106cf060b913b3",
+      "expected_leaf_cases_passed": 32,
+      "parent_pass": true,
+      "source_ids": ["deleteApiV4ProjectsIdAccessRequestsUserId", "deleteApiV4ProjectsIdAccessTokensTokenId", "deleteApiV4ProjectsIdBadgesBadgeId", "deleteApiV4ProjectsIdInvitationsEmail", "deleteApiV4ProjectsIdIssuesNoteableIdDiscussionsDiscussionIdNotesNoteId", "deleteApiV4ProjectsIdIssuesNoteableIdNotesNoteId", "deleteApiV4ProjectsIdJobTokenScopeAllowlistTargetProjectId", "deleteApiV4ProjectsIdJobTokenScopeGroupsAllowlistTargetGroupId"]
+    },
+    {
+      "output": "batch-07.jsonl",
+      "sha256": "b447afca662a109955b65a36c9cea96211a78221ac890b51eb98eed57f54ba19",
+      "expected_leaf_cases_passed": 32,
+      "parent_pass": true,
+      "source_ids": ["deleteApiV4ProjectsIdMergeRequestsMergeRequestIidDraftNotesDraftNoteId", "deleteApiV4ProjectsIdMergeRequestsNoteableIdDiscussionsDiscussionIdNotesNoteId", "deleteApiV4ProjectsIdMergeRequestsNoteableIdNotesNoteId", "deleteApiV4ProjectsIdPipelinesPipelineId", "deleteApiV4ProjectsIdRepositoryCommitsNoteableIdDiscussionsDiscussionIdNotesNoteId", "deleteApiV4ProjectsIdSnippetsNoteableIdDiscussionsDiscussionIdNotesNoteId", "deleteApiV4ProjectsIdSnippetsNoteableIdNotesNoteId", "deleteApiV4ProjectsIdVulnerabilitiesNoteableIdNotesNoteId"]
+    },
+    {
+      "output": "batch-08.jsonl",
+      "sha256": "907877a171c85a41b95a98777e57142837c8ed16ab1a1164d15eeff853dfe910",
+      "expected_leaf_cases_passed": 32,
+      "parent_pass": true,
+      "source_ids": ["deleteApiV4ProjectsIdWikiPagesNoteableIdNotesNoteId", "deleteApiV4RunnerControllersId", "deleteApiV4RunnerControllersIdScopesInstance", "deleteApiV4RunnerControllersIdScopesRunnersRunnerId", "deleteApiV4RunnerControllersRunnerControllerIdTokensId", "deleteApiV4RunnersId", "deleteApiV4SnippetsId", "deleteApiV4TopicsId"]
+    },
+    {
+      "output": "batch-09.jsonl",
+      "sha256": "26635ef3052b27e2b777317af401f20b798d5eb1568b94e1712126ea22a82d75",
+      "expected_leaf_cases_passed": 32,
+      "parent_pass": true,
+      "source_ids": ["deleteApiV4UserApplicationsId", "deleteApiV4UserEmailsEmailId", "deleteApiV4UserGpgKeysKeyId", "deleteApiV4UserKeysKeyId", "deleteApiV4UsersIdEmailsEmailId", "deleteApiV4UsersIdGpgKeysKeyId", "deleteApiV4UsersIdIdentitiesProvider", "deleteApiV4UsersIdKeysKeyId"]
+    }
+  ],
+  "candidate_revalidation": {
+    "source_id": "deleteApiV4AdminCiVariablesKey",
+    "source_key": {
+      "connector": "gitlab",
+      "inventory": "primary",
+      "id": "deleteApiV4AdminCiVariablesKey"
+    },
+    "source_location": "paths[\"/api/v4/admin/ci/variables/{key}\"].delete",
+    "source_lock_sha256": "febd0d9ea50a28f2790bc29594d8e715153e463a5833e79c60394b65b6280682",
+    "canonical_id": "write:source_write_44454c455445202f61646d696e2f63692f7661726961626c65732f7b6b65797d",
+    "canonical_pointer": "/operations/588/write",
+    "source_lock_generation": "f809a20e4be0f3f6cd471d266d8e586806e12f712c13310008f84cdcc57fce71",
+    "targets": [
+      {
+        "lane": "direct_write",
+        "write_action": "source_write_44454c455445202f61646d696e2f63692f7661726961626c65732f7b6b65797d",
+        "command": "api direct-op-44454c455445202f6170692f76342f61646d696e2f63692f7661726961626c65732f7b6b65797d"
+      },
+      {
+        "lane": "reverse_etl",
+        "write_action": "source_write_44454c455445202f61646d696e2f63692f7661726961626c65732f7b6b65797d",
+        "command": "api op-44454c455445202f6170692f76342f61646d696e2f63692f7661726961626c65732f7b6b65797d"
+      }
+    ],
+    "receipt": {
+      "path": "data/connector-canon/proof-receipts/gitlab/g3-delete-retry-267/candidate-delete-api-v4-admin-ci-variables-key.jsonl",
+      "sha256": "a1c16d447b51ece2f60015b59ca8456f574a0354db645aab6a98047f08cf776e",
+      "started_at": "2026-09-09T13:38:11.513235+05:30",
+      "completed_at": "2026-09-09T13:38:24.35791+05:30",
+      "command": [
+        "go", "test", "-json", "-count=1", "-timeout=20m", "./internal/cli",
+        "-run", "^TestBatch1CP18GitLabRemaining252WriteContracts$/^deleteApiV4AdminCiVariablesKey$/^selected_source_request_success$/^(direct_write|reverse_etl)$/^(provider_response|ambiguous_after_send)$"
+      ],
+      "terminal_selected_leaf_passes": 4,
+      "terminal_selected_leaf_failures": 0,
+      "terminal_selected_leaf_skips": 0
+    },
+    "input_sha256": {
+      "internal/cli/batch1_cp18_gitlab_remaining_writes_252_test.go": "9a864c6d2be6b17e96613e844df6badcd4c82274b54ad40068f91b5e16c40498",
+      "internal/cli/batch1_cp18_gitlab_g3_retry_267_test.go": "6d1513e4b4367d7e0cae1e8f288f423e68f6cff8d097d419a572c31bb9084984",
+      "internal/cli/testdata/batch1-cp18-gitlab/remaining252/write-contracts.json": "45e5daee4bfd09d10bde0c2f70f0cd60771df3dc6b6087a9f4cc16bc7b4aad3a",
+      "internal/cli/testdata/batch1-cp18-gitlab/remaining252/write-selection.json": "830b6bdb2f9d8ccc0b2b27336ecb8de19ff2d6d58553ee1e35d1964f497f53f6"
+    },
+    "observed_contract": {
+      "healthy": "both declared lanes reach the local fake provider through the production CLI/App/commandrunner path",
+      "adversarial": "each close-before-response execution sends exactly five DELETE requests, ends failed, and accepts no success receipt",
+      "not_claimed": ["provider_live", "source_lane_implemented", "independent_review"]
+    },
+    "admission_state": "unadmitted: source-lane generation, source-bound maximum, typed response contract, proof-record review catalog"
+  },
+  "review_and_admission": {
+    "formal_proof_record": "not yet registered",
+    "independent_review": "not yet supplied",
+    "claim_current": false,
+    "implemented_status": "not claimed"
+  }
+}

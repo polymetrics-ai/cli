@@ -11,6 +11,8 @@
       "type": "string"
     },
     "expires_in": {
+      "maximum": 43200,
+      "minimum": 1,
       "type": [
         "integer",
         "null"

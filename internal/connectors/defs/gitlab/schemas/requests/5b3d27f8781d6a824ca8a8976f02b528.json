@@ -25,6 +25,8 @@
       ]
     },
     "pagination_limit": {
+      "maximum": 100,
+      "minimum": 1,
       "type": [
         "integer",
         "null"

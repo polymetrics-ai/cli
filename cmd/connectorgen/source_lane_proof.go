@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"io/fs"
 	"math"
 	"os"
 	"reflect"
@@ -15,7 +16,10 @@ import (
 	"strings"
 )
 
-const sourceLaneProofPath = "data/connector-canon/batch1-source-lane-proofs.json"
+const (
+	sourceLaneProofPath              = "data/connector-canon/batch1-source-lane-proofs.json"
+	sourceLaneProofReviewCatalogPath = "data/connector-canon/batch1-source-lane-proof-reviews.json"
+)
 
 var errSourceLaneProofCapacity = errors.New("proof record capacity exceeded")
 
@@ -51,6 +55,22 @@ type sourceLaneProofRecord struct {
 type sourceLaneProofReview struct {
 	Record  sourceLaneProofRecord
 	Fixture bool
+}
+
+// sourceLaneProofReviewCatalogDocument is an external review handoff. The
+// proof document remains the author-owned claim; this separate, versioned
+// catalog is the only production route through which an independent reviewer
+// can attest to the exact record and any shared input set. Fixture is
+// deliberately absent from this wire shape so production bytes cannot grant a
+// fixture-only review authority.
+type sourceLaneProofReviewCatalogDocument struct {
+	SchemaVersion int                             `json:"schema_version"`
+	Reviews       []sourceLaneExternalProofReview `json:"reviews"`
+	InputSets     []sourceLaneProofInputSet       `json:"input_sets,omitempty"`
+}
+
+type sourceLaneExternalProofReview struct {
+	Record sourceLaneProofRecord `json:"record"`
 }
 
 type sourceLaneProofInputs struct {
@@ -89,6 +109,50 @@ type sourceLaneProofPolicy struct {
 }
 type sourceLaneProofReadEvent = sourceProofReadEvent
 type sourceLaneProofReadStats = sourceProofReadStats
+
+func sourceLaneProofCatalogDiagnostic(code string) sourceLaneDiagnostic {
+	return sourceLaneDiagnostic{Lanes: sourceLaneNames(), Stage: "proof", Code: code, Pointer: sourceLaneProofReviewCatalogPath, Owner: "batch1", Severity: "error"}
+}
+
+// sourceLaneProofCatalogFromRepository reads the canonical, externally
+// supplied review catalog through a confined root. A missing catalog is an
+// expected absence: the proof loader will record the per-claim
+// proof_review_unavailable deficit. Invalid or over-budget catalog bytes are
+// a global error rather than a reason to silently accept author-owned claims.
+func sourceLaneProofCatalogFromRepository(ctx context.Context, repo string, policy sourceLaneProofPolicy) (sourceLaneProofCatalog, []sourceLaneDiagnostic) {
+	if ctx == nil {
+		ctx = context.Background()
+	}
+	if ctx.Err() != nil || policy.limits.DocumentBytes <= 0 || policy.limits.DocumentBytes > 128<<20 || policy.MaxRecords < 0 {
+		return sourceLaneProofCatalog{}, []sourceLaneDiagnostic{sourceLaneProofCatalogDiagnostic("proof_review_catalog_invalid")}
+	}
+	root, err := os.OpenRoot(repo)
+	if err != nil {
+		return sourceLaneProofCatalog{}, []sourceLaneDiagnostic{sourceLaneProofCatalogDiagnostic("proof_review_catalog_unavailable")}
+	}
+	defer func() { _ = root.Close() }()
+	file, err := root.Open(sourceLaneProofReviewCatalogPath)
+	if errors.Is(err, fs.ErrNotExist) {
+		return sourceLaneProofCatalog{}, nil
+	}
+	if err != nil {
+		return sourceLaneProofCatalog{}, []sourceLaneDiagnostic{sourceLaneProofCatalogDiagnostic("proof_review_catalog_unavailable")}
+	}
+	defer func() { _ = file.Close() }()
+	raw, err := io.ReadAll(io.LimitReader(file, policy.limits.DocumentBytes+1))
+	if err != nil || int64(len(raw)) > policy.limits.DocumentBytes || ctx.Err() != nil {
+		return sourceLaneProofCatalog{}, []sourceLaneDiagnostic{sourceLaneProofCatalogDiagnostic("proof_review_catalog_invalid")}
+	}
+	var document sourceLaneProofReviewCatalogDocument
+	if err := decodeStrictJSON(raw, &document); err != nil || document.SchemaVersion != 1 || document.Reviews == nil || len(document.Reviews) > policy.MaxRecords || len(document.InputSets) > policy.MaxRecords {
+		return sourceLaneProofCatalog{}, []sourceLaneDiagnostic{sourceLaneProofCatalogDiagnostic("proof_review_catalog_invalid")}
+	}
+	catalog := sourceLaneProofCatalog{Reviews: make([]sourceLaneProofReview, 0, len(document.Reviews)), InputSets: append([]sourceLaneProofInputSet(nil), document.InputSets...)}
+	for _, review := range document.Reviews {
+		catalog.Reviews = append(catalog.Reviews, sourceLaneProofReview{Record: review.Record})
+	}
+	return catalog, nil
+}
 
 func newSourceLaneProofPolicy(keys []sourceOperationKey) (sourceLaneProofPolicy, error) {
 	p := sourceLaneProofPolicy{keys: map[sourceOperationKey]bool{}, limits: sourceLaneProofLimits{DocumentBytes: 128 << 20, UniqueBytes: 512 << 20, InputBytes: 4 << 20, TargetBytes: 64 << 20, Tuples: 131072, Files: 65536, Pins: 4096}}
@@ -448,7 +512,11 @@ func loadSourceLaneProofs(ctx context.Context, repo string, policy sourceLanePro
 		}
 		review, count := reviews[r.ID], reviewCounts[r.ID]
 		if count > 1 || count == 1 && !reflect.DeepEqual(review.Record, r) {
-			add(r, "proof_review_mismatch", "error")
+			code := "proof_review_mismatch"
+			if count == 1 && review.Record.ID == r.ID && review.Record.Key == r.Key && review.Record.Lane == r.Lane {
+				code = "proof_review_stale"
+			}
+			add(r, code, "error")
 			continue
 		}
 		if !sourceLaneProofShape(r) || (len(r.Inputs) > 0) == (r.InputSetSHA256 != "") {

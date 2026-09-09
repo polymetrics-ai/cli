@@ -135,6 +135,142 @@
     },
     {
       "key": {
+        "connector": "gitlab",
+        "inventory": "primary",
+        "id": "deleteApiV4AdminCiVariablesKey"
+      },
+      "semantics": "mutation",
+      "citation": {
+        "document_id": "gitlab:primary",
+        "pointer": "/rest/operations/1/source_operation/summary",
+        "value_sha256": "c16b8703412baf358a107e90d487e9b3cd51bbd691dcb8eb1e6bfded40de5d24"
+      },
+      "clause": "Delete instance variable",
+      "foundation_gap": "",
+      "atlas_id": "",
+      "decision_refs": [
+        "g3-delete-retry-decision-267"
+      ],
+      "intended_bindings": [
+        {
+          "kind": "write",
+          "connector": "gitlab",
+          "id": "source_write_44454c455445202f61646d696e2f63692f7661726961626c65732f7b6b65797d",
+          "lane": "direct_write",
+          "artifact": "internal/connectors/defs/gitlab/writes.json",
+          "pointer": "/actions/0",
+          "artifact_sha256": "23822f05248ec403b8ddfc29b6c86c852b08289712edea15db763fdc68d78fc4",
+          "canonical_id": "write:source_write_44454c455445202f61646d696e2f63692f7661726961626c65732f7b6b65797d",
+          "canonical_pointer": "/operations/588/write",
+          "generation": "sha256:630b07d5ff5c8a396f3e2ffba9872299446541ed21b1f87e0dd9b4cb63d93fbc",
+          "schema_role": "request",
+          "field_mappings": [
+            {
+              "source": {
+                "document_id": "gitlab:primary",
+                "pointer": "/rest/operations/1/source_operation/parameters/0",
+                "value_sha256": "56ade03346cc88d9d757e89e0e382c300f84eeb299f15655490453fddea77e41"
+              },
+              "target": {
+                "kind": "schema",
+                "pointer": "/properties/key"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "write",
+          "connector": "gitlab",
+          "id": "source_write_44454c455445202f61646d696e2f63692f7661726961626c65732f7b6b65797d",
+          "lane": "reverse_etl",
+          "artifact": "internal/connectors/defs/gitlab/writes.json",
+          "pointer": "/actions/0",
+          "artifact_sha256": "23822f05248ec403b8ddfc29b6c86c852b08289712edea15db763fdc68d78fc4",
+          "canonical_id": "write:source_write_44454c455445202f61646d696e2f63692f7661726961626c65732f7b6b65797d",
+          "canonical_pointer": "/operations/588/write",
+          "generation": "sha256:630b07d5ff5c8a396f3e2ffba9872299446541ed21b1f87e0dd9b4cb63d93fbc",
+          "schema_role": "request",
+          "field_mappings": [
+            {
+              "source": {
+                "document_id": "gitlab:primary",
+                "pointer": "/rest/operations/1/source_operation/parameters/0",
+                "value_sha256": "56ade03346cc88d9d757e89e0e382c300f84eeb299f15655490453fddea77e41"
+              },
+              "target": {
+                "kind": "schema",
+                "pointer": "/properties/key"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "write",
+          "connector": "gitlab",
+          "id": "source_write_44454c455445202f61646d696e2f63692f7661726961626c65732f7b6b65797d",
+          "lane": "direct_write",
+          "artifact": "internal/connectors/defs/gitlab/writes.json",
+          "pointer": "/actions/0",
+          "artifact_sha256": "23822f05248ec403b8ddfc29b6c86c852b08289712edea15db763fdc68d78fc4",
+          "canonical_id": "write:source_write_44454c455445202f61646d696e2f63692f7661726961626c65732f7b6b65797d",
+          "canonical_pointer": "/operations/588/write",
+          "generation": "sha256:630b07d5ff5c8a396f3e2ffba9872299446541ed21b1f87e0dd9b4cb63d93fbc",
+          "schema_role": "response",
+          "source_schema": {
+            "document_id": "gitlab:primary",
+            "pointer": "/rest/operations/1/source_operation/responses/200/content/application~1json/schema",
+            "value_sha256": "4ca8689e2d4790a63aac2d2f9bb6d76c67f96b60631bed24e4f37f330b0915c5"
+          },
+          "field_mappings": [
+            {
+              "source": {
+                "document_id": "gitlab:primary",
+                "pointer": "/rest/operations/1/source_operation/responses/200/content/application~1json/schema",
+                "value_sha256": "4ca8689e2d4790a63aac2d2f9bb6d76c67f96b60631bed24e4f37f330b0915c5"
+              },
+              "target": {
+                "kind": "schema",
+                "pointer": ""
+              }
+            }
+          ]
+        },
+        {
+          "kind": "write",
+          "connector": "gitlab",
+          "id": "source_write_44454c455445202f61646d696e2f63692f7661726961626c65732f7b6b65797d",
+          "lane": "reverse_etl",
+          "artifact": "internal/connectors/defs/gitlab/writes.json",
+          "pointer": "/actions/0",
+          "artifact_sha256": "23822f05248ec403b8ddfc29b6c86c852b08289712edea15db763fdc68d78fc4",
+          "canonical_id": "write:source_write_44454c455445202f61646d696e2f63692f7661726961626c65732f7b6b65797d",
+          "canonical_pointer": "/operations/588/write",
+          "generation": "sha256:630b07d5ff5c8a396f3e2ffba9872299446541ed21b1f87e0dd9b4cb63d93fbc",
+          "schema_role": "response",
+          "source_schema": {
+            "document_id": "gitlab:primary",
+            "pointer": "/rest/operations/1/source_operation/responses/200/content/application~1json/schema",
+            "value_sha256": "4ca8689e2d4790a63aac2d2f9bb6d76c67f96b60631bed24e4f37f330b0915c5"
+          },
+          "field_mappings": [
+            {
+              "source": {
+                "document_id": "gitlab:primary",
+                "pointer": "/rest/operations/1/source_operation/responses/200/content/application~1json/schema",
+                "value_sha256": "4ca8689e2d4790a63aac2d2f9bb6d76c67f96b60631bed24e4f37f330b0915c5"
+              },
+              "target": {
+                "kind": "schema",
+                "pointer": ""
+              }
+            }
+          ]
+        }
+      ],
+      "materialized_bindings": []
+    },
+    {
+      "key": {
         "connector": "circleci",
         "inventory": "primary",
         "id": "circleci.rest.getOrgSummaryData"

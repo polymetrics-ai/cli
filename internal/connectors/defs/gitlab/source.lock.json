@@ -11756,7 +11756,6 @@
       "additionalProperties": false,
       "properties": {
         "key": {
-          "maxLength": 8192,
           "type": "string"
         }
       },
@@ -21759,6 +21758,43 @@
       "required": [
         "url"
       ],
+      "type": "object"
+    },
+    "schemas/responses/api_entities_ci_variable.json": {
+      "properties": {
+        "description": {
+          "example": "This variable is being used for ...",
+          "type": "string"
+        },
+        "environment_scope": {
+          "example": "*",
+          "type": "string"
+        },
+        "hidden": {
+          "type": "boolean"
+        },
+        "key": {
+          "example": "TEST_VARIABLE_1",
+          "type": "string"
+        },
+        "masked": {
+          "type": "boolean"
+        },
+        "protected": {
+          "type": "boolean"
+        },
+        "raw": {
+          "type": "boolean"
+        },
+        "value": {
+          "example": "TEST_1",
+          "type": "string"
+        },
+        "variable_type": {
+          "example": "env_var",
+          "type": "string"
+        }
+      },
       "type": "object"
     },
     "schemas/users.json": {
@@ -71851,8 +71887,12 @@
     },
     {
       "id": "write:source_write_44454c455445202f61646d696e2f63692f7661726961626c65732f7b6b65797d",
+      "source": {
+        "provider_operation": "deleteApiV4AdminCiVariablesKey"
+      },
       "schema_refs": {
-        "request": "schemas/requests/af30d82f90fe1d330bfc2d6b55501eb1.json"
+        "request": "schemas/requests/af30d82f90fe1d330bfc2d6b55501eb1.json",
+        "response": "schemas/responses/api_entities_ci_variable.json"
       },
       "write": {
         "body_type": "none",
@@ -71875,13 +71915,49 @@
           "additionalProperties": false,
           "properties": {
             "key": {
-              "maxLength": 8192,
               "type": "string"
             }
           },
           "required": [
             "key"
           ],
+          "type": "object"
+        },
+        "response_schema": {
+          "properties": {
+            "description": {
+              "example": "This variable is being used for ...",
+              "type": "string"
+            },
+            "environment_scope": {
+              "example": "*",
+              "type": "string"
+            },
+            "hidden": {
+              "type": "boolean"
+            },
+            "key": {
+              "example": "TEST_VARIABLE_1",
+              "type": "string"
+            },
+            "masked": {
+              "type": "boolean"
+            },
+            "protected": {
+              "type": "boolean"
+            },
+            "raw": {
+              "type": "boolean"
+            },
+            "value": {
+              "example": "TEST_1",
+              "type": "string"
+            },
+            "variable_type": {
+              "example": "env_var",
+              "type": "string"
+            }
+          },
           "type": "object"
         },
         "redact_fields": [

@@ -3,7 +3,6 @@
   "additionalProperties": false,
   "properties": {
     "key": {
-      "maxLength": 8192,
       "type": "string"
     }
   },

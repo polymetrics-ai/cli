@@ -300,7 +300,14 @@ func vNextValidateSourceSchemas(descriptor vNextCanonicalDescriptor, outputs map
 					effective = append(effective, vNextOperationRequestSchemas(loaded)...)
 				}
 			}
-		case "response", "record":
+		case "response":
+			if source.Write != nil {
+				if loaded, found := writes[source.Write.Spec.Name]; found && len(loaded.ResponseSchema) > 0 {
+					effective = append(effective, loaded.ResponseSchema)
+				}
+			}
+			fallthrough
+		case "record":
 			if source.Stream != nil {
 				if loaded, found := streams[source.Stream.Spec.Name]; found && loaded.SchemaRef != "" {
 					if schema, found := bundle.Schemas[loaded.Name]; found && len(schema.Raw) > 0 {

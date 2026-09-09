@@ -649,6 +649,11 @@ type WriteAction struct {
 	// existing typed action declarations and sealed into the ordinary preview.
 	DeclaredBatch *DeclaredBatchSpec `json:"declared_batch,omitempty"`
 	RecordSchema  json.RawMessage    `json:"record_schema"`
+	// ResponseSchema is an optional, declaration-owned JSON response contract
+	// for a named write action. When present, a successful provider response
+	// must declare JSON and validate against this exact schema before the
+	// public write result is reported as successful.
+	ResponseSchema json.RawMessage `json:"response_schema,omitempty"`
 	// IdempotencyKeyHeader names a provider-documented request header. Execution
 	// generates one fresh key per record and reuses it only across that record's retries.
 	IdempotencyKeyHeader string `json:"idempotency_key_header,omitempty"`
@@ -2129,6 +2134,11 @@ func validateWriteBodies(actions []WriteAction) error {
 		}
 		if err := validateWriteActionSuccessStatuses(i, action); err != nil {
 			return err
+		}
+		if len(action.ResponseSchema) > 0 {
+			if _, err := CompileSchema(action.ResponseSchema); err != nil {
+				return diagnosticWithin(fmt.Sprintf("/actions/%d/response_schema", i), fmt.Errorf("action %d (%q) response_schema: %w", i, action.Name, err))
+			}
 		}
 		if action.BodyRequired && bodyType != "json" {
 			return diagnosticAt(fmt.Sprintf("/actions/%d/body_required", i), "write_body_required_type", "body_required requires body_type json", fmt.Errorf("action %d (%q) body_required requires body_type json, got %q", i, action.Name, bodyType))

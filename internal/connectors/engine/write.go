@@ -464,6 +464,9 @@ func executeApprovedWrite(ctx context.Context, b Bundle, action WriteAction, req
 				if responseErr == nil && err == nil {
 					responseErr = validateWriteActionSuccessStatus(step.action, response.Status)
 				}
+				if responseErr == nil && err == nil {
+					responseErr = validateWriteActionResponseSchema(step.action, response)
+				}
 			}
 			if responseErr != nil {
 				result.RecordsFailed = len(records) - result.RecordsWritten - result.RecordsUnchanged
@@ -513,6 +516,34 @@ func validateWriteActionSuccessStatus(action WriteAction, status int) error {
 		}
 	}
 	return fmt.Errorf("provider response status %d is not declared successful for write action %q", status, action.Name)
+}
+
+// validateWriteActionResponseSchema applies the declaration-owned response
+// schema only after transport and exact-status success. It deliberately does
+// not reinterpret error responses as successes, and it refuses a status-only
+// JSON claim when the provider omitted or contradicted the declared media.
+func validateWriteActionResponseSchema(action WriteAction, response *connsdk.Response) error {
+	if len(action.ResponseSchema) == 0 {
+		return nil
+	}
+	if response == nil {
+		return fmt.Errorf("write action %q response_schema received no provider response", action.Name)
+	}
+	if !writeProviderResponseDeclaresJSON(response.Header) {
+		return fmt.Errorf("write action %q response_schema requires application/json response", action.Name)
+	}
+	schema, err := CompileSchema(action.ResponseSchema)
+	if err != nil {
+		return fmt.Errorf("write action %q response_schema: %w", action.Name, err)
+	}
+	decoded, err := decodeDirectReadBody(response.Body, connsdk.DefaultMaxResponseBody)
+	if err != nil {
+		return fmt.Errorf("write action %q response_schema: provider response is not valid JSON", action.Name)
+	}
+	if err := schema.Validate(decoded); err != nil {
+		return fmt.Errorf("write action %q response_schema: %w", action.Name, err)
+	}
+	return nil
 }
 
 func preparedRequestMatchesExecution(current, approved PreparedRequest) bool {

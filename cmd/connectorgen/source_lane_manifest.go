@@ -115,7 +115,9 @@ func buildSourceLaneManifestObserved(ctx context.Context, repo string, cohort so
 	if policyErr != nil {
 		proofs.Diagnostics = []sourceLaneDiagnostic{{Lanes: sourceLaneNames(), Stage: "proof", Code: "proof_cohort_policy_invalid", Owner: "batch1", Severity: "error"}}
 	} else {
-		proofs = loadSourceLaneProofs(ctx, repo, policy, sourceLaneProofCatalog{})
+		catalog, catalogDiagnostics := sourceLaneProofCatalogFromRepository(ctx, repo, policy)
+		proofs = loadSourceLaneProofs(ctx, repo, policy, catalog)
+		proofs.Diagnostics = append(catalogDiagnostics, proofs.Diagnostics...)
 	}
 	result.Diagnostics = append(result.Diagnostics, proofs.Diagnostics...)
 	var demandAtlasOwners map[string]string
