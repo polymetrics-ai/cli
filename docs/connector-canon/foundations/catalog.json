@@ -1,7 +1,7 @@
 {
   "$schema": "./catalog.schema.json",
   "schema_version": 1,
-  "catalog_revision": 55,
+  "catalog_revision": 56,
   "authority": {
     "authoring_only": true,
     "runtime_input": false,
@@ -3287,7 +3287,8 @@
           "internal/warehouse/artifact.go",
           "internal/warehouse/layout.go",
           "internal/warehouse/parquet.go",
-          "internal/app/read_input_preflight.go"
+          "internal/app/read_input_preflight.go",
+          "internal/app/local_warehouse_overwrite.go"
         ],
         "symbols": [
           {
@@ -3337,6 +3338,14 @@
           {
             "file": "internal/app/read_input_preflight.go",
             "name": "(*App).validateETLReadInputs"
+          },
+          {
+            "file": "internal/app/local_warehouse_overwrite.go",
+            "name": "(*localWarehouseDestinationExecutor).BeginFullOverwrite"
+          },
+          {
+            "file": "internal/app/local_warehouse_overwrite.go",
+            "name": "(*localWarehouseDestinationExecutor).ReadBackEmptyFullOverwrite"
           }
         ]
       },
@@ -3381,7 +3390,8 @@
           "Parquet publication and destination read-back before checkpoint completion",
           "typed dedupe and history materialization strategies",
           "full_append and full_overwrite accept source snapshots without inventing a row cursor",
-          "incremental_append retains its durable source checkpoint and dedupe history retains its declared row cursor"
+          "incremental_append retains its durable source checkpoint and dedupe history retains its declared row cursor",
+          "Canonical full_overwrite uses the existing run-scoped destination port: bounded pages enter a private fsynced JSONL snapshot, the complete WAL precedes one atomic Parquet replacement, and byte/count read-back precedes checkpoint completion."
         ]
       },
       "selection": {
@@ -3410,7 +3420,10 @@
         "Incremental modes still require an admitted provider cursor or event executor; warehouse materialization cannot manufacture one.",
         "Dedupe history requires a declared row cursor; incremental append requires a durable candidate checkpoint.",
         "Change capture requires its typed source and transport path and is not implied by ordinary materialization.",
-        "For selected ReadInputValidator consumers, ordinary saved ETL validates credential metadata plus endpoint overrides after delivered-run reconciliation and before beginRun or source/destination credential resolution; validation carries no secret or runtime capability."
+        "For selected ReadInputValidator consumers, ordinary saved ETL validates credential metadata plus endpoint overrides after delivered-run reconciliation and before beginRun or source/destination credential resolution; validation carries no secret or runtime capability.",
+        "The local warehouse per-page ApplyDestination refuses full_overwrite; the run-scoped port is mandatory.",
+        "WAL and Parquet publication is ordered, not an atomic two-file transaction. A failure after WAL publication retains the complete WAL for rebuild and produces no successful acknowledgement.",
+        "Empty full_overwrite recovery binds its closed publication output to structural connection/stream identity, current owner path digest, acknowledgement time, and exact WAL/table bytes; it does not invent a source checkpoint."
       ],
       "non_goals": [
         "A Postgres warehouse or generic SQL destination.",
@@ -3512,6 +3525,26 @@
           "package": "./internal/app",
           "file": "internal/app/read_input_preflight_test.go",
           "name": "TestRunETLReadInputPreSecret234"
+        },
+        {
+          "package": "./internal/app",
+          "file": "internal/app/local_warehouse_overwrite248_test.go",
+          "name": "TestLocalWarehouseCanonicalOverwrite248"
+        },
+        {
+          "package": "./internal/app",
+          "file": "internal/app/local_warehouse_overwrite_port248_test.go",
+          "name": "TestLocalWarehouseOverwritePort248"
+        },
+        {
+          "package": "./internal/app",
+          "file": "internal/app/local_warehouse_overwrite_port248_test.go",
+          "name": "TestLocalWarehouseOverwritePublicationCuts248"
+        },
+        {
+          "package": "./internal/app",
+          "file": "internal/app/local_warehouse_overwrite_port248_test.go",
+          "name": "TestLocalWarehouseOverwriteRejectsPerPageReplacement248"
         }
       ],
       "known_gap_refs": [],

@@ -101,9 +101,7 @@ func TestBatch1CP18GitLabLane248ManagedETLCollections(t *testing.T) {
 func cp18Lane248ETLCollections(t *testing.T, mode string) {
 	for _, stream := range []string{"projects", "groups", "users", "issues"} {
 		faults := []string{"complete", "second_404", "repeated_link", "malformed_link", "foreign_link"}
-		if mode == "full_overwrite" {
-			faults = []string{"complete"}
-		} // Refused before retrieval; downstream faults remain blocked.
+
 		for _, fault := range faults {
 			t.Run(stream+"/"+fault, func(t *testing.T) {
 				firstBody, lastBody := `[{"id":101,"created_at":"2026-01-01T00:00:00Z"},{"id":202,"created_at":"2026-01-02T00:00:00Z"}]`, `[{"id":303,"created_at":"2026-01-03T00:00:00Z"}]`
@@ -169,13 +167,7 @@ func cp18Lane248ETLCollections(t *testing.T, mode string) {
 				mu.Lock()
 				wire := append([]string(nil), paths...)
 				mu.Unlock()
-				if mode == "full_overwrite" {
-					if code == 0 || len(wire) != 0 || foreignSends.Load() != 0 || !strings.Contains(out+diag, "no matching closed source/destination transport has registered compatible executors") {
-						t.Fatalf("unregistered full_overwrite composition refusal changed: code=%d wire=%v %s %s", code, wire, out, diag)
-					}
-					t.Log("actual full_overwrite source/warehouse combination refused before HTTP; no pagination/publication execution claim")
-					return
-				}
+
 				wantWire := []string{"/api/v4/" + stream + "?per_page=50", "/api/v4/" + stream + "?page=2&per_page=50"}
 				if !reflect.DeepEqual(wire, wantWire) || foreignSends.Load() != 0 {
 					t.Fatalf("wire=%q foreign=%d want=%q code=%d stdout=%s stderr=%s", wire, foreignSends.Load(), wantWire, code, out, diag)

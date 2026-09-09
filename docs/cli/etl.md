@@ -34,6 +34,13 @@ DESCRIPTION
   The warehouse destination uses an appendable JSONL write-ahead log and rebuilds
   each final table as a single Parquet file.
 
+  For admitted source streams, canonical full_overwrite prepares the complete
+  replacement privately in bounded batches. Source retrieval failure leaves the
+  previous published table intact. Publication installs the complete JSONL WAL
+  before replacing the single Parquet table; these two files are not an atomic
+  pair. Read-back and durability checks precede checkpoint completion. A failure
+  after WAL publication retains that complete log for rebuilding the table.
+
   ETL and reverse ETL are separate first-class connector surfaces: ETL reads
   streams, while pm reverse executes connector write actions where the upstream
   API supports mutations.

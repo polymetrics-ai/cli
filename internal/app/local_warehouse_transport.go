@@ -76,6 +76,9 @@ func (e *localWarehouseDestinationExecutor) ApplyDestination(ctx context.Context
 	if err != nil || strategy != request.Plan.ApplyStrategy {
 		return synccontract.DownstreamAcknowledgement{}, fmt.Errorf("local warehouse transport received an undeclared apply strategy")
 	}
+	if strategy.Mode == synccontract.ModeFullOverwrite {
+		return synccontract.DownstreamAcknowledgement{}, fmt.Errorf("local warehouse full_overwrite requires the run-scoped publication port")
+	}
 	if err := request.Receipt.Validate(); err != nil {
 		return synccontract.DownstreamAcknowledgement{}, fmt.Errorf("local warehouse transport receipt: %w", err)
 	}

@@ -74,6 +74,8 @@ pm connections create <name> \
 
 Incremental modes require a cursor. Deduped modes also require a primary key. A static connector advertises a mode only when the rendered execution bundle names the required fields and a registered executor implements it. Runtime preflight rejects incompatible source, destination, or mode combinations before source I/O.
 
+For admitted source streams, canonical `full_overwrite` prepares the complete replacement privately in bounded batches. Source retrieval failure preserves the previous published table. Publication installs the complete JSONL WAL before replacing the single Parquet table; these files are not an atomic pair. Durability and read-back checks precede checkpoint completion. A failure after WAL publication retains the complete log for rebuilding the table.
+
 ### Closed typed transforms
 
 `--transform-file` is an optional bounded JSON `TransformPlanV1`. `pm` checks
