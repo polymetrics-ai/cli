@@ -538,6 +538,12 @@ func sourceProjectionTypedWrite(facts sourceFacts, semantics *vNextSourceProject
 	if !ok {
 		return vNextOperationDescriptor{}, fmt.Errorf("mutation schema requires supported object projection")
 	}
+	// Lower source-owned nullable scalar vocabulary without dropping bounds or
+	// other constraints. The engine continues to compile the closed result.
+	schema, err := sourceProjectionNullableScalars(schema)
+	if err != nil {
+		return vNextOperationDescriptor{}, fmt.Errorf("mutation schema projection: %w", err)
+	}
 	encoded, err := json.Marshal(schema)
 	if err != nil {
 		return vNextOperationDescriptor{}, err
