@@ -87,7 +87,7 @@ func validateRESTDirectReadStructuredJSONBodyField(op OperationSpec, field strin
 	if err != nil {
 		return fmt.Errorf("operation %q body_schema does not declare structured field %q: %w", op.ID, field, err)
 	}
-	if !isObjectType(resolved.node) && !isArrayType(resolved.node) {
+	if !isObjectType(resolved.node) && !isArrayType(resolved.node) && !structuredRESTBodyNodeIsExactNullableString(resolved.node) {
 		return fmt.Errorf("operation %q body_schema field %q must be an object or array", op.ID, field)
 	}
 	return nil
@@ -111,7 +111,7 @@ func validateRESTStructuredJSONBodyField(op OperationSpec, field string) error {
 	if err != nil {
 		return fmt.Errorf("operation %q body_schema does not declare structured field %q: %w", op.ID, field, err)
 	}
-	if !isObjectType(resolved.node) && !isArrayType(resolved.node) {
+	if !isObjectType(resolved.node) && !isArrayType(resolved.node) && !structuredRESTBodyNodeIsExactNullableString(resolved.node) {
 		return fmt.Errorf("operation %q body_schema field %q must be an object or array", op.ID, field)
 	}
 	return nil
@@ -448,7 +448,7 @@ func validateOperationDirectWriteCLIFlagType(op OperationSpec, flag CLIFlag, pat
 	valid := false
 	switch flag.Type {
 	case "json":
-		valid = (isObjectType(node) || isArrayType(node)) && !structuredRESTBodyNodeHasEnum(node)
+		valid = (isObjectType(node) || isArrayType(node) || structuredRESTBodyNodeIsExactNullableString(node)) && !structuredRESTBodyNodeHasEnum(node)
 	case "", "string":
 		valid = structuredRESTBodyNodeAllowsType(node, "string") && structuredRESTBodyNodeAcceptsAllCLIStrings(node)
 	case "enum":
@@ -632,7 +632,7 @@ func operationHasStructuredRESTBodyField(op OperationSpec) bool {
 		if !ok {
 			continue
 		}
-		if isObjectType(node) || isArrayType(node) {
+		if isObjectType(node) || isArrayType(node) || structuredRESTBodyNodeIsExactNullableString(node) {
 			return true
 		}
 		if _, ok := node["properties"]; ok {
@@ -649,6 +649,26 @@ func operationHasStructuredRESTBodyField(op OperationSpec) bool {
 		}
 	}
 	return false
+}
+
+// structuredRESTBodyNodeIsExactNullableString admits the sole scalar union
+// that needs JSON syntax to preserve both provider-declared arms. The fixed
+// operation and closed schema still own the body field; this is not a raw body
+// or arbitrary scalar escape hatch.
+func structuredRESTBodyNodeIsExactNullableString(node map[string]any) bool {
+	rawTypes, ok := node["type"].([]any)
+	if !ok {
+		return false
+	}
+	types := make([]string, 0, len(rawTypes))
+	for _, rawType := range rawTypes {
+		typeName, ok := rawType.(string)
+		if !ok {
+			return false
+		}
+		types = append(types, typeName)
+	}
+	return exactNullableStringTypes(types)
 }
 
 func OperationDirectWriteHasStructuredRESTBody(op OperationSpec) bool {

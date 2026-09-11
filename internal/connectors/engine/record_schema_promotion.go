@@ -131,11 +131,12 @@ func ValidateRecordSchemaFieldMapping(raw json.RawMessage, fields []string) erro
 // command flag which supplies one structured JSON value to a reverse-ETL
 // record. A JSON flag is deliberately narrower than a generic request body:
 // it must name exactly one top-level field of a concrete write action, and
-// that field must itself be an explicitly typed object or array, or a genuine
-// declared multi-kind JSON union. A plain scalar remains a scalar flag; only a
-// provider-owned union needs JSON syntax to preserve every declared arm. The
-// runner calls this through Connector during runtime preflight; connectorgen
-// calls the same function while validating authored CLI metadata.
+// that field must itself be an explicitly typed object or array, a genuine
+// declared multi-kind JSON union, or the exact nullable-string union. A plain
+// scalar remains a scalar flag; only a provider-owned union needs JSON syntax
+// to preserve every declared arm. The runner calls this through Connector
+// during runtime preflight; connectorgen calls the same function while
+// validating authored CLI metadata.
 func ValidateStructuredJSONRecordField(raw json.RawMessage, field string) error {
 	if field == "" {
 		return fmt.Errorf("structured JSON field %q must map to one top-level record property", field)
@@ -149,18 +150,9 @@ func ValidateStructuredJSONRecordField(raw json.RawMessage, field string) error 
 		return fmt.Errorf("record field %q is not declared in record_schema", field)
 	}
 
-	var schema struct {
-		Type json.RawMessage `json:"type"`
-	}
-	if err := json.Unmarshal(property, &schema); err != nil {
-		return fmt.Errorf("structured JSON field %q has invalid schema: %w", field, err)
-	}
-	var types []string
-	var single string
-	if err := json.Unmarshal(schema.Type, &single); err == nil {
-		types = []string{single}
-	} else if err := json.Unmarshal(schema.Type, &types); err != nil {
-		return fmt.Errorf("structured JSON field %q has invalid schema: %w", field, err)
+	types, err := structuredJSONRecordFieldTypes(property, field)
+	if err != nil {
+		return err
 	}
 	structured := false
 	nonNullTypes := map[string]bool{}
@@ -172,7 +164,7 @@ func ValidateStructuredJSONRecordField(raw json.RawMessage, field string) error 
 			nonNullTypes[typeName] = true
 		}
 	}
-	if !structured && len(nonNullTypes) < 2 {
+	if !structured && len(nonNullTypes) < 2 && !exactNullableStringTypes(types) {
 		return fmt.Errorf("structured JSON field %q must declare type object or array", field)
 	}
 	return nil
@@ -190,19 +182,9 @@ func ValidateStructuredJSONRecordStringArm(raw json.RawMessage, field string) er
 	if err != nil {
 		return err
 	}
-	property := properties[field]
-	var schema struct {
-		Type json.RawMessage `json:"type"`
-	}
-	if err := json.Unmarshal(property, &schema); err != nil {
-		return fmt.Errorf("structured JSON field %q has invalid schema: %w", field, err)
-	}
-	var types []string
-	var single string
-	if err := json.Unmarshal(schema.Type, &single); err == nil {
-		types = []string{single}
-	} else if err := json.Unmarshal(schema.Type, &types); err != nil {
-		return fmt.Errorf("structured JSON field %q has invalid schema: %w", field, err)
+	types, err := structuredJSONRecordFieldTypes(properties[field], field)
+	if err != nil {
+		return err
 	}
 	for _, typeName := range types {
 		if typeName == "string" {
@@ -210,6 +192,53 @@ func ValidateStructuredJSONRecordStringArm(raw json.RawMessage, field string) er
 		}
 	}
 	return fmt.Errorf("structured JSON field %q has no declared string arm", field)
+}
+
+func structuredJSONRecordFieldTypes(property json.RawMessage, field string) ([]string, error) {
+	var schema struct {
+		Type json.RawMessage `json:"type"`
+	}
+	if err := json.Unmarshal(property, &schema); err != nil {
+		return nil, fmt.Errorf("structured JSON field %q has invalid schema: %w", field, err)
+	}
+	var single string
+	if err := json.Unmarshal(schema.Type, &single); err == nil {
+		return []string{single}, nil
+	}
+	var types []string
+	if err := json.Unmarshal(schema.Type, &types); err != nil {
+		return nil, fmt.Errorf("structured JSON field %q has invalid schema: %w", field, err)
+	}
+	return types, nil
+}
+
+// exactNullableStringTypes accepts only the source shape that needs strict
+// JSON syntax to distinguish a provider-declared null from ordinary command
+// text. It deliberately does not admit a wider scalar union or an untyped
+// field; those retain their established structured-field rules.
+func exactNullableStringTypes(types []string) bool {
+	if len(types) != 2 {
+		return false
+	}
+	seenString := false
+	seenNull := false
+	for _, typeName := range types {
+		switch typeName {
+		case "string":
+			if seenString {
+				return false
+			}
+			seenString = true
+		case "null":
+			if seenNull {
+				return false
+			}
+			seenNull = true
+		default:
+			return false
+		}
+	}
+	return seenString && seenNull
 }
 
 func recordSchemaTopLevelProperties(raw json.RawMessage) (map[string]json.RawMessage, []string, error) {
