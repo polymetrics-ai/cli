@@ -7,6 +7,8 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
+	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 	"testing/fstest"
@@ -73,6 +75,246 @@ func sourceImportV3RenderedReferenceLock(t *testing.T, citationURL string) ([]by
 		t.Fatal(err)
 	}
 	return raw, page
+}
+
+func sourceImportV3RenderedReferenceCoverageLock(t *testing.T, documents []any, restCount int) []byte {
+	t.Helper()
+	lock := map[string]any{
+		"schema_version": 3,
+		"connector":      "fixture",
+		"rest": map[string]any{
+			"retrieval": "hermetic rendered-reference coverage fixture capture",
+			"coverage_confidence": map[string]any{
+				"level": "documented",
+				"basis": "The provider reference capture is retained as coverage evidence even where a document contains no provider operation.",
+			},
+			"source_documents": documents,
+		},
+		"counts": map[string]any{"rest": restCount, "graphql_query": 0, "graphql_mutation": 0, "total": restCount},
+	}
+	raw, err := json.Marshal(lock)
+	if err != nil {
+		t.Fatal(err)
+	}
+	return raw
+}
+
+func TestSourceImportV3RenderedReferenceCoverageOnlyRequiresExplicitClosedProof(t *testing.T) {
+	t.Parallel()
+	coverage, page := sourceImportRenderedReferenceDocument(t, renderedReferenceCitationURL)
+	coverage["operations"] = []any{}
+	coverage["coverage_only"] = true
+	validRaw := sourceImportV3RenderedReferenceCoverageLock(t, []any{coverage}, 0)
+
+	lock, err := parseSourceImportLock(validRaw, "fixture")
+	if err != nil {
+		t.Fatalf("parse explicit zero-operation coverage lock: %v", err)
+	}
+	requests := 0
+	result, err := importSourceLockResult(context.Background(), lock, sourceImportFetchFunc(func(_ context.Context, sourceURL string) ([]byte, error) {
+		requests++
+		if sourceURL != renderedReferenceArtifactURL {
+			t.Fatalf("coverage import fetched %q, want locked artifact %q", sourceURL, renderedReferenceArtifactURL)
+		}
+		return page, nil
+	}), defaultSourceImportLimits())
+	if err != nil {
+		t.Fatalf("import explicit zero-operation coverage lock: %v", err)
+	}
+	if requests != 1 {
+		t.Fatalf("coverage artifact fetches = %d, want 1", requests)
+	}
+	if len(result.Operations) != 0 || len(result.InboundEvents) != 0 {
+		t.Fatalf("coverage-only result fabricated executable records: %#v", result)
+	}
+	if findings := validateSourceDescriptorAgainstLock("fixture", "sources/fixture-operation-descriptor.json", lock, sourceImportDescriptorDocument{SchemaVersion: 3, Operations: result.Operations}); len(findings) != 0 {
+		t.Fatalf("coverage-only descriptor findings = %+v", findings)
+	}
+
+	cases := []struct {
+		name        string
+		documents   []any
+		restCount   int
+		wantMessage string
+	}{
+		{
+			name: "accidental empty rendered reference",
+			documents: []any{func() any {
+				document, _ := sourceImportRenderedReferenceDocument(t, renderedReferenceCitationURL)
+				document["operations"] = []any{}
+				return document
+			}()},
+			wantMessage: "document",
+		},
+		{
+			name: "coverage marker with an operation",
+			documents: []any{func() any {
+				document, _ := sourceImportRenderedReferenceDocument(t, renderedReferenceCitationURL)
+				document["coverage_only"] = true
+				return document
+			}()},
+			restCount:   1,
+			wantMessage: "coverage",
+		},
+		{
+			name: "coverage marker without an inventory",
+			documents: []any{func() any {
+				document, _ := sourceImportRenderedReferenceDocument(t, renderedReferenceCitationURL)
+				document["coverage_only"] = true
+				delete(document, "operations")
+				return document
+			}()},
+			wantMessage: "must declare operations as an empty array",
+		},
+		{
+			name: "mixed valid and accidental empty documents",
+			documents: []any{coverage, func() any {
+				document, _ := sourceImportRenderedReferenceDocument(t, renderedReferenceCitationURL)
+				document["id"] = "reference-two"
+				document["artifact"].(map[string]any)["source_url"] = "https://fixtures.polymetrics.invalid/reference/widgets-two.html"
+				document["published_source"].(map[string]any)["source_url"] = "https://docs.polymetrics.invalid/reference/widgets-two"
+				document["published_source"].(map[string]any)["capture_url"] = "https://fixtures.polymetrics.invalid/reference/widgets-two.html"
+				document["operations"] = []any{}
+				return document
+			}()},
+			wantMessage: "reference-two",
+		},
+		{
+			name:        "duplicate coverage document identity",
+			documents:   []any{coverage, coverage},
+			wantMessage: "duplicates v3 REST document ID \"reference\"",
+		},
+		{
+			name: "coverage marker on unavailable document",
+			documents: []any{map[string]any{
+				"id":                 "unavailable",
+				"kind":               "unavailable",
+				"content_type":       "application/json",
+				"coverage_only":      true,
+				"unavailable_reason": "provider has no usable API reference",
+				"artifact": map[string]any{
+					"source_url": "https://fixtures.polymetrics.invalid/reference/unavailable.json",
+					"sha256":     strings.Repeat("a", 64),
+					"bytes":      1,
+				},
+				"published_source": map[string]any{
+					"source_url":  "https://docs.polymetrics.invalid/reference/availability",
+					"capture_url": "https://fixtures.polymetrics.invalid/reference/unavailable.json",
+					"sha256":      strings.Repeat("a", 64),
+					"bytes":       1,
+					"adapter":     "fixture-unavailable-capture-v1",
+				},
+				"operations": []any{},
+			}},
+			wantMessage: "coverage_only is valid only for a rendered_reference",
+		},
+	}
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			raw := sourceImportV3RenderedReferenceCoverageLock(t, tc.documents, tc.restCount)
+			_, err := parseSourceImportLock(raw, "fixture")
+			if err == nil || !strings.Contains(err.Error(), tc.wantMessage) {
+				t.Fatalf("parse invalid zero-operation coverage lock error = %v, want source location containing %q", err, tc.wantMessage)
+			}
+		})
+	}
+}
+
+func TestSourceImportV3RenderedReferenceCoverageOnlyRetainsAndVerifiesLockedBytes(t *testing.T) {
+	t.Parallel()
+	coverage, page := sourceImportRenderedReferenceDocument(t, renderedReferenceCitationURL)
+	coverage["operations"] = []any{}
+	coverage["coverage_only"] = true
+	lockRaw := sourceImportV3RenderedReferenceCoverageLock(t, []any{coverage}, 0)
+	lock, err := parseSourceImportLock(lockRaw, "fixture")
+	if err != nil {
+		t.Fatalf("parse explicit coverage lock: %v", err)
+	}
+	defsRoot := t.TempDir()
+	writeSourceRetainFixtureLockRaw(t, defsRoot, lock.Connector, lockRaw)
+
+	if _, err := newConnectorSourceImportRetainedArtifactFetcher(defsRoot, lock.Connector, defaultSourceImportLimits()); err == nil || !strings.Contains(err.Error(), "read retained artifact manifest") {
+		t.Fatalf("unretained coverage reader error = %v, want missing retained artifact manifest", err)
+	}
+
+	var stdout, stderr bytes.Buffer
+	if code := runSourceRetainWithFetcher([]string{"source-retain", lock.Connector, "--defs", defsRoot, "--retrieved-at", "2026-08-27T07:02:03Z", "--license", "fixture-license", "--terms", "fixture-terms"}, &stdout, &stderr, sourceImportFetchFunc(func(_ context.Context, sourceURL string) ([]byte, error) {
+		if sourceURL != renderedReferenceArtifactURL {
+			t.Fatalf("source-retain fetched %q, want %q", sourceURL, renderedReferenceArtifactURL)
+		}
+		return page, nil
+	})); code != 0 {
+		t.Fatalf("source-retain coverage lock exit=%d stdout=%q stderr=%q", code, stdout.String(), stderr.String())
+	}
+
+	retained, err := newConnectorSourceImportRetainedArtifactFetcher(defsRoot, lock.Connector, defaultSourceImportLimits())
+	if err != nil {
+		t.Fatalf("construct retained coverage reader: %v", err)
+	}
+	result, err := importSourceLockResult(context.Background(), lock, retained, defaultSourceImportLimits())
+	if err != nil {
+		t.Fatalf("import retained coverage lock: %v", err)
+	}
+	if len(result.Operations) != 0 || len(result.InboundEvents) != 0 {
+		t.Fatalf("retained coverage result fabricated records: %#v", result)
+	}
+	output := filepath.Join(t.TempDir(), "fixture-operation-descriptor.json")
+	var importStdout, importStderr bytes.Buffer
+	args := []string{"source-import", lock.Connector, "--defs", defsRoot, "--out", output}
+	if code := runSourceImportWithFetcher(args, &importStdout, &importStderr, nil); code != 0 {
+		t.Fatalf("local-only coverage source-import exit=%d stdout=%q stderr=%q", code, importStdout.String(), importStderr.String())
+	}
+	if !strings.Contains(importStdout.String(), "0 operation(s)") || !strings.Contains(importStdout.String(), "writes=0 cli=0") {
+		t.Fatalf("local-only coverage source-import output = %q", importStdout.String())
+	}
+	importStdout.Reset()
+	importStderr.Reset()
+	if code := runSourceImportWithFetcher(append(args, "--check"), &importStdout, &importStderr, nil); code != 0 {
+		t.Fatalf("local-only coverage source-import check exit=%d stdout=%q stderr=%q", code, importStdout.String(), importStderr.String())
+	}
+	for _, surface := range []string{"writes.json", "cli_surface.json", "operations.json"} {
+		if _, err := os.Stat(filepath.Join(defsRoot, lock.Connector, surface)); !os.IsNotExist(err) {
+			t.Fatalf("zero-operation coverage fabricated %s: %v", surface, err)
+		}
+	}
+
+	artifactPath := filepath.Join(defsRoot, lock.Connector, "sources", sourceImportRetainedArtifactDirectory, strings.ToLower(lock.Rest.SourceDocuments[0].Artifact.SHA256)+sourceImportRetainedArtifactExtension)
+	if err := os.WriteFile(artifactPath, append(append([]byte(nil), page...), '\n'), 0o644); err != nil {
+		t.Fatalf("tamper retained coverage artifact: %v", err)
+	}
+	if _, err := importSourceLockResult(context.Background(), lock, retained, defaultSourceImportLimits()); err == nil || !strings.Contains(err.Error(), "retained source artifact") {
+		t.Fatalf("import tampered retained coverage artifact error = %v, want closed integrity refusal", err)
+	}
+}
+
+func TestSourceImportV3RenderedReferenceCoverageOnlyRejectsMalformedAndDuplicateJSONMembers(t *testing.T) {
+	t.Parallel()
+	coverage, _ := sourceImportRenderedReferenceDocument(t, renderedReferenceCitationURL)
+	coverage["operations"] = []any{}
+	coverage["coverage_only"] = true
+	validRaw := sourceImportV3RenderedReferenceCoverageLock(t, []any{coverage}, 0)
+	for _, tc := range []struct {
+		name string
+		raw  []byte
+		want string
+	}{
+		{
+			name: "malformed discriminator type",
+			raw:  []byte(strings.Replace(string(validRaw), `"coverage_only":true`, `"coverage_only":"yes"`, 1)),
+			want: "coverage_only",
+		},
+		{
+			name: "duplicate discriminator member",
+			raw:  []byte(strings.Replace(string(validRaw), `"coverage_only":true`, `"coverage_only":true,"coverage_only":true`, 1)),
+			want: "coverage_only",
+		},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			if _, err := parseSourceImportLock(tc.raw, "fixture"); err == nil || !strings.Contains(err.Error(), tc.want) {
+				t.Fatalf("parse invalid coverage discriminator error = %v, want source location containing %q", err, tc.want)
+			}
+		})
+	}
 }
 
 func sourceImportV3BundleLock(t *testing.T) ([]byte, []byte) {
@@ -271,9 +513,10 @@ func TestSourceImportVersion3RenderedReferenceRetainsCapturedEvidenceWithoutOper
 	sidecar := []byte(`{"navigation":"reference index"}`)
 	sidecarDigest := sha256.Sum256(sidecar)
 	wire["rest"].(map[string]any)["source_documents"] = append(wire["rest"].(map[string]any)["source_documents"].([]any), map[string]any{
-		"id":           "sidecar",
-		"kind":         "rendered_reference",
-		"content_type": "application/json",
+		"id":            "sidecar",
+		"kind":          "rendered_reference",
+		"coverage_only": true,
+		"content_type":  "application/json",
 		"artifact": map[string]any{
 			"source_url": "https://fixtures.polymetrics.invalid/reference/navigation.json",
 			"sha256":     hex.EncodeToString(sidecarDigest[:]),

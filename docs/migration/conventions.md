@@ -1727,6 +1727,16 @@ present, both must agree; the fragment never causes a contradictory binding to
 be ignored. The binding makes an explicitly captured extraction auditable; it
 does not authorize a citation fetch or relax the captured-byte identity.
 
+An intentionally zero-operation rendered coverage document must say
+`coverage_only: true` and declare `operations: []`. It is valid only for
+`kind: "rendered_reference"`; it still requires its ordinary byte-backed
+`artifact`, `published_source`, matching retained artifact-manifest record, and
+digest/byte verification. The marker creates neither a provider operation nor a
+descriptor, command, action, or execution contract. A rendered reference whose
+inventory is empty without this explicit discriminator fails closed, so an
+accidentally omitted operation inventory cannot become a silent coverage claim.
+Existing OpenAPI v1-v3 and bundle lock behavior remains unchanged.
+
 A parity lock can likewise retain a bounded query that it already stores, even
 though that older lock shape has no `identity_query` field. Retention records
 the fixed query as provenance and fetches no caller-supplied URL; it does not
